@@ -4,7 +4,7 @@ This is my rather extensive home lab project, mostly built on AMD Mini PCs with 
 
 Networking runs on 1Gbps / 2.5Gbps w/firewall duty handled by a Fortigate 40F.
 
-The lab also uses my home NAS, a QNAP TS-873 for NFS and object storage.
+The lab also uses my home NAS, a QNAP TS-873 for NFS and object storage (8 x 8TB in RAID6), 2TB nVME (caching), 2TB nvme (VM/NFS storage)
 
 ## Motivation
 
