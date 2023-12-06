@@ -36,9 +36,9 @@ The mATX node is my old PC CPU paired with a mATX mobo, 128GB of DDR4, some spar
 There are a number of technologies that I'm studying, and the lab is fairly detailed. Have lab environments in the major cloud providers for various projects w/tightly controlled budgets.
 
 ### Cloud Platforms
-Azure Lab -- MSFT Dev Account + paid multi-tenant account
-AWS / Amazon Web Services
-GCP (Google Cloud Platform)
+Azure Lab -- MSFT Dev Account + paid multi-tenant account  
+AWS / Amazon Web Services  
+GCP (Google Cloud Platform)  
 
 ### Virtualization
 Proxmox (4 node cluster) -- https://www.proxmox.com/en/proxmox-virtual-environment/overview  
