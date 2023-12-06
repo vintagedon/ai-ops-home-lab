@@ -40,11 +40,17 @@ Proxmox (4 node cluster) -- https://www.proxmox.com/en/proxmox-virtual-environme
 Server 2022 / Hyper-V (single node) -- https://www.microsoft.com/en-us/windows-server  
 Kubernetes / Rancher (4 Pods) -- https://www.rancher.com/  
 Kubernetes / Portainer BE (3 pods) -- https://www.portainer.io/take-3  
+Docker -- https://www.docker.com/
 
-### Monitoring and RMM
+### Monitoring, RMM and Automation
 Prometheus Cortex (multi-tenant Prometheus) -- https://github.com/cortexproject/cortex  
 Grafana (Monitoring GUI + Alerting) -- https://grafana.com/  
 Itarian RMM -- https://www.itarian.com  
+Ansible / Semaphore -- https://www.ansible.com/  
+Pulumi -- https://www.pulumi.com/  
+
+### Infrastructure and Development
+Vagrant -- https://www.vagrantup.com/  
 
 ### Databases
 MariaDB -- https://mariadb.org/  
