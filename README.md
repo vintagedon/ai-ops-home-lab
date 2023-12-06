@@ -33,7 +33,12 @@ The mATX node is my old PC CPU paired with a mATX mobo, 128GB of DDR4, some spar
 - SODOLA 8 Port 2.5G Switch https://amzn.to/47YDz4L
 
 ## Software / Technologies
-There are a number of technologies that I'm studying, and the lab is fairly detailed:
+There are a number of technologies that I'm studying, and the lab is fairly detailed. Have lab environments in the major cloud providers for various projects w/tightly controlled budgets.
+
+### Cloud Platforms
+Azure Lab -- MSFT Dev Account + paid multi-tenant account
+AWS / Amazon Web Services
+GCP (Google Cloud Platform)
 
 ### Virtualization
 Proxmox (4 node cluster) -- https://www.proxmox.com/en/proxmox-virtual-environment/overview  
@@ -42,12 +47,15 @@ Kubernetes / Rancher (4 Pods) -- https://www.rancher.com/
 Kubernetes / Portainer BE (3 pods) -- https://www.portainer.io/take-3  
 Docker -- https://www.docker.com/
 
-### Monitoring, RMM and Automation
+### Monitoring and RMM
 Prometheus Cortex (multi-tenant Prometheus) -- https://github.com/cortexproject/cortex  
 Grafana (Monitoring GUI + Alerting) -- https://grafana.com/  
 Itarian RMM -- https://www.itarian.com  
+
+### Automation / IPAM
 Ansible / Semaphore -- https://www.ansible.com/  
 Pulumi -- https://www.pulumi.com/  
+Netbox -- https://netbox.dev/  
 
 ### Infrastructure and Development
 Vagrant -- https://www.vagrantup.com/  
