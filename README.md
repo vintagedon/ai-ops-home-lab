@@ -52,7 +52,8 @@ Prometheus Cortex (multi-tenant Prometheus) -- https://github.com/cortexproject/
 Grafana (Monitoring GUI + Alerting) -- https://grafana.com/  
 Itarian RMM -- https://www.itarian.com  
 
-### Automation / IPAM
+### Automation / IPAM / Configuration Management
+CyberDrain -- https://cipp.app/  
 Ansible / Semaphore -- https://www.ansible.com/  
 Pulumi -- https://www.pulumi.com/  
 Netbox -- https://netbox.dev/  
