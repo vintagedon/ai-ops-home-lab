@@ -53,12 +53,16 @@ Grafana (Monitoring GUI + Alerting) -- https://grafana.com/
 Itarian RMM -- https://www.itarian.com  
 
 ### Automation / IPAM / Configuration Management
-CyberDrain -- https://cipp.app/  
+MSP Magic (tenancy baseline management) -- https://mspmagic.com/  
+Cipp (in-tenancy management) -- https://cipp.app/  
 Ansible / Semaphore -- https://www.ansible.com/  
 Pulumi -- https://www.pulumi.com/  
 Netbox -- https://netbox.dev/  
 
 ### Infrastructure and Development
+Azure DevOps -- https://azure.microsoft.com/en-us/products/devops
+GitLab -- https://about.gitlab.com/  
+TeamCity (Pipeline Management) -- https://www.jetbrains.com/teamcity/ 
 Vagrant -- https://www.vagrantup.com/  
 
 ### Databases
