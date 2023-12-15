@@ -32,6 +32,8 @@ The mATX node is my old PC CPU paired with a mATX mobo, 128GB of DDR4, some spar
 - TP-Link TL-SG116E Switch https://amzn.to/3t0MWlt
 - SODOLA 8 Port 2.5G Switch https://amzn.to/47YDz4L
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/E1E8S7NNI)
+
 ## Software / Technologies
 There are a number of technologies that I'm studying, and the lab is fairly detailed. Have lab environments in the major cloud providers for various projects w/tightly controlled budgets.
 
@@ -42,8 +44,7 @@ GCP (Google Cloud Platform)  <br/>
 
 ### Virtualization
 Proxmox (4 node cluster) -- https://www.proxmox.com/en/proxmox-virtual-environment/overview  
-Server 2022 / Hyper-V (single node) -- https://www.microsoft.com/en-us/windows-server  
-Kubernetes / Rancher (4 Pods) -- https://www.rancher.com/  
+Server 2022 Datacenter w/Hyper-V (single node) -- https://www.microsoft.com/en-us/windows-server  
 Kubernetes / Portainer BE (3 pods) -- https://www.portainer.io/take-3  
 Docker -- https://www.docker.com/
 
