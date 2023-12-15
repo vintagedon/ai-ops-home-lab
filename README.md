@@ -1,10 +1,10 @@
-## Proxmox and Hyper-V Home Lab
+## Proxmox and Hyper-V Home Lab Overview
 
 This is my rather extensive home lab project, mostly built on AMD Mini PCs with a small Fortinet firewall. The lab currently consists of a 4-node Proxmox v8 cluster, along with a stand-alone Server 2022 Datacenter box that runs all of my Windows VMs including serving as a development and scripting box for Windows / Hyper-V.
 
-Networking runs on 1Gbps / 2.5Gbps w/firewall duty handled by a Fortigate 40F.
+Networking runs on 1Gbps for WAN with a 2.5Gbps switch for storage and firewall duty handled by a Fortigate 40F.
 
-The lab also uses my home NAS, a QNAP TS-873 for NFS and object storage (8 x 8TB in RAID6), 2TB nVME (caching), 2TB nvme (VM/NFS storage)
+The lab also uses my home NAS, a QNAP TS-873 for NFS and object storage (8 x 8TB in RAID6), with a 2TB nVME for caching, and a 2TB nvme for shared cluster storage (NFS/iSCSI)
 
 ## Motivation
 
@@ -14,13 +14,11 @@ Primary Technologies: Virtualization (Proxmox, Hyper-V, and Kubernetes), Automat
 
 ## Hardware
 
-Building a Home Lab can be expensive, but with some good timing, patience, and a Black Friday sale, I was able to keep the cost fairly reasonable.
-
-For the hardware itself, I picked mini PCs. These palmtop PCs have gotten quite powerful in recent years, usually running gaming laptop APUs, and have a ton of options. The ones I went with are the AceMagician AM06OPRO, which has an AMD 5700U (8c/16t), up to 64GB of DDR4, an nVME, space for a SATA SSD, and dual LAN (1Gbps + 2.5Gbps). Maxing these out with 64GB of DDR4, a 2TB nNVME (VM storage), and a cheap 256GB SATA SSD (boot drive; I had some older extra ones), makes these quite capable nodes. Three of these run the Proxmox cluster, while the 4th runs the Hyper-V node.
+For the node hardware itself, I picked mini PCs. These palmtop PCs have gotten quite powerful in recent years, usually running gaming laptop APUs, and have a ton of options. The ones I went with are the AceMagician AM06OPRO, which has an AMD 5700U (8c/16t), up to 64GB of DDR4, an nVME, space for a SATA SSD, and dual LAN (1Gbps + 2.5Gbps). Maxing these out with 64GB of DDR4, a 2TB nNVME (VM storage), and a cheap 256GB SATA SSD (boot drive; I had some older extra ones), makes these quite capable nodes. Three of these run the Proxmox cluster, while the 4th runs the Hyper-V node.
 
 Completely loaded, the Mini PCs were $425 each ($250/node, $100 64GB DDR4 SODIMMs, $75 2TB nVME).
 
-The mATX node is my old PC CPU paired with a mATX mobo, 128GB of DDR4, some spare parts, and a 3090 24GB to do AI work on. Hoping to pair another 3090 w/this around March 2024 to have 48GB of vRAM to run LLMs.
+The fourth node is my old PC CPU paired with a mATX mobo, 128GB of DDR4, some spare parts, and a 3090 24GB to do AI work on. Hoping to pair another 3090 w/this around March 2024 to have 48GB of vRAM to run larger 
 
 - Mini PC Nodes x4: AMD 5700U (TDP15w), 8c/16t, 64GB RAM, 2TB nVME (VM storage), 256GB SATA SSD (boot drive), 1Gbps LAN + 2.5Gbps
 - mATX Node x1: AMD 3700X, 8c/16t, 128GB RAM, 2TB nVME (VM storage), 256GB SATA SSD (boot drive), 1Gbps LAN + 2.5Gbps, nVidia 3090 GPU
