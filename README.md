@@ -1,10 +1,56 @@
-## Proxmox and Hyper-V Home Lab Overview
+![home-lab-proxmox-logo-500x](https://github.com/vintagedon/proxmoxlab/assets/4473026/23ac4c5a-cf65-4d67-ae7d-87a05193a174)
+
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#lab-overview">Lab Overview</a>
+      <ul>
+        <li><a href="#hardware">Hardware</a></li>
+        <li><a href="#goals">Goals</a></li>
+      </ul>
+    </li>
+    <li><a href="#baremetal">Bare Metal: Node Hardware</a></li>
+    <li><a href="#hypervisors">Hypervisors</a></li>
+    <li><a href="tenants"></a>Lab Tenancy</li>
+    <li><a href="technologies"></a>Technologies</li>
+    <li><a href="licensing"></a>Licensing and Lab Licenses</li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
+  </ol>
+</details>
+
+## About the Project
 
 This is my rather extensive home lab project, mostly built on AMD Mini PCs with a small Fortinet firewall. The lab currently consists of a 4-node Proxmox v8 cluster, along with a stand-alone Server 2022 Datacenter box that runs all of my Windows VMs including serving as a development and scripting box for Windows / Hyper-V.
 
 Networking runs on 1Gbps for WAN with a 2.5Gbps switch for storage and firewall duty handled by a Fortigate 40F.
 
 The lab also uses my home NAS, a QNAP TS-873 for NFS and object storage (8 x 8TB in RAID6), with a 2TB nVME for caching, and a 2TB nvme for shared cluster storage (NFS/iSCSI)
+
+## Built With
+
+Hypervisors [![Next][proxmox]][proxmox-url] [![Next][hyperv]][hyperv-url]  
+
+Containers [![Next][kubernetes]][kubernetes-url] [![Next][portainer]][portainer-url] [![Next][rancher]][rancher-url]  
+
+Automation [![Next][ansible]][ansible-url] [![Next][pulumi]][pulumi-url]  
+
+Databases [![Next][mariadb]][mariadb-url] [![Next][postgresql]][postgresql-url] [![Next][victoriametrics]][victoriametrics-url] [![Next][couchdb]][couchdb-url]  
+
+Identity [![Next][microsoftazure]][microsoftazure-url]  
+
+Monitoring [![Next][prometheus]][prometheus-url] [![Next][grafana]][grafana-url]  
+
+Proxying [![Next][npm]][npm-url] [![Next][traefik]][traefik-url]  
 
 ## Motivation
 
@@ -78,3 +124,43 @@ GoAccess -- https://goaccess.io/
 ## Infrastructure Diagram
 ![home-lab-environment-overview](https://github.com/vintagedon/proxmoxlab/assets/4473026/ab6f30b7-8b70-4ecc-ad90-088b7a151d41)
 
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
+[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[linkedin-url]: https://www.linkedin.com/in/donaldfountain
+[proxmox]: https://img.shields.io/badge/proxmox-E57000?style=for-the-badge&logo=proxmox&logoColor=000000
+[proxmox-url]: https://www.proxmox.com/en/proxmox-virtual-environment/overview
+[ansible]: https://img.shields.io/badge/ansible-EE0000?style=for-the-badge&logo=ansible&logoColor=000000
+[ansible-url]: https://www.ansible.com
+[pulumi]: https://img.shields.io/badge/pulumi-8A3391?style=for-the-badge&logo=pulumi&logoColor=FFFFF
+[pulumi-url]: https://www.pulumi.com
+[kubernetes]: https://img.shields.io/badge/kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=FFFFFF
+[kubernetes-url]: https://kubernetes.io
+[hyperv]: https://img.shields.io/badge/hyperv-326CE5?style=for-the-badge&logo=windows&logoColor=000000
+[hyperv-url]: https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/hyper-v-technology-overview
+[portainer]: https://img.shields.io/badge/portainer-326CE5?style=for-the-badge&logo=portainer&logoColor=FFFFFF
+[portainer-url]: https://www.portainer.io
+[couchdb]: https://img.shields.io/badge/couchdb-E42528?style=for-the-badge&logo=apachecouchdb&logoColor=000000
+[couchdb-url]: https://couchdb.apache.org/
+[mariadb]: https://img.shields.io/badge/mariadb-003545?style=for-the-badge&logo=mariadb&logoColor=000000
+[mariadb-url]: https://couchdb.apache.org/
+[postgresql]: https://img.shields.io/badge/postgresql-4169E1?style=for-the-badge&logo=postgresql&logoColor=000000
+[postgresql-url]: https://www.postgresql.org/
+[victoriametrics]: https://img.shields.io/badge/victoriametrics-621773?style=for-the-badge&logo=victoriametrics&logoColor=000000
+[victoriametrics-url]: https://victoriametrics.com/
+[rancher]: https://img.shields.io/badge/rancher-0075A8?style=for-the-badge&logo=rancher&logoColor=000000
+[rancher-url]: https://www.rancher.com
+[prometheus]: https://img.shields.io/badge/prometheus-E6522C?style=for-the-badge&logo=prometheus&logoColor=000000
+[prometheus-url]: https://prometheus.io/
+[grafana]: https://img.shields.io/badge/grafana-F46800?style=for-the-badge&logo=grafana&logoColor=000000
+[grafana-url]: https://grafana.com/
+[azuredevops]: https://img.shields.io/badge/grafana-0078D7?style=for-the-badge&logo=grafana&logoColor=000000
+[azuredevops-url]: https://grafana.com/
+[microsoftazure]: https://img.shields.io/badge/MicrosoftEntra-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=000000
+[microsoftazure-url]: https://azure.microsoft.com/en-us
+[npm]: https://img.shields.io/badge/nginxproxymanager-F15833?style=for-the-badge&logo=nginxproxymanager&logoColor=000000
+[npm-url]: https://nginxproxymanager.com/
+[traefik]: https://img.shields.io/badge/traefikproxy-24A1C1?style=for-the-badge&logo=traefikproxy&logoColor=000000
+[traefik-url]: https://traefik.io/traefik/
