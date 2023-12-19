@@ -36,6 +36,14 @@ Networking runs on 1Gbps for WAN with a 2.5Gbps switch for storage and firewall 
 
 The lab also uses my home NAS, a QNAP TS-873 for NFS and object storage (8 x 8TB in RAID6), with a 2TB nVME for caching, and a 2TB nvme for shared cluster storage (NFS/iSCSI)
 
+## Current Lab Stats
+
+| Technology | # of Nodes | vCPU | vRAM | nVME Storage | 
+| ---------- | ---------- | ---- | ---- | ------------ |
+| Proxmox | 4 | 64 cores | 224G | 8TB |
+| Hyper-V | 1 | 16 cores |  64G | 2TB |
+| Total | 5 | 80 cores | 288G | 10TB |
+
 ## Built With
 
 Hypervisors [![Next][proxmox]][proxmox-url] [![Next][hyperv]][hyperv-url]  
