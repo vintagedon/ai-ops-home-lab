@@ -44,6 +44,8 @@ The lab also uses my home NAS, a QNAP TS-873 for NFS and object storage (8 x 8TB
 | Hyper-V | 1 | 16 cores |  64G | 2TB |
 | Total | 5 | 80 cores | 288G | 10TB |
 
+![2023-12-19 11_29_47-node01 - Proxmox Virtual Environment](https://github.com/vintagedon/proxmoxlab/assets/4473026/e2bfd850-c4c1-46f8-ba03-933b122c1c07)
+
 ## Built With
 
 Hypervisors [![Next][proxmox]][proxmox-url] [![Next][hyperv]][hyperv-url]  
