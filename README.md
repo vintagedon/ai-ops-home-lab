@@ -14,7 +14,7 @@
       <a href="#lab-overview">Lab Overview</a>
       <ul>
         <li><a href="#hardware">Hardware</a></li>
-        <li><a href="#goals">Goals</a></li>
+        <li><a href="#phases">Phases</a></li>
       </ul>
     </li>
     <li><a href="#baremetal">Bare Metal: Node Hardware</a></li>
@@ -77,6 +77,20 @@ The fourth node is my old PC CPU paired with a mATX mobo, 128GB of DDR4, some sp
 - SODOLA 8 Port 2.5G Switch https://amzn.to/47YDz4L
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/E1E8S7NNI)
+
+## Phases
+
+As the lab is a fairly major project, I'm proceding in phases to keep it more organized, working from the bare metal layer up. Below is my current progress.
+
+### Phases: Completed
+
+* **Phase 1 (Bare Metal and Hypervisors):** MiniPC Hardware and BIOS setup, Switches Setup, NAS Storage Setup, Networking Setup (VLANs, SNAT/DNAT, Initial FW Policies), Hypervisor Setup (Proxmox Cluster, Hyper-V [Single Node])
+* **Phase 2 (Azure Multitenancy Setup, Phase 1):** Azure 'Lab' Account Setup + Multitenancy, Tenant Domain Controllers + Entra Connect, Azure Licensing, Lab Licensing, Azure Tenant Accounts Setup + Users, Azure Arc Setup, Azure Monitor + Logging on all nodes [no alerting], Azure Sentinel, Baseline Azure Policies + Conditional Access, Tenant User Onboarding (MFA + Clerk App)
+* **Phase 3 (RMM and Configuration Management, Phase 1):** RMM Agents w/Group Policy Auto-Deploy, RMM Patch Management Base Policies, Semaphore Ansible w/Hasicorp Vault, Backups (HyperV [Iperius Incrementals > External SSD] / Proxmox [Proxmox Backup Server > External SSD)
+* **Phase 4 (Infrastructure, Phase 1):** Portainer K8s cluster + NFS Storage, DB Clusters (MariaDB, Postgres, CouchDB), Bitwarden Server, Prometheus / VictoriaMetrics / Grafana, Grafana Loki, Ngnix Proxy Manager, Lego Lets Encrypt Server (wildcard SSLs on all web endpoints)
+
+### Phases: In Progress
+* Phase 5 (
 
 ## Software / Technologies
 There are a number of technologies that I'm studying, and the lab is fairly detailed. Have lab environments in the major cloud providers for various projects w/tightly controlled budgets.
