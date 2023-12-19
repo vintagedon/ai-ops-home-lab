@@ -97,7 +97,7 @@ As the lab is a fairly major project, I'm proceding in phases to keep it more or
 * **Phase 4 (Infrastructure, Phase 1):** Portainer K8s cluster + NFS Storage, DB Clusters (MariaDB, Postgres, CouchDB), Bitwarden Server, Prometheus / VictoriaMetrics / Grafana, Grafana Loki, Ngnix Proxy Manager, Lego Lets Encrypt Server (wildcard SSLs on all web endpoints)
 
 ### Phases: In Progress
-* Phase 5 (
+* Phase 5 (Automation and Deployment): Windows Deplpoyment Services (Win11 + Win2022), Proxmox Cloud Images via Cloud-Init, Pulimi for Proxmox and Hyper-V, Netbox via Proxmox API for IPAM, Ansible Playbooks for Deploying VMs, Ansible Chocolately setup w/basic Playbooks, 
 
 ## Software / Technologies
 There are a number of technologies that I'm studying, and the lab is fairly detailed. Have lab environments in the major cloud providers for various projects w/tightly controlled budgets.
