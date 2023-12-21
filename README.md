@@ -38,6 +38,8 @@ The lab also uses my home NAS, a QNAP TS-873 for NFS and object storage (8 x 8TB
 
 Infrastructure diagrams can be found in the Wiki: https://github.com/vintagedon/proxmoxlab/wiki
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/E1E8S7NNI)
+
 ## Current Lab Stats
 
 | Technology | # of Nodes | vCPU | vRAM | nVME Storage | 
@@ -84,8 +86,6 @@ Completely loaded, the Mini PCs were $425 each ($250/node, $100 64GB DDR4 SODIMM
 - AceMagician AM06OPRO https://amzn.to/3GsgQ5j
 - TP-Link TL-SG116E Switch https://amzn.to/3t0MWlt
 - Sodola Managed 2.5G/10G Managed Switch (8*2.5G+10G SFP) https://amzn.to/3RMwTBt
-
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/E1E8S7NNI)
 
 ## Phases
 
