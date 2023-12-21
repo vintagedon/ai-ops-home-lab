@@ -34,9 +34,9 @@ This is my rather extensive home lab project, mostly built on AMD Mini PCs with 
 
 Networking runs on 1Gbps for WAN with a 2.5Gbps switch for storage and firewall duty handled by a Fortigate 40F.
 
-The lab also uses my home NAS, a QNAP TS-873 for NFS and object storage (8 x 8TB in RAID6), with a 2TB nVME for caching, and a 2TB nvme for shared cluster storage (NFS/iSCSI),
-
 Infrastructure diagrams can be found in the Wiki: https://github.com/vintagedon/proxmoxlab/wiki
+
+Public Project can be found at: https://project.beardinthe.cloud
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/E1E8S7NNI)
 
@@ -87,18 +87,68 @@ Completely loaded, the Mini PCs were $425 each ($250/node, $100 64GB DDR4 SODIMM
 - TP-Link TL-SG116E Switch https://amzn.to/3t0MWlt
 - Sodola Managed 2.5G/10G Managed Switch (8*2.5G+10G SFP) https://amzn.to/3RMwTBt
 
-## Phases
+## Project Sprints
 
-As the lab is a fairly major project, I'm proceding in phases to keep it more organized, working from the bare metal layer up. Below is my current progress.
+As the lab is a fairly major project, I'm loosly using Sprints to divide up the initial workload.
 
-### Phases: Completed
+### Sprints Completed
+<details>
+  <summary>Sprint 1: Bare Metal and Hypervisors</summary>
+  <ol>
+    <ul>
+      <li>MiniPC Setup: BIOS, hardware upgrades</li>
+      <li>Switch Setup: Wiring and Configuration</li>
+      <li>NAS NFS Storage Configuration</li>
+      <li>Hypervisor Setup: Proxmox single node x4, Server 2022 Hyper-V single node</li>
+      <li>Networking Setup: Proxmox (openVSwitch, VLANs), Hyper-V (Virtual switch, VLANs), Fortigate 40F (VLANs, DHCP, DNAT, SNAT, baseline policies)</li>
+    </ul>
+  </ol>
+</details>
 
-* **Phase 1 (Bare Metal and Hypervisors):** MiniPC Hardware and BIOS setup, Switches Setup, NAS Storage Setup, Networking Setup (VLANs, SNAT/DNAT, Initial FW Policies), Hypervisor Setup (Proxmox Cluster, Hyper-V [Single Node])
-* **Phase 2 (Azure Multitenancy Setup, Phase 1):** Azure 'Lab' Account Setup + Multitenancy, Tenant Domain Controllers + Entra Connect, Azure Licensing, Lab Licensing, Azure Tenant Accounts Setup + Users, Azure Arc Setup, Azure Monitor + Logging on all nodes [no alerting], Azure Sentinel, Baseline Azure Policies + Conditional Access, Tenant User Onboarding (MFA + Clerk App)
-* **Phase 3 (RMM and Configuration Management, Phase 1):** RMM Agents w/Group Policy Auto-Deploy, RMM Patch Management Base Policies, Semaphore Ansible w/Hasicorp Vault, Backups (HyperV [Iperius Incrementals > External SSD] / Proxmox [Proxmox Backup Server > External SSD)
-* **Phase 4 (Infrastructure, Phase 1):** Portainer K8s cluster + NFS Storage, DB Clusters (MariaDB, Postgres, CouchDB), Bitwarden Server, Prometheus / VictoriaMetrics / Grafana, Grafana Loki, Ngnix Proxy Manager, Lego Lets Encrypt Server (wildcard SSLs on all web endpoints)
+<details>
+  <summary>Sprint 2: (Azure Multitenancy Setup, Phase 1</summary>
+  <ol>
+    <ul>
+      <li>Azure Lab Account Creation: pay-as-you-go, Licensing: O365 Standard x1, 1 x Entra P2</li>
+      <li>Create multi-tenancy x4: Primary lab, MSFT lab, AWS lab, GCP lab</li>
+      <li>Create tenant domain controllers, On-prem user, setup Entra Connect</li>
+      <li>Azure Services on all DCs: Azure Arc, Monitor, Sentinel, Logging</li>
+      <li>Azure Baseline Conditional Access and Security policy configuration</li>
+      <li>Tenancy users onboarded with MFA</li>
+    </ul>
+  </ol>
+</details>
 
-### Phases: In Progress
+<details>
+  <summary>Sprint 3: RMM and Configuration Management </summary>
+  <ol>
+    <ul>
+      <li>RMM: Agents installed on all DCs + Auto-Deployment via Group Policy, Patch Management baseline policies</li>
+      <li>Ansible w/Semaphore + HashiCorp Vault: Instllation, all endpoints configured for access</li>
+    </ul>
+  </ol>
+</details>
+
+### Sprints In Progress
+
+<details>
+  <summary>Sprint 4:Infrastructure, Phase 1 </summary>
+  <ol>
+    <ul>
+      <li>MicroK8s Cluster: 4 pods, 4c/16GB RAM/96GB Disk, NFS cluster storage, MeltalLB, Nginx Ingress</li>
+      <li>Portainer Business Edition: 2c/4GB RAM/32GB disk, configured MicroK8s cluster as Edge cluster</li>
+      <li>Database Clusters: MariaDB Galera cluster, PostgreSQL Patroni Cluster, CouchDB cluster</li>
+      <li>Database Load Balancing: Ngnix Proxy Manager</li>
+      <li>Secrets: Bitwarden Password Server, Infisical</li>
+      <li>SSLs / PKI: Lego Lets Encrypt Server</li>
+      <li>Monitoring: Cortex cluster (multitenancy Prometheus) w/Grafana</li>
+      <li>Backups: Promox Backup Server and Iperius Backup (HyperV VMs and Databases)</li>
+      <li></li>
+    </ul>
+  </ol>
+</details>
+
+### Future Sprints
 * Phase 5 (Automation and Deployment): Windows Deplpoyment Services (Win11 + Win2022), Proxmox Cloud Images via Cloud-Init, Pulimi for Proxmox and Hyper-V, Netbox via Proxmox API for IPAM, Ansible Playbooks for Deploying VMs, Ansible Chocolately setup w/basic Playbooks, 
 
 ## Software / Technologies
