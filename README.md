@@ -34,7 +34,9 @@ This is my rather extensive home lab project, mostly built on AMD Mini PCs with 
 
 Networking runs on 1Gbps for WAN with a 2.5Gbps switch for storage and firewall duty handled by a Fortigate 40F.
 
-The lab also uses my home NAS, a QNAP TS-873 for NFS and object storage (8 x 8TB in RAID6), with a 2TB nVME for caching, and a 2TB nvme for shared cluster storage (NFS/iSCSI)
+The lab also uses my home NAS, a QNAP TS-873 for NFS and object storage (8 x 8TB in RAID6), with a 2TB nVME for caching, and a 2TB nvme for shared cluster storage (NFS/iSCSI),
+
+Infrastructure diagrams can be found in the Wiki: https://github.com/vintagedon/proxmoxlab/wiki
 
 ## Current Lab Stats
 
