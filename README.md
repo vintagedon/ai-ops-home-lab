@@ -164,7 +164,10 @@ Distributed under the Apache 2.0 License. See `LICENSE.md` for more information.
 
 <!-- CONTACT -->
 ## Contact
-Your Name - [@crainbramp](https://twitter.com/crainbramp) - crainbramp@beardinthe.cloud
+Twitter/X - [@crainbramp](https://twitter.com/crainbramp)
+
+Email: crainbramp@beardinthe.cloud
+
 Project Link: https://github.com/vintagedon/proxmoxlab/
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
