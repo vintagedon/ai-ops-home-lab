@@ -7,8 +7,9 @@
 [![LinkedIn][linkedin-shield]][linkedin-url]  
 
 ## About the Project
+This is my rather extensive home lab project, mostly built on AMD Mini PCs with a small Fortinet firewall.
 
-This is my rather extensive home lab project, mostly built on AMD Mini PCs with a small Fortinet firewall. The lab currently consists of a 4-node Proxmox v8 cluster, along with a stand-alone Server 2022 Datacenter box that runs all of my Windows VMs including serving as a development and scripting box for Windows / Hyper-V.
+The lab currently consists of a 4-node Proxmox v8 cluster, along with a stand-alone Server 2022 Datacenter box that runs all of my Windows VMs including serving as a development and scripting box for Windows / Hyper-V.
 
 Networking runs on 1Gbps for WAN with a 2.5Gbps switch for storage and firewall duty handled by a Fortigate 40F.
 
@@ -18,7 +19,7 @@ Public Trello Board for Current Sprint: https://trello.com/b/HVu1JBfX/homelab-sp
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/E1E8S7NNI)
 
-## Current Lab Stats
+## Current Lab Specs
 
 | Technology | # of Nodes | vCPU | vRAM | SSD Storage | nVME Storage | 
 | ---------- | ---------- | ---- | ---- | ----------- | ------------ |
@@ -26,31 +27,25 @@ Public Trello Board for Current Sprint: https://trello.com/b/HVu1JBfX/homelab-sp
 | Hyper-V | 1 | 16 cores |  64G | 256GB boot | 2TB VM storage | 
 | Total | 5 | 80 cores | 288G | ----------- | 10TB VM storage | 
 
-![2023-12-19 11_29_47-node01 - Proxmox Virtual Environment](https://github.com/vintagedon/proxmoxlab/assets/4473026/e2bfd850-c4c1-46f8-ba03-933b122c1c07)
+![2023-12-19 11_29_47-node01 - Proxmox Virtual Environment](https://github.com/vintagedon/proxmoxlab/assets/4473026/e2bfd850-c4c1-46f8-ba03-933b122c1c07)  
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Built With
-
 Infrastructure [![Next][fortinet]][fortinet-url] [![Next][cloudflare]][cloudflare-url]  
-
 Hypervisors [![Next][proxmox]][proxmox-url] [![Next][hyperv]][hyperv-url]  
-
 Container Orchestration [![Next][kubernetes]][kubernetes-url] [![Next][portainer]][portainer-url]
-
 Automation [![Next][ansible]][ansible-url] [![Next][pulumi]][pulumi-url]  
-
 Databases [![Next][mariadb]][mariadb-url] [![Next][postgresql]][postgresql-url] [![Next][victoriametrics]][victoriametrics-url] [![Next][couchdb]][couchdb-url] [![Next][microsoftsql]][microsoftsql-url]  
-
 Identity [![Next][microsoftazure]][microsoftazure-url]  
-
 Monitoring [![Next][prometheus]][prometheus-url] [![Next][grafana]][grafana-url]  
-
 Proxying [![Next][npm]][npm-url] [![Next][traefik]][traefik-url]  
-
 Secrets [![Next][bitwarden]][bitwarden-url] [![Next][vault]][vault-url]  
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Motivation
 
 Although I have had a number of home labs through the years, this is my first concerted effort to build a Home Lab from the ground up as scratch. The lab is for learning, development, and exploration of various IT technologies related not just to my job as a systems engineer, but technologies I'm personally interested in, such as DevOps, Ifrastructure as Code, AI, Automation and Platform Engineering.
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Project Sprints
 
@@ -88,8 +83,10 @@ As the lab is a fairly major project, I'm loosly using Sprints to divide up the 
   <summary>Sprint 3: RMM and Configuration Management </summary>
   <ol>
     <ul>
-      <li>RMM: Agents installed on all DCs + Auto-Deployment via Group Policy, Patch Management baseline policies</li>
-      <li>Ansible w/Semaphore + HashiCorp Vault: Instllation, all endpoints configured for access</li>
+      <li>RMM Agents, Windows: Agents to all endpoints, agent auto-deployment via Group Policy all tenants, Patch Management baseline policies</li>
+      <li>RMM Agents, Linux: Agents to all endpoints (monitoring mode only)</li>
+      <li>Ansible w/Semaphore + HashiCorp Vault: Instllation all endpoints, auth via SSH key</li>
+      <li>Ansible Playbook, ad-hoc: install RMM Linux agent</li>
     </ul>
   </ol>
 </details>
@@ -100,54 +97,63 @@ As the lab is a fairly major project, I'm loosly using Sprints to divide up the 
   <summary>Sprint 4:Infrastructure, Phase 1 </summary>
   <ol>
     <ul>
-      <li>MicroK8s Cluster: 4 pods, 4c/16GB RAM/96GB Disk, NFS cluster storage, MeltalLB, Nginx Ingress</li>
-      <li>Portainer Business Edition: 2c/4GB RAM/32GB disk, configured MicroK8s cluster as Edge cluster</li>
+      <li>MicroK8s Cluster: 4 VM nodes, 4c/16GB RAM/96GB Disk (per node), NFS cluster storage, MeltalLB, Ingress</li>
+      <li>Portainer Business Edition: 2c/4GB RAM/32GB disk, configure MicroK8s cluster as Edge cluster</li>
       <li>Database Clusters: MariaDB Galera cluster, PostgreSQL Patroni Cluster, CouchDB cluster</li>
-      <li>Database Load Balancing: Ngnix Proxy Manager</li>
-      <li>Secrets: Bitwarden Password Server, Infisical</li>
+      <li>Database and Ingress Load Balancing: Ngnix Proxy Manager</li>
       <li>SSLs / PKI: Lego Lets Encrypt Server</li>
-      <li>Monitoring: Cortex cluster (multitenancy Prometheus) w/Grafana</li>
+      <li>Monitoring: Cortex cluster (multitenancy Prometheus) w/Grafana front-end, install node_exporter on all endpoints</li>
       <li>Backups: Promox Backup Server and Iperius Backup (HyperV VMs and Databases)</li>
+      <li>Secrets: Bitwarden Password Server, Infisical, HashiCorp Vault</li>
+      <li>Ansible, Phase 1: setup Ansible w/Semaphore front-end, HashiCorp Vault</li>
+      <li>SEIM/XDR, Phase 1: setup Wazuh, install Wazuh agents</li>
+      <li>Container Registry (on prem): setup ProGet Container Registry, Configure for Portainer</li>
+      <li>Github: Initial setup of Repo</li>
+      <li>Trello: Sprint Templates</li>
+      <li>Slack: Initial Integrations, Github, Trello</li>
       <li></li>
     </ul>
   </ol>
 </details>
 
 ### Future Sprints
+<details>
+  <summary>Sprint 5: Configuration Management, Automation, Deployment</summary>
+  <ol>
+    <ul>
+      <li>Windows Deplpoyments: Win11 + Win2022 unattended installs</li>
+      <li>Proxmox Deploymement, VM Templates: Cloud Images via Cloud-Init w/Software Installations</li>
+      <li>Ansible, Phase 2: Configure initial infrastructure, initial playbooks</li>
+      <li>Container Registry, Phase 2: Configure and store all current microk8s stacks into container registries (local + Github)</li>
+      <li>GitOps, Phase 1: create 'testing' and 'production' pods, Docker Compose files for current microk8s stack to repositories w/push to 'test' > 'prod', destroy old default pod</li>
+    </ul>
+  </ol>
+</details>
+
 * Phase 5 (Automation and Deployment): Windows Deplpoyment Services (Win11 + Win2022), Proxmox Cloud Images via Cloud-Init, Pulimi for Proxmox and Hyper-V, Netbox via Proxmox API for IPAM, Ansible Playbooks for Deploying VMs, Ansible Chocolately setup w/basic Playbooks,
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
 ## Contributing
-
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.  
 If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-
+Don't forget to give the project a star! Thanks again!  
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
 3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- LICENSE -->
 ## License
-
-Distributed under the Apache 2.0 License. See `LICENSE.md` for more information.
-
+Distributed under the Apache 2.0 License. See `LICENSE.md` for more information.  
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- CONTACT -->
 ## Contact
-
 Your Name - [@crainbramp](https://twitter.com/crainbramp) - crainbramp@beardinthe.cloud
-
 Project Link: https://github.com/vintagedon/proxmoxlab/
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -161,7 +167,7 @@ Project Link: https://github.com/vintagedon/proxmoxlab/
 [stars-url]: https://github.com/vintagedon/proxmoxlab/stargazers
 [issues-shield]: https://img.shields.io/github/issues/vintagedon/proxmoxlab.svg?style=for-the-badge
 [issues-url]: https://github.com/vintagedon/proxmoxlab/issues
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
+[license-shield]: https://img.shields.io/github/license/vintagedon/proxmoxlab.svg?style=for-the-badge
 [license-url]: https://github.com/vintagedon/proxmoxlab/blob/master/LICENSE.txt
 [license-shield]: https://img.shields.io/github/license/vintagedon/proxmoxlab.svg?style=for-the-badge
 [license-url]: https://github.com/vintagedon/proxmoxlab/blob/master/LICENSE.txt
