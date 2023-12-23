@@ -6,7 +6,7 @@ This is my rather extensive home lab project, mostly built on AMD Mini PCs with 
 
 Networking runs on 1Gbps for WAN with a 2.5Gbps switch for storage and firewall duty handled by a Fortigate 40F.
 
-Infrastructure diagrams can be found in the Wiki: https://github.com/vintagedon/proxmoxlab/wiki
+Infrastructure diagrams can be found in the Wiki: https://github.com/vintagedon/proxmoxlab/wiki/Infrastructure-Diagrams
 
 Public Trello Board for Current Sprint: https://trello.com/b/HVu1JBfX/homelab-sprint-4
 
