@@ -27,13 +27,16 @@ Public Trello Board for Current Sprint: https://trello.com/b/HVu1JBfX/homelab-sp
 | Hyper-V | 1 | 16 cores |  64G | 256GB boot | 2TB VM storage | 
 | Total | 5 | 80 cores | 288G | ----------- | 10TB VM storage | 
 
+* Power Draw (measured by UPS): 200w +/-25w at idle (includes NAS, firewall, switches, ISP modem, Wifi, and all lab infrastructure)
+* Power Cost (using 212.5w as average): 5.1kWh/day x 30 days = 153kWh x .09 (my local power cost) = $13.77/mo average
+
 ![2023-12-19 11_29_47-node01 - Proxmox Virtual Environment](https://github.com/vintagedon/proxmoxlab/assets/4473026/e2bfd850-c4c1-46f8-ba03-933b122c1c07)  
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Built With
 Infrastructure [![Next][fortinet]][fortinet-url] [![Next][cloudflare]][cloudflare-url]  
 Hypervisors [![Next][proxmox]][proxmox-url] [![Next][hyperv]][hyperv-url]  
-Container Orchestration [![Next][kubernetes]][kubernetes-url] [![Next][portainer]][portainer-url]
+Container Orchestration [![Next][kubernetes]][kubernetes-url] [![Next][portainer]][portainer-url]  
 Automation [![Next][ansible]][ansible-url] [![Next][pulumi]][pulumi-url]  
 Databases [![Next][mariadb]][mariadb-url] [![Next][postgresql]][postgresql-url] [![Next][victoriametrics]][victoriametrics-url] [![Next][couchdb]][couchdb-url] [![Next][microsoftsql]][microsoftsql-url]  
 Identity [![Next][microsoftazure]][microsoftazure-url]  
@@ -44,7 +47,7 @@ Secrets [![Next][bitwarden]][bitwarden-url] [![Next][vault]][vault-url]
 
 ## Motivation
 
-Although I have had a number of home labs through the years, this is my first concerted effort to build a Home Lab from the ground up as scratch. The lab is for learning, development, and exploration of various IT technologies related not just to my job as a systems engineer, but technologies I'm personally interested in, such as DevOps, Ifrastructure as Code, AI, Automation and Platform Engineering.
+Although I have had a number of home labs through the years, this is my first concerted effort to build a Home Lab from the ground up from scratch. The lab is for learning, development, and exploration of various IT technologies related not just to my job as a systems engineer, but technologies I'm personally interested in, such as DevOps, Ifrastructure as Code, AI, Automation and Platform Engineering.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Project Sprints
@@ -52,6 +55,8 @@ Although I have had a number of home labs through the years, this is my first co
 As the lab is a fairly major project, I'm loosly using Sprints to divide up the initial workload.
 
 ### Sprints Completed
+These sprints have been completed, and the boards archived.
+
 <details>
   <summary>Sprint 1: Bare Metal and Hypervisors</summary>
   <ol>
@@ -92,6 +97,9 @@ As the lab is a fairly major project, I'm loosly using Sprints to divide up the 
 </details>
 
 ### Sprints In Progress
+The current sprint; best viewed in the public Trello project for up-to-date items and progress.
+
+https://trello.com/b/HVu1JBfX/homelab-sprint-4
 
 <details>
   <summary>Sprint 4:Infrastructure, Phase 1 </summary>
@@ -117,20 +125,24 @@ As the lab is a fairly major project, I'm loosly using Sprints to divide up the 
 </details>
 
 ### Future Sprints
+
+Future planned sprints. Item list is volatile until sprint start.
+
 <details>
   <summary>Sprint 5: Configuration Management, Automation, Deployment</summary>
   <ol>
     <ul>
-      <li>Windows Deplpoyments: Win11 + Win2022 unattended installs</li>
-      <li>Proxmox Deploymement, VM Templates: Cloud Images via Cloud-Init w/Software Installations</li>
-      <li>Ansible, Phase 2: Configure initial infrastructure, initial playbooks</li>
-      <li>Container Registry, Phase 2: Configure and store all current microk8s stacks into container registries (local + Github)</li>
-      <li>GitOps, Phase 1: create 'testing' and 'production' pods, Docker Compose files for current microk8s stack to repositories w/push to 'test' > 'prod', destroy old default pod</li>
+      <li>Windows OS Deployment: Win11 + Win2022 unattended installs (Windows Deployment Toolkit), Autopilot, Intune, RMM device onboarding, initial PS scrips</li>
+      <li>Windows App Deployment: Intune, RMM, Chocolately via PS</li>
+      <li>Proxmox Deploymement, Linux VM Templates: Cloud Images via Cloud-Init w/Software Installations</li>
+      <li>Ansible: Configure initial infrastructure, initial playbooks</li>
+      <li>Container Registry: Configure and store all current microk8s stacks into container registries (local + Github)</li>
+      <li>GitOps: create 'testing' and 'production' pods, Docker Compose files for current microk8s stack to repositories w/push to 'test' > 'prod', destroy old default pod</li>
+      <li>IaC: Pulumi configuration, Ansible Pulumi deployment playbooks (Hyper-V + Proxmox)</li>
+      <li></li>
     </ul>
   </ol>
 </details>
-
-* Phase 5 (Automation and Deployment): Windows Deplpoyment Services (Win11 + Win2022), Proxmox Cloud Images via Cloud-Init, Pulimi for Proxmox and Hyper-V, Netbox via Proxmox API for IPAM, Ansible Playbooks for Deploying VMs, Ansible Chocolately setup w/basic Playbooks,
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
