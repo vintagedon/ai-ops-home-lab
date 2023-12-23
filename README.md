@@ -43,11 +43,11 @@ OF CONTENTS -->
 
 ## Current Lab Stats
 
-| Technology | # of Nodes | vCPU | vRAM | nVME Storage | 
-| ---------- | ---------- | ---- | ---- | ------------ |
-| Proxmox | 4 | 64 cores | 224G | 8TB |
-| Hyper-V | 1 | 16 cores |  64G | 2TB |
-| Total | 5 | 80 cores | 288G | 10TB |
+| Technology | # of Nodes | vCPU | vRAM | SSD Storage | nVME Storage | 
+| ---------- | ---------- | ---- | ---- | ----------- | ------------ |
+| Proxmox | 4 | 64 cores | 224G | 256GB boot | 8TB VM storage | 
+| Hyper-V | 1 | 16 cores |  64G | 256GB boot | 2TB VM storage | 
+| Total | 5 | 80 cores | 288G | ----------- | 10TB VM storage | 
 
 ![2023-12-19 11_29_47-node01 - Proxmox Virtual Environment](https://github.com/vintagedon/proxmoxlab/assets/4473026/e2bfd850-c4c1-46f8-ba03-933b122c1c07)
 
