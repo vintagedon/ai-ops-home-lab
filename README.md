@@ -53,19 +53,23 @@ OF CONTENTS -->
 
 ## Built With
 
+Infrastructure [![Next][fortinet]][fortinet-url] [![Next][cloudflare]][cloudflare-url]  
+
 Hypervisors [![Next][proxmox]][proxmox-url] [![Next][hyperv]][hyperv-url]  
 
-Containers [![Next][kubernetes]][kubernetes-url] [![Next][portainer]][portainer-url] [![Next][rancher]][rancher-url]  
+Container Orchestration [![Next][kubernetes]][kubernetes-url] [![Next][portainer]][portainer-url]
 
 Automation [![Next][ansible]][ansible-url] [![Next][pulumi]][pulumi-url]  
 
-Databases [![Next][mariadb]][mariadb-url] [![Next][postgresql]][postgresql-url] [![Next][victoriametrics]][victoriametrics-url] [![Next][couchdb]][couchdb-url]  
+Databases [![Next][mariadb]][mariadb-url] [![Next][postgresql]][postgresql-url] [![Next][victoriametrics]][victoriametrics-url] [![Next][couchdb]][couchdb-url] [![Next][microsoftsql]][microsoftsql-url]  
 
 Identity [![Next][microsoftazure]][microsoftazure-url]  
 
 Monitoring [![Next][prometheus]][prometheus-url] [![Next][grafana]][grafana-url]  
 
 Proxying [![Next][npm]][npm-url] [![Next][traefik]][traefik-url]  
+
+Secrets [![Next][bitwarden]][bitwarden-url] [![Next][vault]][vault-url]  
 
 ## Motivation
 
@@ -224,17 +228,27 @@ GoAccess -- https://goaccess.io/
 [postgresql-url]: https://www.postgresql.org/
 [victoriametrics]: https://img.shields.io/badge/victoriametrics-621773?style=for-the-badge&logo=victoriametrics&logoColor=000000
 [victoriametrics-url]: https://victoriametrics.com/
-[rancher]: https://img.shields.io/badge/rancher-0075A8?style=for-the-badge&logo=rancher&logoColor=000000
-[rancher-url]: https://www.rancher.com
 [prometheus]: https://img.shields.io/badge/prometheus-E6522C?style=for-the-badge&logo=prometheus&logoColor=000000
 [prometheus-url]: https://prometheus.io/
 [grafana]: https://img.shields.io/badge/grafana-F46800?style=for-the-badge&logo=grafana&logoColor=000000
 [grafana-url]: https://grafana.com/
 [azuredevops]: https://img.shields.io/badge/grafana-0078D7?style=for-the-badge&logo=grafana&logoColor=000000
 [azuredevops-url]: https://grafana.com/
-[microsoftazure]: https://img.shields.io/badge/MicrosoftEntra-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=000000
+[microsoftazure]: https://img.shields.io/badge/Microsoft_Entra-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=000000
 [microsoftazure-url]: https://azure.microsoft.com/en-us
-[npm]: https://img.shields.io/badge/nginxproxymanager-F15833?style=for-the-badge&logo=nginxproxymanager&logoColor=000000
+[npm]: https://img.shields.io/badge/nginx_proxymanager-F15833?style=for-the-badge&logo=nginxproxymanager&logoColor=000000
 [npm-url]: https://nginxproxymanager.com/
-[traefik]: https://img.shields.io/badge/traefikproxy-24A1C1?style=for-the-badge&logo=traefikproxy&logoColor=000000
+[traefik]: https://img.shields.io/badge/traefik-24A1C1?style=for-the-badge&logo=traefikproxy&logoColor=000000
 [traefik-url]: https://traefik.io/traefik/
+[bitwarden]: https://img.shields.io/badge/bitwarden_server-175DDC?style=for-the-badge&logo=bitwarden&logoColor=000000
+[bitwarden-url]: https://github.com/bitwarden/server
+[fortinet]: https://img.shields.io/badge/fortinet-EE3124?style=for-the-badge&logo=fortinet&logoColor=000000
+[fortinet-url]: https://github.com/bitwarden/server
+[vault]: https://img.shields.io/badge/vault-FFEC6E?style=for-the-badge&logo=vault&logoColor=000000
+[vault-url]: https://www.vaultproject.io/
+[vagrant]: https://img.shields.io/badge/vagrant-1868F2?style=for-the-badge&logo=vagrant&logoColor=000000
+[vagrant-url]: https://www.vagrantup.com/
+[cloudflare]: https://img.shields.io/badge/cloudflare-F38020?style=for-the-badge&logo=cloudflare&logoColor=000000
+[cloudflare-url]: https://www.cloudflare.com/
+[microsoftsql]: https://img.shields.io/badge/sql_server-CC2927?style=for-the-badge&logo=microsoftsqlserver&logoColor=000000
+[microsoftsql-url]: https://www.microsoft.com/en-us/sql-server/sql-server-2022
