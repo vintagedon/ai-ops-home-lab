@@ -1,6 +1,19 @@
-![home-lab-proxmox-logo-500x](https://github.com/vintagedon/proxmoxlab/assets/4473026/23ac4c5a-cf65-4d67-ae7d-87a05193a174)
+![github-proxmoxhomelab-cover](https://github.com/vintagedon/proxmoxlab/assets/4473026/c6b964cd-0d73-47a6-ae1b-7e682c53c2ca)
 
-<!-- TABLE OF CONTENTS -->
+## About the Project
+
+This is my rather extensive home lab project, mostly built on AMD Mini PCs with a small Fortinet firewall. The lab currently consists of a 4-node Proxmox v8 cluster, along with a stand-alone Server 2022 Datacenter box that runs all of my Windows VMs including serving as a development and scripting box for Windows / Hyper-V.
+
+Networking runs on 1Gbps for WAN with a 2.5Gbps switch for storage and firewall duty handled by a Fortigate 40F.
+
+Infrastructure diagrams can be found in the Wiki: https://github.com/vintagedon/proxmoxlab/wiki
+
+Public Trello Board for Current Sprint: https://trello.com/b/HVu1JBfX/homelab-sprint-4
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/E1E8S7NNI)
+
+<!-- TABLE ![Uploading github-proxmoxhomelab-cover.jpg…]()
+OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
   <ol>
@@ -27,18 +40,6 @@
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
-
-## About the Project
-
-This is my rather extensive home lab project, mostly built on AMD Mini PCs with a small Fortinet firewall. The lab currently consists of a 4-node Proxmox v8 cluster, along with a stand-alone Server 2022 Datacenter box that runs all of my Windows VMs including serving as a development and scripting box for Windows / Hyper-V.
-
-Networking runs on 1Gbps for WAN with a 2.5Gbps switch for storage and firewall duty handled by a Fortigate 40F.
-
-Infrastructure diagrams can be found in the Wiki: https://github.com/vintagedon/proxmoxlab/wiki
-
-Public Project can be found at: https://project.beardinthe.cloud
-
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/E1E8S7NNI)
 
 ## Current Lab Stats
 
