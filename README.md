@@ -23,9 +23,9 @@ Public Trello Board for Current Sprint: https://trello.com/b/HVu1JBfX/homelab-sp
 
 | Technology | # of Nodes | vCPU | vRAM | SSD Storage | Local nVME Storage | NAS NFS Storage |
 | ---------- | ---------- | ---- | ---- | ----------- | ------------------ | --------------- |
-| Proxmox | 4 | 64 cores | 224G | 256GB boot | 8TB VM storage | 4TB nVME Shared |
+| Proxmox | 4 | 64 cores | 256G | 256GB boot | 8TB VM storage | 4TB nVME Shared |
 | Hyper-V | 1 | 16 cores |  64G | 256GB boot | 2TB VM storage | 4TB nVME Shared |
-| Total | 5 | 80 cores | 288G | ----------- | 10TB VM storage | 4TB nVME Shared |
+| Total | 5 | 80 cores | 320G | ----------- | 10TB VM storage | 4TB nVME Shared |
 
 * Power Draw (measured by UPS): 200w +/-25w at idle (includes NAS, firewall, switches, ISP modem, Wifi, and all lab infrastructure)
 * Power Cost (using 212.5w as average): 5.1kWh/day x 30 days = 153kWh x .09 (my local power cost) = $13.77/mo average
