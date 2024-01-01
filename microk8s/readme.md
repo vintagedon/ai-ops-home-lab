@@ -1,21 +1,26 @@
-# MicroK8s Cluster w/NFS, Ceph, Portainer, 
+# MicroK8s Cluster with NFS/Longhorn, MetalLB, Traefik w/GUI Managenent
 
-This is a full set of instructions, configuration files, and scripts, to set up an HA MicroK8s cluster managed by Portainer.
+This is a full set of instructions, configuration files, and scripts, to set up an HA MicroK8s cluster managed by your choice of Rancher, Portainer, or the MicroK8s dashboard along with storage and more. With the modular nature of K8s, you can simply leave out sections you don't wish to incorporate.
 
 The cluster includes:
 
 * MicroK8s 1.29 classic
-* NFS shared cluster storage via NFS CIFS drivers + persistent volume claim
-* CephFS and Object Storage via MicroCeph Cluster + Ceph Addon
-* Web-Based GUI iterface via Portainer or MicroK8s Dashboard
-* Ingress Load Balancer: Ngnix
+* A choice of two different shared cluster storage options
+  - NFS shared cluster storage via NFS CIFS drivers + persistent volume claim
+  - HA shared Cluster storage via Longhorn
+* A choice of two different Web-Based GUIs to manage your cluster
+  - MicroK8s Control Panel
+  - Portainer Business Edition (free up to 3 nodes)
+  - Rancher
+* Ingress Load Balancer: MetalLB
+* Reverse Proxy w/Let's Encrypt Certificates: Traefik
 * Kata Containers (HA virtual machines in MicroK8s)
 
 Due to the modular nature of MicroK8s, simply leave off a section if you don't want to enable it.
 
 # Requirements
 
-This is based off my cluster, which is a 4 node MicroK8s cluster with a 3 node Ceph cluster.
+This is based off my cluster, which is a 7 node MicroK8s cluster (3 master nodes + 4 worker nodes) with a 3 node Longhorn cluster.
 
 Although MicroK8s is lightweight, I would suggest VMs with at least 2 cores and 4GB of RAM and one OSD per Ceph node.
 
@@ -70,7 +75,7 @@ microk8s join 10.23.209.1:25000/92b2db237428470dc4fcfc4ebbd9dc81/2c0cb3284b05
 microk8s join 172.17.0.1:25000/92b2db237428470dc4fcfc4ebbd9dc81/2c0cb3284b05
 ```
 
-The options are self-explanatory, but my recommendation would be the first join command, considered a 'standard join'. This installs the control plane and allows this node to be a worker node.
+If you join three or more nodes together using the first join command, MicroK8s will automatically configure HA for you. Each node will have the control plane and be able to be used as a worker node.
 
-If you join three or more nodes together using the first join command, MicroK8s will automatically configure HA for you.
+After you have HA established, you can then add standalone worker nodes, if you wish. For example, in my current cluster, I have 3 dedicated master nodes and 4 dedicated worker nodes.
 
