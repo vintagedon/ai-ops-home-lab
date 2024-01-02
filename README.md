@@ -17,6 +17,8 @@ Infrastructure diagrams can be found in the Wiki: https://github.com/vintagedon/
 
 Public Trello Board for Current Sprint: https://trello.com/b/HVu1JBfX/homelab-sprint-4
 
+Repo for my Infrastructure Scripts: https://github.com/vintagedon/infrastructure-scripting
+
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/E1E8S7NNI)
 
 ## Current Lab Specs
