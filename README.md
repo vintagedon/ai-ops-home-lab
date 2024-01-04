@@ -7,11 +7,13 @@
 [![LinkedIn][linkedin-shield]][linkedin-url]  
 
 ## About the Project
-This is my rather extensive home lab project, mostly built on AMD Mini PCs with a small Fortinet firewall.
+This Repository Homelab contains all my homelab documentation files. Here you'll find notes, setups, and configurations for infrastructure, applications, networking, and more.
 
-The lab currently consists of a 4-node Proxmox v8 cluster, along with a stand-alone Server 2022 Datacenter box that runs all of my Windows VMs including serving as a development and scripting box for Windows / Hyper-V.
+The lab itself utilizes modern technologies such as [GitOps](https://about.gitlab.com/topics/gitops/), [Infrastructure as Code](https://www.redhat.com/en/topics/automation/what-is-infrastructure-as-code-iac), [DevOps](https://www.wikiwand.com/en/DevOps), [CI/CD pipelines](https://about.gitlab.com/topics/ci-cd/), and more to provision, operate and update all the self-hosted services in my lab.
 
-Networking runs on 1Gbps for WAN with a 2.5Gbps switch for storage and firewall duty handled by a Fortigate 40F.
+These can be used as a customizable framework to build your own Proxmox Home Lab.
+
+⚠️ Take note that products and technolgies change at a fast pace, and although I do try to keep up with the latest updates and technology on the bleeding edge, understand that this won't always be the case.
 
 Infrastructure diagrams can be found in the Wiki: https://github.com/vintagedon/proxmoxlab/wiki/Infrastructure-Diagrams
 
