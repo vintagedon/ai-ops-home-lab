@@ -1,13 +1,13 @@
 version: '3'
 services:
   app:
-    image: 'jc21/nginx-proxy-manager:latest'
-    restart: unless-stopped
+    image: 'jc21/nginx-proxy-manager:${NPM_VERSION}'
+    restart: ${RESTART_FLAG}
     ports:
       # These ports are in format <host-port>:<container-port>
       - '${PUBLIC_HTTP_PORT}:80'
       - '${PUBLIC_HTTPS_PORT}:443'
       - '${NPM_ADMIN_PORT}:81'
     volumes:
-      - ${DATA_DIR}/data:/data
-      - ${LETSENCRYPT_DIR}/letsencrypt:/etc/letsencrypt
+      - ${NPM_BIND_MOUNT}/data:/data
+      - ${NPM_BIND_MOUNT}/letsencrypt:/etc/letsencrypt
