@@ -1,18 +1,8 @@
-# Name: nginx-proxy-mananger-sqlite.yaml
-#
-# Description:
-# Docker file
-# Ngnix Proxy Manager w/SQLLite
-# https://nginxproxymanager.com/
-#
-# Project: https://github.com/vintagedon/infrastructure-scripting/blob/main/docker-compose/
-# License: Apache-2.0
-
 version: '3'
 services:
   app:
-    image: 'jc21/nginx-proxy-manager:latest'
-    restart: unless-stopped
+    image: 'jc21/nginx-proxy-manager:${NPM_VERSION}'
+    restart: $(RESTART_FLAG)
     ports:
       # These ports are in format <host-port>:<container-port>
       - '${PUBLIC_HTTP_PORT}:80'
