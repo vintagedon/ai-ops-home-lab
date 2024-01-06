@@ -1,6 +1,6 @@
 # Gitea with MariaDB
 
-This Docker Compose provides a basic working Gitea instance using MySQL as storage.
+This Docker Compose (Portainer stack compatible) provides a basic working Gitea instance using MySQL as storage.
 
 https://about.gitea.com/
 
