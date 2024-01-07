@@ -7,35 +7,11 @@
 [![LinkedIn][linkedin-shield]][linkedin-url]  
 
 ## About the Project
-This Repository Homelab contains all my homelab documentation files. Here you'll find notes, setups, and configurations for infrastructure, applications, networking, and more.
+Welcome to the Proxmox Home Virtualization Lab project.  
 
-The lab itself utilizes modern technologies such as [GitOps](https://about.gitlab.com/topics/gitops/), [Infrastructure as Code](https://www.redhat.com/en/topics/automation/what-is-infrastructure-as-code-iac), [DevOps](https://www.wikiwand.com/en/DevOps), [CI/CD pipelines](https://about.gitlab.com/topics/ci-cd/), and more to provision, operate and update all the self-hosted services in my lab.
+This repository is a guide to creating your own home lab, built on Proxmox, and utilizing the latest technologies, applications, and methods. The lab itself utilizes modern technologies such as [GitOps](https://about.gitlab.com/topics/gitops/), [Infrastructure as Code](https://www.redhat.com/en/topics/automation/what-is-infrastructure-as-code-iac), [DevOps](https://www.wikiwand.com/en/DevOps), [CI/CD pipelines](https://about.gitlab.com/topics/ci-cd/), and more. 
 
-These can be used as a customizable framework to build your own Proxmox Home Lab.
-
-⚠️ Take note that products and technolgies change at a fast pace, and although I do try to keep up with the latest updates and technology on the bleeding edge, understand that this won't always be the case.
-
-Infrastructure diagrams can be found in the Wiki: https://github.com/vintagedon/proxmoxlab/wiki/Infrastructure-Diagrams
-
-Public Trello Board for Current Sprint: https://trello.com/b/HVu1JBfX/homelab-sprint-4
-
-Repo for my Infrastructure Scripts: https://github.com/vintagedon/infrastructure-scripting
-
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/E1E8S7NNI)
-
-## Current Lab Specs
-
-| Technology | # of Nodes | vCPU | vRAM | SSD Storage | Local nVME Storage | NAS NFS Storage |
-| ---------- | ---------- | ---- | ---- | ----------- | ------------------ | --------------- |
-| Proxmox | 4 | 64 cores | 256G | 256GB boot | 8TB VM storage | 4TB nVME Shared |
-| Hyper-V | 1 | 16 cores |  64G | 256GB boot | 2TB VM storage | 4TB nVME Shared |
-| Total | 5 | 80 cores | 320G | ----------- | 10TB VM storage | 4TB nVME Shared |
-
-* Power Draw (measured by UPS): 200w +/-25w at idle (includes NAS, firewall, switches, ISP modem, Wifi, and all lab infrastructure)
-* Power Cost (using 212.5w as average): 5.1kWh/day x 30 days = 153kWh x .09 (my local power cost) = $13.77/mo average
-
-![2023-12-19 11_29_47-node01 - Proxmox Virtual Environment](https://github.com/vintagedon/proxmoxlab/assets/4473026/e2bfd850-c4c1-46f8-ba03-933b122c1c07)  
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+The project, if followed per the repository, is opinionated, but the project is built modularly, allowing you flexibility to adapt the lab to your needs.
 
 ## Built With
 Infrastructure [![Next][fortinet]][fortinet-url] [![Next][cloudflare]][cloudflare-url]  
@@ -52,101 +28,6 @@ Secrets [![Next][bitwarden]][bitwarden-url] [![Next][vault]][vault-url]
 ## Motivation
 
 Although I have had a number of home labs through the years, this is my first concerted effort to build a Home Lab from the ground up from scratch. The lab is for learning, development, and exploration of various IT technologies related not just to my job as a systems engineer, but technologies I'm personally interested in, such as DevOps, Ifrastructure as Code, AI, Automation and Platform Engineering.
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-## Project Sprints
-
-As the lab is a fairly major project, I'm loosly using Sprints to divide up the initial workload.
-
-### Sprints Completed
-These sprints have been completed, and the boards archived.
-
-<details>
-  <summary>Sprint 1: Bare Metal and Hypervisors</summary>
-  <ol>
-    <ul>
-      <li>MiniPC Setup: BIOS, hardware upgrades</li>
-      <li>Switch Setup: Wiring and Configuration</li>
-      <li>NAS NFS Storage Configuration</li>
-      <li>Hypervisor Setup: Proxmox single node x4, Server 2022 Hyper-V single node</li>
-      <li>Networking Setup: Proxmox (openVSwitch, VLANs), Hyper-V (Virtual switch, VLANs), Fortigate 40F (VLANs, DHCP, DNAT, SNAT, baseline policies)</li>
-    </ul>
-  </ol>
-</details>
-
-<details>
-  <summary>Sprint 2: (Azure Multitenancy Setup, Phase 1</summary>
-  <ol>
-    <ul>
-      <li>Azure Lab Account Creation: pay-as-you-go, Licensing: O365 Standard x1, 1 x Entra P2</li>
-      <li>Create multi-tenancy x4: Primary lab, MSFT lab, AWS lab, GCP lab</li>
-      <li>Create tenant domain controllers, On-prem user, setup Entra Connect</li>
-      <li>Azure Services on all DCs: Azure Arc, Monitor, Sentinel, Logging</li>
-      <li>Azure Baseline Conditional Access and Security policy configuration</li>
-      <li>Tenancy users onboarded with MFA</li>
-    </ul>
-  </ol>
-</details>
-
-<details>
-  <summary>Sprint 3: RMM and Configuration Management </summary>
-  <ol>
-    <ul>
-      <li>RMM Agents, Windows: Agents to all endpoints, agent auto-deployment via Group Policy all tenants, Patch Management baseline policies</li>
-      <li>RMM Agents, Linux: Agents to all endpoints (monitoring mode only)</li>
-      <li>Ansible w/Semaphore + HashiCorp Vault: Instllation all endpoints, auth via SSH key</li>
-      <li>Ansible Playbook, ad-hoc: install RMM Linux agent</li>
-    </ul>
-  </ol>
-</details>
-
-### Sprints In Progress
-The current sprint; best viewed in the public Trello project for up-to-date items and progress.
-
-https://trello.com/b/HVu1JBfX/homelab-sprint-4
-
-<details>
-  <summary>Sprint 4:Infrastructure, Phase 1 </summary>
-  <ol>
-    <ul>
-      <li>MicroK8s Cluster: 4 VM nodes, 4c/16GB RAM/96GB Disk (per node), NFS cluster storage, MeltalLB, Ingress</li>
-      <li>Portainer Business Edition: 2c/4GB RAM/32GB disk, configure MicroK8s cluster as Edge cluster</li>
-      <li>Database Clusters: MariaDB Galera cluster, PostgreSQL Patroni Cluster, CouchDB cluster</li>
-      <li>Database and Ingress Load Balancing: Ngnix Proxy Manager</li>
-      <li>SSLs / PKI: Lego Lets Encrypt Server</li>
-      <li>Monitoring: Cortex cluster (multitenancy Prometheus) w/Grafana front-end, install node_exporter on all endpoints</li>
-      <li>Backups: Promox Backup Server and Iperius Backup (HyperV VMs and Databases)</li>
-      <li>Secrets: Bitwarden Password Server, Infisical, HashiCorp Vault</li>
-      <li>Ansible, Phase 1: setup Ansible w/Semaphore front-end, HashiCorp Vault</li>
-      <li>SEIM/XDR, Phase 1: setup Wazuh, install Wazuh agents</li>
-      <li>Container Registry (on prem): setup ProGet Container Registry, Configure for Portainer</li>
-      <li>Github: Initial setup of Repo</li>
-      <li>Trello: Sprint Templates</li>
-      <li>Slack: Initial Integrations, Github, Trello</li>
-      <li></li>
-    </ul>
-  </ol>
-</details>
-
-### Future Sprints
-
-Future planned sprints. Item list is volatile until sprint start.
-
-<details>
-  <summary>Sprint 5: Configuration Management, Automation, Deployment</summary>
-  <ol>
-    <ul>
-      <li>Windows OS Deployment: Win11 + Win2022 unattended installs (Windows Deployment Toolkit), Autopilot, Intune, RMM device onboarding, initial PS scrips</li>
-      <li>Windows App Deployment: Intune, RMM, Chocolately via PS</li>
-      <li>Proxmox Deploymement, Linux VM Templates: Cloud Images via Cloud-Init w/Software Installations</li>
-      <li>Ansible: Configure initial infrastructure, initial playbooks</li>
-      <li>Container Registry: Configure and store all current microk8s stacks into container registries (local + Github)</li>
-      <li>GitOps: create 'testing' and 'production' pods, Docker Compose files for current microk8s stack to repositories w/push to 'test' > 'prod', destroy old default pod</li>
-      <li>IaC: Pulumi configuration, Ansible Pulumi deployment playbooks (Hyper-V + Proxmox)</li>
-      <li></li>
-    </ul>
-  </ol>
-</details>
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
@@ -174,7 +55,6 @@ Email: crainbramp@beardinthe.cloud
 
 Project Link: https://github.com/vintagedon/proxmoxlab/
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
