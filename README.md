@@ -7,13 +7,13 @@
 [![LinkedIn][linkedin-shield]][linkedin-url]  
 
 ## About the Project
-Welcome to the Proxmox Home Virtualization Lab project.  
+Welcome to the Proxmox Virtualization Lab project.  
 
-This repository is a guide to creating your own virtualization home lab, built on Proxmox, and utilizing the latest technologies, applications, and methods. The repository is modular, and can be used as a framework for anything from a simple home lab running a few services, up to a full development cluster including Docker and a Kubernetes cluster.
+This repository is a guide to creating your own virtualization lab, built on Proxmox, and utilizing the latest technologies, applications, and methods. The repository is modular, and can be used as a framework for anything from a simple home lab running a few services, up to a full development cluster including Docker and a Kubernetes cluster.
 
 The lab itself utilizes modern technologies such as [GitOps](https://about.gitlab.com/topics/gitops/), [Infrastructure as Code](https://www.redhat.com/en/topics/automation/what-is-infrastructure-as-code-iac), [DevOps](https://www.wikiwand.com/en/DevOps), [CI/CD pipelines](https://about.gitlab.com/topics/ci-cd/), and more. 
 
-This framework 
+This framework is actively used in my development lab; information on that cluster and infrastructure diagrams can be found in the Wiki.
 
 ## Built With
 Infrastructure [![Next][fortinet]][fortinet-url] [![Next][cloudflare]][cloudflare-url]  
