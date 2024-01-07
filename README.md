@@ -9,9 +9,11 @@
 ## About the Project
 Welcome to the Proxmox Home Virtualization Lab project.  
 
-This repository is a guide to creating your own home lab, built on Proxmox, and utilizing the latest technologies, applications, and methods. The lab itself utilizes modern technologies such as [GitOps](https://about.gitlab.com/topics/gitops/), [Infrastructure as Code](https://www.redhat.com/en/topics/automation/what-is-infrastructure-as-code-iac), [DevOps](https://www.wikiwand.com/en/DevOps), [CI/CD pipelines](https://about.gitlab.com/topics/ci-cd/), and more. 
+This repository is a guide to creating your own virtualization home lab, built on Proxmox, and utilizing the latest technologies, applications, and methods. The repository is modular, and can be used as a framework for anything from a simple home lab running a few services, up to a full development cluster including Docker and a Kubernetes cluster.
 
-The project, if followed per the repository, is opinionated, but the project is built modularly, allowing you flexibility to adapt the lab to your needs.
+The lab itself utilizes modern technologies such as [GitOps](https://about.gitlab.com/topics/gitops/), [Infrastructure as Code](https://www.redhat.com/en/topics/automation/what-is-infrastructure-as-code-iac), [DevOps](https://www.wikiwand.com/en/DevOps), [CI/CD pipelines](https://about.gitlab.com/topics/ci-cd/), and more. 
+
+This framework 
 
 ## Built With
 Infrastructure [![Next][fortinet]][fortinet-url] [![Next][cloudflare]][cloudflare-url]  
@@ -27,7 +29,9 @@ Secrets [![Next][bitwarden]][bitwarden-url] [![Next][vault]][vault-url]
 
 ## Motivation
 
-Although I have had a number of home labs through the years, this is my first concerted effort to build a Home Lab from the ground up from scratch. The lab is for learning, development, and exploration of various IT technologies related not just to my job as a systems engineer, but technologies I'm personally interested in, such as DevOps, Ifrastructure as Code, AI, Automation and Platform Engineering.
+As a Systems Engineer, I find it tough, if not impossible, to be exposed at work to enough new technologies in the virtualization and development world to "stay current".
+
+This lab attempts to address that by providing a framework that you can use to create anything from a home lab to a full development cluster. All using modern technogies and methodologies. All on free and Open Source software; much of it enterprise grade in itself.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
