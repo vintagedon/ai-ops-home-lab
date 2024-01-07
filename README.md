@@ -56,6 +56,14 @@ Email: crainbramp@beardinthe.cloud
 Project Link: https://github.com/vintagedon/proxmoxlab/
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+<!-- ACKNOWLEDGMENTS -->
+## Acknowledgments
+
+Lot of great projects that inspired or helped.
+
+* [BASH Scripting Boilerplate: Bashew](https://github.com/pforret/bashew)
+* [Self-Hosted App Master List: Awesome Self Hosted](https://github.com/awesome-selfhosted/awesome-selfhosted)
+
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/vintagedon/proxmoxlab.svg?style=for-the-badge
