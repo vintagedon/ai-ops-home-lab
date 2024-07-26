@@ -63,7 +63,9 @@ Project Link: https://github.com/vintagedon/proxmoxlab/
 
 We'd like to thank our sponsor for supporting this project:
 
-[![MSP4 LLC](https://msp4.com/wp-content/uploads/2021/10/MSP4.png)](https://msp4.com)
+<a href="https://msp4.com">
+  <img src="https://msp4.com/wp-content/uploads/2021/10/MSP4.png" width="250" alt="MSP4 LLC">
+</a>
 
 **MSP4 LLC** - Best in class IT support & consulting
 
