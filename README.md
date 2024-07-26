@@ -7,9 +7,7 @@
 [![LinkedIn][linkedin-shield]][linkedin-url]  
 
 ## About the Project
-Welcome to the Proxmox Virtualization Lab project.  
-
-This repository is a guide to creating your own virtualization lab, built on Proxmox, and utilizing the latest technologies, applications, and methods. The repository is modular, and can be used as a framework for anything from a simple home lab running a few services, up to a full development cluster including Docker and a Kubernetes cluster.
+Welcome to ProxmoxHomeITLab, your all-inclusive resource for using Proxmox as an effective home lab solution to improve your IT abilities. This repository is intended to give you the tools, manuals, and information you need to create a solid learning environment with Proxmox virtualization.
 
 The lab itself utilizes modern technologies such as [GitOps](https://about.gitlab.com/topics/gitops/), [Infrastructure as Code](https://www.redhat.com/en/topics/automation/what-is-infrastructure-as-code-iac), [DevOps](https://www.wikiwand.com/en/DevOps), [CI/CD pipelines](https://about.gitlab.com/topics/ci-cd/), and more. 
 
@@ -59,6 +57,19 @@ Email: crainbramp@beardinthe.cloud
 
 Project Link: https://github.com/vintagedon/proxmoxlab/
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- SPONSORS -->
+## Sponsors
+
+We'd like to thank our sponsor for supporting this project:
+
+[![MSP4 LLC](https://msp4.com/wp-content/uploads/2021/10/MSP4.png)](https://msp4.com)
+
+**MSP4 LLC** - Best in class IT support & consulting
+
+---
+
+Happy learning, and enjoy building your Proxmox home lab!
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
