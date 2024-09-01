@@ -1,4 +1,3 @@
-![github-proxmoxhomelab-cover](https://github.com/vintagedon/proxmoxlab/assets/4473026/c6b964cd-0d73-47a6-ae1b-7e682c53c2ca)
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
@@ -6,60 +5,142 @@
 [![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]  
 
-## About the Project
-Welcome to ProxmoxHomeITLab, your all-inclusive resource for using Proxmox as an effective home lab solution to improve your IT abilities. This repository is intended to give you the tools, manuals, and information you need to create a solid learning environment with Proxmox virtualization.
+```
+ _______  _______  _______ _________ _______  _______ _________   _______           _        _______  _______  _______  _______ 
+(  ____ )(  ____ )(  ___  )\__    _/(  ____ \(  ____ \\__   __/  (  ____ \|\     /|( (    /|(  ___  )(  ____ )(  ____ \(  ____ \
+| (    )|| (    )|| (   ) |   )  (  | (    \/| (    \/   ) (     | (    \/( \   / )|  \  ( || (   ) || (    )|| (    \/| (    \/
+| (____)|| (____)|| |   | |   |  |  | (__    | |         | |     | (_____  \ (_) / |   \ | || (___) || (____)|| (_____ | (__    
+|  _____)|     __)| |   | |   |  |  |  __)   | |         | |     (_____  )  \   /  | (\ \) ||  ___  ||  _____)(_____  )|  __)   
+| (      | (\ (   | |   | |   |  |  | (      | |         | |           ) |   ) (   | | \   || (   ) || (            ) || (      
+| )      | ) \ \__| (___) ||\_)  )  | (____/\| (____/\   | |     /\____) |   | |   | )  \  || )   ( || )      /\____) || (____/\
+|/       |/   \__/(_______)(____/   (_______/(_______/   )_(     \_______)   \_/   |/    )_)|/     \||/       \_______)(_______/
+                                                                                                                                
+```
 
-The lab itself utilizes modern technologies such as [GitOps](https://about.gitlab.com/topics/gitops/), [Infrastructure as Code](https://www.redhat.com/en/topics/automation/what-is-infrastructure-as-code-iac), [DevOps](https://www.wikiwand.com/en/DevOps), [CI/CD pipelines](https://about.gitlab.com/topics/ci-cd/), and more. 
 
-This framework is actively used in my development lab; information on that cluster and infrastructure diagrams can be found in the Wiki.
+## 🔍 Project Overview
 
-## Built With
-Infrastructure [![Next][fortinet]][fortinet-url] [![Next][cloudflare]][cloudflare-url]  
-Hypervisors [![Next][proxmox]][proxmox-url] [![Next][hyperv]][hyperv-url]  
-Container Orchestration [![Next][kubernetes]][kubernetes-url] [![Next][portainer]][portainer-url]  
-Automation [![Next][ansible]][ansible-url] [![Next][pulumi]][pulumi-url]  
-Databases [![Next][mariadb]][mariadb-url] [![Next][postgresql]][postgresql-url] [![Next][victoriametrics]][victoriametrics-url] [![Next][couchdb]][couchdb-url] [![Next][microsoftsql]][microsoftsql-url]  
-Identity [![Next][microsoftazure]][microsoftazure-url]  
-Monitoring [![Next][prometheus]][prometheus-url] [![Next][grafana]][grafana-url]  
-Proxying [![Next][npm]][npm-url] [![Next][traefik]][traefik-url]  
-Secrets [![Next][bitwarden]][bitwarden-url] [![Next][vault]][vault-url]  
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+Although a very diverse project, this project is, at its heart, about building a small form factor (SFF) home IT lab with enterprise-capabilities in an economical and power-efficient infrastructure for developing your IT skills. What you do, build, and learn with it is entirely up to you.
 
-## Motivation
+Regardless, welcome to Project Synapse, my name is Don, and I do cloud AI stuff.
 
-As a Systems Engineer, I find it tough, if not impossible, to be exposed at work to enough new technologies in the virtualization and development world to "stay current".
+AI-Ops Home Lab is an ongoing experiment in integrating AI technologies with DevOps practices in a home lab environment. This project aims to explore the synergies between artificial intelligence, infrastructure automation, and continuous integration/deployment pipelines.
 
-This lab attempts to address that by providing a framework that you can use to create anything from a home lab to a full development cluster. All using modern technogies and methodologies. All on free and Open Source software; much of it enterprise grade in itself.
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+## 📚 Table of Contents
 
-<!-- CONTRIBUTING -->
-## Contributing
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.  
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!  
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+- [Project Overview](#-project-overview)
+- [Current Status: Active Development](#-current-status-active-development)
+- [Key Features](#-key-features)
+- [Technology Stack](#-technology-stack)
+- [Recommendations](#-recommendations)
+- [Getting Started](#-getting-started)
+- [Ethical Considerations](#-ethical-considerations)
+- [Limitations and Disclaimers](#-limitations-and-disclaimers)
+- [About Me](#-about-me)
+- [Contributing](#-contributing)
+- [License](#-license)
+- [Acknowledgments](#-acknowledgments)
+- [Contact](#-contact)
+- [Sponsors](#-sponsors)
+- [📖 Wiki](#-wiki)
 
-<!-- LICENSE -->
-## License
-Distributed under the Apache 2.0 License. See `LICENSE.md` for more information.  
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- CONTACT -->
-## Contact
-Twitter/X - [@crainbramp](https://twitter.com/crainbramp)
+### 🛠️ Current Status: Active Development
 
-Email: crainbramp@beardinthe.cloud
+This project is in active development and should be considered experimental. While we strive for stability and reliability, some components may be in various stages of implementation or testing.
 
-Project Link: https://github.com/vintagedon/proxmoxlab/
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+## ✨ Key Features
 
-<!-- SPONSORS -->
-## Sponsors
+- **AI Integration**: Leveraging AI models for infrastructure management and decision support.
+- **DevOps Practices**: Implementing CI/CD pipelines, Infrastructure as Code (IaC), and automated testing.
+- **Home Lab Environment**: Utilizing consumer-grade and/or used enterprise hardware to emulate enterprise-level setups.
+- **Ethical AI Development**: Focusing on responsible AI practices and transparency.
+
+## 🚀 Technology Stack
+
+- **Virtualization**: Proxmox VE
+- **Containerization**: Docker, Kubernetes
+- **AI/ML**: TensorFlow, PyTorch, DeepInfra
+- **Infrastructure Management**: Ansible, Terraform
+- **Version Control**: Git with GitHub and Gitea
+- **Monitoring**: Prometheus, Grafana, Teams Rooms, Gotify, AlertManager
+- **CI/CD**: Azure DevOps, Gitea, GitHub
+- **Databases**: MariaDB, PostgreSQL, InfluxDB, Neo4j, Redis
+- **Message Queuing**: RabbitMQ, Apache Kafka
+- **API Gateway**: Kong
+- **Load Balancing**: HAProxy, NGINX
+- **Security**: HashiCorp Vault (on-premises), Azure Key Vault
+- **Logging**: ELK Stack (Elasticsearch, Logstash, Kibana)
+- **Configuration Management**: Puppet
+- **Asset Management**: DataGerry
+- **Automation**: Ansible, Azure Pipelines, Logic Apps
+
+## 📝 Recommendations
+
+1. Start with core services like Proxmox VE for virtualization and Docker for containerization.
+2. Implement a robust monitoring solution using Prometheus, Grafana, and AlertManager early in the project.
+3. Set up version control with Git, using GitHub for public repositories and Gitea for internal use.
+4. Choose databases based on your specific use cases, but consider starting with PostgreSQL for relational data and Redis for caching.
+5. Implement CI/CD pipelines using Azure DevOps and Azure Pipelines, integrating with GitHub and Gitea for a comprehensive development workflow.
+6. Use Ansible for configuration management and automation tasks.
+7. Implement HashiCorp Vault for on-premises secrets management and Azure Key Vault for cloud-based secrets.
+8. As you progress, introduce more specialized tools like Neo4j for graph data and Apache Kafka for event streaming.
+9. Utilize DeepInfra for advanced AI/ML capabilities in your infrastructure management.
+10. Set up DataGerry for comprehensive asset management across your lab environment.
+
+## 🧑‍💻 Getting Started
+
+(Note: This section will be expanded as the project progresses)
+
+1. Clone the repository.
+2. Review the documentation in the `docs` folder.
+3. Check the `CONTRIBUTING.md` file for guidelines on how to contribute.
+
+## 🌐 Ethical Considerations
+
+This project is committed to the responsible development and use of AI technologies. We adhere to the following principles:
+
+- Transparency in AI decision-making processes.
+- Privacy protection and data minimization.
+- Regular ethical audits of AI components.
+- Open discussion of potential biases and limitations.
+
+## ⚠️ Limitations and Disclaimers
+
+- This project is not intended for production use without thorough testing and validation.
+- The AI components are experimental and may not always produce optimal results.
+- Performance may vary depending on hardware configurations.
+
+## 👨‍💼 About Me
+
+I'm Don, and I've been involved in computer hardware and IT for over four decades now. My journey has taken me from the early days of personal computing all the way to today's modern enterprise systems. These days, I'm all about:
+
+- Systems Engineering and Administration (because someone's got to keep the lights on)
+- Cloud Technologies (with a soft spot for Azure)
+- Virtualization and Automation (because who likes doing things manually?)
+- AI and Machine Learning integration in IT operations (it's not skynet, I promise)
+
+I've got this itch for continuous learning and innovation, which is pretty much why I kicked off this project. I wanted to dive into the crazy intersection of AI, DevOps, and home lab environments. It's my way of mashing together years of industry experience with cutting-edge tech to create something unique. Think of it as a playground for learning and experimenting – only instead of swings and slides, we've got servers and AI models.
+
+## 🤝 Contributing
+
+We welcome contributions from the community. Please read our `CONTRIBUTING.md` file for guidelines on how to make contributions.
+
+## 📜 License
+
+This project is licensed under the Apache License 2.0 - see the `LICENSE` file for details.
+
+## 📬 Contact
+
+Project maintained by [VintageDon](https://github.com/vintagedon).
+
+For any queries, please open an issue in this repository.
+
+---
+
+**Note**: This README is a living document and will be updated as the project evolves. Last updated: [DATE]
+
+## 💸 Sponsors
 
 We'd like to thank our sponsor for supporting this project:
 
@@ -73,13 +154,17 @@ We'd like to thank our sponsor for supporting this project:
 
 Happy learning, and enjoy building your Proxmox home lab!
 
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
+## 📖 Wiki
+
+For detailed information about the project, including current lab stats, infrastructure diagrams, and the latest VM lists, please visit our [Wiki](https://github.com/your-repo/wiki). The Wiki is regularly updated with the most current information about the lab environment and project progress.
+
+## 🙏 Acknowledgments
 
 Lot of great projects that inspired or helped.
 
 * [BASH Scripting Boilerplate: Bashew](https://github.com/pforret/bashew)
 * [Self-Hosted App Master List: Awesome Self Hosted](https://github.com/awesome-selfhosted/awesome-selfhosted)
+
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
@@ -141,3 +226,4 @@ Lot of great projects that inspired or helped.
 [cloudflare-url]: https://www.cloudflare.com/
 [microsoftsql]: https://img.shields.io/badge/sql_server-CC2927?style=for-the-badge&logo=microsoftsqlserver&logoColor=000000
 [microsoftsql-url]: https://www.microsoft.com/en-us/sql-server/sql-server-2022
+
