@@ -26,6 +26,8 @@ Regardless, welcome to Project Synapse, my name is Don, and I do cloud AI stuff.
 
 AI-Ops Home Lab is an ongoing experiment in integrating AI technologies with DevOps practices in a home lab environment. This project aims to explore the synergies between artificial intelligence, infrastructure automation, and continuous integration/deployment pipelines.
 
+There is a considerable amount of information in the wiki such as current lab stats, infrastructure charts, and more.
+
 ## 📚 Table of Contents
 
 - [Project Overview](#-project-overview)
