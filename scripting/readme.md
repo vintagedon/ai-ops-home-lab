@@ -71,7 +71,7 @@ This project is licensed under the MIT License - see the [LICENSE](../LICENSE) f
 
 ---
 
-🔧 Maintained by: [Your Name/Team]
-📅 Last Updated: [YYYY-MM-DD]
+🔧 Maintained by: [VintageDon]
+📅 Last Updated: [2024-09-01]
 
 For more information on the AI-Ops Home Lab project, please refer to the [main repository README](../README.md).
