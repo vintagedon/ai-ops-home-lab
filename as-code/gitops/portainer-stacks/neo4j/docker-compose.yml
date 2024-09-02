@@ -1,0 +1,43 @@
+#########################################################################
+# Script Name: docker-compose.yml
+# Description: Docker Compose configuration for Neo4j, including 
+#              environment variables for database configuration.
+# Author: vintagedon (https://github.com/vintagedon)
+# Date Created: 2024-09-01
+# Last Modified: 2024-09-01
+# Version: 1.1
+#
+# Usage: Deploy this configuration in Portainer, linked to the Gitea 
+#        repository with automatic updates enabled.
+#
+# Output: Deploys a Neo4j instance with customizable settings 
+#         managed via the accompanying .env file.
+#
+# Dependencies: 
+#   - Docker Compose
+#   - Neo4j Docker image (${NEO4J_IMAGE_VERSION})
+#
+# AI Assistance:
+# This configuration was developed with the assistance of GPT-4.
+#
+#########################################################################
+
+services:
+  neo4j:
+    image: ${NEO4J_IMAGE_VERSION}
+    container_name: neo4j
+    env_file:
+      - .env
+    volumes:
+      - ${NEO4J_DATA_PATH}:/data
+      - ${NEO4J_CONFIG_PATH}:/var/lib/neo4j/conf/neo4j.conf
+    networks:
+      - ${NEO4J_NETWORK}
+    ports:
+      - "${NEO4J_HTTP_PORT:-7474}:7474" # HTTP Port
+      - "${NEO4J_BOLT_PORT:-7687}:7687" # Bolt Port
+    restart: ${NEO4J_RESTART_POLICY}
+
+networks:
+  ${NEO4J_NETWORK}:
+    driver: bridge

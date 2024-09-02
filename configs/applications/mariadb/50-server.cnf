@@ -1,0 +1,67 @@
+# ================================================================================
+# Name:         50-server.cnf
+# Description:  Optimized MariaDB configuration for docker01 in Project SYNAPSE
+# Author:       VintageDon
+# Version:      1.0
+# Date:         September 1, 2024
+#
+# This is an optimized MySQL specifically for docker01; these databases won't be
+# busy at first, so they can all share a single docker server and be split off
+# or resources added as needed.
+#
+# ================================================================================
+
+# MariaDB 50-server.cnf optimized for docker01
+# Environment: Lab with 6 databases
+# Server specs: 4 cores, 16GB RAM, NVMe drive
+
+[mysqld]
+# === Required Settings ===
+port                            = 3306
+basedir                         = /usr
+datadir                         = /var/lib/mysql
+pid_file                        = /var/run/mysqld/mysqld.pid
+socket                          = /var/run/mysqld/mysqld.sock
+tmpdir                          = /tmp
+user                            = mysql
+
+# === Connection Settings ===
+max_connections                 = 150
+wait_timeout                    = 180
+
+# === InnoDB Settings ===
+default_storage_engine          = InnoDB
+innodb_buffer_pool_size         = 2G
+innodb_buffer_pool_instances    = 2
+innodb_file_per_table           = 1
+innodb_log_file_size            = 256M
+innodb_log_buffer_size          = 8M
+innodb_flush_method             = O_DIRECT
+innodb_io_capacity              = 2000
+innodb_io_capacity_max          = 4000
+
+# === MyISAM Settings ===
+key_buffer_size                 = 16M
+
+# === Query Cache Settings ===
+query_cache_type                = 0
+query_cache_size                = 0
+
+# === Table Settings ===
+table_definition_cache          = 2000
+table_open_cache                = 2000
+max_heap_table_size             = 64M
+tmp_table_size                  = 64M
+
+# === Thread Settings ===
+thread_cache_size               = 50
+thread_stack                    = 192K
+
+# === Binary Logging ===
+disable_log_bin                 = 1
+
+# === Error Logging ===
+log_error                       = /var/lib/mysql/mysql_error.log
+
+[mysqldump]
+max_allowed_packet              = 256M

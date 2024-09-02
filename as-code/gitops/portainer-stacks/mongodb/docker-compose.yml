@@ -1,0 +1,43 @@
+#########################################################################
+# Script Name: docker-compose.yml
+# Description: Docker Compose configuration for MongoDB, including 
+#              environment variables for database configuration.
+# Author: vintagedon (https://github.com/vintagedon)
+# Date Created: 2024-09-01
+# Last Modified: 2024-09-01
+# Version: 1.1
+#
+# Usage: Deploy this configuration in Portainer, linked to the Gitea 
+#        repository with automatic updates enabled.
+#
+# Output: Deploys a MongoDB instance with customizable settings 
+#         managed via the accompanying .env file.
+#
+# Dependencies: 
+#   - Docker Compose
+#   - MongoDB Docker image (${MONGODB_IMAGE_VERSION})
+#
+# AI Assistance:
+# This configuration was developed with the assistance of GPT-4.
+#
+#########################################################################
+
+services:
+  mongodb:
+    image: ${MONGODB_IMAGE_VERSION}
+    container_name: mongodb
+    env_file:
+      - .env
+    volumes:
+      - ${MONGODB_DATA_PATH}:/data/db
+      - ${MONGODB_CONFIG_PATH}:/etc/mongod.conf
+    networks:
+      - ${MONGODB_NETWORK}
+    ports:
+      - "${MONGO_PORT:-27017}:27017"
+    restart: ${MONGODB_RESTART_POLICY}
+    command: mongod --config /etc/mongod.conf --bind_ip ${MONGO_BIND_IP:-0.0.0.0}
+
+networks:
+  ${MONGODB_NETWORK}:
+    driver: bridge

@@ -1,0 +1,42 @@
+#########################################################################
+# Script Name: docker-compose.yml
+# Description: Docker Compose configuration for MariaDB, including 
+#              environment variables for database configuration.
+# Author: vintagedon (https://github.com/vintagedon)
+# Date Created: 2024-09-01
+# Last Modified: 2024-09-01
+# Version: 1.1
+#
+# Usage: Deploy this configuration in Portainer, linked to the Gitea 
+#        repository with automatic updates enabled.
+#
+# Output: Deploys a MariaDB instance with customizable settings 
+#         managed via the accompanying .env file.
+#
+# Dependencies: 
+#   - Docker Compose
+#   - MariaDB Docker image (${MARIADB_IMAGE_VERSION})
+#
+# AI Assistance:
+# This configuration was developed with the assistance of GPT-4.
+#
+#########################################################################
+
+services:
+  mariadb:
+    image: ${MARIADB_IMAGE_VERSION}
+    container_name: mariadb
+    env_file:
+      - .env
+    volumes:
+      - ${MARIADB_DATA_PATH}:/var/lib/mysql
+      - ${MARIADB_CONFIG_PATH}:/etc/mysql/mariadb.conf.d/50-server.cnf
+    networks:
+      - ${MARIADB_NETWORK}
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    restart: ${MARIADB_RESTART_POLICY}
+
+networks:
+  ${MARIADB_NETWORK}:
+    driver: bridge

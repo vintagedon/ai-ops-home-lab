@@ -1,0 +1,43 @@
+#########################################################################
+# Script Name: docker-compose.yml
+# Description: Docker Compose configuration for Redis, including 
+#              environment variables for database configuration.
+# Author: vintagedon (https://github.com/vintagedon)
+# Date Created: 2024-09-01
+# Last Modified: 2024-09-01
+# Version: 1.1
+#
+# Usage: Deploy this configuration in Portainer, linked to the Gitea 
+#        repository with automatic updates enabled.
+#
+# Output: Deploys a Redis instance with customizable settings 
+#         managed via the accompanying .env file.
+#
+# Dependencies: 
+#   - Docker Compose
+#   - Redis Docker image (${REDIS_IMAGE_VERSION})
+#
+# AI Assistance:
+# This configuration was developed with the assistance of GPT-4.
+#
+#########################################################################
+
+services:
+  redis:
+    image: ${REDIS_IMAGE_VERSION}
+    container_name: redis
+    env_file:
+      - .env
+    volumes:
+      - ${REDIS_DATA_PATH}:/data
+      - ${REDIS_CONFIG_PATH}:/usr/local/etc/redis/redis.conf
+    networks:
+      - ${REDIS_NETWORK}
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    restart: ${REDIS_RESTART_POLICY}
+    command: redis-server /usr/local/etc/redis/redis.conf --bind ${REDIS_BIND:-0.0.0.0} --requirepass ${REDIS_PASSWORD:-}
+
+networks:
+  ${REDIS_NETWORK}:
+    driver: bridge

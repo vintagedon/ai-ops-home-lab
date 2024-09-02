@@ -1,0 +1,43 @@
+#########################################################################
+# Script Name: docker-compose.yml
+# Description: Docker Compose configuration for PostgreSQL, including 
+#              environment variables for database configuration.
+# Author: vintagedon (https://github.com/vintagedon)
+# Date Created: 2024-09-01
+# Last Modified: 2024-09-01
+# Version: 1.1
+#
+# Usage: Deploy this configuration in Portainer, linked to the Gitea 
+#        repository with automatic updates enabled.
+#
+# Output: Deploys a PostgreSQL instance with customizable settings 
+#         managed via the accompanying .env file.
+#
+# Dependencies: 
+#   - Docker Compose
+#   - PostgreSQL Docker image (${POSTGRES_IMAGE_VERSION})
+#
+# AI Assistance:
+# This configuration was developed with the assistance of GPT-4.
+#
+#########################################################################
+
+services:
+  postgres:
+    image: ${POSTGRES_IMAGE_VERSION}
+    container_name: postgres
+    env_file:
+      - .env
+    volumes:
+      - ${POSTGRES_DATA_PATH}:/var/lib/postgresql/data
+      - ${POSTGRES_CONFIG_PATH}:/etc/postgresql/postgresql.conf
+    networks:
+      - ${POSTGRES_NETWORK}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    restart: ${POSTGRES_RESTART_POLICY}
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+
+networks:
+  ${POSTGRES_NETWORK}:
+    driver: bridge
