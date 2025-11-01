@@ -1,0 +1,285 @@
+card_type: hybrid-service-model-card
+title: "Google Code Assist Standard — Hybrid Model Card"
+version: "1.0.0"
+phase: "1.0"
+status: "active"
+author: "NIST AI RMF Cookbook Team"
+repository: "https://github.com/vintagedon/nist-ai-rmf-cookbook"
+related_artifacts:
+  underlying_model_card: "./google-gemini-25-pro-model-card.yaml"
+  supplemental_docs:
+    - "../work-logs/worklog-code-assist-deployment.md"
+governance_function: "GOVERN"
+review_cadence: "quarterly"
+last_reviewed: "2025-10-26"
+next_review_due: "2026-01-26"
+owners:
+  responsible:
+    handle: "VintageDon"
+    role: "Platform Administrator"
+  governing:
+    name: "AI Review Board"
+    role: "Governing Body"
+  accountable:
+    name: "RadioAstronomy.io Operations"
+    role: "Accountable Org Unit"
+
+object_under_governance:
+  service_name: "Google Code Assist Standard"
+  provider: "Google Cloud / Google DeepMind"
+  deployment_type: "SaaS (managed, enterprise code assistance)"
+  tenant_boundary: "Google Workspace Enterprise (SSO-enforced)"
+  license_tier: "Standard (via Google Developer Program Premium)"
+  underlying_models:
+    - name: "Gemini 2.5 Pro"
+      reference: "./google-gemini-25-pro-model-card.yaml"
+      notes: "Enterprise-grade deployment with data governance"
+
+intended_use:
+  summary: >
+    Use of Google Code Assist Standard across all engineer accounts for repository 
+    automation, infrastructure code generation, database optimization, and development 
+    assistance within astronomy-cluster operations. Provisioned via Google Developer 
+    Program Premium with enterprise data governance and IP indemnification.
+  in_scope:
+    - Repository automation (commit messages, documentation generation)
+    - Infrastructure code generation and assistance (Proxmox, Kubernetes, automation)
+    - Database query generation and optimization
+    - Code review assistance and refactoring suggestions
+    - Documentation generation from code
+    - Integration with Workspace, CLI (Gemini CLI), and GCP services
+    - Firebase development assistance
+    - Colab Enterprise integration
+    - Cloud Run deployment assistance
+  out_of_scope:
+    - Autonomous code deployment without review
+    - Processing credentials, API keys, or secrets
+    - Production system changes without approval workflow
+    - Code generation for security-critical functions without review
+  notes: "Enterprise tier features (custom grounding) available but not currently deployed."
+
+service_configuration:
+  access_controls:
+    sso: true
+    mfa: "enforced"
+    workspace_integration: true
+    account_provisioning: "All engineer accounts"
+  quota_limits:
+    tier: "Standard (Google Developer Program Premium)"
+    requests_per_minute: 120
+    requests_per_day: 1500
+    scope: "Combined across Gemini CLI and VSCode extension"
+    capacity_assessment: "Meets entire cluster automation needs with headroom"
+  integration_points:
+    vscode_extension:
+      status: "enabled"
+      capabilities:
+        - "Code completion and generation"
+        - "Inline documentation"
+        - "Refactoring suggestions"
+        - "Code explanation"
+    gemini_cli:
+      status: "enabled"
+      capabilities:
+        - "Automated repository operations"
+        - "Bulk documentation generation"
+        - "Infrastructure code generation"
+        - "Script assistance"
+    google_workspace:
+      status: "enabled"
+      capabilities:
+        - "Code assistance in Google Docs/Sheets"
+        - "Technical documentation support"
+    gcp_services:
+      firebase:
+        status: "available"
+        use_case: "Development assistance for Firebase projects"
+      colab_enterprise:
+        status: "available"
+        use_case: "Data analysis and ML experimentation"
+      cloud_databases:
+        status: "available"
+        use_case: "SQL query generation and optimization"
+      cloud_run:
+        status: "available"
+        use_case: "Deployment configuration assistance"
+  features_tools:
+    code_generation:
+      status: "enabled"
+      constraints: "Human review required before deployment"
+    code_explanation:
+      status: "enabled"
+    refactoring:
+      status: "enabled"
+      constraints: "Review required for production code"
+    documentation_generation:
+      status: "enabled"
+    custom_grounding:
+      status: "available (not deployed)"
+      notes: "Enterprise feature; Standard license is prerequisite"
+  change_management:
+    vendor_change_trigger: true
+    internal_review_on_change: true
+    process: "Quarterly review of service updates; git-tracked code changes"
+
+enterprise_features:
+  data_governance:
+    no_training_on_customer_data: true
+    description: >
+      Standard tier ensures customer code and prompts are not used to train models. 
+      Enterprise-grade data governance enforced through Workspace Enterprise integration.
+    compliance_fence: "Completely within organizational compliance boundary"
+  ip_indemnification:
+    status: "included"
+    description: >
+      Google provides generative AI indemnification protecting against copyright 
+      infringement challenges arising from training data or generated code suggestions.
+    coverage: "Standard and Enterprise tiers"
+  security_posture:
+    certifications:
+      - "SOC 2 Type II"
+      - "ISO/IEC 27001"
+    encryption_in_transit: true
+    encryption_at_rest: true
+    workspace_integration: "Enterprise security policies enforced"
+
+data_handling_and_security:
+  vendor_commitments:
+    no_training_on_org_data: true
+    enterprise_data_governance: true
+    ip_indemnification: true
+    certifications:
+      - "SOC 2 Type II"
+      - "ISO/IEC 27001"
+    encryption_in_transit: true
+    encryption_at_rest: true
+  organizational_controls:
+    data_minimization: "Code and technical content only"
+    retention_policy: "Per Workspace Enterprise settings"
+    audit_evidence:
+      - "Git commits for all code changes"
+      - "Signed commits with GPG"
+      - "Pull request reviews"
+      - "Gemini CLI operation logs"
+    output_review: "Human review required before production deployment"
+  prohibited_data_classes:
+    - "Credentials, secrets, API keys"
+    - "Authentication tokens"
+    - "Encryption keys"
+    - "Database connection strings with passwords"
+    - "CUI/ITAR/EAR or export-controlled material"
+  permitted_data_classes:
+    - "Infrastructure code (Ansible, Terraform, K8s)"
+    - "Application code (non-security-critical)"
+    - "Database queries and schemas"
+    - "Documentation and comments"
+    - "Configuration files (sanitized)"
+    - "Repository automation scripts"
+
+governance_and_accountability:
+  authority_model:
+    responsible: "VintageDon"
+    governing: "AI Review Board"
+    accountable: "RadioAstronomy.io Operations"
+  approvals:
+    required_for:
+      - "Changes to intended use scope"
+      - "Processing of new data categories"
+      - "Integration with additional GCP services"
+      - "Custom grounding deployment (if Enterprise features activated)"
+  documentation_links:
+    worklogs:
+      - "../work-logs/worklog-code-assist-deployment.md"
+    policies:
+      - "../policies/01-ai-governance-policy.md"
+    standards:
+      - "../standards/01-ai-system-assessment-standard.md"
+  review:
+    cadence: "quarterly"
+    early_review_triggers:
+      - "Material vendor service change"
+      - "Proposed scope expansion"
+      - "Security incident or audit finding"
+      - "License tier changes"
+
+rmf_alignment:
+  coverage: ["GOVERN"]
+  notes: >
+    At Phase 1.0 this card records governance intent, roles, boundaries, 
+    configuration, and enterprise features. MAP/MEASURE/MANAGE will be 
+    added in later phases when operational metrics and risk management 
+    procedures are formalized.
+
+use_case_deployment:
+  cluster_automation:
+    description: "Gemini CLI-based repository operations and bulk automation"
+    quota_utilization: "Within 120 req/min capacity with headroom"
+    examples:
+      - "Automated commit message generation"
+      - "Bulk documentation updates"
+      - "Infrastructure code generation"
+  engineer_workflows:
+    description: "VSCode extension integration for all engineer accounts"
+    capabilities:
+      - "Code completion and suggestions"
+      - "Inline documentation generation"
+      - "Refactoring assistance"
+      - "Code explanation and review"
+  infrastructure_development:
+    description: "GCP and cloud infrastructure assistance"
+    services:
+      - "Cloud Run deployment configuration"
+      - "Database query optimization"
+      - "Firebase development support"
+      - "Colab Enterprise data analysis"
+
+code_assistance_assessment:
+  generation_quality:
+    strengths:
+      - "Context-aware code completion"
+      - "Multi-language support"
+      - "Infrastructure-as-code generation"
+      - "Documentation generation from code"
+    limitations:
+      - "May generate deprecated API usage"
+      - "Security-critical functions require review"
+      - "Complex logic may need human refinement"
+  security_considerations:
+    code_review_required: true
+    security_critical_functions: "Human review mandatory"
+    credential_handling: "Must be sanitized before prompts"
+    deployment_gates: "Pull request approval workflow enforced"
+  known_risks:
+    - "Generated code may contain subtle bugs"
+    - "Security vulnerabilities in suggested patterns"
+    - "Over-reliance on suggestions without understanding"
+    - "Potential for deprecated or non-optimal approaches"
+  mitigations:
+    - "Mandatory code review before deployment"
+    - "Git-tracked changes with signed commits"
+    - "Pull request approval workflow"
+    - "Security scanning on generated code"
+    - "Engineer judgment on suggestion adoption"
+
+disclosures:
+  limitations:
+    - "Code suggestions require human review and validation"
+    - "May not reflect latest API changes or best practices"
+    - "Context window limits large codebases"
+    - "Custom grounding (Enterprise feature) not deployed"
+  assumptions:
+    - "Service features remain as documented unless vendor updates"
+    - "Engineers maintain judgment on suggestion adoption"
+    - "Code review process catches generation errors"
+    - "Workspace Enterprise security policies remain enforced"
+  dependencies:
+    - "Google Workspace Enterprise availability and terms"
+    - "Google Developer Program Premium membership"
+    - "Gemini 2.5 Pro model card for underlying capabilities"
+    - "Git workflow and review processes"
+
+change_log:
+  - version: "1.0.0"
+    date: "2025-10-26"
+    author: "NIST AI RMF Cookbook Team"
+    summary: "Initial hybrid service-use card documenting Code Assist Standard deployment across engineer accounts with enterprise data governance."

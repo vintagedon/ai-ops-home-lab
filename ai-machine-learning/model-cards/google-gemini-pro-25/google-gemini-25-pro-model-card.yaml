@@ -1,0 +1,191 @@
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+model_identity:
+  name: "Gemini 2.5 Pro"
+  vendor: "Google DeepMind"
+  model_family: "Gemini 2.x"
+  version: "2.5 Pro"
+  release_date: "2025-08-15"
+  model_type: "Large Multimodal Reasoning Model"
+  vendor_model_card_url: "https://deepmind.google/technologies/gemini/2-5/"
+  license: "Commercial API (Proprietary)"
+  deprecation_status: "Active"
+
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer + Mixture of Experts (MoE) multimodal stack"
+    parameter_count: "Not publicly disclosed"
+    context_window: "2 Million tokens (Pro variant, text + multimodal)"
+    training_data_cutoff: "2024-12"
+    architectural_details: |
+      Gemini 2.5 Pro builds on Gemini 1.5’s long-context Transformer architecture with MoE routing,
+      cross-modal token fusion for text, image, audio and video, and a retrieval-augmented memory.
+      Training scale and layer counts remain undisclosed.
+  modalities:
+    supported_inputs: ["text", "image", "audio", "video", "code"]
+    supported_outputs: ["text", "image", "structured_data"]
+  performance_characteristics:
+    speed_tier: "High"
+    cost_tier: "Premium"
+    latency: |
+      Google positions Gemini 2.5 Pro as “near-real-time” for multimodal tasks via Vertex AI and Gemini for Workspace.
+      Concrete latency figures not published.
+    throughput: |
+      Optimized for streaming responses and long-context caching within Vertex AI APIs; throughput data undisclosed.
+
+capabilities:
+  vendor_claimed_strengths: |
+    Deep reasoning and multimodal understanding across text, image, audio, and video; supports tool use and code execution;
+    excels at long-context reasoning (up to 2 M tokens); integrated with Workspace (Gmail, Docs, Sheets).
+  benchmark_performance: |
+    Vendor-reported benchmarks from system card and blog post:
+    - MMLU 95.9 (5-shot)
+    - GPQA 87.3
+    - HumanEval 92.1 (Python)
+    - VideoMM and MathVista scores surpass Gemini 1.5 Pro and GPT-5 on internal tests.
+  special_capabilities:
+    tools_support: true
+    vision_support: true
+    reasoning_support: true
+    image_generation: true
+    additional_capabilities: ["code_execution", "web_search", "memory_contexts", "multimodal_retrieval"]
+  known_limitations:
+    vendor_disclosed: |
+      May still hallucinate, especially in multi-turn long sessions; risk of imprecise numerical reasoning and domain bias.
+      Google notes guardrails and content filters are active but not foolproof.
+    common_failure_modes: |
+      Long-context token boundary errors, audio/video captioning drift, minor code syntax hallucinations.
+    unsuitable_use_cases: |
+      Safety-critical or regulated applications without human oversight; legal/medical advice; autonomous decision systems without risk controls.
+
+training_information:
+  training_data_description: |
+    Multimodal corpora including web, licensed video and audio, synthetic data, and Google Knowledge Graph augmentation;
+    volume undisclosed.
+  training_methodology: |
+    Reinforcement Learning from Human and AI Feedback (RLHF + RLAIF); multimodal pretraining with Mixture-of-Experts and contrastive alignment.
+  data_privacy_considerations: |
+    Google states Gemini 2.5 Pro does not train on Workspace customer data unless explicitly opted in; data filtered to remove personal identifiers.
+
+intended_use:
+  vendor_intended_use: |
+    General-purpose multimodal assistant and developer model for reasoning, coding, creative work, and data analysis.
+  suitable_domains: ["general_purpose", "multimodal_reasoning", "creative_generation", "code_generation", "analysis"]
+  out_of_scope_use: |
+    High-risk autonomous decision-making without oversight; applications involving biomedical, financial, or critical-infrastructure control.
+
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      “Best reasoning model to date,” robust on multimodal benchmarks and long-context tasks.
+    public_evidence: |
+      Vendor benchmarks show consistent gains vs. Gemini 1.5 and competitors; independent replication ongoing.
+    assessment_notes: |
+      Evidence suggests strong validity in benchmarked domains; external testing still limited.
+  safe:
+    safety_measures: |
+      Google DeepMind Responsible AI framework; red-team testing; filters for violence, hate, sexual content; watermarking for images.
+    known_safety_issues: |
+      Residual bias and hallucination; potential prompt injection risk via tool use.
+    assessment_notes: |
+      Safety controls mature; user must enforce application-level guardrails.
+  secure_and_resilient:
+    security_features: |
+      Secure Vertex AI endpoint; prompt-injection mitigations; enterprise data segmentation.
+    known_vulnerabilities: |
+      Prompt injection and data exfiltration threats common to LLMs.
+    assessment_notes: |
+      Enterprise-grade API security with standard LLM risks remaining.
+  accountable_and_transparent:
+    transparency_level: "Medium-High"
+    auditability: |
+      Model card and system card public; audit logging through Vertex AI available.
+    assessment_notes: |
+      Clear documentation and responsible AI overview but no full parameter/data disclosure.
+  explainable_and_interpretable:
+    explainability_features: |
+      Developer debug traces for tool calls and retrieval steps; attention heatmaps in Vertex AI Preview.
+    interpretability_limitations: |
+      Internal attention patterns not semantically interpretable; no public model-internals release.
+    assessment_notes: |
+      Adequate for engineering debug and compliance audit; mechanistic interpretability limited.
+  privacy_enhanced:
+    privacy_features: |
+      Enterprise privacy commitments, encryption in transit and at rest, regional data residency controls.
+    privacy_concerns: |
+      Training dataset details undisclosed; opt-in telemetry potential.
+    assessment_notes: |
+      Acceptable for enterprise deployment under contractual terms.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Bias audits, counterfactual data augmentation, fairness evaluation pipeline.
+    known_biases: |
+      Standard linguistic and cultural biases may persist.
+    assessment_notes: |
+      Vendor commitment to mitigation clear; deployers must verify on their user demographics.
+
+evaluation_guidance:
+  recommended_tests: |
+    - Long-context reasoning with domain documents (≥500k tokens)
+    - Multimodal fusion accuracy tests (image + text)
+    - Tool and code execution robustness
+    - Domain-specific factual accuracy and bias screening
+  key_evaluation_questions: |
+    - Does 2 M-token context yield measurable gain for our tasks?
+    - Are multimodal outputs accurate in our data types?
+    - What latency/cost profile meets our SLOs?
+    - Are safety filters adequate for our use?
+  comparison_considerations: |
+    - Long-context capacity vs GPT-5; multimodal breadth vs Claude 4.5; pricing vs Vertex AI alternatives.
+
+rmf_function_mapping:
+  govern:
+    notes: |
+      Define oversight for multimodal and code execution; enforce approval flows for external tool calls and data ingestion.
+  map:
+    context_considerations: |
+      Determine data sensitivity, regional storage requirements, and tool integration risks.
+    risk_categories: ["hallucination", "bias", "privacy_leakage", "prompt_injection", "tool_misuse", "cost_overrun"]
+  measure:
+    suggested_metrics: |
+      Factual accuracy; bias indices; latency; cost per M tokens; multimodal retrieval precision.
+  manage:
+    risk_management_considerations: |
+      Use enterprise APIs with audit logging; monitor prompt injection; apply RAG sanitization and human review for high-impact outputs.
+
+references:
+  vendor_documentation:
+    - url: "https://deepmind.google/technologies/gemini/2-5/"
+      description: "Official Gemini 2.5 overview and system card summary"
+    - url: "https://blog.google/technology/ai/google-gemini-2-5-pro/"
+      description: "Launch announcement and benchmarks"
+  benchmarks:
+    - name: "MMLU"
+      url: "https://blog.google/technology/ai/google-gemini-2-5-pro/"
+      result: "95.9 (5-shot)"
+    - name: "HumanEval (Python)"
+      url: "https://blog.google/technology/ai/google-gemini-2-5-pro/"
+      result: "92.1"
+    - name: "GPQA"
+      url: "https://blog.google/technology/ai/google-gemini-2-5-pro/"
+      result: "87.3"
+  third_party_evaluations: []
+  news_coverage:
+    - title: "Google announces Gemini 2.5 Pro"
+      url: "https://blog.google/technology/ai/google-gemini-2-5-pro/"
+      date: "2025-08-15"
+
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Google DeepMind Gemini 2.5 official page and launch blog.
+  completeness_assessment: |
+    High for capabilities and safety statements; low for undisclosed architecture and dataset details.
+  change_log:
+    - date: "2025-10-17"
+      author: "Cookbook Team"
+      changes: "Initial card based on Google DeepMind Gemini 2.5 documentation."
