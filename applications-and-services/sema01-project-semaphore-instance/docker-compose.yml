@@ -1,0 +1,48 @@
+
+services:
+  semaphore:
+    image: semaphoreui/semaphore:latest
+    container_name: proj-sema01
+    restart: unless-stopped
+    ports:
+      - "${SEMAPHORE_HTTP_PORT:-3000}:3000"
+    volumes:
+      # Use Docker-managed named volumes for portability and to avoid host permission issues.
+      - semaphore-config:/etc/semaphore
+      - semaphore-playbooks:/tmp/semaphore
+    environment:
+      # --- Database Configuration (External PostgreSQL) ---
+      SEMAPHORE_DB_DIALECT: postgres
+      SEMAPHORE_DB_HOST: ${SEMAPHORE_DB_HOST}
+      SEMAPHORE_DB_PORT: ${SEMAPHORE_DB_PORT:-5432}
+      SEMAPHORE_DB_USER: ${SEMAPHORE_DB_USER}
+      SEMAPHORE_DB_PASS: ${SEMAPHORE_DB_PASSWORD}
+      SEMAPHORE_DB: ${SEMAPHORE_DB_NAME}
+
+      # --- Data & Playbook Paths ---
+      SEMAPHORE_PLAYBOOK_PATH: /tmp/semaphore/
+
+      # --- Local Administrator Account ---
+      SEMAPHORE_ADMIN_NAME: ${SEMAPHORE_ADMIN_NAME}
+      SEMAPHORE_ADMIN_EMAIL: ${SEMAPHORE_ADMIN_EMAIL}
+      SEMAPHORE_ADMIN: ${SEMAPHORE_ADMIN_USER}
+      SEMAPHORE_ADMIN_PASSWORD: ${SEMAPHORE_ADMIN_PASSWORD}
+
+      # --- Security & Encryption ---
+      SEMAPHORE_ACCESS_KEY_ENCRYPTION: ${SEMAPHORE_ENCRYPTION_KEY}
+
+
+      # --- Timezone ---
+      TZ: ${TZ:-UTC}
+    networks:
+      - semaphore_net
+
+# Define the Docker-managed named volumes.
+volumes:
+  semaphore-config:
+  semaphore-playbooks:
+
+networks:
+  semaphore_net:
+    name: ${DOCKER_NETWORK:-semaphore_network}
+    driver: bridge

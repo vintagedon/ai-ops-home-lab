@@ -1,0 +1,40 @@
+# =============================================================================
+# PROXMOX ASTRONOMY LAB - ANSIBLE CONFIGURATION
+# =============================================================================
+# Purpose: 
+# Scope: 7-node Proxmox cluster with 20+ VMs running Ubuntu 24.04 Server
+# Architecture: Hybrid Kubernetes + VM infrastructure with centralized management
+# Agent Integration: Designed for MCP-based AI agent orchestration
+#
+# Network: Dual-VLAN (10.25.10.x mgmt, 10.25.20.x project)
+# Control Node: mgmt-ansible01 (10.25.10.7)
+# Target Infrastructure: Linux VMs across radioastronomy.io domain
+#
+# Last Updated: July 23, 2025
+# =============================================================================
+# roles/baseline/tasks/time-sync.yml
+---
+- name: Install chrony for time synchronization
+  apt:
+    name: chrony
+    state: present
+    update_cache: yes
+
+- name: Configure chrony for US pool
+  template:
+    src: chrony.conf.j2
+    dest: /etc/chrony/chrony.conf
+    backup: yes
+  notify: restart chrony
+
+- name: Enable and start chrony service
+  systemd:
+    name: chrony
+    enabled: yes
+    state: started
+
+- name: Verify time synchronization
+  command: chronyc tracking
+  register: chrony_status
+  changed_when: false
+

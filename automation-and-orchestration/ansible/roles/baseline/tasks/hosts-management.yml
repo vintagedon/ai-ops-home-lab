@@ -1,0 +1,57 @@
+# =============================================================================
+# PROXMOX ASTRONOMY LAB - ANSIBLE CONFIGURATION
+# =============================================================================
+# Purpose: 
+# Scope: 7-node Proxmox cluster with 20+ VMs running Ubuntu 24.04 Server
+# Architecture: Hybrid Kubernetes + VM infrastructure with centralized management
+# Agent Integration: Designed for MCP-based AI agent orchestration
+#
+# Network: Dual-VLAN (10.25.10.x mgmt, 10.25.20.x project)
+# Control Node: mgmt-ansible01 (10.25.10.7)
+# Target Infrastructure: Linux VMs across radioastronomy.io domain
+#
+# Last Updated: July 23, 2025
+# =============================================================================
+# roles/baseline/tasks/hosts-management.yml
+---
+- name: Update /etc/hosts with all infrastructure hosts
+  blockinfile:
+    path: /etc/hosts
+    block: |
+      # Infrastructure hosts - managed by Ansible
+      # Management VLAN (10.25.10.x)
+      10.25.10.2 radio-dc01.radioastronomy.io radio-dc01
+      10.25.10.7 mgmt-ansible01.radioastronomy.io mgmt-ansible01
+      10.25.10.8 mgmt-sec01.radioastronomy.io mgmt-sec01
+      10.25.10.9 mgmt-docker01.radioastronomy.io mgmt-docker01
+      10.25.10.10 mgmt-agents01.radioastronomy.io mgmt-agents01
+      10.25.10.11 mgmt-veeam01.radioastronomy.io mgmt-veeam01
+      
+      # Project VLAN (10.25.20.x)
+      10.25.20.2 radio-dc02.radioastronomy.io radio-dc02
+      10.25.20.3 proj-dp01.radioastronomy.io proj-dp01
+      10.25.20.4 proj-k8s01.radioastronomy.io proj-k8s01
+      10.25.20.5 proj-k8s02.radioastronomy.io proj-k8s02
+      10.25.20.6 proj-k8s03.radioastronomy.io proj-k8s03
+      10.25.20.7 proj-dev01.radioastronomy.io proj-dev01
+      10.25.20.8 proj-pg01.radioastronomy.io proj-pg01
+      10.25.20.9 proj-mon01.radioastronomy.io proj-mon01
+      10.25.20.10 proj-kasm01.radioastronomy.io proj-kasm01
+      10.25.20.11 proj-fs01.radioastronomy.io proj-fs01
+      10.25.20.14 proj-docker01.radioastronomy.io proj-docker01
+      10.25.20.15 proj-fs02.radioastronomy.io proj-fs02
+      10.25.20.16 proj-pgsql02.radioastronomy.io proj-pgsql02
+      10.25.20.17 proj-fs03.radioastronomy.io proj-fs03
+      10.25.20.18 proj-mongo01.radioastronomy.io proj-mongo01
+      10.25.20.19 proj-milvus01.radioastronomy.io proj-milvus01
+      10.25.20.20 proj-rds01.radioastronomy.io proj-rds01
+      10.25.20.21 proj-node4j01.radioastronomy.io proj-node4j01
+      10.25.20.22 proj-port01.radioastronomy.io proj-port01
+      10.25.20.23 proj-fs04.radioastronomy.io proj-fs04
+      10.25.20.24 proj-docker02.radioastronomy.io proj-docker02
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - Infrastructure hosts"
+    backup: yes
+  tags:
+    - hosts
+    - dns
+

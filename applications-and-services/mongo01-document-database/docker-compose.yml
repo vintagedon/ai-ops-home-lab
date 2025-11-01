@@ -1,0 +1,321 @@
+# MongoDB Document Database Platform - Docker Compose Configuration
+# Enterprise-grade NoSQL document database with Mongo Express web interface
+# Documentation: See README.md for complete setup and configuration guide
+
+version: '3.8'
+
+# ==============================================================================
+# NETWORK CONFIGURATION
+# ==============================================================================
+networks:
+  mongodb-network:
+    driver: ${NETWORK_DRIVER:-bridge}
+    name: ${MONGODB_NETWORK_NAME:-mongodb-network}
+
+# ==============================================================================
+# VOLUME CONFIGURATION
+# ==============================================================================
+volumes:
+  mongodb_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${MONGODB_DATA_PATH:-./data}
+  mongodb_config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${MONGODB_CONFIG_PATH:-./config}
+  mongodb_backups:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${BACKUP_PATH:-./backups}
+
+# ==============================================================================
+# SERVICE DEFINITIONS
+# ==============================================================================
+services:
+
+  # ============================================================================
+  # MONGODB DATABASE SERVICE
+  # ============================================================================
+  mongo:
+    image: ${MONGODB_IMAGE_VERSION:-mongo:8.0}
+    container_name: ${MONGODB_CONTAINER_NAME:-mongo01}
+    restart: ${RESTART_POLICY:-unless-stopped}
+    
+    # =========================================================================
+    # ENVIRONMENT CONFIGURATION
+    # =========================================================================
+    environment:
+      # Authentication Configuration
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-your_secure_password}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE:-admin}
+      
+      # Timezone Configuration
+      TZ: ${TZ:-UTC}
+      
+      # Performance Configuration
+      WIREDTIGER_CACHE_SIZE_GB: ${WIREDTIGER_CACHE_SIZE_GB:-3}
+    
+    # =========================================================================
+    # PORT CONFIGURATION
+    # =========================================================================
+    ports:
+      - "${MONGODB_PORT:-27017}:27017"
+    
+    # =========================================================================
+    # VOLUME CONFIGURATION
+    # =========================================================================
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+      - mongodb_backups:/backup
+      # Optional: Custom MongoDB configuration
+      # - ./mongod.conf:/etc/mongod.conf:ro
+    
+    # =========================================================================
+    # RESOURCE LIMITS (VM 2016: 2 vCPU, 4GB RAM)
+    # =========================================================================
+    deploy:
+      resources:
+        limits:
+          cpus: ${MONGODB_CPU_LIMIT:-2.0}
+          memory: ${MONGODB_MEMORY_LIMIT:-3500m}
+        reservations:
+          cpus: ${MONGODB_CPU_RESERVATION:-1.0}
+          memory: ${MONGODB_MEMORY_RESERVATION:-2g}
+    
+    # =========================================================================
+    # MONGODB CONFIGURATION COMMAND
+    # =========================================================================
+    command: >
+      mongod 
+      --auth
+      --bind_ip ${MONGODB_BIND_IP:-0.0.0.0}
+      --wiredTigerCacheSizeGB ${WIREDTIGER_CACHE_SIZE_GB:-3}
+      --maxConns ${MONGODB_MAX_CONNECTIONS:-1000}
+      --logLevel ${MONGODB_LOG_LEVEL:-quiet}
+      --profile ${MONGODB_PROFILING_LEVEL:-1}
+      --slowms ${MONGODB_SLOW_OP_THRESHOLD:-100}
+    
+    # =========================================================================
+    # HEALTH CHECK CONFIGURATION
+    # =========================================================================
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: ${HEALTH_CHECK_INTERVAL:-10}s
+      timeout: ${HEALTH_CHECK_TIMEOUT:-5}s
+      retries: ${HEALTH_CHECK_RETRIES:-3}
+      start_period: ${HEALTH_CHECK_START_PERIOD:-40}s
+    
+    # =========================================================================
+    # SECURITY CONFIGURATION
+    # =========================================================================
+    security_opt:
+      - ${CONTAINER_SECURITY_OPT:-no-new-privileges:true}
+    
+    # =========================================================================
+    # LOGGING CONFIGURATION
+    # =========================================================================
+    logging:
+      driver: ${LOG_DRIVER:-json-file}
+      options:
+        max-size: ${LOG_MAX_SIZE:-100m}
+        max-file: ${LOG_MAX_FILE:-3}
+    
+    # =========================================================================
+    # NETWORK CONFIGURATION
+    # =========================================================================
+    networks:
+      - mongodb-network
+
+  # ============================================================================
+  # MONGO EXPRESS WEB INTERFACE SERVICE
+  # ============================================================================
+  mongo-express:
+    image: ${MONGO_EXPRESS_IMAGE_VERSION:-mongo-express:1.0.2}
+    container_name: ${MONGO_EXPRESS_CONTAINER_NAME:-mongo-express}
+    restart: ${RESTART_POLICY:-unless-stopped}
+    
+    # =========================================================================
+    # ENVIRONMENT CONFIGURATION
+    # =========================================================================
+    environment:
+      # MongoDB Connection Configuration
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${ME_CONFIG_MONGODB_ADMINUSERNAME:-admin}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${ME_CONFIG_MONGODB_ADMINPASSWORD:-your_secure_password}
+      ME_CONFIG_MONGODB_URL: ${ME_CONFIG_MONGODB_URL:-mongodb://admin:your_secure_password@mongo:27017/}
+      ME_CONFIG_MONGODB_SERVER: ${ME_CONFIG_MONGODB_SERVER:-mongo}
+      
+      # Web Interface Authentication
+      ME_CONFIG_BASICAUTH_USERNAME: ${ME_CONFIG_BASICAUTH_USERNAME:-admin}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${ME_CONFIG_BASICAUTH_PASSWORD:-your_secure_password}
+      ME_CONFIG_BASICAUTH: ${ME_CONFIG_BASICAUTH:-true}
+      
+      # Additional Configuration
+      TZ: ${TZ:-UTC}
+      
+      # Optional: Site configuration
+      # ME_CONFIG_SITE_COOKIESECRET: ${ME_CONFIG_SITE_COOKIESECRET:-}
+      # ME_CONFIG_SITE_SESSIONSECRET: ${ME_CONFIG_SITE_SESSIONSECRET:-}
+    
+    # =========================================================================
+    # PORT CONFIGURATION
+    # =========================================================================
+    ports:
+      - "${MONGO_EXPRESS_WEB_PORT:-8081}:8081"
+    
+    # =========================================================================
+    # DEPENDENCY CONFIGURATION
+    # =========================================================================
+    depends_on:
+      mongo:
+        condition: service_healthy
+    
+    # =========================================================================
+    # HEALTH CHECK CONFIGURATION
+    # =========================================================================
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8081"]
+      interval: ${HEALTH_CHECK_INTERVAL:-10}s
+      timeout: ${HEALTH_CHECK_TIMEOUT:-5}s
+      retries: ${HEALTH_CHECK_RETRIES:-3}
+      start_period: 30s
+    
+    # =========================================================================
+    # SECURITY CONFIGURATION
+    # =========================================================================
+    security_opt:
+      - ${CONTAINER_SECURITY_OPT:-no-new-privileges:true}
+    
+    # =========================================================================
+    # LOGGING CONFIGURATION
+    # =========================================================================
+    logging:
+      driver: ${LOG_DRIVER:-json-file}
+      options:
+        max-size: ${LOG_MAX_SIZE:-100m}
+        max-file: ${LOG_MAX_FILE:-3}
+    
+    # =========================================================================
+    # NETWORK CONFIGURATION
+    # =========================================================================
+    networks:
+      - mongodb-network
+
+# ==============================================================================
+# ADDITIONAL SERVICES (OPTIONAL)
+# ==============================================================================
+
+  # ============================================================================
+  # MONGODB BACKUP SERVICE (OPTIONAL - Uncomment to enable)
+  # ============================================================================
+  # mongodb-backup:
+  #   image: ${MONGODB_IMAGE_VERSION:-mongo:8.0}
+  #   container_name: mongodb-backup
+  #   restart: "no"  # Only run when needed
+  #   
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-admin}
+  #     MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-your_secure_password}
+  #     BACKUP_RETENTION_DAYS: ${BACKUP_RETENTION_DAYS:-30}
+  #     TZ: ${TZ:-UTC}
+  #   
+  #   volumes:
+  #     - mongodb_backups:/backup
+  #     - ./scripts/backup.sh:/backup.sh:ro
+  #   
+  #   command: >
+  #     sh -c "
+  #       echo 'Starting MongoDB backup...' &&
+  #       mongodump --host mongo:27017 
+  #                 --username ${MONGO_INITDB_ROOT_USERNAME:-admin} 
+  #                 --password ${MONGO_INITDB_ROOT_PASSWORD:-your_secure_password} 
+  #                 --authenticationDatabase admin
+  #                 --out /backup/$(date +%Y%m%d-%H%M%S) &&
+  #       echo 'Backup completed successfully'
+  #     "
+  #   
+  #   depends_on:
+  #     mongo:
+  #       condition: service_healthy
+  #   
+  #   networks:
+  #     - mongodb-network
+
+  # ============================================================================
+  # MONGODB EXPORTER FOR PROMETHEUS (OPTIONAL - Uncomment to enable)
+  # ============================================================================
+  # mongodb-exporter:
+  #   image: percona/mongodb_exporter:0.40
+  #   container_name: mongodb-exporter
+  #   restart: ${RESTART_POLICY:-unless-stopped}
+  #   
+  #   environment:
+  #     MONGODB_URI: mongodb://${MONGO_INITDB_ROOT_USERNAME:-admin}:${MONGO_INITDB_ROOT_PASSWORD:-your_secure_password}@mongo:27017/admin
+  #     TZ: ${TZ:-UTC}
+  #   
+  #   ports:
+  #     - "9216:9216"  # Prometheus metrics endpoint
+  #   
+  #   depends_on:
+  #     mongo:
+  #       condition: service_healthy
+  #   
+  #   networks:
+  #     - mongodb-network
+  #   
+  #   logging:
+  #     driver: ${LOG_DRIVER:-json-file}
+  #     options:
+  #       max-size: ${LOG_MAX_SIZE:-100m}
+  #       max-file: ${LOG_MAX_FILE:-3}
+
+# ==============================================================================
+# CONFIGURATION NOTES
+# ==============================================================================
+# 
+# 1. SECURITY CONSIDERATIONS:
+#    - Change default MongoDB credentials before production use
+#    - Change Mongo Express web interface credentials
+#    - Enable SSL/TLS for production deployments
+#    - Implement proper network segmentation
+#    - Regular security updates and patches
+#
+# 2. PERFORMANCE TUNING:
+#    - Adjust WiredTiger cache size based on available memory
+#    - Monitor resource usage and adjust limits accordingly
+#    - Optimize indexes for frequently queried collections
+#    - Configure connection pooling for applications
+#
+# 3. BACKUP CONFIGURATION:
+#    - Enable automated backup service for production
+#    - Test backup and restore procedures regularly
+#    - Monitor backup storage capacity and retention
+#    - Implement backup encryption for sensitive data
+#
+# 4. MONITORING:
+#    - Enable MongoDB exporter for Prometheus integration
+#    - Configure log aggregation for operational insights
+#    - Set up alerting for database health and performance
+#    - Monitor slow queries and optimize accordingly
+#
+# 5. VOLUME MANAGEMENT:
+#    - Ensure sufficient disk space for database growth
+#    - Implement proper backup of persistent volumes
+#    - Consider using external storage for production
+#    - Monitor disk I/O performance and optimize accordingly
+#
+# 6. HIGH AVAILABILITY (FUTURE):
+#    - Configure replica sets for production deployments
+#    - Implement proper failover and recovery procedures
+#    - Test disaster recovery scenarios regularly
+#    - Consider sharding for very large datasets
+#
+# ==============================================================================

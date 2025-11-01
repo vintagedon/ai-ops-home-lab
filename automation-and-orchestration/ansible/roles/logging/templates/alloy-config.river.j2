@@ -1,0 +1,48 @@
+# =============================================================================
+# PROXMOX ASTRONOMY LAB - ANSIBLE CONFIGURATION
+# =============================================================================
+# Purpose: 
+# Scope: 7-node Proxmox cluster with 20+ VMs running Ubuntu 24.04 Server
+# Architecture: Hybrid Kubernetes + VM infrastructure with centralized management
+# Agent Integration: Designed for MCP-based AI agent orchestration
+#
+# Network: Dual-VLAN (10.25.10.x mgmt, 10.25.20.x project)
+# Control Node: mgmt-ansible01 (10.25.10.7)
+# Target Infrastructure: Linux VMs across radioastronomy.io domain
+#
+# Last Updated: July 23, 2025
+# =============================================================================
+// Alloy configuration for {{ inventory_hostname }}
+logging {
+  level  = "info"
+  format = "logfmt"
+}
+
+loki.source.journal "system_logs" {
+  max_age    = "12h"
+  labels     = {
+    hostname = "{{ inventory_hostname }}",
+    job      = "systemd-journal",
+    environment = "production",
+  }
+  forward_to = [loki.write.logs_loki.receiver]
+}
+
+{% if inventory_hostname in groups['docker_hosts'] %}
+loki.source.docker "docker_logs" {
+  host       = "unix:///var/run/docker.sock"
+  targets    = []
+  labels     = {
+    hostname = "{{ inventory_hostname }}",
+    job      = "docker-containers",
+  }
+  forward_to = [loki.write.logs_loki.receiver]
+}
+{% endif %}
+
+loki.write "logs_loki" {
+  endpoint {
+    url = "http://proj-mon01.radioastronomy.io:3100/loki/api/v1/push"
+  }
+}
+

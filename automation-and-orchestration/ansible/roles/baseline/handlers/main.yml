@@ -1,0 +1,38 @@
+# =============================================================================
+# PROXMOX ASTRONOMY LAB - ANSIBLE CONFIGURATION
+# =============================================================================
+# Purpose: 
+# Scope: 7-node Proxmox cluster with 20+ VMs running Ubuntu 24.04 Server
+# Architecture: Hybrid Kubernetes + VM infrastructure with centralized management
+# Agent Integration: Designed for MCP-based AI agent orchestration
+#
+# Network: Dual-VLAN (10.25.10.x mgmt, 10.25.20.x project)
+# Control Node: mgmt-ansible01 (10.25.10.7)
+# Target Infrastructure: Linux VMs across radioastronomy.io domain
+#
+# Last Updated: July 23, 2025
+# =============================================================================
+# roles/baseline/handlers/main.yml
+---
+- name: restart chrony
+  systemd:
+    name: chrony
+    state: restarted
+
+- name: restart unattended-upgrades
+  systemd:
+    name: unattended-upgrades
+    state: restarted
+  ignore_errors: yes  # In case service doesn't exist yet
+
+- name: reload systemd
+  systemd:
+    daemon_reload: yes
+
+- name: enable upgrade timer
+  systemd:
+    name: unattended-upgrades.timer
+    enabled: yes
+    state: started
+    daemon_reload: yes  # Ensure systemd sees the new timer
+

@@ -1,0 +1,34 @@
+# =============================================================================
+# PROXMOX ASTRONOMY LAB - ANSIBLE CONFIGURATION
+# =============================================================================
+# Purpose: 
+# Scope: 7-node Proxmox cluster with 20+ VMs running Ubuntu 24.04 Server
+# Architecture: Hybrid Kubernetes + VM infrastructure with centralized management
+# Agent Integration: Designed for MCP-based AI agent orchestration
+#
+# Network: Dual-VLAN (10.25.10.x mgmt, 10.25.20.x project)
+# Control Node: mgmt-ansible01 (10.25.10.7)
+# Target Infrastructure: Linux VMs across radioastronomy.io domain
+#
+# Last Updated: July 23, 2025
+# =============================================================================
+# roles/logging/tasks/main.yml
+---
+- name: Remove promtail if present
+  include_tasks: remove-promtail.yml
+  tags: cleanup
+
+- name: Install and configure Alloy
+  include_tasks: install-alloy.yml
+  tags: alloy
+
+- name: Configure Docker logging
+  include_tasks: docker-logging.yml
+  when: "'docker_hosts' in group_names"
+  tags: docker
+
+- name: Update Prometheus configuration
+  include_tasks: prometheus-config.yml
+  when: inventory_hostname == "proj-mon01"
+  tags: prometheus
+

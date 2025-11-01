@@ -1,0 +1,164 @@
+{
+  "version": 0,
+  "ui": {
+    "default_locale": "",
+    "prompt_suggestions": [
+      {
+        "title": ["Example Query", ""],
+        "content": "Generate a Grafana query to show data ingestion rate over the last 24 hours."
+      }
+    ],
+    "enable_signup": true,
+    "default_user_role": "user",
+    "enable_community_sharing": true,
+    "enable_message_rating": true,
+    "banners": []
+  },
+  "ldap": {
+    "enable": false
+  },
+  "webhook_url": "https://example.com/webhook",
+  "auth": {
+    "admin": {
+      "show": true
+    },
+    "api_key": {
+      "enable": false,
+      "endpoint_restrictions": false,
+      "allowed_endpoints": ""
+    },
+    "jwt_expiry": "-1"
+  },
+  "webui": {
+    "url": "https://example.com"
+  },
+  "channels": {
+    "enable": true
+  },
+  "direct": {
+    "enable": true
+  },
+  "openai": {
+    "enable": true,
+    "api_base_urls": [
+      "https://api.openai.com/v1",
+      "https://api.someprovider.com/v1/openai"
+    ],
+    "api_keys": [
+      "sk-REDACTED",
+      "sk-REDACTED"
+    ],
+    "api_configs": {
+      "0": {},
+      "1": {
+        "enable": true,
+        "prefix_id": "",
+        "model_ids": [
+          "gpt-4o",
+          "gpt-3.5-turbo-0125",
+          "custom/claude-sonnet",
+          "meta-llama/llama3-70b",
+          "custom/dolphin-llama3-70b",
+          "mistralai/mistral-7b-instruct",
+          "phind/code-llama-34b",
+          "nous/hermes-3-llama3"
+        ]
+      }
+    }
+  },
+  "ollama": {
+    "enable": true,
+    "base_urls": ["http://localhost:11434"],
+    "api_configs": {
+      "0": {}
+    }
+  },
+  "rag": {
+    "pdf_extract_images": true,
+    "full_context": false,
+    "bypass_embedding_and_retrieval": false,
+    "youtube_loader_language": ["en"],
+    "youtube_loader_proxy_url": "",
+    "enable_web_loader_ssl_verification": true,
+    "web": {
+      "search": {
+        "enable": true,
+        "engine": "google_pse",
+        "bypass_embedding_and_retrieval": false,
+        "google_pse_api_key": "REDACTED",
+        "google_pse_engine_id": "REDACTED",
+        "bing_search_v7_endpoint": "https://api.bing.microsoft.com/v7.0/search",
+        "bing_search_v7_subscription_key": "",
+        "result_count": 3,
+        "concurrent_requests": 10,
+        "trust_env": false,
+        "domain": {
+          "filter_list": []
+        }
+      }
+    },
+    "embedding_engine": "openai",
+    "embedding_model": "text-embedding-3-small",
+    "openai_api_base_url": "https://api.openai.com/v1",
+    "openai_api_key": "sk-REDACTED",
+    "ollama": {
+      "url": "http://localhost:11434",
+      "key": ""
+    },
+    "embedding_batch_size": 1,
+    "file": {
+      "max_size": null,
+      "max_count": null
+    },
+    "CONTENT_EXTRACTION_ENGINE": "",
+    "tika_server_url": "http://tika:9998",
+    "document_intelligence_endpoint": "",
+    "document_intelligence_key": "",
+    "text_splitter": "",
+    "chunk_size": 1000,
+    "chunk_overlap": 100,
+    "template": "### Task:\nRespond to the user query using the provided context, incorporating inline citations in the format [source_id] **only when the <source_id> tag is explicitly provided** in the context.\n\n### Guidelines:\n- If you don't know the answer, clearly state that.\n- If uncertain, ask the user for clarification.\n- Respond in the same language as the user's query.\n- If the context is unreadable or of poor quality, inform the user and provide the best possible answer.\n- If the answer isn't present in the context but you possess the knowledge, explain this to the user and provide the answer using your own understanding.\n- **Only include inline citations using [source_id] (e.g., [1], [2]) when a `<source_id>` tag is explicitly provided in the context.**\n- Do not cite if the <source_id> tag is not provided in the context.  \n- Do not use XML tags in your response.\n- Ensure citations are concise and directly related to the information provided.\n\n### Example of Citation:\nIf the user asks about a specific topic and the information is found in \"whitepaper.pdf\" with a provided <source_id>, the response should include the citation like so:  \n* \"According to the study, the proposed method increases efficiency by 20% [whitepaper.pdf].\"\nIf no <source_id> is present, the response should omit the citation.\n\n### Output:\nProvide a clear and direct response to the user's query, including inline citations in the format [source_id] only when the <source_id> tag is present in the context.\n\n<context>\n{{CONTEXT}}\n</context>\n\n<user_query>\n{{QUERY}}\n</user_query>",
+    "top_k": 3,
+    "relevance_threshold": 0,
+    "enable_hybrid_search": false
+  },
+  "google_drive": {
+    "enable": false
+  },
+  "onedrive": {
+    "enable": false
+  },
+  "task": {
+    "model": {
+      "default": "",
+      "external": ""
+    },
+    "title": {
+      "enable": true,
+      "prompt_template": ""
+    },
+    "image": {
+      "prompt_template": ""
+    },
+    "autocomplete": {
+      "enable": true,
+      "input_max_length": -1
+    },
+    "tags": {
+      "enable": true,
+      "prompt_template": ""
+    },
+    "query": {
+      "search": {
+        "enable": true
+      },
+      "retrieval": {
+        "enable": true
+      },
+      "prompt_template": ""
+    },
+    "tools": {
+      "prompt_template": ""
+    }
+  }
+}

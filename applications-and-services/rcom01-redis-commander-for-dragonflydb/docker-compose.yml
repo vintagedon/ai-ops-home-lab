@@ -1,0 +1,25 @@
+services:
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: redis-commander
+    restart: unless-stopped
+    ports:
+      # Expose the web UI to a configurable host port.
+      - '${REDIS_COMMANDER_HTTP_PORT:-8083}:8081'
+    environment:
+      # Connect directly to the DragonflyDB instance using the host's IP and published port.
+      - REDIS_HOSTS=local:10.25.20.24:6379
+      - TZ=${TZ:-UTC}
+    deploy:
+      resources:
+        limits:
+          memory: ${REDIS_COMMANDER_MEM_LIMIT:-128M}
+        reservations:
+          memory: ${REDIS_COMMANDER_MEM_RESERVATION:-64M}
+    networks:
+      - redis-commander_net
+
+networks:
+  redis-commander_net:
+    name: ${DOCKER_NETWORK:-redis-commander_network}
+    driver: bridge

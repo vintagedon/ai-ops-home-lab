@@ -1,0 +1,40 @@
+# =============================================================================
+# PROXMOX ASTRONOMY LAB - ANSIBLE CONFIGURATION
+# =============================================================================
+# Purpose: 
+# Scope: 7-node Proxmox cluster with 20+ VMs running Ubuntu 24.04 Server
+# Architecture: Hybrid Kubernetes + VM infrastructure with centralized management
+# Agent Integration: Designed for MCP-based AI agent orchestration
+#
+# Network: Dual-VLAN (10.25.10.x mgmt, 10.25.20.x project)
+# Control Node: mgmt-ansible01 (10.25.10.7)
+# Target Infrastructure: Linux VMs across radioastronomy.io domain
+#
+# Last Updated: July 23, 2025
+# =============================================================================
+# roles/baseline/templates/50unattended-upgrades.j2
+// Ansible managed - unattended upgrades configuration
+Unattended-Upgrade::Allowed-Origins {
+    "${distro_id}:${distro_codename}";
+    "${distro_id}:${distro_codename}-security";
+    "${distro_id}ESMApps:${distro_codename}-apps-security";
+    "${distro_id}ESM:${distro_codename}-infra-security";
+};
+
+// Only install security updates automatically
+Unattended-Upgrade::Package-Blacklist {
+    // Add any packages you want to exclude
+};
+
+// Automatically reboot if required (during work hours only)
+Unattended-Upgrade::Automatic-Reboot "false";
+
+// Email notifications
+Unattended-Upgrade::Mail "{{ ansible_user }}@radioastronomy.io";
+Unattended-Upgrade::MailReport "on-change";
+
+// Clean up
+Unattended-Upgrade::Remove-Unused-Dependencies "true";
+Unattended-Upgrade::Remove-New-Unused-Dependencies "true";
+Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";
+

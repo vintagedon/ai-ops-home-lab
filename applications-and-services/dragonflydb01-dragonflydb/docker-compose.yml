@@ -1,0 +1,56 @@
+---
+version: '3.8'
+
+services:
+  dragonflydb:
+    image: docker.dragonflydb.io/dragonflydb/dragonfly:latest
+    container_name: proj-dragonflydb01
+    restart: unless-stopped
+    # Use a named volume for data persistence.
+    volumes:
+      - dragonfly-data:/data
+    # Expose the Redis-compatible port to the host.
+    ports:
+      - '6379:6379'
+    # Define resource limits for the container.
+    deploy:
+      resources:
+        limits:
+          memory: ${DRAGONFLY_MEM_LIMIT:-512M}
+        reservations:
+          memory: ${DRAGONFLY_MEM_RESERVATION:-128M}
+    networks:
+      - dragonfly_net
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: redis-commander
+    restart: unless-stopped
+    ports:
+      # Expose the web UI to a configurable host port.
+      - '${REDIS_COMMANDER_HTTP_PORT:-8083}:8081'
+    environment:
+      # This pre-configures Redis Commander to automatically connect to DragonflyDB.
+      # The format is 'label:hostname:port'.
+      - REDIS_HOSTS=local:dragonflydb:6379
+      - TZ=${TZ:-UTC}
+    # Define resource limits for the container.
+    deploy:
+      resources:
+        limits:
+          memory: ${REDIS_COMMANDER_MEM_LIMIT:-128M}
+        reservations:
+          memory: ${REDIS_COMMANDER_MEM_RESERVATION:-64M}
+    networks:
+      - dragonfly_net
+    depends_on:
+      - dragonflydb
+
+# Define the Docker-managed named volume for DragonflyDB data.
+volumes:
+  dragonfly-data:
+
+networks:
+  dragonfly_net:
+    name: ${DOCKER_NETWORK:-dragonfly_network}
+    driver: bridge

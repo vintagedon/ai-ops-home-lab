@@ -1,0 +1,46 @@
+# =============================================================================
+# PROXMOX ASTRONOMY LAB - ANSIBLE CONFIGURATION
+# =============================================================================
+# Purpose: 
+# Scope: 7-node Proxmox cluster with 20+ VMs running Ubuntu 24.04 Server
+# Architecture: Hybrid Kubernetes + VM infrastructure with centralized management
+# Agent Integration: Designed for MCP-based AI agent orchestration
+#
+# Network: Dual-VLAN (10.25.10.x mgmt, 10.25.20.x project)
+# Control Node: mgmt-ansible01 (10.25.10.7)
+# Target Infrastructure: Linux VMs across radioastronomy.io domain
+#
+# Last Updated: July 23, 2025
+# =============================================================================
+# roles/logging/tasks/remove-promtail.yml - Skip apt operations if conflicts
+---
+- name: Stop promtail service if running
+  systemd:
+    name: promtail
+    state: stopped
+  ignore_errors: yes
+
+- name: Remove promtail binary manually
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /usr/bin/promtail
+    - /usr/local/bin/promtail
+  ignore_errors: yes
+
+- name: Remove promtail configuration files
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /etc/promtail
+    - /var/log/promtail
+    - /etc/systemd/system/promtail.service
+  ignore_errors: yes
+
+- name: Reload systemd after service removal
+  systemd:
+    daemon_reload: yes
+  ignore_errors: yes
+

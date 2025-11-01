@@ -1,0 +1,119 @@
+# =============================================================================
+# PROXMOX ASTRONOMY LAB - ANSIBLE CONFIGURATION
+# =============================================================================
+# Purpose: 
+# Scope: 7-node Proxmox cluster with 20+ VMs running Ubuntu 24.04 Server
+# Architecture: Hybrid Kubernetes + VM infrastructure with centralized management
+# Agent Integration: Designed for MCP-based AI agent orchestration
+#
+# Network: Dual-VLAN (10.25.10.x mgmt, 10.25.20.x project)
+# Control Node: mgmt-ansible01 (10.25.10.7)
+# Target Infrastructure: Linux VMs across radioastronomy.io domain
+#
+# Last Updated: July 23, 2025
+# =============================================================================
+# roles/logging/tasks/install-alloy.yml - Add storage path fix
+---
+- name: Completely remove all apt sources and clean cache
+  shell: |
+    # Remove all Grafana-related files
+    rm -f /etc/apt/sources.list.d/grafana*
+    rm -f /etc/apt/keyrings/grafana*
+    rm -f /etc/apt/trusted.gpg.d/grafana*
+    
+    # Clean apt cache completely
+    apt-get clean
+    rm -rf /var/lib/apt/lists/*
+    
+    # Update package lists fresh
+    apt-get update
+  ignore_errors: yes
+
+- name: Download Alloy ZIP package (correct URL)
+  get_url:
+    url: "https://github.com/grafana/alloy/releases/download/v1.10.0/alloy-linux-amd64.zip"
+    dest: /tmp/alloy-linux-amd64.zip
+    mode: '0644'
+
+- name: Install unzip if not present
+  apt:
+    name: unzip
+    state: present
+    update_cache: no
+
+- name: Extract Alloy binary
+  unarchive:
+    src: /tmp/alloy-linux-amd64.zip
+    dest: /tmp/
+    remote_src: yes
+
+- name: Install Alloy binary
+  copy:
+    src: /tmp/alloy-linux-amd64
+    dest: /usr/local/bin/alloy
+    mode: '0755'
+    remote_src: yes
+
+- name: Create Alloy user
+  user:
+    name: alloy
+    system: yes
+    shell: /bin/false
+    home: /var/lib/alloy
+    create_home: yes
+
+- name: Create Alloy configuration directory
+  file:
+    path: /etc/alloy
+    state: directory
+    mode: '0755'
+    owner: alloy
+    group: alloy
+
+- name: Create Alloy data directory with proper permissions
+  file:
+    path: /var/lib/alloy
+    state: directory
+    mode: '0755'
+    owner: alloy
+    group: alloy
+
+- name: Create Alloy systemd service
+  template:
+    src: alloy.service.j2
+    dest: /etc/systemd/system/alloy.service
+  notify:
+    - reload systemd
+    - restart alloy
+
+- name: Create Alloy configuration
+  template:
+    src: alloy-config.river.j2
+    dest: /etc/alloy/config.river
+    backup: yes
+    owner: alloy
+    group: alloy
+    mode: '0644'
+  notify: restart alloy
+
+- name: Stop any existing Alloy service
+  systemd:
+    name: alloy
+    state: stopped
+  ignore_errors: yes
+
+- name: Reload systemd and start Alloy service
+  systemd:
+    name: alloy
+    enabled: yes
+    state: started
+    daemon_reload: yes
+
+- name: Clean up downloaded files
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /tmp/alloy-linux-amd64.zip
+    - /tmp/alloy-linux-amd64
+

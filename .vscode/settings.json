@@ -1,0 +1,41 @@
+{
+  // 1) Per-language default formatters
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+
+  // 2) Predictable save actions (explicit only)
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit",
+    "source.fixAll.ruff": "explicit"
+  },
+
+  // 3) Exclude heavy/generated paths (search + explorer)
+  "files.exclude": {
+    "**/.venv": true,
+    "**/__pycache__": true,
+    "**/.mypy_cache": true,
+    "**/renders": true,
+    "**/output": true,
+    "**/data/cache": true
+  },
+  "search.exclude": {
+    "**/.venv": true,
+    "**/__pycache__": true,
+    "**/.mypy_cache": true,
+    "**/renders/**": true,
+    "**/output/**": true,
+    "**/data/cache/**": true
+  },
+
+  // (nice to have for your venv)
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+  "python.analysis.typeCheckingMode": "basic",
+  "python.terminal.activateEnvironment": true
+}

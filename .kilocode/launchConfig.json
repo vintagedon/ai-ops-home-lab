@@ -1,0 +1,10 @@
+{
+  "kilocode.autoLaunch": {
+    "enabled": true,
+    "profile": "ZAI-Coding",
+    "mode": "ask",
+    "prompt": "Analyze git changes since last commit for review tags and potential issues. Report any TODO, FIXME, REVIEW, SECURITY, PERFORMANCE, QUESTION, COORDINATION, TECHNICAL-DEBT, BUG tags found in modified files. Highlight critical (@1) and high priority (@2) items. Quick summary format with file:line references.",
+    "waitForCompletion": false,
+    "showOutput": true
+  }
+}

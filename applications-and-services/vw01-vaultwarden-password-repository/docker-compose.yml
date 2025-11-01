@@ -1,0 +1,33 @@
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: proj-vw01
+    restart: unless-stopped
+    volumes:
+      # Use a Docker-managed named volume for all persistent data.
+      - vw-data:/data
+    ports:
+      # Expose the container's port to the host.
+      - '${VW_HTTP_PORT:-8080}:80'
+    environment:
+      # --- General Settings ---
+      # Sets the domain name, which is crucial for WebAuthn (FIDO2) and other features.
+      - DOMAIN=${VW_DOMAIN}
+      # Enable WebSockets for real-time client communication.
+      - WEBSOCKET_ENABLED=true
+      # --- Admin Panel ---
+      # Set a secure, random token to access the admin interface at /admin.
+      - ADMIN_TOKEN=${VW_ADMIN_TOKEN}
+      # --- Timezone ---
+      - TZ=${TZ:-UTC}
+    networks:
+      - vaultwarden_net
+
+# Define the Docker-managed named volume.
+volumes:
+  vw-data:
+
+networks:
+  vaultwarden_net:
+    name: ${DOCKER_NETWORK:-vaultwarden_network}
+    driver: bridge

@@ -1,0 +1,49 @@
+# =============================================================================
+# PROXMOX ASTRONOMY LAB - ANSIBLE CONFIGURATION
+# =============================================================================
+# Purpose: 
+# Scope: 7-node Proxmox cluster with 20+ VMs running Ubuntu 24.04 Server
+# Architecture: Hybrid Kubernetes + VM infrastructure with centralized management
+# Agent Integration: Designed for MCP-based AI agent orchestration
+#
+# Network: Dual-VLAN (10.25.10.x mgmt, 10.25.20.x project)
+# Control Node: mgmt-ansible01 (10.25.10.7)
+# Target Infrastructure: Linux VMs across radioastronomy.io domain
+#
+# Last Updated: July 23, 2025
+# =============================================================================
+# roles/baseline/tasks/unattended-upgrades.yml
+---
+- name: Install unattended-upgrades
+  apt:
+    name: unattended-upgrades
+    state: present
+    update_cache: yes
+
+- name: Configure unattended upgrades schedule
+  template:
+    src: 20auto-upgrades.j2
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+  notify: restart unattended-upgrades
+
+- name: Configure unattended upgrades options
+  template:
+    src: 50unattended-upgrades.j2
+    dest: /etc/apt/apt.conf.d/50unattended-upgrades
+
+- name: Create systemd timer for workday updates (11 AM)
+  template:
+    src: unattended-upgrades.timer.j2
+    dest: /etc/systemd/system/unattended-upgrades.timer
+  notify: 
+    - reload systemd
+    - enable upgrade timer
+
+- name: Create systemd service for unattended upgrades
+  template:
+    src: unattended-upgrades.service.j2
+    dest: /etc/systemd/system/unattended-upgrades.service
+  notify: 
+    - reload systemd
+    - enable upgrade timer
+

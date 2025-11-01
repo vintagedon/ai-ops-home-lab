@@ -1,0 +1,27 @@
+# =============================================================================
+# PROXMOX ASTRONOMY LAB - ANSIBLE CONFIGURATION
+# =============================================================================
+# Purpose: 
+# Scope: 7-node Proxmox cluster with 20+ VMs running Ubuntu 24.04 Server
+# Architecture: Hybrid Kubernetes + VM infrastructure with centralized management
+# Agent Integration: Designed for MCP-based AI agent orchestration
+#
+# Network: Dual-VLAN (10.25.10.x mgmt, 10.25.20.x project)
+# Control Node: mgmt-ansible01 (10.25.10.7)
+# Target Infrastructure: Linux VMs across radioastronomy.io domain
+#
+# Last Updated: July 23, 2025
+# =============================================================================
+# roles/baseline/templates/unattended-upgrades.timer.j2
+[Unit]
+Description=Unattended Upgrades Timer (Workdays 11 AM)
+Requires=unattended-upgrades.service
+
+[Timer]
+# Monday-Friday at 11:00 AM
+OnCalendar=Mon..Fri 11:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+

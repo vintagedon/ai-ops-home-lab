@@ -1,0 +1,97 @@
+# =============================================================================
+# PROXMOX ASTRONOMY LAB - ANSIBLE CONFIGURATION
+# =============================================================================
+# Purpose: 
+# Scope: 7-node Proxmox cluster with 20+ VMs running Ubuntu 24.04 Server
+# Architecture: Hybrid Kubernetes + VM infrastructure with centralized management
+# Agent Integration: Designed for MCP-based AI agent orchestration
+#
+# Network: Dual-VLAN (10.25.10.x mgmt, 10.25.20.x project)
+# Control Node: mgmt-ansible01 (10.25.10.7)
+# Target Infrastructure: Linux VMs across radioastronomy.io domain
+#
+# Last Updated: July 23, 2025
+# =============================================================================
+# roles/monitoring/templates/prometheus.yml.j2
+# Ansible managed - Updated for current infrastructure
+global:
+  scrape_interval: 15s
+
+alerting:
+  alertmanagers:
+    - static_configs:
+      - targets: ['proj-mon01.radioastronomy.io:9093']
+
+scrape_configs:
+  # Monitoring stack self-monitoring
+  - job_name: 'monitoring_stack'
+    static_configs:
+      - targets: ['proj-mon01.radioastronomy.io:9090', 'proj-mon01.radioastronomy.io:3100', 'proj-mon01.radioastronomy.io:9093']
+        labels:
+          instance: 'proj-mon01'
+          group: 'monitoring'
+
+  # Node exporter - all Linux hosts
+  - job_name: 'node-exporter'
+    static_configs:
+{% for host in groups['linux'] %}
+      - targets: ['{{ hostvars[host]['ansible_host'] }}:9100']
+        labels:
+          hostname: '{{ host }}'
+          group: '{{ "mgmt" if host.startswith("mgmt-") else "project" }}'
+{% endfor %}
+
+  # cAdvisor - Docker hosts only
+  - job_name: 'cadvisor'
+    static_configs:
+{% for host in groups['docker_hosts'] %}
+      - targets: ['{{ hostvars[host]['ansible_host'] }}:8080']
+        labels:
+          hostname: '{{ host }}'
+          group: 'docker'
+{% endfor %}
+
+  # What's Up Docker - Container update monitoring
+  - job_name: 'wud'
+    metrics_path: /metrics
+    static_configs:
+{% for host in groups['docker_hosts'] %}
+      - targets: ['{{ hostvars[host]['ansible_host'] }}:3000']
+        labels:
+          hostname: '{{ host }}'
+          group: 'docker'
+{% endfor %}
+
+  # PostgreSQL exporters
+  - job_name: 'postgres-exporter'
+    static_configs:
+      - targets: ['proj-pg01.radioastronomy.io:9187']
+        labels:
+          hostname: 'proj-pg01'
+          group: 'database'
+      - targets: ['proj-pgsql02.radioastronomy.io:9187']
+        labels:
+          hostname: 'proj-pgsql02'
+          group: 'database'
+      - targets: ['mgmt-agents01.radioastronomy.io:9187']
+        labels:
+          hostname: 'mgmt-agents01'
+          group: 'database'
+
+  # NVIDIA GPU exporter
+  - job_name: 'nvidia-gpu-exporter'
+    static_configs:
+      - targets: ['proj-k8s03.radioastronomy.io:9835']
+        labels:
+          hostname: 'proj-k8s03'
+          group: 'compute'
+
+  # Additional service exporters
+  - job_name: 'gitea'
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['proj-docker01.radioastronomy.io:3000']
+        labels:
+          hostname: 'proj-docker01'
+          group: 'services'
+

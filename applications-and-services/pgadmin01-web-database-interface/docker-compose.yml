@@ -1,0 +1,30 @@
+services:
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin01
+    restart: unless-stopped
+    ports:
+      # Expose the web UI to a configurable host port.
+      - '${PGADMIN_HTTP_PORT:-5050}:80'
+    environment:
+      # Set the default user account for the initial login.
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      # The password for the default user. This should be set securely in the .env file.
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+      # This setting prevents pgAdmin from running in a desktop-only mode.
+      - PGADMIN_CONFIG_SERVER_MODE=False
+      - TZ=${TZ:-UTC}
+    volumes:
+      # Use a Docker-managed named volume to persist server configurations, user settings, etc.
+      - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - pgadmin_net
+
+# Define the Docker-managed named volume.
+volumes:
+  pgadmin-data:
+
+networks:
+  pgadmin_net:
+    name: ${DOCKER_NETWORK:-pgadmin_network}
+    driver: bridge
