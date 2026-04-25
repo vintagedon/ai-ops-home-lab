@@ -1,0 +1,210 @@
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+model_identity:
+  name: "Kimi K2-Instruct-0905"
+  vendor: "Moonshot AI"
+  model_family: "Kimi K2"
+  version: "Instruct-0905"
+  release_date: "2025-09-05"
+  model_type: "Mixture-of-Experts (MoE) Large Language Model (32B activated / 1T total params)"
+
+  vendor_model_card_url: "https://huggingface.co/moonshotai/Kimi-K2-Instruct-0905"
+
+  license: "Modified MIT License"
+  deprecation_status: "Active"
+
+technical_specifications:
+  architecture:
+    base_architecture: "MoE Transformer with 384 experts, 8 experts selected per token" :contentReference[oaicite:2]{index=2}
+    parameter_count: "1 T total / 32 B activated" :contentReference[oaicite:3]{index=3}
+    context_window: "256 k tokens" :contentReference[oaicite:4]{index=4}
+    training_data_cutoff: "Not publicly disclosed"
+    architectural_details: |
+      Layers: 61 (1 dense layer + 60 MoE layers)
+      Hidden dimension: 7168 attention hidden dim, MoE hidden dim per expert 2048
+      Attention heads: 64
+      Activation: SwiGLU
+      Vocabulary size: 160 K tokens   :contentReference[oaicite:5]{index=5}
+
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "High compute (MoE 1T total parameters)"
+    cost_tier: "Premium"
+    latency: "Not publicly disclosed"
+    throughput: "Not publicly disclosed"
+
+capabilities:
+  vendor_claimed_strengths: |
+    Enhanced agentic/assistant coding intelligence (especially frontend programming & tool-calling) :contentReference[oaicite:6]{index=6}
+    Very large context length (256 k tokens) enables long-horizon tasks and document-scale understanding. :contentReference[oaicite:7]{index=7}
+    Specialized for instruction-tuned agentic workflows with native tool invocation support. :contentReference[oaicite:8]{index=8}
+
+  benchmark_performance: |
+    Selected benchmark table from model page:
+    - SWE-Bench Verified (Agentic Coding) ~65.8% single-attempt accuracy for 0905 version. :contentReference[oaicite:9]{index=9}
+    - LiveCodeBench, MultiPL-E, etc details as published. :contentReference[oaicite:10]{index=10}
+
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["tool-calling APIs", "agentic coding workflows", "very long context input"]
+
+  known_limitations:
+    vendor_disclosed: |
+      Standard large model caveats: performance may vary in domains outside target (frontend coding/agentic tool tasks) and environment/hardware readiness matters. :contentReference[oaicite:11]{index=11}
+    common_failure_modes: |
+      - Drift or inconsistency in reasoning over very long context chains beyond 256 k tokens (not publicly detailed)
+      - High inference cost and hardware requirements due to MoE size
+    unsuitable_use_cases: |
+      - Unmoderated use in high-stakes or regulated settings without human oversight
+      - Use cases requiring transparent training data provenance or weight interpretability
+
+training_information:
+  training_data_description: |
+    Pre-training: 15.5 T tokens used for pre-training large MoE model (per model page) with MuonClip optimizer for scale stability. :contentReference[oaicite:12]{index=12}
+    Post-training: Instruction-tuned variant “Instruct-0905” built on top of base.
+  training_methodology: |
+    Mixture-of-Experts architecture, MuonClip optimizer, large context pre-training followed by instruction tuning and agentic tool-use finetuning. :contentReference[oaicite:13]{index=13}
+  data_privacy_conside­rations: |
+    Specific dataset provenance, PII removal processes, filtering strategy not publicly disclosed; deployers must assess for compliance.
+
+intended_use:
+  vendor_intended_use: |
+    General-purpose assistant/agent tasks with strong focus on coding, tool-use, frontend programming, chat completion spanning very long context. :contentReference[oaicite:14]{index=14}
+  suitable_domains: ["agentic_coding","tool_invocation","long_form_dialogue","documentation_analysis"]
+  out_of_scope_use: |
+    Use in safety-critical or regulated environments without further validation; domains outside coding/agent workflows without testing; infrastructure with low compute capacity insufficient to support model demands.
+
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Detailed architecture, context length, benchmark numbers are reported publicly on model page.
+    public_evidence: |
+      Metrics and specs are self-reported; independent third-party evaluations are limited. :contentReference[oaicite:15]{index=15}
+    assessment_notes: |
+      Strong feature profile; organisations should validate domain-specific behaviour and benchmark result reproduction.
+
+  safe:
+    safety_measures: |
+      License (Modified MIT) and public model card; vendor identifies use-case limitations; integration through platform APIs emphasised. :contentReference[oaicite:16]{index=16}
+    known_safety_issues: |
+      General risks of LLMs: hallucination, bias, misuse of large context, tool-invocation vulnerabilities.
+    assessment_notes: |
+      Deployers should implement moderation, output logging, human review especially given coding/tool-use focus.
+
+  secure_and_resilient:
+    security_features: |
+      Model is supported on hardware platforms (e.g., GroqCloud) with high-throughput architecture. :contentReference[oaicite:17]{index=17}
+    known_vulnerabilities: |
+      Prompt injection, tool-call abuse, context-overflow attacks typical of large context models.
+    assessment_notes: |
+      Infrastructure must include robust runtime protections, resource isolation and monitoring.
+
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Model card is public, architecture specs disclosed; but training data, dataset details and weights introspection not fully open.
+    assessment_notes: |
+      Good baseline for governance; specific organisational validation still required.
+
+  explainable_and_interpretable:
+    explainability_features: |
+      Documentation of tool-calling interface and package details; chain-of-thought not explicitly open.
+    interpretability_limitations: |
+      Internals (expert routing, dataset mix) not disclosed.
+    assessment_notes: |
+      Treated as advanced capability model; interpretability remains limited.
+
+  privacy_enhanced:
+    privacy_features: |
+      Model weights open under MIT licence; run context/hardware details disclosed.
+    privacy_concerns: |
+      Unknown provenance of training data; potential for personal data inclusion and large context reflection of earlier tokens.
+    assessment_notes: |
+      For regulated or high-privacy domains, perform PII auditing and data lineage checks.
+
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      No detailed public bias mitigation section; front-end/coding orientation suggests bias may be less emphasised than general LLM.
+    known_biases: |
+      Community comments note potential access/quantisation constraints and limited independent review. :contentReference[oaicite:18]{index=18}
+    assessment_notes: |
+      Deployers should run language-/region-specific bias audits and monitor tool-call outputs for fairness/harm.
+
+evaluation_guidance:
+  recommended_tests: |
+    - Reproduce reported benchmarks (SWE-Bench Verified, LiveCodeBench, etc) in your environment.
+    - Test tool-calling reliability and integration in your toolchain (e.g., editor, CLI).
+    - Validate behaviour over very long context (approaching 256 k tokens) for coherence and drift.
+    - Perform coding tasks (especially frontend/agent workflow) relevant to your use-case.
+    - Conduct safety red-teaming: tool-call misuse, hallucination in code generation, prompt injection within long context.
+    - Benchmark latency/throughput on your infra given model size/hardware demands.
+
+  key_evaluation_questions: |
+    - Does model performance (coding, tool-use, long-context) meet your in-domain metrics?
+    - Is your infrastructure capable of supporting the model’s compute/latency requirements?
+    - Are moderation, provenance, logging, human-in-loop review implemented given agentic nature?
+    - Are you comfortable with upstream data/weight transparency and license for your deployment?
+
+  comparison_considerations: |
+    - Compare with other large MoE models (e.g., Kimi K2-0711, Qwen3, DeepSeek) in terms of active parameters, context length, agentic/tool-use suitability.
+    - Evaluate trade-offs between size/compute cost vs performance uplift for your tasks.
+    - Confirm license/usage terms and derivative rights under Modified MIT License.
+
+rmf_function_mapping:
+  govern:
+    notes: |
+      Human-in-loop required for agentic workflows; track tool-calls and model versions; manage attribution and licensing obligations.
+  map:
+    context_considerations: |
+      Very long input contexts (256 k) increase risk of prompt injection, data leakage, drift, and unintended behaviour.
+    risk_categories: ["hallucination","tool_usage_misuse","data_leakage_in_long_context","bias","privacy_leakage"]
+  measure:
+    suggested_metrics: |
+      - Hallucination rate per 10k tokens in long-context tasks.
+      - Tool-call error/failure rate in integrated workflows.
+      - Latency/throughput relative to compute and cost targets.
+      - Bias/harm incident rate per 1000 users for domain/coding tasks.
+  manage:
+    risk_management_considerations: |
+      Build monitoring/logging around tool invocation and long-context inputs; restrict use in high-risk domains; validate both agentic output and internal tool-calls; plan fallback/rollback mechanisms.
+
+references:
+  vendor_documentation:
+    - url: "https://huggingface.co/moonshotai/Kimi-K2-Instruct-0905"
+      description: "Hugging Face model page for Kimi K2-Instruct-0905"
+    - url: "https://docs.api.nvidia.com/nim/reference/moonshotai-kimi-k2-instruct-0905"
+      description: "Supplemental architecture/use-case summary" :contentReference[oaicite:19]{index=19}
+  benchmarks:
+    - name: "Coding & agentic benchmark table (SWE-Bench, LiveCodeBench etc)"
+      url: "https://huggingface.co/moonshotai/Kimi-K2-Instruct-0905"
+      result: "Benchmark table as published on model page" :contentReference[oaicite:20]{index=20}
+  third_party_evaluations:
+    - source: "Reddit user discussion"
+      url: "https://www.reddit.com/r/LocalLLaMA/comments/1n8xjyz"
+      summary: > “At the moment no GGUF quants exist yet … K2 0905 update … context window 256K tokens.” :contentReference[oaicite:21]{index=21}
+  news_coverage:
+    - title: "Kimi K2 0905 model update on GroqCloud"
+      url: "https://groq.com/blog/introducing-kimi-k2-0905-on-groqcloud"
+      date: "2025-09-05" :contentReference[oaicite:22]{index=22}
+
+metadata:
+  card_version: "1.0"
+  card_author: "Don Fountain"
+  card_creation_date: "2025-10-24"
+  last_updated: "2025-10-24"
+  information_sources: |
+    Model card page, vendor documentation, community commentary (Reddit), third-party summariser sites.
+  completeness_assessment: |
+    High for architecture specs (MoE, parameters, context length), good for coding/agentic benchmarks; medium for training data transparency and real-world production metrics; lower for detailed latency/throughput analyses and third-party independent evaluation.
+  change_log:
+    - date: "2025-10-24"
+      author: "Don Fountain"
+      changes: "Initial synthesis of Kimi K2-Instruct-0905 model card."
+

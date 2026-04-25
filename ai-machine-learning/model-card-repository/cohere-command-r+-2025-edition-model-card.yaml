@@ -1,0 +1,248 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Command R+ (2025 Edition)"
+  vendor: "Cohere"
+  model_family: "Command R"
+  version: "2025"
+  release_date: "2025-02-14"
+  model_type: "Open-weight Retrieval-Augmented Language Model"
+  vendor_model_card_url: "https://cohere.com/blog/command-r-plus-2025"
+  license: "CC-BY-NC-4.0 (Open-weight, non-commercial use)"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer (Decoder-only, RAG-optimized)"
+    parameter_count: "104 B parameters (sparse MoE architecture)"
+    context_window: "128 K tokens"
+    training_data_cutoff: "2024-10"
+    architectural_details: |
+      Command R+ is an open-weight, retrieval-augmented model designed for long-context reasoning and grounding.
+      It uses sparse Mixture-of-Experts layers, retrieval embeddings, and built-in reranker modules for factual recall.
+      The 2025 refresh introduces efficiency upgrades, new multilingual capabilities, and fine-tuning hooks for
+      enterprise RAG and agentic applications.
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text", "structured_data"]
+  performance_characteristics:
+    speed_tier: "Medium"
+    cost_tier: "Low / Open-weight"
+    latency: |
+      ≈25–40 ms/token on A100 inference using vLLM or Cohere API.
+    throughput: |
+      Scales efficiently for retrieval workloads due to sparse expert activation and embedding caching.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    Strong retrieval integration and factual accuracy.  
+    Designed for knowledge-intensive workflows—summarization, retrieval-augmented question answering (RAG),
+    and conversational search.  
+    Open-weight release enables fine-tuning and on-prem deployments.
+  benchmark_performance: |
+    - MMLU: 81.5  
+    - GSM8K: 88.9  
+    - RAG-FactScore: 92.3  
+    - HellaSwag: 83.0  
+    - Long-context recall (100K tokens): 97.4%  
+    (Cohere release + Hugging Face leaderboard)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["retrieval_augmented_generation", "embedding_reranker", "multilingual", "fine_tuning"]
+  known_limitations:
+    vendor_disclosed: |
+      Dependent on retrieval quality; may hallucinate when external knowledge unavailable.
+    common_failure_modes: |
+      Overconfidence in unsupported statements; failure to cite correctly in multi-hop queries.
+    unsuitable_use_cases: |
+      Closed-book reasoning; domains requiring deterministic correctness without grounding.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on large-scale multilingual text and code datasets augmented with retrieval examples.
+    Includes synthetic RAG conversations and alignment data tuned for factual citation generation.
+    Dataset composition: public, licensed, and synthetic (mix undisclosed).
+  training_methodology: |
+    Retrieval-Augmented Supervised Fine-Tuning (RASF) and preference optimization for citation fidelity.
+    Built-in retriever uses Cohere’s multilingual embedding model.
+  data_privacy_considerations: |
+    PII and sensitive content filtered from both retrieval and instruction datasets.
+    Open weights allow user control over data handling and retrieval corpora.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Retrieval-augmented chatbots, knowledge management, search augmentation, and enterprise documentation QA.
+  suitable_domains: ["research", "enterprise_QA", "documentation_search", "knowledge_bases", "education"]
+  out_of_scope_use: |
+    Non-grounded creative writing; unmoderated public deployment; safety-critical reasoning tasks.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Delivers consistent factual accuracy when connected to external retrieval sources.
+    public_evidence: |
+      Independent evaluations confirm high factual consistency and long-context retention.
+    assessment_notes: |
+      Very reliable for retrieval-based applications; less so in open-ended reasoning.
+  safe:
+    safety_measures: |
+      Filtered training data, grounded response templates, and factual consistency checks.
+    known_safety_issues: |
+      May generate uncited factual claims when retrieval source is ambiguous.
+    assessment_notes: |
+      Safety depends on retrieval configuration and moderation integration.
+  secure_and_resilient:
+    security_features: |
+      Retrieval interface supports endpoint isolation; fine-tuning pipelines allow on-premise control.
+    known_vulnerabilities: |
+      Potential data leakage through user-managed retrieval corpora.
+    assessment_notes: |
+      Security posture strong under local control; external API retrievals require oversight.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Model weights, documentation, and training recipe released under open license.
+    assessment_notes: |
+      Fully auditable and transparent RAG architecture.
+  explainable_and_interpretable:
+    explainability_features: |
+      Reranker outputs and retrieval source traces exposed to developers.
+    interpretability_limitations: |
+      Internal weighting of retrieval relevance not directly tunable.
+    assessment_notes: |
+      Strong explainability for RAG systems.
+  privacy_enhanced:
+    privacy_features: |
+      Open deployment supports full local control; no data telemetry or remote logging.
+    privacy_concerns: |
+      User must govern retrieval index content; improper curation may expose sensitive data.
+    assessment_notes: |
+      Enables privacy-preserving RAG workflows.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Balanced multilingual corpus and fairness-regularized embeddings.
+    known_biases: |
+      Residual language bias toward high-resource languages.
+    assessment_notes: |
+      Fair for multilingual contexts; fairness may degrade on low-resource data.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Retrieval-grounded factual accuracy testing  
+    - Citation consistency and reference verification  
+    - Bias and multilingual fairness audits  
+    - Latency and cost-performance benchmarking under RAG load
+  key_evaluation_questions: |
+    - Are retrieval indexes curated and compliant?  
+    - Is factual grounding sufficient for your domain?  
+    - Do citations align with organizational documentation requirements?
+  comparison_considerations: |
+    - Outperforms Llama 3.1 70B and Mistral Large v2 on factual QA;  
+      slower and less flexible for open-ended reasoning than Claude 4.1 Sonnet or GPT-4 Turbo.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Establish policies for retrieval corpus curation, citation logging, and API usage.
+  map:
+    context_considerations: |
+      Identify factual risk tolerance and citation completeness requirements.
+    risk_categories: ["hallucination", "bias", "retrieval_error", "privacy_leakage"]
+  measure:
+    suggested_metrics: |
+      FactScore, retrieval precision, citation recall, and grounded accuracy rate.
+  manage:
+    risk_management_considerations: |
+      Conduct periodic retrieval audits; re-index sensitive data; require citation compliance validation.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://cohere.com/blog/command-r-plus-2025"
+    description: "Official Command R+ 2025 announcement"
+  - url: "https://huggingface.co/CohereForAI/command-r-plus"
+    description: "Open-weight repository and benchmarks"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "81.5"
+  - name: "GSM8K"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "88.9"
+  third_party_evaluations:
+  - source: "Hugging Face Open LLM Leaderboard"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    summary: "Confirms high factuality in retrieval-augmented reasoning."
+  news_coverage:
+  - title: "Cohere releases 2025 refresh of Command R+ with multilingual RAG support"
+    url: "https://cohere.com/blog/command-r-plus-2025"
+    date: "2025-02-14"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Cohere official documentation, open-weight release card, and benchmark datasets.
+  completeness_assessment: |
+    High for transparency and performance data; medium for training corpus breakdown.
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card based on Command R+ 2025 release and open-weight data."

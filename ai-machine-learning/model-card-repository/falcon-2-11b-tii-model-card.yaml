@@ -1,0 +1,251 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Falcon 2 11B"
+  vendor: "Technology Innovation Institute (TII, UAE)"
+  model_family: "Falcon 2"
+  version: "11B"
+  release_date: "2024-05-15"
+  model_type: "Open-Weight Multilingual Reasoning Model"
+  vendor_model_card_url: "https://huggingface.co/tiiuae/falcon-2-11b"
+  license: "Apache 2.0"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Dense Transformer (decoder-only, causal LM)"
+    parameter_count: "11 billion"
+    context_window: "32 K tokens"
+    training_data_cutoff: "2024-02"
+    architectural_details: |
+      Falcon 2 11B is TII’s next-generation open model following Falcon 40B and 180B.
+      It introduces grouped-query attention (GQA), sliding-window attention, and rotary embeddings (RoPE)
+      for efficient long-context reasoning and improved factual grounding.
+      Designed as a compact but high-performance reasoning model, 
+      it is optimized for multilingual and code-heavy workloads.
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "Very High"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ~0.18 s per 1 K tokens (fp16 on A100) and <0.1 s when quantized (INT4 on RTX 4090).  
+      Tuned for high throughput on vLLM, TensorRT-LLM, and Hugging Face Text Generation Inference.
+    throughput: |
+      Designed for real-time assistants, chatbots, and RAG systems; supports efficient batching.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • Compact, efficient reasoning model competitive with Mistral 7B and Gemma 2 9B.  
+    • Excellent performance in multilingual and code tasks.  
+    • Tuned for long-context summarization and retrieval-augmented pipelines.  
+    • Energy-efficient architecture suitable for on-prem or edge deployment.
+  benchmark_performance: |
+    - MMLU: 77.9  
+    - GSM8K: 84.2  
+    - ARC-C: 81.1  
+    - HumanEval: 74.3  
+    (TII internal + Hugging Face Open LLM Leaderboard, June 2024)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["multilingual_QA", "summarization", "code_generation", "RAG_integration"]
+  known_limitations:
+    vendor_disclosed: |
+      No multimodal support; factual grounding weaker without retrieval.  
+      English and Arabic optimized, lower accuracy in low-resource languages.  
+    common_failure_modes: |
+      Over-refusal in sensitive queries; limited stylistic variation.  
+    unsuitable_use_cases: |
+      Safety-critical or real-time decision automation.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on 5 trillion tokens from RefinedWeb 2, multilingual Wikipedia, Common Crawl, 
+    code repositories, and synthetic reasoning datasets.  
+    Balanced data across English, Arabic, and European languages.
+  training_methodology: |
+    Standard autoregressive pretraining; supervised fine-tuning with instruction-following and reasoning data.  
+    SafeRL and multilingual RLHF alignment applied post-training.  
+  data_privacy_considerations: |
+    Public and licensed data only; no personal or user-derived datasets included.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    General-purpose reasoning, summarization, and multilingual assistants.  
+    Designed for enterprise RAG, educational use, and research.
+  suitable_domains: ["research", "education", "enterprise_AI", "multilingual_assistants", "code_generation"]
+  out_of_scope_use: |
+    Automated decision-making, regulated content generation, or unmoderated chat systems.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Stable long-context reasoning and low hallucination rate (<3%).  
+    public_evidence: |
+      Confirmed via Open LLM Leaderboard and TII benchmarks; reproducible inference verified.  
+    assessment_notes: |
+      Reliable compact reasoning model for multilingual tasks.
+  safe:
+    safety_measures: |
+      SafeRL alignment and toxicity filtering; multilingual moderation data applied.  
+    known_safety_issues: |
+      Conservative refusals; overcautious tone in politically sensitive prompts.  
+    assessment_notes: |
+      Safe for public use under light moderation.
+  secure_and_resilient:
+    security_features: |
+      Integrity-verified checkpoints; no telemetry; secure on-prem deployment supported.  
+    known_vulnerabilities: |
+      Standard open LLM risks (prompt injection, malicious fine-tunes).  
+    assessment_notes: |
+      Secure when isolated in managed environments.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Weights, tokenizer, and evaluation code published; architecture and dataset sources documented.  
+    assessment_notes: |
+      Exemplary transparency for open-weight reasoning model.
+  explainable_and_interpretable:
+    explainability_features: |
+      Compatible with attention-visualization and interpretability libraries (TransformerLens, Captum).  
+    interpretability_limitations: |
+      No explicit reasoning trace output; dense architecture limits modular interpretability.  
+    assessment_notes: |
+      High interpretability for academic research.
+  privacy_enhanced:
+    privacy_features: |
+      PII filtering during data preprocessing; no telemetry or retention.  
+    privacy_concerns: |
+      Minimal; standard open web dataset exposure.  
+    assessment_notes: |
+      Meets privacy expectations for open research.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Multilingual dataset balancing and SafeRL fairness calibration.  
+    known_biases: |
+      Slight English and Arabic bias; limited coverage for minority languages.  
+    assessment_notes: |
+      Acceptable fairness baseline for open deployment.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • Multilingual QA and translation accuracy.  
+    • Reasoning and factual QA (MMLU, GSM8K).  
+    • Bias, toxicity, and fairness audits.  
+    • Latency and quantization performance on deployment hardware.
+  key_evaluation_questions: |
+    – Does reasoning accuracy meet your requirements?  
+    – Are safety and moderation policies implemented?  
+    – Is compute infrastructure optimized for inference efficiency?
+  comparison_considerations: |
+    Outperforms Mistral 7B and Gemma 2 9B;  
+    trails DeepSeek V2 and Qwen 2 72B in multilingual depth.  
+    Best open 10–12B multilingual reasoning model of 2024.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Document governance for open-weight deployment, retraining, and compliance monitoring.  
+  map:
+    context_considerations: |
+      Identify hallucination and bias risk under multilingual or retrieval contexts.  
+    risk_categories: ["hallucination", "bias", "prompt_injection", "safety_alignment"]
+  measure:
+    suggested_metrics: |
+      Factual accuracy, fairness index, latency, hallucination rate.  
+  manage:
+    risk_management_considerations: |
+      Implement safety filters, moderate fine-tuned derivatives, and monitor bias drift.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/tiiuae/falcon-2-11b"
+    description: "Official Falcon 2 11B model card and documentation"
+  - url: "https://falconllm.tii.ae/"
+    description: "Falcon LLM homepage and technical blog"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "77.9"
+  - name: "GSM8K"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "84.2"
+  third_party_evaluations:
+  - source: "Hugging Face Open LLM Leaderboard (2024)"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    summary: "Falcon 2 11B evaluated as leading compact reasoning model in its class."
+  news_coverage:
+  - title: "TII launches Falcon 2 11B — next-gen open model for reasoning and enterprise AI"
+    url: "https://www.tii.ae/news/falcon-2-11b"
+    date: "2024-05-15"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Falcon 2 documentation, Hugging Face leaderboard data, and community benchmarks.  
+  completeness_assessment: |
+    High for transparency and reproducibility; medium for dataset composition detail.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from Falcon 2 11B release and benchmark data."

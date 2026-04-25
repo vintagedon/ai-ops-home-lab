@@ -1,0 +1,194 @@
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+model_identity:
+  name: "Orpheus-3B-0.1-FT"
+  vendor: "Canopy Labs"
+  model_family: "Orpheus-3B"
+  version: "0.1 (finetuned)"
+  release_date: "2025-03-18"  # release date per model page. :contentReference[oaicite:2]{index=2}
+  model_type: "Text-to-Speech (TTS) model"
+
+  vendor_model_card_url: "https://huggingface.co/canopylabs/orpheus-3b-0.1-ft"  :contentReference[oaicite:3]{index=3}
+
+  license: "Apache 2.0"  # As referenced in community commentary. :contentReference[oaicite:4]{index=4}
+  deprecation_status: "Active"
+
+technical_specifications:
+  architecture:
+    base_architecture: "LLM-based speech generation model (derived from Llama-3.2-3B-Instruct)". :contentReference[oaicite:5]{index=5}
+    parameter_count: "≈ 3 billion parameters"  # described in community and repo references. :contentReference[oaicite:6]{index=6}
+    context_window: "Not explicitly defined for audio generation"
+    training_data_cutoff: "Not publicly disclosed"
+
+    architectural_details: |
+      - Built for TTS: converts text input (with optional voice/emotion tags) into natural speech output. :contentReference[oaicite:7]{index=7}  
+      - Supports voice-cloning (zero-shot), guided emotion/intonation tags (e.g., `<laugh>`, `<sigh>`, `<groan>`) for expressive output. :contentReference[oaicite:8]{index=8}  
+
+  modalities:
+    supported_inputs: ["text (prompt)","voice/emotion tags"]
+    supported_outputs: ["audio (speech waveform)"]
+
+  performance_characteristics:
+    speed_tier: "Optimised for near-real-time streaming (≈200 ms latency reported)". :contentReference[oaicite:9]{index=9}  
+    cost_tier: "Lower cost compared to many commercial TTS APIs" :contentReference[oaicite:10]{index=10}  
+    latency: "≈ 200 ms streaming latency; with input streaming reducible to ~100 ms". :contentReference[oaicite:11]{index=11}  
+    throughput: "Not broadly specified"
+
+capabilities:
+  vendor_claimed_strengths: |
+    - “Human-like speech” with natural intonation, rhythm and expressiveness. :contentReference[oaicite:12]{index=12}  
+    - Zero-shot voice cloning: clone voices without prior fine-tuning. :contentReference[oaicite:13]{index=13}  
+    - Emotion and intonation control using tags. :contentReference[oaicite:14]{index=14}  
+  benchmark_performance: |
+    Independent numeric benchmark scores not widely published.  
+  special_capabilities:
+    tools_support: false  
+    vision_support: false  
+    reasoning_support: false  
+    image_generation: false  
+    additional_capabilities: ["voice-cloning","emotion-tag driven speech","low latency streaming"]  
+  known_limitations:
+    vendor_disclosed: |
+      - Training/data provenance is not fully detailed (dataset size, composition)  
+      - Best performance may depend on hardware/inference setup  
+    common_failure_modes: |
+      - Possible noisier output or latency/hardware bottleneck if streaming on sub-optimum hardware. :contentReference[oaicite:15]{index=15}  
+      - Might under-perform on non-English or highly unusual voices (less documented)  
+    unsuitable_use_cases: |
+      - Voice impersonation or cloning without legal/ethical clearance  
+      - Mission-critical or regulated applications without thorough validation  
+      - Use where training-data transparency or certified provenance is required
+
+training_information:
+  training_data_description: |
+    - Model card states “LLM-based speech model… designed for high-quality empathetic text-to-speech generation”. :contentReference[oaicite:16]{index=16}  
+    - Specific dataset size/composition (audio hours, speaker diversity) not publicly disclosed.  
+  training_methodology: |
+    - Finetuning of base 3 B model with supervised audio/text pairs, voice/emotion tags, streaming-capable inference.  
+  data_privacy_considerations: |
+    - Users should verify voice-consent, copyright, and PII filtering of any cloned or training voice data.
+
+intended_use:
+  vendor_intended_use: |
+    High-quality, expressive TTS generation for streaming, voice-cloning, voice agent, VR/AR/interactive applications.  
+  suitable_domains: ["voice assistants","audiobook narration","game NPC voices","multilingual voice cloning (with adaptation)"]  
+  out_of_scope_use: |
+    - Applications requiring certified audio provenance/training data transparency  
+    - Use in regulated environments (e.g., medical voice, forensic audio) without extra caution  
+    - Use without respecting voice-consent/rights (especially voice-cloning)
+
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Public model card indicates major features and capabilities. :contentReference[oaicite:17]{index=17}  
+    public_evidence: |
+      Community commentary corroborates low-latency streaming claim and voice-cloning capability. :contentReference[oaicite:18]{index=18}  
+    assessment_notes: |
+      Good candidate for expressive TTS; implementers should run validation on their specific hardware and domain.  
+  safe:
+    safety_measures: |
+      Model card includes misuse guidance (do not impersonate without consent). :contentReference[oaicite:19]{index=19}  
+    known_safety_issues: |
+      Risk of generating plausible voice clones, misuse for impersonation, voice-privacy concerns.  
+    assessment_notes: |
+      Deploy with voice-consent, moderation, logging of voice output.  
+  secure_and_resilient:
+    security_features: |
+      Open model (weights accessible under conditions); allows local/private deployment.  
+    known_vulnerabilities: |
+      Streaming/low-latency inference may stress hardware, increasing risk of performance/quality degradation.  
+    assessment_notes: |
+      Monitor hardware, memory usage, fallback if latency grows.  
+  accountable_and_transparent:
+    transparency_level: "Medium"  
+    auditability: |
+      Weights and code are publicly available, but dataset/training logs and full provenance are limited.  
+    assessment_notes: |
+      For regulated use, supplement with internal documentation, version tracking, voice-consent logs.  
+  explainable_and_interpretable:
+    explainability_features: |
+      Output audio is inspectable; generation pipeline can be traced; voice/emotion tags visible.  
+    interpretability_limitations: |
+      Internal model decisions and training dataset not fully documented.  
+    assessment_notes: |
+      Acceptable for many uses; if high auditability or interpretability is required, conduct extra reviews.  
+  privacy_enhanced:
+    privacy_features: |
+      Local inference possible (reducing cloud data exposure).  
+    privacy_concerns: |
+      Voice cloning and emotive expression raise identity and consent risks; unknown dataset PII filtering.  
+    assessment_notes: |
+      For VOICE data of private individuals, ensure proper consent, usage tracking, and possibly voice-watermarking.  
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Model supports multiple voices and expressive tags; but public language/voice diversity coverage less detailed.  
+    known_biases: |
+      May under-perform for under-represented languages, accents, or speakers outside training set. :contentReference[oaicite:20]{index=20}  
+    assessment_notes: |
+      Test voice and accent/performance across all demographic groups you intend to serve.
+
+evaluation_guidance:
+  recommended_tests: |
+    - Run audio generation for your domain (voice style, accent, emotion) and evaluate naturalness, latency, clarity, voice likeness.  
+    - Benchmark latency and throughput on your target hardware (especially for streaming).  
+    - Test voice-cloning: provide new speaker voice samples and evaluate clone fidelity, evaluate consent/rights issues.  
+    - Test emotion tag capability: prompt with `<laugh>`, `<sigh>` tags and assess output for correctness and alignment.  
+    - Evaluate across accents/languages you expect to support.  
+    - Evaluate safety: attempt adversarial prompts, impersonation risk, copyrighted voice cloning.  
+  key_evaluation_questions: |
+    - Does the TTS output quality (naturalness, emotion, clarity) meet your deliverable specs?  
+    - Does latency/throughput meet your real-time or interactive requirement?  
+    - Are voice-consent, licensing, and voice-cloning rights properly covered in your use-case?  
+    - Does the model behave reliably across all accents/voices you need?  
+  comparison_considerations: |
+    - Compare with other open-source/emerging TTS models (Sesame, Dia, Higgs Audio V2) in terms of parameter size, hardware cost, voice style, latency.  
+    - Consider trade-offs between model size (3 B) vs smaller/more specialised TTS for your voice quality and latency needs.  
+    - Consider hardware/hardware cost vs required voice fidelity and streaming latency.
+
+rmf_function_mapping:
+  govern:
+    notes: |
+      Use of expressive voice generation models requires governance around voice-consent, deepfake voice risk, versioning and asset logging.  
+  map:
+    context_considerations: |
+      Text-to-speech pipelines, voice-agent systems, voice cloning, interactive voice UI.  
+    risk_categories: ["voice_deepfake","voice_impersonation","latency_failure","hardware_resource_exhaustion","bias_voice_accent"]  
+  measure:
+    suggested_metrics: |
+      - Impersonation incident rate per 1k voice outputs.  
+      - Latency exceeding user-acceptable threshold (%) per 1k sessions.  
+      - Voice-cloning fidelity error rate per 100 cloned speakers.  
+      - Accents/voice-style dropouts per 100 sessions.  
+  manage:
+    risk_management_considerations: |
+      Implement voice-consent mechanism, watermark voice output if used in production, monitor for misuse, track model version/voices, apply fallback human-review for high-risk voice outputs.
+
+references:
+  vendor_documentation:
+    - url: "https://huggingface.co/canopylabs/orpheus-3b-0.1-ft"
+      description: "Model page on Hugging Face" :contentReference[oaicite:21]{index=21}  
+    - url: "https://github.com/canopyai/Orpheus-TTS"
+      description: "Training code repository" :contentReference[oaicite:22]{index=22}  
+  benchmarks:
+    - name: "Reddit user commentary on latency and cost"  
+      url: "https://www.reddit.com/r/TextToSpeech/comments/1jx45zt/”  
+      summary: > “$1/hr AI voice is here … Orpheus TTS … ~250 ms latency, hyper-expressive.” :contentReference[oaicite:23]{index=23}  
+  third_party_evaluations:
+    - source: "Reddit discussion on voice style and performance"  
+      url: "https://www.reddit.com/r/LocalLLaMA/comments/1jf6igq”  
+      summary: > “In TTS land … 3B boi is a huge drop.” :contentReference[oaicite:24]{index=24}  
+
+metadata:
+  card_version: "1.0"
+  card_author: "Generated-by-Assistant"
+  card_creation_date: "2025-10-24"
+  last_updated: "2025-10-24"
+  information_sources: |
+    Model page, repository, community commentary.  
+  completeness_assessment: |
+    Good for architecture, capabilities, intended use; moderate for training dataset details and independent benchmark numbers; limited for full hardware performance matrix across voices/accents.  
+  change_log:
+    - date: "2025-10-24"
+      author: "Generated-by-Assistant"
+      changes: "Initial synthesis of Orpheus-3B-0.1-FT model card."

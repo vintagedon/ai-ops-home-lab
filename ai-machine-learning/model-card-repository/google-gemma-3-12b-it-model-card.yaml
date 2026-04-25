@@ -1,0 +1,181 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Gemma 3 12B-IT"
+  vendor: "Google"
+  model_family: "Gemma 3"
+  version: "12B-IT"
+  release_date: "2025"
+  model_type: "Open-Weight Multimodal Model (Instruction-Tuned)"
+  vendor_model_card_url: "https://huggingface.co/google/gemma-3-12b-it"
+  license: "Gemma Terms of Use"
+  deprecation_status: "Active"
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer-based"
+    parameter_count: "~12B"
+    context_window: "128,000 tokens"
+    training_data_cutoff: "Not publicly disclosed"
+    architectural_details: |
+      A large-scale model in the Gemma 3 family, offering strong performance across a wide range of tasks while still being deployable on local or private cloud infrastructure. [27]
+  modalities:
+    supported_inputs:
+    - "text"
+    - "image"
+    supported_outputs:
+    - "text"
+  performance_characteristics:
+    speed_tier: "Resource intensive; requires high-end consumer or enterprise GPUs."
+    cost_tier: "N/A (Open-weight)"
+    latency: "Dependent on deployment hardware and inference optimization."
+    throughput: "Suitable for single-user or small-team deployments on local hardware."
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    A powerful open model with a large 128K context window, strong multimodal capabilities, and support for over 140 languages, suitable for complex reasoning and generation tasks. [27]
+  benchmark_performance: |
+    - HellaSwag (10-shot): 84.2
+    - MMLU (5-shot): 74.5
+    - MATH (4-shot): 43.3
+    - HumanEval (0-shot): 45.7
+    - Full benchmark table available in the model card. [27]
+  special_capabilities:
+    tools_support: false
+    vision_support: true
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities:
+    - "long_context_window"
+    - "multilingual_support"
+    - "advanced_reasoning"
+  known_limitations:
+    vendor_disclosed: |
+      Subject to standard LLM limitations including potential for factual inaccuracies, reflecting biases from training data, and difficulty with highly complex reasoning. [27]
+    common_failure_modes: |
+      May require significant computational resources for inference, especially with long context.
+    unsuitable_use_cases: |
+      Deployment on resource-constrained devices. Any use that violates the Gemma Prohibited Use Policy.
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on 12 trillion tokens from a dataset including web documents, code, mathematics, and images. [27]
+  training_methodology: |
+    Trained using JAX and ML Pathways on Google TPU hardware. [27]
+  data_privacy_considerations: |
+    Training data underwent filtering for CSAM and sensitive data. [27]
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    To foster innovation by making powerful VLM technology accessible to developers and researchers for deployment on their own infrastructure. [27]
+  suitable_domains:
+  - "research_and_development"
+  - "private_cloud_ai"
+  - "complex_document_analysis"
+  - "specialized_chatbots"
+  out_of_scope_use: |
+    Use in high-stakes domains without rigorous fine-tuning, validation, and safety controls.
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Provides superior performance to other, comparably-sized open model alternatives. [27]
+    public_evidence: |
+      Published benchmarks demonstrate strong performance across reasoning, STEM, and multimodal tasks. [27]
+    assessment_notes: |
+      A high-performing open model that competes with larger, proprietary models on some tasks.
+  safe:
+    safety_measures: |
+      Underwent safety evaluations for child safety, content safety, and representational harms. [27]
+    known_safety_issues: |
+      Can reflect biases from training data and be misused for generating harmful content.
+    assessment_notes: |
+      Deployers are responsible for implementing safety guardrails.
+  secure_and_resilient:
+    security_features: |
+      Local deployment allows for full control over the security environment.
+    known_vulnerabilities: |
+      Standard LLM vulnerabilities.
+    assessment_notes: |
+      Security is the responsibility of the deployer.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Model weights are open, and the model card provides details on training and evaluation.
+    assessment_notes: |
+      High transparency enables accountability.
+  explainable_and_interpretable:
+    explainability_features: |
+      Open weights enable research into model internals.
+    interpretability_limitations: |
+      Full interpretability remains a research challenge.
+    assessment_notes: |
+      More interpretable than closed-API models.
+  privacy_enhanced:
+    privacy_features: |
+      Local deployment ensures user data does not need to be sent to a third-party API.
+    privacy_concerns: |
+      Potential for memorization of training data.
+    assessment_notes: |
+      Strong choice for applications with strict data privacy requirements.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Data filtering and safety evaluations were performed. [27]
+    known_biases: |
+      May exhibit biases present in the training data.
+    assessment_notes: |
+      Requires use-case-specific bias testing.
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Establish a baseline for VRAM consumption and inference speed on target enterprise hardware.
+    - Evaluate the model's performance on complex, domain-specific reasoning tasks.
+    - Test the limits of the 128K context window with internal, proprietary documents.
+  key_evaluation_questions: |
+    - What is the total cost of ownership (TCO) for deploying and managing this model in our private cloud?
+    - How does its performance on our specific tasks compare to using a proprietary API model?
+  comparison_considerations: |
+    Compare against other open-weight models in the 10-15B parameter range (e.g., Llama 3, Mistral) and against proprietary API models on a total cost and performance basis.
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/google/gemma-3-12b-it"
+    description: "Hugging Face Model Card for Gemma 3 12B-IT"
+  - url: "https://goo.gle/Gemma3Report"
+    description: "Gemma 3 Technical Report"

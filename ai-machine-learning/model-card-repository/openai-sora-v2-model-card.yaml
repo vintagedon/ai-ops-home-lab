@@ -1,0 +1,382 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# =============================================================================
+# MODEL IDENTITY
+# =============================================================================
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Sora (System Card v2)"
+  vendor: "OpenAI"
+  model_family: "Sora"
+  version: "v2 (System Card, 2024-12-09)"
+  release_date: "2024-12-09"
+  model_type: "Video Generation Model (Diffusion-based, text/image/video-to-video)"
+  vendor_model_card_url: "https://openai.com/index/sora-2-system-card/"
+  license: "Commercial API (Proprietary)"
+  deprecation_status: "Active"
+
+# =============================================================================
+# MODEL ARCHITECTURE & TECHNICAL SPECIFICATIONS
+# =============================================================================
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Diffusion model for video generation"
+    parameter_count: "Not publicly disclosed"
+    context_window: "Not applicable (video generation)"
+    training_data_cutoff: "Not publicly disclosed"
+    architectural_details: |
+      Sora is a diffusion-based video generation model that begins from noise and
+      iteratively denoises to produce video, with design choices that give the model
+      foresight over many frames. It uses a recaptioning technique derived from
+      DALL·E 3 to create high-quality training captions, and can operate in
+      text-to-video, image-to-video, and video editing/extension modes. 
+      Additional low-level architectural details are not publicly disclosed.
+
+  modalities:
+    supported_inputs: ["text", "image", "video"]
+    supported_outputs: ["video"]
+  performance_characteristics:
+    speed_tier: "Not publicly disclosed"
+    cost_tier: "Premium"
+    latency: |
+      Not publicly disclosed.
+
+    throughput: |
+      Not publicly disclosed.
+
+# =============================================================================
+# CAPABILITIES & LIMITATIONS
+# =============================================================================
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    Generates videos up to 1080p (20 seconds max) from text prompts; can
+    transform images into videos; can edit, extend, and inpaint existing video,
+    including filling in missing frames and adding or removing content while
+    preserving detail. System includes Explore/Featured feeds and creator tools.
+
+  benchmark_performance: |
+    The system card focuses on safety and risk evaluations rather than public
+    creative-quality benchmarks. Selected moderation classifier metrics (from
+    vendor evaluations):
+    - Child safety (under-18 classifier, multiple categories): reported accuracy ≈ 97–99%.
+    - Nudity & Suggestive Content classifiers: ~97.25% accuracy at input and ~97.59% at output (end-to-end).
+    - Deceptive election content LLM filter: recall 98.23%, precision 88.80% on synthetic eval sets.
+
+  special_capabilities:
+    tools_support: false
+    vision_support: true
+    reasoning_support: false
+    image_generation: false
+
+    additional_capabilities: ["image-to-video", "video-editing", "inpainting/outpainting", "content-aware extension", "C2PA provenance features", "visible watermark (configurable)"]
+
+  known_limitations:
+    vendor_disclosed: |
+      Risks include potential misuse for persuasion, misinformation, and social
+      engineering; risk of likeness and deepfake abuse; potential generation of
+      violating content without layered mitigations; constraints around accuracy
+      of realistic minors and adult-content classification; limitations in
+      provenance adoption and external platform enforcement.
+
+    common_failure_modes: |
+      - Prompts that attempt to elicit violating content (e.g., sexual content involving minors, explicit nudity).
+      - Attempts to generate deceptive content (e.g., election misinformation).
+      - Style prompts using living artists may yield outputs resembling artist styles, raising creator concerns.
+
+    unsuitable_use_cases: |
+      Use that violates child safety or sexual content policies; explicit sexual
+      content generation; impersonation/likeness misuse; deceptive political
+      content; any safety-critical deployment without layered safeguards and human review.
+
+# =============================================================================
+# TRAINING & DATA
+# =============================================================================
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Mixed sources: selected publicly available datasets and web material; proprietary
+    data via partnerships (e.g., Shutterstock, Pond5) to access non-public video/image
+    data; and human data from AI trainers, red teamers, and employees. The system
+    also uses recaptioning to improve text–video alignment. Detailed dataset
+    composition/volumes are not publicly disclosed.
+
+  training_methodology: |
+    Diffusion-based video generation trained with high-quality captions (recaptioning)
+    and standard safety/data filtering pipelines during pretraining and post-training.
+    Specific optimization and alignment methods are not fully disclosed.
+
+  data_privacy_considerations: |
+    System card emphasizes provenance and transparency (e.g., visible watermark and
+    C2PA metadata in certain flows), moderation before and after generation, and 
+    policy enforcement. Details on user data retention or training on user data are
+    not publicly disclosed.
+
+# =============================================================================
+# INTENDED USE & SCOPE
+# =============================================================================
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Storytelling, creative expression, and prototyping of short-form videos by
+    adults; iterative deployment with creator feedback; initial access to users 
+    18+ with layered safety systems.
+
+  suitable_domains: ["creative_generation", "storyboarding", "marketing_prototypes", "education/demos"]
+  out_of_scope_use: |
+    Generation of explicit sexual content; content involving minors; real-person
+    likeness abuse; deceptive political content (e.g., elections); safety-critical
+    applications; any regulated, high-stakes automated decision-making.
+
+# =============================================================================
+# TRUSTWORTHINESS CHARACTERISTICS
+# Map to NIST AI RMF Seven Characteristics based on public information
+# =============================================================================
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Extensive internal and external red-teaming across categories (e.g., child
+      safety, nudity/suggestive content, deception/elections), with layered
+      pre- and post-generation checks; iterative artist access program (>500k model
+      requests) informed safety updates and product choices.
+
+    public_evidence: |
+      System card tables report child-safety and nudity/suggestive-content classifier
+      accuracy, and deceptive-election-content filter performance on synthetic evals.
+      Naturally occurring real-world prevalence remains limited in the public doc.
+
+    assessment_notes: |
+      Reliability for safety gating appears strong under measured conditions;
+      creative/video quality benchmarks are not disclosed.
+
+  safe:
+    safety_measures: |
+      Multi-modal moderation (text/image/video) before output; custom LLM filtering
+      (e.g., third-party app detection, identity-based misuse checks); input/output
+      classifiers (child safety, nudity/suggestive content, deception); human review
+      backstops; product policies; age-gating (18+); rate limits and upload caps in
+      iterative rollouts; Explore/Featured feed moderation.
+
+    known_safety_issues: |
+      Residual risks of deepfake/likeness misuse, deceptive content, and policy
+      evasion; potential false positives/negatives in safety classifiers, especially
+      in edge cases (e.g., synthetic but realistic minors).
+
+    assessment_notes: |
+      Robust, layered mitigations with ongoing tuning; enforcement and ecosystem
+      provenance adoption are critical external dependencies.
+
+  secure_and_resilient:
+    security_features: |
+      Automated scanning of outputs (e.g., ~2 frames/sec pass for output classifiers),
+      policy-based blocking, and internal incident response workflows; iterative
+      deployment strategy to reduce blast radius.
+
+    known_vulnerabilities: |
+      Standard generative-media risks: prompt-induced policy bypass attempts,
+      adversarial prompt engineering, distribution of content without provenance.
+
+    assessment_notes: |
+      Security posture is tied to moderation stack efficacy and ecosystem controls.
+
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Public system card with category-specific evaluations; visible watermarking and
+      C2PA plans; internal audit and enforcement mechanisms; however, no release of
+      weights or full dataset details.
+
+    assessment_notes: |
+      Clear articulation of mitigations and policies; limited disclosure on model
+      internals and training data specifics.
+
+  explainable_and_interpretable:
+    explainability_features: |
+      Policy categories and classifier roles are documented; evaluation tables show
+      directional performance for key risk areas.
+
+    interpretability_limitations: |
+      No mechanistic interpretability or open weights; diffusion internals and
+      safety classifier models are not publicly described in depth.
+
+    assessment_notes: |
+      Operational explainability through policies/metrics, not model-internals.
+
+  privacy_enhanced:
+    privacy_features: |
+      Provenance features (watermark, C2PA metadata under some conditions); policy
+      constraints around uploads; human review guardrails.
+
+    privacy_concerns: |
+      Training dataset composition, personal data handling, and retention practices
+      are not fully detailed in public materials.
+
+    assessment_notes: |
+      Privacy posture depends on platform policies and enforcement; enterprise usage
+      should review contractual data handling terms.
+
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Prompt refinements, policy filters, and ongoing identification of mitigations;
+      commitments to expand representation and reduce harmful bias.
+
+    known_biases: |
+      Body-shape and demographic representation challenges acknowledged; living-artist
+      style prompts may trigger ethical concerns despite policy guardrails.
+
+    assessment_notes: |
+      Continuous improvement signaled; deployers should evaluate outputs for their
+      audiences and contexts.
+
+# =============================================================================
+# EVALUATION GUIDANCE
+# Guidance for organizations evaluating this model for their use case
+# =============================================================================
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Human review of safety categories relevant to your domain (child safety, nudity, deception).
+    - Likeness/impersonation red-team prompts aligned to your brand and public figures.
+    - Provenance signal validation (watermark/C2PA) across your content pipeline.
+    - Application-level policy enforcement and escalation testing.
+    - Content quality/user study benchmarks for your creative workflows.
+
+  key_evaluation_questions: |
+    - Do layered mitigations (input/output classifiers + policies) meet your risk tolerance?
+    - Can you operationalize provenance signals end-to-end (ingest → storage → distribution)?
+    - What review SLAs and enforcement processes are required for your use?
+    - Are there edge cases (regional election rules, minors policy, artist styles) that need custom blocks?
+
+  comparison_considerations: |
+    - Safety-layer depth vs. other video generators.
+    - Provenance robustness and external platform compatibility.
+    - Policy clarity and enforceability for likeness and election content.
+    - Creative quality vs. your target audience and constraints.
+
+# =============================================================================
+# NIST AI RMF MAPPING
+# How this model's characteristics map to RMF functions
+# =============================================================================
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Require human-in-the-loop review for publishable content; enforce age-gating;
+      define escalation paths for CSAM/likeness/election categories; track
+      watermark/C2PA handling across partners and platforms.
+
+  map:
+    context_considerations: |
+      Map content categories, audience age restrictions, distribution channels,
+      and jurisdictional rules (e.g., election laws). Identify where provenance
+      may be stripped or transformed downstream.
+
+    risk_categories: ["child_safety", "sexual_content", "deceptive_content", "likeness_misuse", "policy_bypass", "provenance_stripping"]
+  measure:
+    suggested_metrics: |
+      - Classifier block/allow rates and false positive/negative trends by category.
+      - Human review turnaround and appeal outcomes.
+      - Provenance-preservation success across the pipeline.
+      - Incident rate for policy violations per 1,000 generations.
+
+  manage:
+    risk_management_considerations: |
+      Combine automated moderation with trained reviewers; restrict risky features
+      (e.g., likeness uploads) until safeguards are validated; maintain takedown
+      and penalty processes; continuously red-team across evolving misuse patterns.
+
+# =============================================================================
+# REFERENCES & SOURCES
+# =============================================================================
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://openai.com/index/sora-2-system-card/"
+    description: "OpenAI Sora System Card (Dec 9, 2024)"
+  benchmarks:
+  - name: "Safety classifiers (Child Safety)"
+    url: "https://openai.com/index/sora-2-system-card/"
+    result: "Reported accuracy ≈ 97–99% across categories (table)"
+  - name: "Safety classifiers (Nudity & Suggestive Content)"
+    url: "https://openai.com/index/sora-2-system-card/"
+    result: "Input accuracy ~97.25%; Output (E2E) ~97.59%"
+  - name: "Deceptive Election Content LLM filter"
+    url: "https://openai.com/index/sora-2-system-card/"
+    result: "Recall 98.23%; Precision 88.80% (synthetic evals)"
+  third_party_evaluations:
+  - source: ""
+    url: ""
+    summary: ""
+  news_coverage:
+  - title: ""
+    url: ""
+    date: ""
+
+# =============================================================================
+# METADATA
+# =============================================================================
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "Don Fountain"
+  card_creation_date: "2025-10-24"
+  last_updated: "2025-10-24"
+  information_sources: |
+    Vendor system card PDF describing capabilities, mitigations, and evaluation
+    results; tables on child safety, nudity/suggestive content, and deceptive
+    content; narrative sections on preparedness, red-teaming, policies, and 
+    provenance (watermark/C2PA).
+
+  completeness_assessment: |
+    High for safety/mitigation details; medium for capabilities; low for undisclosed
+    architecture, parameters, latency/throughput, and dataset composition.
+
+  change_log:
+  - date: "2025-10-24"
+    author: "Don Fountain"
+    changes: "Initial card synthesized from OpenAI Sora System Card (v2)."

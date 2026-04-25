@@ -1,0 +1,253 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Falcon 180B"
+  vendor: "Technology Innovation Institute (TII, UAE)"
+  model_family: "Falcon"
+  version: "180B"
+  release_date: "2023-09-06"
+  model_type: "Open-Weight Large Language Model (English & Multilingual)"
+  vendor_model_card_url: "https://huggingface.co/tiiuae/falcon-180B"
+  license: "Falcon License (Permissive Research + Commercial)"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Dense Transformer (decoder-only, causal LM)"
+    parameter_count: "180 billion"
+    context_window: "8 K tokens"
+    training_data_cutoff: "2023-05"
+    architectural_details: |
+      Falcon 180B is a dense transformer architecture trained with a next-token prediction objective.
+      It uses rotary positional embeddings (RoPE), multi-query attention (MQA),
+      and parallelized fused kernels for high inference efficiency.
+      The model was trained using 3.5 trillion tokens across English, multilingual, and code datasets.
+      It remains one of the largest open-weight dense models released to the public as of 2024.
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "Medium (dense 180B)"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ~1.4 s per 1 K tokens on 8 × A100 (fp16);  
+      quantized inference possible on 2 × A6000 or H100 GPUs using AWQ or GPTQ compression.
+    throughput: |
+      High throughput for document summarization and reasoning when run on large clusters.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • Strong English reasoning and summarization for open-weight class.  
+    • Outperforms GPT-3.5 and LLaMA 2 70B on several reasoning and QA benchmarks.  
+    • Openly available for fine-tuning and large-scale academic research.  
+  benchmark_performance: |
+    - MMLU: 70.5  
+    - GSM8K: 75.4  
+    - ARC-C: 74.8  
+    - HellaSwag: 78.3  
+    (TII and Hugging Face Leaderboard, Oct 2023)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["summarization", "QA", "multilingual_support", "open_research"]
+  known_limitations:
+    vendor_disclosed: |
+      English-dominant model with limited multilingual coverage.  
+      Alignment and safety tuning are minimal compared to post-2024 releases.  
+      Limited context length (8K).  
+    common_failure_modes: |
+      Verbose reasoning, occasional factual hallucination, inconsistent style coherence.  
+    unsuitable_use_cases: |
+      Regulated or safety-critical domains without moderation.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on RefinedWeb dataset (3.5T tokens), a high-quality filtered web corpus curated by TII, 
+    combined with multilingual and code data for reasoning enhancement.  
+    Roughly 80% English, 15% multilingual, 5% code.
+  training_methodology: |
+    Dense transformer pretraining with AdamW optimizer, cosine learning rate schedule, 
+    and dynamic loss scaling.  
+    Fine-tuned on instruction datasets for conversational alignment.
+  data_privacy_considerations: |
+    RefinedWeb data filtered for PII and toxic content; no private data or telemetry included.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Open research, education, and enterprise experimentation.  
+    Supports summarization, reasoning, and multilingual generation.  
+  suitable_domains: ["education", "research", "knowledge_assistance", "QA", "enterprise_AI"]
+  out_of_scope_use: |
+    Legal, medical, or high-risk government automation without supervision.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Stable and deterministic open-weight model for reasoning and research.  
+    public_evidence: |
+      Hugging Face benchmarks confirm reproducibility and reliability under vLLM.  
+    assessment_notes: |
+      Reliable baseline for large dense transformer research.
+  safe:
+    safety_measures: |
+      Minimal alignment; RefinedWeb toxicity filtering only.  
+    known_safety_issues: |
+      May output offensive or unsafe content under unfiltered prompts.  
+    assessment_notes: |
+      Safe for research under moderation.
+  secure_and_resilient:
+    security_features: |
+      Model weights hash-verified on Hugging Face; no telemetry or data logging.  
+    known_vulnerabilities: |
+      Standard prompt injection and output manipulation risks.  
+    assessment_notes: |
+      Secure for isolated or sandboxed deployments.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Full weights, tokenizer, and data pipeline summaries released.  
+      Training details documented in system card.  
+    assessment_notes: |
+      Excellent transparency and reproducibility.
+  explainable_and_interpretable:
+    explainability_features: |
+      Fully compatible with interpretability frameworks; open attention maps available.  
+    interpretability_limitations: |
+      Dense transformer complexity hinders fine-grained human interpretability.  
+    assessment_notes: |
+      Suitable for research and interpretability work.
+  privacy_enhanced:
+    privacy_features: |
+      RefinedWeb filtering removes PII; no inference logging.  
+    privacy_concerns: |
+      Possible residual web artifacts; standard for open models.  
+    assessment_notes: |
+      Acceptable privacy posture for open science.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Dataset filtering for toxicity and demographic fairness.  
+    known_biases: |
+      English-language cultural bias persists; weaker multilingual fairness.  
+    assessment_notes: |
+      Moderate fairness for open research use.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • Reasoning and summarization benchmarks (MMLU, GSM8K).  
+    • Safety and bias audits for target application.  
+    • Latency and scaling profiling for dense inference.  
+    • Quantization quality and lossless compression validation.
+  key_evaluation_questions: |
+    – Does the application tolerate potential unaligned responses?  
+    – Is compute infrastructure adequate for dense 180B model?  
+    – Are fairness and toxicity filters applied in deployment?
+  comparison_considerations: |
+    Outperforms LLaMA 2 70B and Falcon 40B;  
+    trails DeepSeek V2 and Claude 3 Sonnet in reasoning and factual grounding.  
+    Remains one of the best dense open-weight models globally.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Establish policy for open-weight usage, derivative model sharing, and retraining governance.  
+  map:
+    context_considerations: |
+      Identify hallucination and bias risk for target use case.  
+    risk_categories: ["hallucination", "bias", "prompt_injection", "toxicity"]
+  measure:
+    suggested_metrics: |
+      Accuracy, bias index, toxicity rate, latency, and hallucination frequency.  
+  manage:
+    risk_management_considerations: |
+      Apply moderation layers, ensure controlled deployment, and log inference contexts for research.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/tiiuae/falcon-180B"
+    description: "Official Falcon 180B model card and documentation"
+  - url: "https://falconllm.tii.ae/"
+    description: "TII Falcon model family homepage"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "70.5"
+  - name: "GSM8K"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "75.4"
+  third_party_evaluations:
+  - source: "Hugging Face Open LLM Leaderboard (2023)"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    summary: "Falcon 180B benchmarked as top-performing dense open model at launch."
+  news_coverage:
+  - title: "Falcon 180B — the UAE’s open 180B model rivals GPT-3.5 performance"
+    url: "https://www.tii.ae/news/falcon-180b-launch"
+    date: "2023-09-06"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Falcon 180B system card, Hugging Face leaderboard, and Open LLM community replication data.  
+  completeness_assessment: |
+    High for transparency and performance; medium for safety and bias methodology disclosure.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from Falcon 180B release and benchmark data."

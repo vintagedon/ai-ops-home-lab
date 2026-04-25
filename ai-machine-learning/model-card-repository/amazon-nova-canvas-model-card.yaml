@@ -1,0 +1,456 @@
+# Amazon Nova Canvas Model Card
+# Following general model card template structure
+
+model_name: Amazon Nova Canvas
+model_version: "1.0"
+model_date: "2024-12"
+model_type: Latent Diffusion Model for Image Generation
+model_description: |
+  Amazon Nova Canvas is a state-of-the-art image generation model that creates professional-grade 
+  images with rich customization controls. It is a latent diffusion model that accepts text prompts 
+  and optional reference images as input, generating high-quality images with various resolutions 
+  (512px to 2K horizontal resolution) and aspect ratios (1:4 to 4:1, maximum 4.2M pixels). Canvas 
+  offers advanced capabilities including image editing, inpainting, outpainting, style transfer, 
+  color palette control, and background removal.
+
+# Organization Information
+developer: Amazon Artificial General Intelligence (AGI)
+organization_name: Amazon
+organization_contact: nova-technical-report@amazon.com
+organization_website: https://aws.amazon.com/bedrock/nova/
+
+# Model Characteristics
+architecture: Latent Diffusion Model with Variational AutoEncoder (VAE) and text encoder
+parameters: Not listed in source
+resolution_capabilities:
+  minimum: 512x512 pixels
+  maximum: 2048x2048 pixels (2K horizontal resolution)
+  max_total_pixels: 4200000  # 4.2M pixels
+  aspect_ratios: "1:4 to 4:1 (any aspect ratio within range)"
+input_modalities:
+  - text (prompts)
+  - image (optional reference images)
+output_modalities:
+  - image
+languages_supported:
+  - English
+  - Multiple languages supported for text prompts (specific list not provided)
+
+# Intended Use
+intended_use:
+  primary_applications:
+    - Professional image creation for advertising and marketing
+    - Entertainment industry content generation
+    - Product visualization and mockups
+    - Style-guided image generation with reference images
+    - Image editing and manipulation (inpainting, outpainting)
+    - Background removal and replacement
+    - Color palette-controlled image generation
+    - Image variation generation
+    - Creative content production
+  
+  intended_users:
+    - Marketing and advertising professionals
+    - Content creators and designers
+    - Entertainment industry professionals
+    - E-commerce businesses for product imagery
+    - Creative agencies
+    - Social media managers
+    - Artists and illustrators
+  
+  use_case_examples:
+    - Creating marketing materials with specific brand color palettes
+    - Generating product images for e-commerce catalogs
+    - Producing advertising visuals with consistent style
+    - Editing existing images by changing specific elements
+    - Removing backgrounds from product photos
+    - Creating variations of existing creative assets
+    - Generating entertainment content and concept art
+
+  key_features:
+    text_to_image:
+      - Generate images from text prompts
+      - Support for various resolutions and aspect ratios
+      - Style and color palette guidance via reference images
+    
+    image_editing:
+      - Inpainting: Edit specific areas using natural language mask prompts
+      - Outpainting: Extend images beyond original boundaries
+      - Background removal: Extract subjects with automatic background removal
+      - Object removal: Remove unwanted elements from images
+    
+    image_conditioning:
+      - Style transfer from reference images
+      - Layout and structure guidance from reference images
+      - Color palette control via hex codes
+    
+    image_variation:
+      - Generate variations of existing images
+      - Maintain similar content with controlled differences
+
+out_of_scope_use:
+  prohibited_uses:
+    - Generation of content intended to harm, deceive, or exploit individuals
+    - Creating non-consensual intimate imagery or deepfakes
+    - Content that sexualizes, grooms, abuses, or otherwise harms minors
+    - Generating hate speech or content promoting violent extremism
+    - Creating misleading or deceptive content for fraud
+    - Generating images intended to spread misinformation
+    - Creating content that violates copyright or intellectual property rights
+    - Political manipulation or election interference imagery
+  
+  limitations:
+    - Cannot generate video content (use Nova Reel for video)
+    - Limited to static images only
+    - May struggle with complex text rendering within images
+    - May have difficulty with very specific or unusual requests
+    - Cannot guarantee photorealistic human faces in all scenarios
+    - Limited control over fine-grained details in complex scenes
+    - May not perfectly replicate specific artistic styles
+
+# Training Data
+training_data:
+  data_sources:
+    - Licensed commercial data
+    - Proprietary Amazon data
+    - Open source datasets
+    - Publicly available data (where appropriate)
+  
+  data_composition:
+    modalities:
+      - Images paired with text descriptions
+      - Various artistic styles and photography
+      - Diverse subjects and scenes
+    content_types: Not fully specified in source
+  
+  data_preprocessing:
+    - Highly scalable filtering and deduplication pipelines
+    - Data enrichment processes
+    - Content filtering based on Responsible AI objectives
+    - Pipelines built using AWS EMR and AWS Batch
+  
+  data_volume: Not listed in source
+  data_collection_period: Not listed in source
+  
+  data_labeling:
+    - Text-image pairing refinement
+    - Human preference data for image quality
+    - Safety and appropriateness labeling
+
+# Training Procedure
+training_procedure:
+  training_stages:
+    - stage: Pretraining
+      description: |
+        Training latent diffusion model on large-scale text-image paired data. VAE learns 
+        to encode images to latent representations and decode back to image space. Text 
+        encoder processes prompts into conditioning signals.
+    
+    - stage: Fine-tuning
+      description: |
+        Refinement on curated datasets for quality, style control, and safety alignment.
+  
+  architecture_components:
+    vae: Variational AutoEncoder maps images to/from latent space
+    text_encoder: Tokenizes and encodes text prompts for conditioning
+    diffusion_model: Iteratively denoises latent variables conditioned on text
+  
+  inference_process: |
+    At inference, latent variable initialized with Gaussian noise, then iteratively denoised 
+    by trained diffusion model conditioned on text prompt. Clean latent decoded by VAE to 
+    produce final image.
+  
+  training_infrastructure:
+    storage:
+      - AWS EMR for data pipelines
+      - AWS Batch for processing
+      - Other AWS services for scalable infrastructure
+    notes: Specific hardware details not provided for Canvas
+  
+  training_duration: Not listed in source
+  training_compute: Not listed in source
+
+# Customization
+customization:
+  fine_tuning_supported: Not explicitly stated in source
+  customization_options:
+    - Reference image guidance for style transfer
+    - Color palette specification via hex codes
+    - Layout and structure guidance via reference images
+
+# Performance
+performance:
+  evaluation_methodology: |
+    Evaluated using both automated metrics (ImageReward, TIFA) and human evaluation via 
+    blind A/B testing. Human evaluation conducted by third-party vendor with trained annotators 
+    following detailed guidelines. Evaluated on ~1000 prompts covering diverse categories 
+    including humans, landscapes, indoor environments, creative themes, and artistic themes.
+  
+  automated_metrics:
+    - metric: ImageReward
+      value: 1.250
+      notes: Reward model aligned with human preference, evaluated on 10k MSCOCO prompts
+      comparison:
+        - model: DALL-E 3
+          score: 1.052
+        - model: Stable Diffusion 3.5 Large
+          score: 1.082
+        - model: Stable Diffusion 3 Medium
+          score: 0.952
+        - model: Flux Pro 1.0
+          score: 1.075
+        - model: Flux Schnell
+          score: 0.999
+    
+    - metric: TIFA (Text-to-Image Faithfulness)
+      value: 0.897
+      notes: Reference-free metric via VQA, evaluated on 4k prompts from TIFA-v1.0 benchmark
+      comparison:
+        - model: DALL-E 3
+          score: 0.863
+        - model: Stable Diffusion 3.5 Large
+          score: 0.891
+        - model: Stable Diffusion 3 Medium
+          score: 0.881
+        - model: Flux Pro 1.0
+          score: 0.875
+        - model: Flux Schnell
+          score: 0.882
+  
+  human_evaluation:
+    methodology: |
+      Single-blind pairwise comparison with ~1000 diverse prompts. Images generated at 
+      1k x 1k resolution with random seeds. Annotators evaluated on two dimensions: 
+      (1) overall image quality and (2) text-image alignment/instruction following.
+    
+    versus_dalle3:
+      overall_preference:
+        win_rate: 54.5%
+        tie_rate: 6.4%
+        loss_rate: 39.1%
+      
+      instruction_following:
+        win_rate: 39.4%
+        tie_rate: 22.5%
+        loss_rate: 38.1%
+    
+    versus_imagen3:
+      overall_preference:
+        win_rate: 48.2%
+        tie_rate: 5.3%
+        loss_rate: 46.5%
+      
+      instruction_following:
+        win_rate: 38.4%
+        tie_rate: 28.1%
+        loss_rate: 33.5%
+  
+  key_strengths:
+    - Highest ImageReward score among compared models
+    - Highest TIFA score among compared models
+    - Strong overall image quality (54.5% win rate vs DALL-E 3)
+    - Competitive performance against leading models
+    - Rich customization and control features
+
+# Limitations and Biases
+limitations:
+  technical_limitations:
+    - Static images only - no video or animation generation
+    - Maximum resolution of 2K horizontal (2048 pixels)
+    - Maximum total pixels of 4.2M
+    - Aspect ratio constraints (1:4 to 4:1)
+    - May struggle with accurate text rendering within generated images
+    - Limited control over extremely fine-grained details
+    - Cannot process or understand audio
+    - Requires well-formed text prompts for best results
+  
+  domain_limitations:
+    - May have difficulty with highly technical or specialized imagery
+    - Cannot guarantee exact replication of specific copyrighted styles
+    - May struggle with uncommon object combinations
+    - Limited ability to generate scientifically accurate specialized content
+    - May not accurately represent all cultures and demographics equally
+  
+  known_failure_modes:
+    - May generate anatomically incorrect human figures in complex poses
+    - Text within images may be garbled or incorrect
+    - May misinterpret ambiguous prompts
+    - Color palette control may not perfectly match all scenarios
+    - Background removal may fail on complex or ambiguous boundaries
+    - May generate unexpected results with contradictory prompt elements
+
+biases:
+  bias_evaluation:
+    approach: |
+      Evaluated through Responsible AI framework including content filtering, human review, 
+      and adherence to safety objectives across fairness, safety, and representation dimensions.
+    
+    evaluation_process:
+      - Human preference data collection for quality and appropriateness
+      - Safety evaluations during fine-tuning
+      - Diverse prompt set covering multiple categories and themes
+      - Third-party vendor evaluation with detailed guidelines
+  
+  identified_biases:
+    - Training data may reflect biases present in web-sourced images
+    - May exhibit Western-centric bias in default representations (inference)
+    - Potential underrepresentation of certain demographics or cultures
+    - Style biases based on training data composition
+    - Specific bias metrics not fully disclosed in source
+  
+  mitigation_strategies:
+    - Extensive data filtering during training
+    - RAI alignment during fine-tuning
+    - Input and output moderation systems
+    - Content policy enforcement
+    - Human review and quality control
+    - Diverse evaluation datasets
+    - Continuous monitoring and improvement
+
+# Responsible AI
+responsible_ai:
+  framework:
+    approach: |
+      Canvas follows Amazon's 8-dimensional Responsible AI framework covering Fairness, 
+      Explainability, Privacy and Security, Safety, Controllability, Veracity and Robustness, 
+      Governance, and Transparency.
+  
+  safety_measures:
+    input_moderation: |
+      Detects and blocks prompts requesting prohibited content including harmful, 
+      illegal, or inappropriate imagery.
+    
+    output_moderation: |
+      Scans generated images for policy violations before delivery to users.
+    
+    watermarking: |
+      Invisible watermark embedded during generation. Robust to alterations like rotation, 
+      resizing, color inversion, and flipping. Watermark detection API available. 
+      Confidence score-based detection reflects extent of image editing.
+    
+    c2pa_metadata: |
+      C2PA (Coalition for Content Provenance and Authenticity) metadata added to all 
+      generated images for content authenticity and provenance tracking.
+  
+  content_policies:
+    prohibited_content:
+      - Sexual content or nudity
+      - Child safety violations
+      - Hate speech or discriminatory content
+      - Violence or gore
+      - Self-harm content
+      - Illegal activities
+      - Misinformation or deceptive content
+      - Harassment or bullying
+      - Copyright or IP violations
+  
+  transparency_features:
+    - Invisible watermarking on all generated images
+    - C2PA metadata for provenance tracking
+    - Watermark detection API for verification
+    - Clear model card documentation
+  
+  commitments:
+    - US White House voluntary commitments on safe AI development
+    - G7 AI Hiroshima Process Code of Conduct
+    - Participation in AI Safety Summits
+    - Frontier Model Forum membership
+    - Partnership on AI membership
+
+# Ethical Considerations
+ethical_considerations:
+  dual_use: |
+    Image generation models can be used for both beneficial creative purposes and potential 
+    misuse (deepfakes, misinformation). Mitigated through moderation, watermarking, and 
+    usage policies.
+  
+  environmental_impact: Not listed in source
+  
+  labor_practices: |
+    Uses third-party vendors for human evaluation with rigorous quality standards.
+  
+  copyright_and_ip: |
+    Training data includes licensed, proprietary, and appropriately sourced public data. 
+    Output moderation prevents generation of content violating copyright. Users responsible 
+    for ensuring their use complies with applicable laws.
+  
+  deepfakes_and_misinformation: |
+    Watermarking and C2PA metadata help identify AI-generated content. Input/output 
+    moderation prevents generation of deceptive content.
+
+# Licensing and Access
+license: Not listed in source
+access:
+  availability: Available via Amazon Bedrock
+  api_access: Yes, through Amazon Bedrock APIs
+  restrictions: Subject to Amazon Bedrock terms of service and acceptable use policies
+  pricing: Not listed in source
+  watermark_detection: API will be available soon after launch
+
+# Model Card Contact
+model_card_authors:
+  - Amazon Artificial General Intelligence (AGI) Team
+model_card_contact: nova-technical-report@amazon.com
+model_card_version: "1.0"
+model_card_date: "2024-12"
+
+# Citation
+citation: |
+  @misc{novatechreport,
+    author = {Amazon AGI},
+    title = {The Amazon Nova Family of Models: Technical Report and Model Card},
+    year = {2024},
+    url = {https://www.amazon.science/publications/the-amazon-nova-family-of-models-technical-report-and-model-card}
+  }
+
+# Additional Resources
+additional_resources:
+  technical_report: https://www.amazon.science/publications/the-amazon-nova-family-of-models-technical-report-and-model-card
+  documentation: https://docs.aws.amazon.com/nova/latest/userguide
+  canvas_examples: https://www.amazon.science/blog/amazon-nova-canvas-examples
+  huggingface_materials: https://huggingface.co/amazon-agi
+  bedrock_console: https://aws.amazon.com/bedrock/nova/
+
+# Canvas-Specific Technical Details
+canvas_capabilities:
+  text_to_image:
+    resolutions:
+      - 512x512
+      - 1024x1024
+      - 2048x2048
+      - Custom resolutions up to 4.2M pixels
+    aspect_ratios: "Any ratio between 1:4 and 4:1"
+  
+  image_editing:
+    inpainting:
+      description: Edit specific areas using natural language mask prompts
+      method: Describe area to edit, model repaints that region
+    
+    outpainting:
+      description: Extend image beyond original boundaries
+      method: Generate new content around existing image
+    
+    background_removal:
+      description: Automatically remove background, preserve subject
+      method: Automatic segmentation and removal
+    
+    object_removal:
+      description: Remove unwanted objects from images
+      method: Natural language specification of objects to remove
+  
+  advanced_controls:
+    style_transfer:
+      description: Generate in style of reference image
+      method: Provide reference image with prompt
+    
+    color_palette:
+      description: Control color palette with hex codes
+      method: Provide list of hex color codes with prompt
+    
+    image_conditioning:
+      description: Follow layout and structure of reference image
+      method: Provide reference image to guide generation
+    
+    image_variation:
+      description: Generate variations of existing image
+      method: Provide image and variation parameters

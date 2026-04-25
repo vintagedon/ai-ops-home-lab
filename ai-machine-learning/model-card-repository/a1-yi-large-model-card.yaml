@@ -1,0 +1,253 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Yi-Large"
+  vendor: "01.AI"
+  model_family: "Yi"
+  version: "Large (1.5 generation)"
+  release_date: "2024-07-11"
+  model_type: "Open-Weight Bilingual Frontier Model (Chinese + English)"
+  vendor_model_card_url: "https://huggingface.co/01-ai/Yi-Large"
+  license: "Apache 2.0"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Dense Transformer (decoder-only)"
+    parameter_count: "120 billion"
+    context_window: "64 K tokens"
+    training_data_cutoff: "2024-03"
+    architectural_details: |
+      Yi-Large is 01.AI’s first frontier-scale bilingual model, succeeding Yi-34B and Yi-1.5.  
+      Trained with enhanced Chinese–English mixture corpora and mathematical/coding datasets.  
+      Employs rotary embeddings (RoPE), grouped-query attention (GQA), and fused activation kernels 
+      for efficiency on H800 and TPU v5e hardware.  
+      Released under a fully open Apache 2.0 license for research and commercial use.
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "Medium–High"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ~0.8 s per 1 K tokens (fp16 on 8 × A100);  
+      supports quantized inference for single-GPU deployment.
+    throughput: |
+      Optimized for distributed serving (vLLM, TensorRT-LLM).  
+      Scaling tested to 256 GPUs with >90 % efficiency.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • Native bilingual reasoning (Chinese + English).  
+    • Strong mathematical and coding ability for open-weight class.  
+    • Competitive factual accuracy with Gemma 2 27B and Qwen 2 72B.  
+    • Fine-tuning friendly for enterprise assistants and academic research.
+  benchmark_performance: |
+    - MMLU: 86.7  
+    - GSM8K: 90.9  
+    - C-Eval (Chinese): 92.5  
+    - HumanEval: 84.2  
+    (01.AI internal + ARC benchmarks, Aug 2024)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["bilingual_reasoning", "code_generation", "long_context_QA", "summarization"]
+  known_limitations:
+    vendor_disclosed: |
+      Focused on Chinese and English; other languages less robust.  
+      No multimodal support.  
+      Occasionally verbose in Chinese narrative tasks.
+    common_failure_modes: |
+      Minor hallucination in low-resource topics; polished tone bias in English outputs.  
+    unsuitable_use_cases: |
+      Legal, medical, or policy automation without oversight.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    ~10 trillion tokens from public and licensed Chinese/English web text, Wikipedia, academic papers, and code.  
+    Instruction data curated via AI feedback and human annotation for reasoning depth.
+  training_methodology: |
+    Pretrained with next-token prediction; followed by instruction fine-tuning and SafeRL alignment.  
+    Includes chain-of-thought (CoT) datasets for math and logic.
+  data_privacy_considerations: |
+    Only public and licensed sources used; no private user data.  
+    Model weights open and telemetry-free.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    General-purpose bilingual assistant for research, education, and enterprise integration.  
+    Ideal for translation, coding, document summarization, and RAG systems.
+  suitable_domains: ["research", "education", "software_engineering", "translation", "enterprise_AI"]
+  out_of_scope_use: |
+    Safety-critical decision support or automated governance tasks.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      State-of-the-art bilingual accuracy and stable long-context performance.  
+    public_evidence: |
+      Confirmed by Hugging Face Open LLM Leaderboard and ARC 2024 benchmarks.  
+    assessment_notes: |
+      Reliable for bilingual applications and fine-tuning research.
+  safe:
+    safety_measures: |
+      SafeRL alignment, toxicity filters, and multilingual moderation datasets.  
+    known_safety_issues: |
+      Occasionally over-refuses benign queries in Chinese.  
+    assessment_notes: |
+      Safe for research and enterprise under moderation.
+  secure_and_resilient:
+    security_features: |
+      Signed checkpoints; reproducible hashes; no telemetry.  
+    known_vulnerabilities: |
+      Prompt injection and data-poisoning risks typical of open models.  
+    assessment_notes: |
+      Secure in controlled deployment.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Weights + training summary + eval scripts publicly released.  
+    assessment_notes: |
+      Strong transparency and auditability for open distribution.
+  explainable_and_interpretable:
+    explainability_features: |
+      Fully compatible with TransformerLens and similar tools for attention visualization.  
+    interpretability_limitations: |
+      No reasoning-trace metadata output.  
+    assessment_notes: |
+      Suitable for academic interpretability research.
+  privacy_enhanced:
+    privacy_features: |
+      No data retention or logging; supports on-prem deployment.  
+    privacy_concerns: |
+      Minimal risk from public web data.  
+    assessment_notes: |
+      Meets strong privacy expectations for open weights.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Balanced bilingual dataset and SafeRL fairness corrections.  
+    known_biases: |
+      Slight bias toward Mandarin register and formal English style.  
+    assessment_notes: |
+      Acceptable fairness profile for bilingual systems.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • Bilingual QA and translation accuracy across domains  
+    • Mathematical and coding benchmarks (GSM8K, HumanEval)  
+    • Fairness + toxicity audits in Chinese and English  
+    • Quantization and latency tests on target hardware
+  key_evaluation_questions: |
+    – Does bilingual accuracy meet domain needs?  
+    – Are safety filters localized and verified?  
+    – Is hardware adequate for 64 K context operation?
+  comparison_considerations: |
+    Outperforms Gemma 2 27B and LLaMA 3 8B in bilingual tasks;  
+    trails Claude 3 Sonnet and GPT-4 Turbo in complex reasoning.  
+    Strongest open bilingual model as of mid-2024.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Establish language-specific governance and fairness evaluation under AI use policy.
+  map:
+    context_considerations: |
+      Identify bias risks in translation and domain terminology.  
+    risk_categories: ["hallucination", "bias", "prompt_injection", "data_contamination"]
+  measure:
+    suggested_metrics: |
+      Accuracy, toxicity rate, fairness index, latency.  
+  manage:
+    risk_management_considerations: |
+      Apply moderation filters and audit bilingual fine-tunes for bias shift.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/01-ai/Yi-Large"
+    description: "Official Yi-Large release and evaluation card"
+  - url: "https://github.com/01-ai/Yi"
+    description: "Training and evaluation repository"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "86.7"
+  - name: "C-Eval"
+    url: "https://arxiv.org/abs/2305.08322"
+    result: "92.5"
+  third_party_evaluations:
+  - source: "ARC Open LLM Leaderboard (2024)"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    summary: "Yi-Large recognized for top bilingual performance and openness."
+  news_coverage:
+  - title: "01.AI releases Yi-Large — frontier-scale open bilingual model"
+    url: "https://www.01.ai/blog/yi-large-release"
+    date: "2024-07-11"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    01.AI documentation, Hugging Face benchmarks, ARC evaluations, and community replications.
+  completeness_assessment: |
+    High for transparency and benchmarks; medium for fine-tuning and dataset granularity.
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from Yi-Large release and evaluation data."

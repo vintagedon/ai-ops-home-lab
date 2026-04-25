@@ -1,0 +1,182 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Gemini 2.5 Flash Image (Nano Banana)"
+  vendor: "Google"
+  model_family: "Gemini 2.5"
+  version: "2.5 Flash Image (Sept 2025)"
+  release_date: "2025-09-26"
+  model_type: "Large Multimodal Model (Text-to-Image)"
+  vendor_model_card_url: "https://storage.googleapis.com/deepmind-media/Model-Cards/Gemini-2-5-Flash-Model-Card.pdf"
+  license: "Commercial API (Proprietary)"
+  deprecation_status: "Active"
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Sparse Mixture-of-Experts (MoE) Transformer with native multimodal architecture"
+    parameter_count: "Not publicly disclosed"
+    context_window: "1,048,576 tokens (input)"
+    training_data_cutoff: "Not publicly disclosed"
+    architectural_details: |
+      "Nano Banana" is the codename for Gemini 2.5 Flash Image. [16, 17] It is a natively multimodal model trained from the ground up to process text and images in a single, unified step, enabling advanced capabilities beyond simple image generation. [18] It shares the same underlying architecture as Gemini 2.5 Flash.
+  modalities:
+    supported_inputs:
+    - "text"
+    - "image"
+    supported_outputs:
+    - "image"
+    - "text"
+  performance_characteristics:
+    speed_tier: "Very High"
+    cost_tier: "Low"
+    latency: "Optimized for fast, interactive, and conversational image editing workflows."
+    throughput: "Designed for high-volume creative applications."
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    Goes beyond simple text-to-image generation to support conversational editing, multi-image composition, logical reasoning about image content, and clear text rendering within images. [18] Can maintain subject identity across multiple images for consistent character generation. Includes built-in SynthID digital watermarking. [16]
+  benchmark_performance: |
+    No specific image-generation benchmarks (e.g., FID scores) are publicly disclosed in the model card. Performance is described qualitatively.
+  special_capabilities:
+    tools_support: false
+    vision_support: true
+    reasoning_support: true
+    image_generation: true
+    additional_capabilities:
+    - "conversational_image_editing"
+    - "multi_image_composition"
+    - "style_transfer"
+    - "text_rendering_in_images"
+    - "visual_reasoning"
+    - "synthid_watermarking"
+  known_limitations:
+    vendor_disclosed: |
+      Subject to general limitations of generative models. May struggle with complex compositional requests or highly specific spatial reasoning.
+    common_failure_modes: |
+      May misinterpret complex, narrative prompts or generate artifacts in highly detailed images.
+    unsuitable_use_cases: |
+      Generation of deceptive or harmful content; applications requiring photorealistic depiction of real individuals without consent.
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Pre-trained on a large-scale, diverse collection of data including publicly-available web-documents, code, images, audio, and video. [9]
+  training_methodology: |
+    Natively multimodal training on a sparse MoE Transformer architecture. [9, 18]
+  data_privacy_considerations: |
+    All generated images include an invisible SynthID digital watermark to identify them as AI-generated. [16]
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Creative workflows requiring image generation and conversational, multi-turn editing capabilities. Applications include generating consistent characters, prompt-based editing, and combining image understanding with generation. [16, 17]
+  suitable_domains:
+  - "creative_tools"
+  - "marketing_and_advertising"
+  - "design_prototyping"
+  - "brand_asset_generation"
+  out_of_scope_use: |
+    Any use that violates Google's Acceptable Use Policy, including the generation of harmful, deceptive, or explicit content.
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Provides reliable control for a huge range of applications, including maintaining subject identity and intelligent, prompt-based editing. [16]
+    public_evidence: |
+      Public examples and tutorials demonstrate its capabilities in conversational editing and visual reasoning. [18]
+    assessment_notes: |
+      Appears highly capable for creative and interactive workflows. Reliability for specific, complex compositions should be tested.
+  safe:
+    safety_measures: |
+      Includes built-in safety filters and SynthID watermarking for transparency. [16]
+    known_safety_issues: |
+      Potential for misuse in creating deceptive media, though mitigated by watermarking.
+    assessment_notes: |
+      The inclusion of SynthID is a significant safety and transparency feature.
+  secure_and_resilient:
+    security_features: |
+      Accessed via Google's secure API infrastructure.
+    known_vulnerabilities: |
+      Potential for adversarial prompts designed to bypass safety filters.
+    assessment_notes: |
+      Standard security posture for a cloud-hosted generative model.
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      SynthID watermarking provides a mechanism for auditing the provenance of generated images. The model card is publicly available.
+    assessment_notes: |
+      Watermarking enhances accountability. Transparency into the model's internal workings remains limited.
+  explainable_and_interpretable:
+    explainability_features: |
+      The model's ability to engage in conversational refinement provides a degree of interactive explainability.
+    interpretability_limitations: |
+      The underlying generation process is a black box.
+    assessment_notes: |
+      Focus is on user control and interaction rather than mechanistic interpretability.
+  privacy_enhanced:
+    privacy_features: |
+      Operates within Google's cloud privacy and data handling policies.
+    privacy_concerns: |
+      Training data sources are not fully disclosed.
+    assessment_notes: |
+      Suitable for enterprise use under Google Cloud's data processing agreements.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Subject to Google's internal bias mitigation efforts during data curation and model training.
+    known_biases: |
+      May reproduce societal biases related to demographics and culture present in the training data.
+    assessment_notes: |
+      Requires careful prompt engineering and output review to manage potential biases in production applications.
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Test for subject consistency across a series of generated images with varying scenes and poses.
+    - Evaluate the precision of conversational editing for adding, removing, and modifying elements.
+    - Assess the quality of text rendering for logos and diagrams.
+    - Red-team with prompts designed to test safety filter boundaries.
+  key_evaluation_questions: |
+    - How robust is subject identity retention for our specific art style and characters?
+    - Does the conversational editing workflow improve efficiency compared to traditional text-to-image regeneration?
+  comparison_considerations: |
+    Compare against other leading text-to-image models (e.g., Imagen 4, Midjourney, DALL-E) on image quality, prompt adherence, and unique features like conversational editing.
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://storage.googleapis.com/deepmind-media/Model-Cards/Gemini-2-5-Flash-Model-Card.pdf"
+    description: "Official Gemini 2.5 Flash & 2.5 Flash Image Model Card"
+  - url: "https://developers.googleblog.com/en/how-to-prompt-gemini-2-5-flash-image-generation-for-the-best-results/"
+    description: "Developer blog post with prompting guidance and examples."

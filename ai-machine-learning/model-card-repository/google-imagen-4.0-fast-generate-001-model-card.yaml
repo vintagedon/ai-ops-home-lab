@@ -1,0 +1,177 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Imagen 4 Fast"
+  vendor: "Google"
+  model_family: "Imagen 4"
+  version: "4.0 Fast"
+  release_date: "2025-05-20"
+  model_type: "Text-to-Image Latent Diffusion Model (Speed-Optimized)"
+  vendor_model_card_url: "https://storage.googleapis.com/deepmind-media/Model-Cards/Imagen-4-Model-Card.pdf"
+  license: "Commercial API (Proprietary)"
+  deprecation_status: "Active"
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Latent Diffusion Model"
+    parameter_count: "Not publicly disclosed"
+    context_window: "Not applicable"
+    training_data_cutoff: "Not applicable"
+    architectural_details: |
+      A variant of the Imagen 4 model, specifically optimized for generation speed and efficiency. Shares the same core architecture as the standard Imagen 4 model. [29]
+  modalities:
+    supported_inputs:
+    - "text"
+    - "image"
+    supported_outputs:
+    - "image"
+  performance_characteristics:
+    speed_tier: "Very High"
+    cost_tier: "Low (~$0.02 per generation)"
+    latency: "Lowest latency in the Imagen 4 family, optimized for real-time or near-real-time applications."
+    throughput: "Highest throughput in the Imagen 4 family, designed for high-speed generation."
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    Optimized for image generation speed, making it best for projects requiring high-speed generation without compromising significantly on quality. [29]
+  benchmark_performance: |
+    Qualitatively described as the fastest model in the Imagen 4 family. No specific latency benchmarks are published.
+  special_capabilities:
+    tools_support: false
+    vision_support: true
+    reasoning_support: false
+    image_generation: true
+    additional_capabilities:
+    - "high_speed_generation"
+    - "cost_efficiency"
+    - "synthid_watermarking"
+  known_limitations:
+    vendor_disclosed: |
+      Shares the same known limitations as the standard Imagen 4 model. Image quality may be slightly lower than the standard and Ultra variants in exchange for speed. [28]
+    common_failure_modes: |
+      May produce fewer fine details or more artifacts compared to the quality-optimized variants.
+    unsuitable_use_cases: |
+      Applications where maximum photorealism and detail fidelity are required.
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Based on the same training data and methodology as the standard Imagen 4 model. [28]
+  training_methodology: |
+    Fine-tuned or configured from the base Imagen 4 model to prioritize speed and cost over maximum quality.
+  data_privacy_considerations: |
+    Includes SynthID watermarking, consistent with the Imagen 4 family. [28]
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    For content creators and brand marketers who need quick image generation along with high quality for high-volume tasks. [29]
+  suitable_domains:
+  - "social_media_content_creation"
+  - "real_time_prototyping"
+  - "high_volume_asset_generation"
+  - "interactive_applications"
+  out_of_scope_use: |
+    Final production of high-end marketing assets or photorealistic imagery where quality cannot be compromised.
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Offers significantly improved speed and efficiency for image generation. [29]
+    public_evidence: |
+      Positioned as the fast, low-cost option in the Imagen 4 lineup.
+    assessment_notes: |
+      The ideal choice for applications where latency and cost are more critical than achieving the absolute highest image quality.
+  safe:
+    safety_measures: |
+      Inherits the safety features of the Imagen 4 family, including data filtering and SynthID. [28]
+    known_safety_issues: |
+      Standard risks associated with generative image models.
+    assessment_notes: |
+      Robust safety posture.
+  secure_and_resilient:
+    security_features: |
+      Accessed via Google's secure cloud infrastructure.
+    known_vulnerabilities: |
+      Standard generative AI vulnerabilities.
+    assessment_notes: |
+      Secure for enterprise use.
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Shares the same model card as Imagen 4. SynthID supports provenance tracking.
+    assessment_notes: |
+      Accountability is enhanced by watermarking.
+  explainable_and_interpretable:
+    explainability_features: |
+      None specified.
+    interpretability_limitations: |
+      Opaque internal workings.
+    assessment_notes: |
+      Not designed for interpretability.
+  privacy_enhanced:
+    privacy_features: |
+      Adheres to Google Cloud's privacy standards.
+    privacy_concerns: |
+      Training data details are not fully public.
+    assessment_notes: |
+      Meets enterprise privacy requirements.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Inherits the bias mitigation strategies of the base Imagen 4 model.
+    known_biases: |
+      Potential for societal biases.
+    assessment_notes: |
+      Requires careful prompting and review.
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Latency and throughput benchmarking to validate its performance for high-volume applications.
+    - A/B testing against Imagen 4 to assess the quality trade-off for the target use case.
+    - Cost analysis for large-scale generation tasks to confirm TCO benefits.
+  key_evaluation_questions: |
+    - Is the generation speed fast enough for our interactive application's user experience?
+    - Is the image quality sufficient for our social media and content marketing needs?
+  comparison_considerations: |
+    Compare against other speed-focused image generation models on the market. The primary internal comparison is the cost/speed/quality trade-off against the standard and Ultra versions of Imagen 4.
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://storage.googleapis.com/deepmind-media/Model-Cards/Imagen-4-Model-Card.pdf"
+    description: "Official Imagen 4 Model Card (covers all variants)"
+  - url: "https://www.imagine.art/blogs/google-imagen-4-overview"
+    description: "Third-party overview detailing the different Imagen 4 variants."

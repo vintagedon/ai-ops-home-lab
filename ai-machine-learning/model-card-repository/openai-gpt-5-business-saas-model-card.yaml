@@ -1,0 +1,153 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+card_type: hybrid-service-model-card
+title: "ChatGPT Business – Hybrid Model Card"
+version: "0.2.0"
+phase: "0.2"
+status: "draft"
+author: "VintageDon"
+repository: "https://github.com/vintagedon/nist-ai-rmf-cookbook"
+related_artifacts:
+  underlying_model_card: "./openai-gpt-5-model-card.yaml"  # Lives in the same directory
+  supplemental_docs:
+  - "./NIST AI RMF Model Card for GPT Business.md"
+  - "../worklogs/worklog-02-gpt-business-evaluation.md"     # Adjust path to match repo
+governance_function: "GOVERN"
+review_cadence: "quarterly"
+last_reviewed:
+next_review_due:
+owners:
+  responsible:
+    handle: "VintageDon"
+    role: "Platform Administrator"
+  governing:
+    name: "AI Review Board (provisional)"
+    role: "Governing Body"
+  accountable:
+    name: "Quadratic IT Platform Ops"
+    role: "Accountable Org Unit"
+
+object_under_governance:
+  service_name: "ChatGPT Business"
+  provider: "OpenAI"
+  deployment_type: "SaaS (managed)"
+  tenant_boundary: "Organization Business tenant (SSO-enforced)"
+  underlying_models:
+  - name: "GPT-5"
+    reference: "./openai-gpt-5-model-card.yaml"
+  # Note: This card treats the managed service (Business tier) as the primary object.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  summary: >
+    Use of ChatGPT Business to assist with AI governance documentation, controlled
+    repository automation plans, and non-sensitive technical writing within the
+    NIST AI RMF Cookbook project during Phase 0.2.
+  in_scope:
+  - Drafting and refining governance and documentation artifacts
+  - Generating structured templates and skeletons for repo content
+  - Non-sensitive technical explanation and summarization
+  out_of_scope:
+  - Processing client/customer/government data or CUI
+  - Production system changes or autonomous decision-making
+  - Handling PII/PHI or regulated financial data
+  notes: "This scope will be revisited at ≥ Phase 0.3 as governance matures."
+
+service_configuration:
+  access_controls:
+    sso: true
+    mfa: "enforced"
+    role_separation: true
+  features_tools:
+    # Phase 0.2 defaults—tight by design; relax only via board-approved change
+    browsing:
+      status: "disabled"
+      rationale: "Minimize data egress and complexity in Phase 0.2"
+    code_interpreter:
+      status: "disabled"
+      rationale: "No execution environment needed for documentation drafting"
+    file_uploads:
+      status: "limited"
+      constraints:
+      - "No sensitive data"
+      - "Non-executable documents only"
+    third_party_integrations:
+      status: "none"
+  change_management:
+    vendor_change_trigger: true
+    internal_review_on_change: true
+    process: "PR with signed commits linked to ADR; board sign-off"
+
+data_handling_and_security:
+  vendor_commitments:
+    no_training_on_org_data: true
+    certifications:
+    - "SOC 2 Type II"
+    - "ISO/IEC 27001"
+    encryption_in_transit: true
+    encryption_at_rest: true
+  organizational_controls:
+    data_minimization: "Non-sensitive content only"
+    retention_policy: "TBD in Phase 0.3"
+    audit_evidence:
+    - "Signed Git commits and PRs for policy/doc changes"
+    - "Worklogs referencing use of the service"
+  prohibited_data_classes:
+  - "PII/PHI"
+  - "Customer or government client data"
+  - "Credentials, secrets, keys"
+  - "CUI/ITAR/EAR or export-controlled material"
+
+governance_and_accountability:
+  authority_model:
+    responsible: "VintageDon"
+    governing: "AI Review Board (provisional)"
+    accountable: "Quadratic IT Platform Ops"
+  approvals:
+    required_for:
+    - "Changes to features_tools defaults"
+    - "Expansion of in_scope data or tasks"
+  documentation_links:
+    adr:
+    - "../adr/ADR-001-initial-adoption.md"     # Placeholder; adjust if different
+    worklogs:
+    - "../worklogs/worklog-02-gpt-business-evaluation.md"
+  review:
+    cadence: "quarterly"
+    early_review_triggers:
+    - "Material vendor service change"
+    - "Proposed scope expansion"
+    - "Security incident or audit finding"
+
+rmf_alignment:
+  coverage: ["GOVERN"]
+  notes: >
+    At Phase 0.2 this card records governance intent, roles, boundaries, and
+    configuration. MAP/MEASURE/MANAGE will be added in later phases when
+    operational data and procedures exist.
+
+disclosures:
+  limitations:
+  - "This card focuses on the managed service context; model internals are referenced."
+  - "Evaluation metrics and red-team findings are intentionally out of scope in Phase 0.2."
+  assumptions:
+  - "Service features remain within Phase 0.2 defaults unless a board-approved PR changes them."
+  dependencies:
+  - "Availability and terms of ChatGPT Business (OpenAI)"
+  - "Sibling GPT-5 model card for underlying model details"
+
+change_log:
+- version: "0.2.0"
+  date:
+  author: "VintageDon"
+  summary: "Initial Phase 0.2 hybrid service-use card (GOVERN only)."

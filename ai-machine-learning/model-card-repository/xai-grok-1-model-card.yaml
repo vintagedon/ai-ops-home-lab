@@ -1,0 +1,246 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Grok-1"
+  vendor: "xAI"
+  model_family: "Grok"
+  version: "1"
+  release_date: "2023-11-04"
+  model_type: "Open-Weight Foundation Reasoning Model"
+  vendor_model_card_url: "https://github.com/xai-org/grok-1"
+  license: "Apache 2.0 (Open Weights)"
+  deprecation_status: "Superseded by Grok-2 (2024)"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Dense Transformer (decoder-only)"
+    parameter_count: "314 billion"
+    context_window: "32 K tokens"
+    training_data_cutoff: "2023-10"
+    architectural_details: |
+      Grok-1 was the original frontier-scale LLM developed by xAI and released as an open-weight model in March 2024.  
+      It features a dense transformer architecture with rotary positional embeddings (RoPE) and grouped-query attention (GQA).  
+      Training focused on reasoning, factual grounding, and mathematical problem solving using Mixture-of-Datasets pretraining techniques and post-alignment refinement.  
+      It serves as the foundation checkpoint for later xAI models, including Grok-2.
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "Medium"
+    cost_tier: "Free / Open Weights"
+    latency: |
+      ~1.0 s per 1 K tokens on 8×A100 GPUs (fp16); quantized inference runs on single consumer GPU.  
+    throughput: |
+      Designed for offline research and fine-tuning workflows with distributed training support.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • High-accuracy reasoning and mathematical problem solving for an open model.  
+    • Competitive with GPT-3.5 and Claude Instant at release time.  
+    • Robust architecture for fine-tuning and open research into alignment and interpretability.  
+  benchmark_performance: |
+    - MMLU: 79.5  
+    - GSM8K: 83.2  
+    - ARC-C: 80.1  
+    - HumanEval: 72.4  
+    (xAI and community leaderboard data, Dec 2023–Apr 2024)
+  special_capabilities:
+    tools_support: false
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["mathematical_reasoning", "code_generation", "long_context_summarization"]
+  known_limitations:
+    vendor_disclosed: |
+      Limited alignment and safety filters relative to later models.  
+      No multimodal capabilities or external retrieval integration.  
+    common_failure_modes: |
+      Occasional hallucination and verbose outputs in long contexts.  
+    unsuitable_use_cases: |
+      Production deployments without moderation or safety controls.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on a diverse corpus of English and multilingual web text, code, Wikipedia, and math datasets (e.g., MATH, GSM8K, The Pile).  
+    Public and licensed sources only. No proprietary X/Twitter data included in this release.  
+  training_methodology: |
+    Large-scale distributed pretraining on 8K A100 GPUs followed by instruction-tuning and lightweight RLHF alignment.  
+  data_privacy_considerations: |
+    Trained on public datasets; no user data or PII present.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Research, fine-tuning, and educational applications in reasoning and mathematical domains.  
+    Suitable for academic and open research projects.  
+  suitable_domains: ["research", "education", "mathematics", "code_generation"]
+  out_of_scope_use: |
+    Commercial deployments requiring moderation and safety compliance.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Reproducible open-weight baseline for frontier-class reasoning models.  
+    public_evidence: |
+      Verified benchmarks via Hugging Face and Eleuther community tests.  
+    assessment_notes: |
+      Reliable for research; alignment limited vs closed models.
+  safe:
+    safety_measures: |
+      Basic toxicity filtering and content refusal tuning during alignment.  
+    known_safety_issues: |
+      May emit unsafe content in creative prompts without moderation.  
+    assessment_notes: |
+      Requires external safety layers for production use.
+  secure_and_resilient:
+    security_features: |
+      Open weights; hash-verified integrity and reproducible builds.  
+    known_vulnerabilities: |
+      Susceptible to prompt injection and context poisoning.  
+    assessment_notes: |
+      Secure when deployed in sandboxed research environments.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Full weights, training recipes, and evaluation scripts published on GitHub.  
+    assessment_notes: |
+      High transparency — one of the first frontier-scale open models to release weights publicly.
+  explainable_and_interpretable:
+    explainability_features: |
+      Open architecture enables attention map and gradient analysis.  
+    interpretability_limitations: |
+      No built-in reasoning trace output.  
+    assessment_notes: |
+      Excellent for interpretability research.
+  privacy_enhanced:
+    privacy_features: |
+      No telemetry or data collection; weights freely deployable offline.  
+    privacy_concerns: |
+      None beyond standard LLM public-data exposure.  
+    assessment_notes: |
+      Meets open-science privacy baselines.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Dataset balancing and toxicity filtering applied post-training.  
+    known_biases: |
+      English-dominant and tech-culture skew typical of web-trained models.  
+    assessment_notes: |
+      Bias moderate and documented; suitable for controlled research.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • Reasoning and math benchmarks (GSM8K, ARC, MATH).  
+    • Bias and toxicity assessment under open prompts.  
+    • Quantization and latency tests on consumer hardware.  
+    • Safety filter integration testing for production use.
+  key_evaluation_questions: |
+    • Does alignment meet your safety requirements?  
+    • Is hardware capacity adequate for 314 B-parameter dense model?  
+    • Are moderation layers implemented in your deployment?
+  comparison_considerations: |
+    • Outperforms Falcon 40B and LLaMA 2 70B on reasoning benchmarks.  
+      Trails Claude 3 Haiku and GPT-4 Turbo in alignment and language depth.  
+      Foundation checkpoint for Grok-2 and xAI experiments.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Establish usage policy for frontier-scale open-weights (license and alignment responsibility).  
+  map:
+    context_considerations: |
+      Evaluate alignment and bias risk for research vs production contexts.  
+    risk_categories: ["hallucination", "bias", "prompt_injection", "safety_violation"]
+  measure:
+    suggested_metrics: |
+      Accuracy, toxicity rate, bias index, hallucination frequency.  
+  manage:
+    risk_management_considerations: |
+      Pair with external moderation layers and safe-RL alignment for public use.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://github.com/xai-org/grok-1"
+    description: "Official Grok-1 open-weights repository and training code"
+  - url: "https://huggingface.co/xai-org/grok-1"
+    description: "Hugging Face distribution with evaluation scripts"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "79.5"
+  - name: "GSM8K"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "83.2"
+  third_party_evaluations:
+  - source: "Hugging Face Open LLM Leaderboard (2024)"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    summary: "Grok-1 recognized as a top open-weight frontier-class baseline."
+  news_coverage:
+  - title: "xAI releases Grok-1 weights — an open frontier model for researchers"
+    url: "https://x.ai/blog/grok-1-open-release"
+    date: "2024-03-17"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    xAI Grok-1 GitHub release, Hugging Face leaderboard data, and community benchmarks.  
+  completeness_assessment: |
+    High for transparency and reproducibility; medium for alignment detail and safety analysis.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from xAI Grok-1 open release and evaluation data."

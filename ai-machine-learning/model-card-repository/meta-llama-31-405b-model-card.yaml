@@ -1,0 +1,244 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Llama 3.1 405B"
+  vendor: "Meta AI"
+  model_family: "Llama 3.x"
+  version: "3.1 (405B)"
+  release_date: "2025-07-23"
+  model_type: "Frontier-scale open-weight language model (limited-access)"
+  vendor_model_card_url: "https://ai.meta.com/llama/"
+  license: "Meta AI Llama 3 Community License – Research Only Variant"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer (Decoder-only, GQA + MoE hybrid)"
+    parameter_count: "≈405 B total parameters (16 active experts per token)"
+    context_window: "256 K tokens"
+    training_data_cutoff: "2025-01"
+    architectural_details: |
+      Llama 3.1 405B extends Meta’s architecture into frontier-scale territory.  
+      Uses hybrid mixture-of-experts (MoE) layers for efficiency, rotary position encodings,
+      grouped-query attention (GQA), and long-context optimizations.  
+      Trained with a distributed pipeline across >16 k H100 GPUs with tensor + expert parallelism.
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "Premium"
+    cost_tier: "High Cost"
+    latency: |
+      Inference typically 50–70 ms / token on 8×H100 setup; requires > 80 GB GPU memory per replica.
+    throughput: |
+      ≈15 tokens / s per GPU stream with two experts active per token; scales linearly with inference parallelism.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    Meta’s highest-accuracy open-weight LLM. Performs at frontier-model levels on reasoning, factual accuracy,
+    and multilingual tasks. Demonstrates GPT-4 Turbo / Claude Opus–tier reasoning and code competence while remaining transparent.
+  benchmark_performance: |
+    - MMLU: 89.8  
+    - GSM8K: 94.5  
+    - HumanEval: 85.6  
+    - ARC-C: 88.2  
+    - BBH: 76.3  
+    (Meta AI and Hugging Face Leaderboard results)
+  special_capabilities:
+    tools_support: false
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["long_context", "code_generation", "multilingual_reasoning", "MoE_sparse_activation"]
+  known_limitations:
+    vendor_disclosed: |
+      Extreme hardware requirements; no built-in moderation or refusal tuning.  
+      Hallucination possible on ambiguous prompts; alignment weaker than proprietary frontier models.
+    common_failure_modes: |
+      Occasional coherence drift beyond 200 K tokens; verbose explanations in reasoning; no safety classifier pipeline.
+    unsuitable_use_cases: |
+      Public-facing deployments without moderation; regulatory domains without human oversight.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on ≈25 T tokens of filtered text and code data from public, licensed, and synthetic sources; curated for factuality and toxicity.  
+    Detailed dataset composition undisclosed.
+  training_methodology: |
+    Large-scale pretraining with expert routing; fine-tuned with instruction datasets and preference optimization (DPO).  
+    Evaluated for responsible use but no RLHF alignment pipeline disclosed.
+  data_privacy_considerations: |
+    PII and toxic content filtered during preprocessing. Downstream users must enforce privacy controls on fine-tunes.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Research into frontier-scale LLMs, foundation for domain-specific fine-tuning and retrieval-augmented systems.
+  suitable_domains: ["research", "enterprise_RAG", "code_generation", "multilingual_analysis"]
+  out_of_scope_use: |
+    Direct consumer chat interfaces without safety layer; autonomous decision-making in regulated environments.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Near-frontier accuracy with open weights; state-of-the-art benchmarks for an open model.
+    public_evidence: |
+      Hugging Face and independent benchmarks confirm comparable scores to closed models.
+    assessment_notes: |
+      Very high reliability within LLM variability bounds; long-context performance verified to ~200 K tokens.
+  safe:
+    safety_measures: |
+      Pretraining filters and responsible-AI license; Meta’s red-team testing on harmful content generation.
+    known_safety_issues: |
+      No runtime moderation; open weights permit unrestricted fine-tunes.
+    assessment_notes: |
+      Integrators must apply external moderation and monitoring.
+  secure_and_resilient:
+    security_features: |
+      None intrinsic; open-deployment model allows sandboxed environments.
+    known_vulnerabilities: |
+      Prompt injection; model exfiltration if deployed publicly without controls.
+    assessment_notes: |
+      Suitable for air-gapped and research clusters with proper governance.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Model weights, tokenizer, and evaluation tools released; training data composition opaque.
+    assessment_notes: |
+      Best-in-class transparency for frontier-scale open model to date.
+  explainable_and_interpretable:
+    explainability_features: |
+      Open weights permit expert-routing trace analysis; architecture supports mechanistic interpretability research.
+    interpretability_limitations: |
+      Expert specialization details not documented; trace granularity limited to router outputs.
+    assessment_notes: |
+      Valuable for academic interpretability research at scale.
+  privacy_enhanced:
+    privacy_features: |
+      Pretraining filter pipeline; no user data collection.
+    privacy_concerns: |
+      Underlying web sources undisclosed; some copyright risk possible.
+    assessment_notes: |
+      Adequate for research; enterprises should review data policy compliance.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Bias and toxicity filters applied to training data; evaluation benchmarks published.
+    known_biases: |
+      Standard language bias; lower performance on low-resource languages.
+    assessment_notes: |
+      Fairness testing strong but ongoing; open access enables community auditing.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Reasoning accuracy vs closed frontier models  
+    - Long-context retention and hallucination testing  
+    - Bias and toxicity audits  
+    - Compute cost and energy profiling
+  key_evaluation_questions: |
+    - Does infrastructure support MoE and context demands?  
+    - Are safety controls and licensing restrictions implemented?  
+    - Does open deployment pose data or reputation risk?
+  comparison_considerations: |
+    - Performance approaches GPT-4 Turbo / Claude Opus levels with full transparency; requires significant compute investment.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Treat as frontier-class asset under executive oversight; document compute resource allocation and licensing compliance.
+  map:
+    context_considerations: |
+      Identify infrastructure, data governance, and safety dependencies for frontier-scale use.
+    risk_categories: ["hallucination", "bias", "prompt_injection", "privacy_leakage", "cost_overrun"]
+  measure:
+    suggested_metrics: |
+      Accuracy and factuality; bias indices; GPU utilization; energy cost / inference; safety flag rates.
+  manage:
+    risk_management_considerations: |
+      Require red-team program; limit access via role-based controls; apply moderation middleware for public interfaces.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://ai.meta.com/llama/"
+    description: "Official Llama 3.1 overview and model card"
+  - url: "https://huggingface.co/meta-llama/Llama-3.1-405B"
+    description: "Hugging Face repository and leaderboard data"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "89.8"
+  - name: "GSM8K"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "94.5"
+  third_party_evaluations:
+  - source: "Hugging Face Open LLM Leaderboard"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    summary: "Confirms performance comparable to closed frontier models."
+  news_coverage:
+  - title: "Meta introduces Llama 3.1 405B frontier-class model"
+    url: "https://ai.meta.com/blog/llama-3-1/"
+    date: "2025-07-23"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Meta AI Llama 3.1 documentation, Hugging Face evaluations, and community benchmarks.
+  completeness_assessment: |
+    High for architecture and benchmarks; medium for training data and alignment details.
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card based on Meta AI and community evaluations."

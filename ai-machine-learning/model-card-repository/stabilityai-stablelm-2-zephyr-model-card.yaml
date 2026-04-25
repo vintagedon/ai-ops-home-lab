@@ -1,0 +1,255 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "StableLM 2 Zephyr"
+  vendor: "Stability AI"
+  model_family: "StableLM"
+  version: "2 (Zephyr)"
+  release_date: "2024-03-12"
+  model_type: "Open-Weight Instruction-Tuned Reasoning and Chat Model"
+  vendor_model_card_url: "https://huggingface.co/stabilityai/stablelm-2-zephyr"
+  license: "Apache 2.0"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Dense Transformer (decoder-only)"
+    parameter_count: "13 billion"
+    context_window: "16 K tokens"
+    training_data_cutoff: "2024-02"
+    architectural_details: |
+      StableLM 2 Zephyr is Stability AI’s instruction-tuned variant of StableLM 2 13B,
+      designed for conversational reasoning and factual QA.
+      It builds upon the StableLM 2 architecture, which integrates rotary embeddings (RoPE),
+      grouped-query attention (GQA), and FlashAttention 2 for fast, efficient inference.
+      The model was tuned using open instruction datasets and RLHF pipelines derived
+      from community efforts such as Zephyr and OpenAssistant.
+
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "High"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ~0.18 s per 1K tokens (fp16 A100); ~0.07 s INT4 on RTX 4090.  
+      Optimized for interactive assistant use.  
+    throughput: |
+      Linear scaling on multi-GPU setups with excellent quantization support.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • Balanced reasoning, conversational flow, and factual grounding.  
+    • Open, instruction-tuned model optimized for assistants and chatbots.  
+    • Transparent, fully open-weight release under Apache 2.0.  
+  benchmark_performance: |
+    - MT-Bench: 7.6  
+    - MMLU: 74.1  
+    - GSM8K: 80.7  
+    - ARC-C: 78.1  
+    - TruthfulQA: 64.5  
+    (Hugging Face Open LLM Leaderboard, Mar 2024)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["instruction_following", "QA", "summarization", "chatbot"]
+  known_limitations:
+    vendor_disclosed: |
+      English-centric; limited multilingual capability.  
+      Slight verbosity in open-ended dialogues.  
+    common_failure_modes: |
+      Occasional hallucinations in factual synthesis tasks.  
+    unsuitable_use_cases: |
+      Legal, medical, or regulated applications requiring verified outputs.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Pretrained on 1.5T tokens of public web, academic, and code data.  
+    Fine-tuned using open instruction datasets including UltraChat, OpenOrca, and Zephyr alignments.  
+    Post-tuning applied for safety, refusal, and tone moderation.
+  training_methodology: |
+    Supervised fine-tuning (SFT) + RLHF + reward model distillation.  
+    Safety-tuned via synthetic adversarial data and refusal training.  
+  data_privacy_considerations: |
+    Trained only on open and licensed datasets; PII scrubbed during preprocessing.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Research, education, assistant development, and open AI experimentation.  
+    Serves as a foundation for safe, efficient chat and reasoning agents.  
+  suitable_domains: ["education", "research", "chatbots", "documentation", "prototyping"]
+  out_of_scope_use: |
+    Autonomous decision-making or unmoderated high-stakes applications.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Balanced reasoning accuracy with low hallucination for model size.  
+    public_evidence: |
+      Verified via Hugging Face Leaderboard and Stability AI’s evaluations.  
+    assessment_notes: |
+      Reliable open reasoning assistant for education and RAG systems.
+  safe:
+    safety_measures: |
+      Alignment data filtering, SafeRL tuning, and red-teaming simulation.  
+    known_safety_issues: |
+      May refuse benign content under strict safety thresholds.  
+    assessment_notes: |
+      Safe under normal supervision.
+  secure_and_resilient:
+    security_features: |
+      No telemetry, fully open weights with checksum verification.  
+    known_vulnerabilities: |
+      Prompt injection and malicious fine-tune risks.  
+    assessment_notes: |
+      Secure for local, offline, or enterprise R&D deployment.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Model weights, dataset summaries, and training scripts publicly released.  
+    assessment_notes: |
+      High transparency for research and compliance documentation.
+  explainable_and_interpretable:
+    explainability_features: |
+      Compatible with standard interpretability frameworks and attention visualizers.  
+    interpretability_limitations: |
+      No native CoT trace or reasoning introspection.  
+    assessment_notes: |
+      Fully interpretable small-scale open model.
+  privacy_enhanced:
+    privacy_features: |
+      PII-removed datasets; inference telemetry-free.  
+    privacy_concerns: |
+      Minimal risk, consistent with open dataset standards.  
+    assessment_notes: |
+      Meets open-model privacy expectations.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Alignment to reduce toxicity and social bias through synthetic moderation data.  
+    known_biases: |
+      English-centric tone; minor over-polite bias.  
+    assessment_notes: |
+      Acceptable fairness and bias levels for open research.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • Instruction-following and conversation coherence.  
+    • Factual QA and summarization accuracy.  
+    • Bias and toxicity evaluation (RealToxicityPrompts).  
+    • Latency and quantization efficiency profiling.  
+  key_evaluation_questions: |
+    – Does alignment behavior meet your moderation requirements?  
+    – Are factuality levels sufficient for deployment use?  
+    – Is performance adequate within compute constraints?  
+  comparison_considerations: |
+    Outperforms Zephyr-7B and OpenHermes 2.5;  
+    trails Phi-3 Medium 14B and Mistral 7B v0.3 in reasoning.  
+    Excellent open alternative to mid-size proprietary chat models.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Establish governance for instruction-tuned reuse and community fine-tunes under Apache 2.0.  
+  map:
+    context_considerations: |
+      Identify hallucination and bias risks in conversational workloads.  
+    risk_categories: ["hallucination", "bias", "prompt_injection", "alignment_drift"]
+  measure:
+    suggested_metrics: |
+      Accuracy, MT-Bench score, hallucination rate, latency.  
+  manage:
+    risk_management_considerations: |
+      Apply safety moderation layers and post-deployment evaluation routines.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/stabilityai/stablelm-2-zephyr"
+    description: "Official Stability AI model card"
+  - url: "https://stability.ai/news/stablelm-2-release"
+    description: "Release blog and announcement"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "74.1"
+  - name: "GSM8K"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "80.7"
+  third_party_evaluations:
+  - source: "Hugging Face Open LLM Leaderboard (2024)"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    summary: "StableLM 2 Zephyr validated as top-performing open 13B instruct-tuned model."
+  news_coverage:
+  - title: "Stability AI releases StableLM 2 Zephyr — open instruction-tuned model for assistants"
+    url: "https://stability.ai/news/stablelm-2-release"
+    date: "2024-03-12"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Stability AI documentation, Hugging Face leaderboards, and independent benchmarks.  
+  completeness_assessment: |
+    High for transparency and safety; medium for alignment dataset detail.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from StableLM 2 Zephyr release and benchmark data."
+

@@ -1,0 +1,977 @@
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+# Model Card: Mistral-7B-Instruct-v0.3
+# Populated from: https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3
+# Date: 2025-10-28
+
+schema_version: "1.0.0"
+
+# =============================================================================
+# MODEL IDENTITY
+# =============================================================================
+
+model_identity:
+  name: "Mistral-7B-Instruct-v0.3"
+  vendor: "Mistral AI"
+  model_family: "Mistral"
+  version: "v0.3"
+  release_date: "2024-05-22"
+  model_type: "Large Language Model"
+
+  vendor_model_card_url: "https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3"
+
+  license: "Apache 2.0"
+  
+  deprecation_status: "Active"
+
+# =============================================================================
+# MODEL ARCHITECTURE & TECHNICAL SPECIFICATIONS
+# =============================================================================
+
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer decoder with grouped-query attention (GQA) and sliding window attention (SWA)"
+    
+    parameter_count: "7.248B (7.3 billion parameters)"
+    
+    context_window: "32,768 tokens"
+    
+    training_data_cutoff: "Not publicly disclosed"
+
+    architectural_details: |
+      Mistral-7B-Instruct-v0.3 is an instruction-tuned version of Mistral-7B-v0.3 base model.
+      Key architectural features:
+      - Grouped-Query Attention (GQA): Enables faster inference with reduced memory requirements
+      - Sliding Window Attention (SWA): Each layer attends to previous 4,096 hidden states, providing linear compute cost O(sliding_window * seq_len)
+      - Rolling Buffer Cache: Maintains fixed cache size for efficient memory usage
+      - Extended vocabulary: 32,768 tokens (increased from v0.2)
+      - v3 Tokenizer support: Improved tokenization efficiency and accuracy
+      - Function calling capabilities: Supports tool/function calling through extended vocabulary (TOOL_CALLS, AVAILABLE_TOOLS, TOOL_RESULTS tokens)
+      - Instruction fine-tuning: Trained on publicly available instruction datasets from HuggingFace
+      - Base model: Built on Mistral-7B-v0.3 foundation
+
+  modalities:
+    supported_inputs: ["text"]
+    
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "Near real-time"
+    
+    cost_tier: "Low to Moderate"
+    
+    latency: "Real-time on single GPU (e.g., NVIDIA A10G at ~33ms per token), varies by hardware"
+    
+    throughput: "Not specified in vendor documentation"
+
+# =============================================================================
+# CAPABILITIES & LIMITATIONS
+# =============================================================================
+
+capabilities:
+  vendor_claimed_strengths: |
+    According to Mistral AI documentation:
+    - Outperforms Llama 2 13B across all benchmarks
+    - Approaches Llama 1 34B performance on many benchmarks
+    - Demonstrates superior performance in code, mathematics, and reasoning tasks
+    - Performs equivalently to a Llama 2 model more than 3x its size on reasoning, comprehension, and STEM tasks (MMLU)
+    - Mistral 7B Instruct outperforms all 7B models on MT-Bench and is comparable to 13B chat models
+    - Extended vocabulary supports diverse language inputs and improved understanding
+    - Function calling enables integration with external tools and APIs
+    - Efficient inference through architectural optimizations (GQA, SWA)
+    - Easy to fine-tune for specific tasks and domains
+    - Balance of speed, size, and performance makes it suitable as a general-purpose model
+
+  benchmark_performance: |
+    Based on vendor-reported benchmarks for Mistral 7B base model (v0.1, comparable architecture):
+    
+    MMLU (5-shot): ~60% (outperforms Llama 2 13B)
+    Commonsense Reasoning (0-shot average): Superior to Llama 2 13B
+    - HellaSwag, Winogrande, PIQA, SIQA, OpenbookQA, ARC-Easy, ARC-Challenge, CommonsenseQA
+    World Knowledge (5-shot): Competitive with Llama 2 13B
+    - NaturalQuestions, TriviaQA
+    Reading Comprehension (0-shot): Superior to Llama 2 13B
+    - BoolQ, QuAC
+    Math: Strong performance on GSM8K and MATH benchmarks
+    Code: Comparable to CodeLlama 7B on HumanEval while maintaining strong English task performance
+    BBH (3-shot): Competitive with larger models
+    AGI Eval (3-5-shot): Strong performance on English multiple-choice questions
+    
+    MT-Bench (Instruct version): Outperforms all 7B instruction-following models, comparable to 13B chat models
+    
+    Note: Specific v0.3 Instruct benchmarks not widely published; architecture and performance similar to v0.1/v0.2 with vocabulary improvements.
+
+  special_capabilities:
+    tools_support: true
+    
+    vision_support: false
+    
+    reasoning_support: true
+    
+    image_generation: false
+    
+    additional_capabilities: ["function_calling", "instruction_following", "multilingual_support_primary_english", "code_generation", "mathematical_reasoning"]
+
+  known_limitations:
+    vendor_disclosed: |
+      From Mistral AI documentation:
+      - No moderation mechanisms implemented
+      - Model does not include built-in guardrails for content filtering
+      - Limited parameter count restricts knowledge compression compared to larger models
+      - Performance on knowledge benchmarks is on par (not superior) to Llama 2 13B, likely due to parameter constraints
+      - Primary language support is English; other languages may have reduced performance
+      - Requires explicit guardrails for deployment in environments requiring moderated outputs
+      - Knowledge cutoff not publicly disclosed; limited awareness of events after training
+
+    common_failure_modes: |
+      Common to instruction-tuned LLMs of this size:
+      - Hallucination: May generate plausible but factually incorrect information
+      - Knowledge boundaries: Limited knowledge compression due to 7B parameter size
+      - Prompt sensitivity: Performance varies with prompt engineering quality
+      - Multi-turn consistency: May lose context or consistency in extended conversations
+      - Specialized domain limitations: May underperform in highly specialized or technical domains without fine-tuning
+      - Instruction misinterpretation: May occasionally misunderstand complex or ambiguous instructions
+      - Bias amplification: May reflect biases present in training data
+
+    unsuitable_use_cases: |
+      This model should NOT be used for:
+      - High-stakes decision-making without human review (medical diagnosis, legal judgments, financial advice)
+      - Safety-critical systems without additional safeguards
+      - Unmoderated public-facing applications without content filtering
+      - Applications requiring guaranteed factual accuracy without verification
+      - Regulated domains without appropriate validation and compliance measures
+      - Tasks requiring moderation of harmful, toxic, or inappropriate content (no built-in moderation)
+      - Real-time factual information retrieval (knowledge cutoff limitations)
+      - Applications targeting minors without appropriate content controls
+      - Production systems where hallucinated information could cause harm
+
+# =============================================================================
+# TRAINING & DATA
+# =============================================================================
+
+training_information:
+  training_data_description: |
+    Base Model (Mistral-7B-v0.3):
+    - Training data details not publicly disclosed by Mistral AI
+    - Trained on diverse datasets from various domains to ensure broad knowledge
+    - Knowledge cutoff: Not publicly specified; release suggests training data current to approximately early 2024
+    
+    Instruction Fine-tuning (v0.3 Instruct):
+    - Fine-tuned on publicly available instruction datasets from HuggingFace
+    - "No tricks, no proprietary data" (per Mistral AI announcement)
+    - Designed to demonstrate base model's fine-tuning capabilities
+    - Specific instruction datasets not enumerated in documentation
+
+  training_methodology: |
+    Base Model:
+    - Transformer architecture with grouped-query attention (GQA)
+    - Sliding window attention (SWA) mechanism for efficient long-sequence handling
+    - Rolling buffer cache for memory optimization
+    - Training infrastructure supported by CoreWeave and CINECA/EuroHPC (Leonardo)
+    - Utilizes FlashAttention, vLLM, xFormers for performance optimization
+    
+    Instruction Fine-tuning:
+    - Supervised fine-tuning on instruction-following datasets
+    - Trained to follow chat format and instruction templates
+    - System message support for role-based interactions
+    - No reinforcement learning from human feedback (RLHF) mentioned
+    - No reported moderation or safety fine-tuning
+
+  data_privacy_considerations: |
+    - Training data sources not fully disclosed; privacy handling practices unknown
+    - No documented PII filtering or consent mechanisms publicly disclosed
+    - Users should assume training data may include publicly available internet text
+    - For sensitive deployments, assess data provenance risks
+    - No reported data governance or sourcing transparency
+    - Recommended to implement additional privacy controls for enterprise deployments
+    - Function calling capabilities could expose sensitive information if not properly configured
+
+# =============================================================================
+# INTENDED USE & SCOPE
+# =============================================================================
+
+intended_use:
+  vendor_intended_use: |
+    Per Mistral AI documentation:
+    - General-purpose language understanding and generation
+    - Instruction-following tasks and conversational AI
+    - Code generation and understanding
+    - Mathematical reasoning and problem-solving
+    - Text summarization and translation
+    - Question answering and information retrieval
+    - Integration with external tools via function calling
+    - Research and development in AI/ML
+    - Demonstration of base model fine-tuning capabilities
+    - Local deployment and on-device inference scenarios
+    - Suitable as "general-purpose daily driver" for various NLP tasks
+
+  suitable_domains: ["conversational_ai", "code_assistance", "content_generation", "research_and_development", "educational_applications", "prototype_development", "data_analysis_assistance", "creative_writing", "translation", "summarization"]
+
+  out_of_scope_use: |
+    Out-of-scope uses include:
+    - Unmoderated content generation in public-facing applications
+    - High-stakes automated decision-making without human oversight
+    - Clinical, legal, or financial advice without expert validation
+    - Safety-critical systems without additional safeguards
+    - Applications requiring guaranteed factual accuracy
+    - Child-facing applications without content moderation
+    - Real-time fact-checking or news verification (knowledge cutoff)
+    - Regulatory compliance tasks without validation frameworks
+    - Any use case requiring content moderation (lacks moderation mechanisms)
+    - Production systems where hallucinations could cause significant harm
+
+# =============================================================================
+# TRUSTWORTHINESS CHARACTERISTICS
+# =============================================================================
+
+trustworthiness_assessment:
+  # CHARACTERISTIC 1: Valid and Reliable
+  valid_and_reliable:
+    vendor_claims: |
+      Mistral AI provides:
+      - Extensive benchmark comparisons showing performance advantages over comparable models
+      - Outperforms Llama 2 13B across multiple evaluation categories
+      - Demonstrated MT-Bench superiority among 7B instruction models
+      - Architecture designed for efficiency and accuracy (GQA, SWA)
+      - Claims based on independent re-evaluation of comparison models for fairness
+
+    public_evidence: |
+      - Benchmarks published by Mistral AI and verified by community
+      - Model widely adopted with 17.6M+ downloads on HuggingFace
+      - Over 100 spaces and applications built using the model
+      - Independent benchmarking sites confirm competitive performance
+      - Community reports generally align with vendor claims on performance
+      - Multiple deployment options (Ollama, HuggingFace, cloud providers) validate reliability
+
+    assessment_notes: |
+      Validation considerations:
+      - Benchmark performance well-documented but focused on v0.1; v0.3 specific results less comprehensive
+      - Performance varies with prompt engineering and use case
+      - Reliability depends on deployment infrastructure and configuration
+      - Pre-deployment testing on domain-specific data recommended
+      - Knowledge boundaries should be validated for specific applications
+      - Consistency in extended multi-turn conversations needs validation
+      - Function calling reliability should be tested before production use
+
+  # CHARACTERISTIC 2: Safe
+  safe:
+    vendor_safety_measures: |
+      Minimal safety measures documented:
+      - No moderation mechanisms implemented
+      - No built-in guardrails for content filtering
+      - Vendor explicitly acknowledges lack of moderation controls
+      - Vendor invites community engagement on guardrail implementation
+      - No documented safety fine-tuning or red-teaming
+      - No reported adversarial testing or safety evaluations
+
+    known_safety_concerns: |
+      - Can generate harmful, toxic, or inappropriate content without filtering
+      - No protection against prompt injection or jailbreaking attempts
+      - May produce biased or discriminatory outputs
+      - Function calling could be exploited if not properly constrained
+      - Hallucinations could mislead users in high-stakes scenarios
+      - Lacks content moderation for child safety
+      - No documented resistance to adversarial inputs
+      - Requires external safety layers for production deployment
+
+    assessment_notes: |
+      Safety deployment requirements:
+      - MUST implement external content moderation systems
+      - MUST add prompt filtering and output validation layers
+      - MUST implement rate limiting and abuse detection
+      - MUST add human-in-the-loop review for high-stakes applications
+      - Should implement adversarial testing before deployment
+      - Consider fine-tuning with safety datasets for specific use cases
+      - Establish clear usage policies and terms of service
+      - Monitor for misuse patterns and implement controls
+      - Function calling must be restricted to approved tools only
+
+  # CHARACTERISTIC 3: Secure and Resilient
+  secure_and_resilient:
+    security_measures: |
+      Model-level security:
+      - Apache 2.0 license allows full inspection of weights
+      - SafeTensors format provides some integrity verification
+      - Model available through multiple secure hosting providers
+      - No documented security testing or vulnerability assessments
+      - No reported adversarial robustness evaluations
+
+    known_vulnerabilities: |
+      Potential security concerns:
+      - Prompt injection vulnerabilities (common to LLMs)
+      - Potential for information leakage through carefully crafted prompts
+      - Function calling could be exploited if not properly sandboxed
+      - No documented resistance to adversarial examples
+      - May expose sensitive information if trained on such data
+      - Jailbreaking techniques may bypass intended behaviors
+      - Model extraction risks in hosted environments
+
+    assessment_notes: |
+      Security recommendations:
+      - Implement input validation and sanitization
+      - Add prompt injection detection mechanisms
+      - Sandbox function calling with strict permissions
+      - Monitor for adversarial patterns and anomalies
+      - Implement rate limiting and abuse detection
+      - Regular security assessments of deployment infrastructure
+      - Consider model access controls and authentication
+      - Establish incident response procedures
+      - Encrypt model weights and communications in transit
+      - Validate all external function/tool integrations
+
+  # CHARACTERISTIC 4: Accountable and Transparent
+  accountable_and_transparent:
+    transparency_level: |
+      Moderate transparency:
+      - Architecture details well-documented
+      - Training methodology partially disclosed
+      - Benchmark results extensively published
+      - Training data sources NOT disclosed
+      - Training data composition NOT detailed
+      - Data curation and filtering processes NOT described
+      - Fine-tuning datasets listed as "publicly available on HuggingFace" without specifics
+      - No model cards following standard formats (e.g., Mitchell et al.)
+      - Open-source weights enable inspection
+      - Apache 2.0 license provides usage transparency
+
+    auditability: |
+      - Model weights fully accessible for inspection
+      - Architecture documented in papers and code
+      - Inference code open-sourced (mistral-inference)
+      - Evaluation code and benchmarks not fully published
+      - Training code not publicly available
+      - Data provenance not auditable
+      - Decision-making process not traceable
+      - Deployment logging must be implemented externally
+
+    assessment_notes: |
+      Transparency gaps:
+      - Training data opacity limits bias assessment
+      - Cannot verify data consent or PII handling
+      - Fine-tuning data details insufficient for replication
+      - Limited documentation on model development decisions
+      - No disclosed red-teaming or safety evaluations
+      
+      Accountability measures needed:
+      - Implement comprehensive logging of model interactions
+      - Maintain audit trails for function calling
+      - Document deployment decisions and risk assessments
+      - Establish clear responsibility chains for model outputs
+      - Create feedback mechanisms for error reporting
+      - Regular transparency reporting for stakeholders
+
+  # CHARACTERISTIC 5: Explainable and Interpretable
+  explainable_and_interpretable:
+    interpretability_features: |
+      Limited interpretability:
+      - Standard transformer architecture (well-understood in research)
+      - Attention mechanisms provide some insight into token relationships
+      - No built-in explanation capabilities
+      - No documented interpretability tools or methods
+      - Black-box behavior for most use cases
+      - Function calling provides some transparency in tool use
+
+    explanation_capabilities: |
+      - Model can generate chain-of-thought reasoning when prompted
+      - No native explanation of decision-making process
+      - Cannot reliably explain why specific outputs were generated
+      - No confidence scores or uncertainty quantification
+      - Token probabilities available through API but require interpretation
+      - Attention visualization requires external tools
+
+    assessment_notes: |
+      Interpretability considerations:
+      - Treat as black-box system for critical decisions
+      - Implement chain-of-thought prompting for reasoning tasks
+      - Consider external interpretability tools (e.g., attention visualization)
+      - Document prompt strategies and their impact on outputs
+      - Establish human review processes for unexplainable decisions
+      - Not suitable for applications requiring explainable AI compliance
+      - Consider fine-tuning for specific explanation formats if needed
+
+  # CHARACTERISTIC 6: Privacy-Enhanced
+  privacy_enhanced:
+    privacy_features: |
+      Limited privacy features:
+      - No documented PII filtering during training
+      - No reported differential privacy techniques
+      - No privacy-preserving inference mechanisms
+      - Local deployment option provides data locality
+      - No telemetry in open-source inference code
+      - User responsible for privacy controls in deployment
+
+    data_handling: |
+      Training data privacy:
+      - Data sources not disclosed; privacy practices unknown
+      - No documented consent mechanisms
+      - Potential inclusion of public internet data
+      - Cannot verify absence of PII in training data
+      
+      Inference privacy:
+      - Depends entirely on deployment configuration
+      - Local deployment option prevents data sharing
+      - Cloud deployments subject to provider privacy policies
+      - No built-in privacy guarantees
+      - Function calling may expose sensitive information if not controlled
+
+    assessment_notes: |
+      Privacy deployment requirements:
+      - Implement PII detection and redaction in inputs/outputs
+      - Consider local deployment for sensitive data
+      - Establish data retention and deletion policies
+      - Implement access controls and audit logging
+      - Assess cloud provider privacy compliance (if hosted)
+      - Consider differential privacy techniques for fine-tuning on sensitive data
+      - Restrict function calling to non-privacy-invasive tools
+      - Conduct privacy impact assessments for specific use cases
+      - GDPR/privacy regulation compliance requires additional controls
+
+  # CHARACTERISTIC 7: Fair with Harmful Bias Managed
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Minimal bias mitigation:
+      - Training on "diverse datasets" claimed but not detailed
+      - No documented debiasing techniques
+      - No reported fairness testing or demographic parity measures
+      - No bias evaluation results published
+      - Community advised to "remain cautious of potential biases"
+      - No fairness constraints during training documented
+
+    known_biases: |
+      Potential biases (common to LLMs, specific testing not published):
+      - Language/dialect performance gaps (optimized for English)
+      - Cultural and regional biases likely present
+      - Demographic representation biases unknown
+      - Potential occupational and gender stereotyping
+      - Socioeconomic biases possible
+      - Specific bias testing results not published for v0.3
+      - Training data opacity prevents bias source identification
+
+    assessment_notes: |
+      Fairness considerations:
+      - MUST conduct bias testing for specific deployment use cases
+      - Test across demographic groups relevant to application
+      - Evaluate performance across languages, dialects, and cultural contexts
+      - Implement bias monitoring in production
+      - Consider bias mitigation during fine-tuning if needed
+      - Establish fairness metrics appropriate to use case
+      - Document bias testing results and mitigation strategies
+      - Particularly important for hiring, lending, healthcare, or legal applications
+      - Community engagement on bias issues encouraged by vendor
+      - Not suitable for high-stakes fairness-sensitive applications without extensive testing
+
+# =============================================================================
+# EVALUATION GUIDANCE
+# =============================================================================
+
+evaluation_guidance:
+  recommended_tests: |
+    Pre-deployment validation:
+    
+    1. Performance Testing:
+       - Accuracy on domain-specific test sets (establish baseline >80% for production)
+       - Latency benchmarks on target hardware (<100ms p95 for interactive use)
+       - Throughput testing under expected load (target: sustain 10+ req/sec)
+       - Context window utilization testing (validate 32k token handling)
+       - Function calling accuracy and reliability
+    
+    2. Safety & Bias Testing:
+       - Adversarial prompt testing (red teaming)
+       - Toxic/harmful content generation testing (MUST implement filters)
+       - Demographic bias evaluation across protected characteristics
+       - Prompt injection and jailbreak vulnerability testing
+       - Cultural sensitivity testing for target audience
+       - Child safety testing if applicable
+    
+    3. Reliability Testing:
+       - Hallucination rate on factual Q&A (measure and establish thresholds)
+       - Multi-turn conversation consistency (test 10+ turn conversations)
+       - Edge case and error handling
+       - Knowledge boundary testing (identify gaps)
+       - Instruction following accuracy across task types
+    
+    4. Security Testing:
+       - Prompt injection vulnerability assessment
+       - Information leakage testing
+       - Function calling sandbox escape attempts
+       - Rate limiting and abuse resistance
+       - Authentication and access control validation
+    
+    5. Compliance Testing:
+       - License compliance review (Apache 2.0 terms)
+       - Privacy regulation compliance (GDPR, CCPA, etc.)
+       - Industry-specific regulatory requirements
+       - Data retention and deletion capabilities
+       - Audit logging and traceability
+    
+    6. Integration Testing:
+       - API stability and error handling
+       - Function/tool calling integration validation
+       - Deployment infrastructure compatibility
+       - Monitoring and observability setup
+       - Backup and recovery procedures
+    
+    Pass/Fail Criteria:
+    - Establish domain-specific accuracy thresholds before deployment
+    - Zero tolerance for safety filter bypass in production
+    - Latency requirements must meet UX standards
+    - All security vulnerabilities must be addressed
+
+  key_evaluation_questions: |
+    Critical questions for deployment decision:
+    
+    1. Performance & Capability:
+       - Does the model meet accuracy requirements for our specific use cases?
+       - Have we validated performance on representative domain data?
+       - Is the 32k context window sufficient for our needs?
+       - Does function calling meet our integration requirements?
+       - Is latency acceptable for our user experience?
+    
+    2. Infrastructure & Resources:
+       - Can our infrastructure support a 7B parameter model?
+       - Do we have GPU resources for acceptable inference speed?
+       - Are we comfortable with throughput and scaling characteristics?
+       - Have we tested on our actual deployment hardware?
+       - Is local deployment viable or do we need cloud hosting?
+    
+    3. Safety & Risk:
+       - Have we implemented adequate content moderation systems?
+       - Are we comfortable with the lack of built-in safety controls?
+       - Have we assessed bias risks for our use case?
+       - Do we have human oversight mechanisms in place?
+       - Is our risk appetite aligned with model limitations?
+    
+    4. Compliance & Governance:
+       - Are Apache 2.0 license terms acceptable for our use?
+       - Have we addressed privacy regulation requirements?
+       - Do we meet industry-specific compliance needs?
+       - Are our audit and accountability measures sufficient?
+       - Have we documented our risk assessment and mitigation plans?
+    
+    5. Transparency & Trust:
+       - Are we comfortable with training data opacity?
+       - Can we operate effectively without explainability?
+       - Have we communicated model limitations to stakeholders?
+       - Do we have processes for handling errors and issues?
+       - Is vendor support and community adequate for our needs?
+    
+    6. Alternatives & Trade-offs:
+       - Have we compared with other 7B models (Llama, Gemma)?
+       - Would a larger model better serve our needs despite cost?
+       - Would a smaller model suffice with efficiency gains?
+       - Are specialized models available for our domain?
+       - What are the cost/performance trade-offs vs. alternatives?
+
+  comparison_considerations: |
+    When comparing Mistral-7B-Instruct-v0.3 with alternatives:
+    
+    Similar Size Models (7-9B parameters):
+    - Llama 2 7B / Llama 3.2 7B: Compare licensing, performance, community support
+    - Gemma 2 7B: Consider Google's safety features vs. Mistral's performance
+    - Ministral 8B: Newer Mistral model with different license terms
+    
+    Larger Models (13B+):
+    - Llama 2 13B / Llama 3.1 13B: Better accuracy but higher resource requirements
+    - Mistral NeMo 12B: Larger Mistral alternative with multilingual improvements
+    - Consider: Does accuracy gain justify resource increase?
+    
+    Smaller Models (1-3B):
+    - Llama 3.2 1B/3B, Gemma 2 2B, Ministral 3B: Better efficiency, reduced capability
+    - Consider: Is smaller model sufficient for use case?
+    
+    Proprietary APIs:
+    - Claude, GPT-4, Gemini: Better safety, performance but higher cost, less control
+    - Consider: Build vs. buy, data privacy, cost at scale
+    
+    Key Trade-offs:
+    - Cost vs. Quality: Balance inference cost with output quality requirements
+    - Speed vs. Accuracy: Smaller models faster but less accurate; larger models opposite
+    - Control vs. Convenience: Self-hosted provides control; APIs provide convenience
+    - Safety vs. Performance: Models with better safety may have performance constraints
+    - Licensing: Apache 2.0 vs. commercial licenses vs. API terms
+    
+    Deployment Constraints:
+    - On-device: Smaller models (1-3B) more suitable
+    - Cloud: Cost, latency, privacy considerations
+    - Hybrid: Complexity vs. flexibility trade-off
+    - Enterprise: Compliance, support, SLA requirements
+    
+    Differentiation Factors:
+    - Function calling: Native support in v0.3
+    - Extended vocabulary: 32k tokens advantage
+    - Context window: 32k competitive for size class
+    - Community: Strong HuggingFace ecosystem
+    - Benchmarks: Strong performance relative to size
+    - Architectural efficiency: GQA and SWA for speed
+
+# =============================================================================
+# NIST AI RMF MAPPING
+# =============================================================================
+
+rmf_function_mapping:
+  # GOVERN: Organizational policies and oversight
+  govern:
+    notes: |
+      Governance considerations for deployment:
+      
+      Policies:
+      - Establish acceptable use policy addressing lack of moderation
+      - Define content filtering and safety requirements
+      - Set data privacy and security policies
+      - Document licensing compliance (Apache 2.0)
+      - Create incident response procedures
+      
+      Approval:
+      - Require technical review for architecture fit
+      - Security team approval for function calling configurations
+      - Privacy team review for data handling
+      - Legal review for licensing and compliance
+      - Executive approval for high-visibility or high-risk use cases
+      
+      Oversight:
+      - Continuous monitoring of outputs for quality and safety
+      - Regular bias and fairness audits
+      - Periodic security assessments
+      - Compliance audits for regulatory requirements
+      - Vendor and model version tracking
+      
+      Version Control:
+      - Pin to specific model version for production
+      - Test updates in staging before production deployment
+      - Maintain rollback capability
+      - Document model version in audit logs
+      - Track performance metrics across versions
+
+  # MAP: Context and risk identification
+  map:
+    context_considerations: |
+      Contextual factors affecting risk:
+      
+      Use Case Context:
+      - Who: End users, internal teams, external customers
+      - What: Specific tasks and expected outcomes
+      - Where: Deployment environment (cloud, on-premise, edge)
+      - When: Real-time, batch, or asynchronous processing
+      - Why: Business objectives and success criteria
+      
+      Data Sensitivity:
+      - Public information: Lower risk
+      - Internal business data: Moderate risk
+      - Personal information: Higher risk (PII/privacy concerns)
+      - Regulated data: Highest risk (HIPAA, financial, etc.)
+      
+      Stakeholder Impacts:
+      - Direct users: UX, accuracy, safety concerns
+      - Indirect affected parties: Fairness, bias, discrimination risks
+      - Organization: Reputation, liability, compliance exposure
+      - Society: Broader ethical and safety implications
+      
+      Regulatory Requirements:
+      - GDPR/privacy laws: Data handling and consent
+      - Industry regulations: Healthcare (HIPAA), financial (SOC2), etc.
+      - AI-specific regulations: EU AI Act, emerging frameworks
+      - Accessibility requirements: WCAG, ADA compliance
+
+    risk_categories: ["content_safety", "bias_and_fairness", "privacy_and_data_protection", "security_and_adversarial", "accuracy_and_reliability", "compliance_and_legal", "reputational_and_ethical"]
+
+  # MEASURE: Metrics and monitoring
+  measure:
+    suggested_metrics: |
+      Production monitoring metrics:
+      
+      Performance Metrics:
+      - Accuracy: Task-specific success rate (target: >85% for production)
+      - Latency: Response time p50, p95, p99 (target: <100ms p95 for interactive)
+      - Throughput: Requests per second (establish baseline for scaling)
+      - Context utilization: Average and max token usage
+      - Function call success rate: Accuracy of tool invocations
+      - Error rate: Failed requests, timeouts, exceptions
+      
+      Safety Metrics:
+      - Harmful content rate: Toxic/inappropriate outputs per 1000 requests (target: <0.1%)
+      - Content filter trigger rate: Frequency of safety system activation
+      - Prompt injection attempts: Detected adversarial inputs
+      - Jailbreak success rate: Successful bypass of intended behavior
+      - User report rate: Complaints or flags from users
+      
+      Fairness Metrics:
+      - Performance parity: Accuracy across demographic groups (target: <5% variance)
+      - Representation balance: Output diversity across protected characteristics
+      - Bias incident rate: Reported discriminatory outputs
+      - Demographic performance monitoring: Ongoing fairness tracking
+      
+      Operational Metrics:
+      - Uptime/availability: System reliability (target: >99.9%)
+      - Infrastructure utilization: GPU/CPU/memory usage
+      - Cost per request: Economic efficiency
+      - Queue depth: Request backlog and scaling needs
+      
+      Compliance Metrics:
+      - Policy violation rate: Breaches of usage guidelines
+      - Audit finding count: Issues identified in reviews
+      - Data retention compliance: Proper handling and deletion
+      - Access control violations: Unauthorized usage attempts
+      
+      Measurement Methods:
+      - Automated logging of all metrics
+      - Real-time dashboards for operational monitoring
+      - Regular batch analysis for trend detection
+      - Periodic manual review of sample outputs
+      - User feedback collection and analysis
+      - A/B testing for model improvements
+      
+      Thresholds and Alerts:
+      - Define acceptable ranges for each metric
+      - Set up automated alerts for threshold breaches
+      - Escalation procedures for critical issues
+      - Regular review and adjustment of thresholds
+
+  # MANAGE: Risk controls and responses
+  manage:
+    risk_management_considerations: |
+      Risk controls and mitigation strategies:
+      
+      Technical Controls:
+      - Content Filtering: MUST implement external moderation system
+        * Input validation and sanitization
+        * Output filtering for harmful content
+        * Prompt injection detection
+        * Real-time toxic content detection
+      
+      - Guardrails: Establish behavioral boundaries
+        * System prompt engineering for safety
+        * Response length and format controls
+        * Topic restrictions where applicable
+        * Function calling permission whitelisting
+      
+      - Monitoring: Comprehensive observability
+        * Centralized logging of all interactions
+        * Real-time anomaly detection
+        * Performance and safety metric tracking
+        * Audit trail generation
+      
+      - Fallbacks: Graceful degradation
+        * Fallback to conservative responses on uncertainty
+        * Human escalation for edge cases
+        * Error handling and user communication
+        * Rate limiting and circuit breakers
+      
+      Process Controls:
+      - Human Review: Oversight mechanisms
+        * Sampling of outputs for quality assurance
+        * Mandatory human review for high-stakes decisions
+        * User feedback loop for continuous improvement
+        * Regular audit of model behavior
+      
+      - Escalation: Clear procedures
+        * Define escalation triggers
+        * Establish response team and responsibilities
+        * Communication protocols for incidents
+        * Documented decision-making authority
+      
+      - Logging: Comprehensive audit trail
+        * All inputs and outputs logged
+        * User actions and system decisions recorded
+        * Timestamps and session tracking
+        * Secure storage and retention policies
+      
+      Organizational Controls:
+      - Training: Prepare teams
+        * User training on model capabilities and limitations
+        * Operator training on monitoring and response
+        * Stakeholder education on AI risks and controls
+        * Regular updates on model changes
+      
+      - Policies: Clear guidelines
+        * Acceptable use policies
+        * Data handling procedures
+        * Incident response plans
+        * Compliance requirements
+      
+      - Oversight: Governance structure
+        * Regular review meetings
+        * Executive sponsorship
+        * Cross-functional risk committee
+        * External advisory board (if applicable)
+      
+      Incident Response:
+      - Detection: Identify issues rapidly
+        * Automated alerting
+        * User reporting mechanisms
+        * Regular audits and testing
+      
+      - Response: Act quickly and effectively
+        * Immediate containment procedures
+        * Root cause analysis
+        * Corrective action implementation
+        * Communication to stakeholders
+      
+      - Recovery: Return to normal operations
+        * Validation of fixes
+        * Gradual rollout of changes
+        * Enhanced monitoring post-incident
+      
+      - Learning: Continuous improvement
+        * Incident post-mortems
+        * Documentation of lessons learned
+        * Process and control updates
+        * Team training on new procedures
+      
+      Continuous Improvement:
+      - Regular model evaluation against current benchmarks
+      - Feedback incorporation into fine-tuning
+      - Version upgrade assessments
+      - Industry best practice adoption
+      - Emerging threat adaptation
+
+# =============================================================================
+# REFERENCES & SOURCES
+# =============================================================================
+
+references:
+  vendor_documentation:
+    - url: "https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3"
+      description: "Official HuggingFace model card with installation, usage examples, and technical details"
+    
+    - url: "https://mistral.ai/news/announcing-mistral-7b"
+      description: "Original Mistral 7B announcement with architecture details and benchmark comparisons"
+    
+    - url: "https://github.com/mistralai/mistral-inference"
+      description: "Official inference library and implementation"
+    
+    - url: "https://docs.mistral.ai/"
+      description: "Mistral AI documentation portal"
+
+  benchmarks:
+    - name: "MMLU (Massive Multitask Language Understanding)"
+      url: "https://mistral.ai/news/announcing-mistral-7b"
+      result: "Mistral 7B achieves ~60% on 5-shot MMLU, outperforming Llama 2 13B"
+    
+    - name: "HumanEval (Code Generation)"
+      url: "https://mistral.ai/news/announcing-mistral-7b"
+      result: "Approaches CodeLlama 7B performance while maintaining strong English task performance"
+    
+    - name: "MT-Bench (Instruction Following)"
+      url: "https://mistral.ai/news/announcing-mistral-7b"
+      result: "Mistral 7B Instruct outperforms all 7B models, comparable to 13B chat models"
+    
+    - name: "Commonsense Reasoning Suite"
+      url: "https://mistral.ai/news/announcing-mistral-7b"
+      result: "Superior to Llama 2 13B on HellaSwag, Winogrande, PIQA, SIQA, OpenbookQA, ARC-Easy, ARC-Challenge, CommonsenseQA"
+
+  third_party_evaluations:
+    - source: "MarkTechPost"
+      url: "https://www.marktechpost.com/2024/05/22/mistral-ai-team-releases-the-mistral-7b-instruct-v0-3-an-instruct-fine-tuned-version-of-the-mistral-7b-v0-3/"
+      summary: "Analysis of v0.3 release focusing on extended vocabulary, v3 tokenizer, and function calling capabilities"
+    
+    - source: "WritingMate AI Blog"
+      url: "https://writingmate.ai/blog/mistral-7b-v03-guide-and-details"
+      summary: "Comprehensive guide to v0.3 improvements: 32,768 token vocabulary, v3 tokenizer, function calling support"
+    
+    - source: "Artificial Analysis"
+      url: "https://www.educative.io/blog/mistral-vs-llama"
+      summary: "Independent comparative analysis of Mistral vs Llama models across multiple benchmarks"
+    
+    - source: "HuggingFace Community"
+      url: "https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3"
+      summary: "17.6M+ downloads, 2197+ likes, 100+ demo spaces demonstrating widespread adoption and validation"
+
+# =============================================================================
+# METADATA
+# =============================================================================
+
+metadata:
+  card_version: "1.0"
+  card_author: "Claude (AI Assistant)"
+  card_creation_date: "2025-10-28"
+  last_updated: "2025-10-28"
+  
+  information_sources: |
+    Primary sources:
+    - Official HuggingFace model repository and model card
+    - Mistral AI official announcements and blog posts
+    - Vendor documentation and GitHub repositories
+    - Published benchmark results from Mistral AI
+    - Third-party technical analyses and comparisons
+    - Community usage reports and evaluation
+    
+    Information limitations:
+    - v0.3-specific benchmark results less comprehensive than v0.1
+    - Training data details not publicly disclosed
+    - Safety evaluation results not published
+    - Bias testing results not available
+    - Fine-tuning dataset specifics not enumerated
+
+  completeness_assessment: |
+    Information completeness by section:
+    
+    COMPREHENSIVE:
+    - Model identity and basic specifications
+    - Architecture and technical design
+    - Licensing and availability
+    - Benchmark performance (v0.1 baseline)
+    - Deployment options and usage examples
+    - Known limitations (lack of moderation)
+    - Community adoption and validation
+    
+    PARTIAL OR LIMITED:
+    - v0.3-specific benchmark results (inferred from v0.1/v0.2)
+    - Fine-tuning methodology details
+    - Instruction dataset composition
+    - Performance characteristics on specific hardware
+    - Cost analysis for various deployment options
+    
+    CRITICAL GAPS:
+    - Training data sources and composition
+    - Data curation and filtering practices
+    - Privacy and PII handling during training
+    - Bias evaluation and mitigation efforts
+    - Safety testing and red team results
+    - Adversarial robustness assessments
+    - Specific fairness metrics and demographic performance
+    - Knowledge cutoff date
+    
+    Confidence assessment:
+    - HIGH confidence: Architecture, benchmarks, licensing, deployment
+    - MODERATE confidence: Capabilities, performance characteristics
+    - LOW confidence: Training data, safety measures, bias characteristics
+    
+    To improve confidence:
+    - Request training data transparency from vendor
+    - Conduct independent bias and safety testing
+    - Perform domain-specific validation
+    - Engage with community for real-world performance insights
+    - Monitor vendor disclosures for additional information
+    - Consider independent third-party audits
+
+  change_log:
+    - date: "2025-10-28"
+      author: "Claude (AI Assistant)"
+      changes: "Initial model card creation based on HuggingFace source and web research. Populated all sections with available information from vendor documentation and third-party sources. Noted information gaps where data was not publicly disclosed."
+
+# =============================================================================
+# ADDITIONAL NOTES
+# =============================================================================
+
+# This model card documents Mistral-7B-Instruct-v0.3, an instruction-tuned LLM
+# with notable strengths in performance relative to size but critical gaps in
+# safety and transparency documentation.
+#
+# Key considerations for deployment:
+# 1. MUST implement external content moderation - model has no built-in safety
+# 2. Training data opacity limits bias assessment - extensive testing required
+# 3. Strong performance benchmarks but domain validation essential
+# 4. Apache 2.0 licensing provides flexibility but assumes deployment responsibility
+# 5. Function calling capabilities powerful but require careful security controls
+#
+# Recommended for: Research, development, prototyping, low-stakes applications
+# with appropriate safeguards
+#
+# Not recommended for: Unmoderated production systems, high-stakes decisions,
+# safety-critical applications without extensive additional controls
+#
+# This card should be updated as:
+# - New benchmark results become available
+# - Vendor releases additional documentation
+# - Independent evaluations are published
+# - Deployment experiences reveal new insights
+# - Regulatory requirements evolve

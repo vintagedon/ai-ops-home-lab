@@ -1,0 +1,250 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "DeepSeek-R1"
+  vendor: "DeepSeek-AI"
+  model_family: "DeepSeek R1"
+  version: "v1.0"  # GitHub release tag v1.0.0 :contentReference[oaicite:1]{index=1}
+  release_date: "2025-01-20"  # approximate release date derived from blog posts :contentReference[oaicite:2]{index=2}
+  model_type: "Large Language Model (Mixture-of-Experts, 671B total params, 37B activated)"
+
+  vendor_model_card_url: "https://github.com/deepseek-ai/DeepSeek-R1"  # repository home
+
+  license: "MIT License"  # stated in repo: "code and models are released under the MIT License" :contentReference[oaicite:3]{index=3}
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Mixture-of-Experts (MoE) transformer – 671B total parameters, 37B activated parameters, context length up to 128K tokens" # :contentReference[oaicite:4]{index=4}
+    parameter_count: "671B total / 37B activated"
+    context_window: "128,000 tokens" # :contentReference[oaicite:5]{index=5}
+    training_data_cutoff: "Not publicly disclosed"
+
+    architectural_details: |
+      The pipeline used by DeepSeek-R1 includes two reinforcement learning (RL) stages without prior SFT for the "R1-Zero" variant, followed by two SFT stages to seed reasoning plus non-reasoning behaviours. # :contentReference[oaicite:6]{index=6}
+
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "High-end inference (MoE 671B size)"
+    cost_tier: "Premium"
+    latency: "Not publicly disclosed"
+    throughput: "Not publicly disclosed"
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    - High reasoning, code and mathematics benchmark performance (e.g., MMLU, DROP) on par or superior to peer top models. # :contentReference[oaicite:7]{index=7}
+    - Large context length support (up to 128K tokens) enabling long-form reasoning and chain-of-thought (CoT) tasks.
+  benchmark_performance: |
+    A sample: MMLU (Pass@1) ~90.8 for DeepSeek-R1; DROP (3-shot F1) ~92.2. # :contentReference[oaicite:8]{index=8}
+  special_capabilities:
+    tools_support: false
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["long-context reasoning", "self-verification & reflection abilities (R1-Zero variant)"] # :contentReference[oaicite:9]{index=9}
+  known_limitations:
+    vendor_disclosed: |
+      Model behaviours outside reported tasks may degrade; developer/user responsible for safety testing. # :contentReference[oaicite:10]{index=10}
+    common_failure_modes: |
+      - Possible reasoning drift in very long inputs beyond tested benchmarks.
+      - Unknown performance in non-public domains/data.  
+    unsuitable_use_cases: |
+      - Deployment in safety-critical systems without human oversight.
+      - Domains requiring full architecture or dataset transparency.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Not fully disclosed. The repo mentions large-scale RL and distilled reasoning data but no full dataset breakdown. # :contentReference[oaicite:11]{index=11}
+  training_methodology: |
+    Multi-stage: seed SFT, RL without SFT (for R1-Zero), then SFT+RL refinement. # :contentReference[oaicite:12]{index=12}
+  data_privacy_considerations: |
+    Model card does not give detailed personal-data filtering or dataset provenance; implementer should validate for compliance.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Reasoning, mathematics, code generation, research and development foundation. Available for distillation into smaller models. # :contentReference[oaicite:13]{index=13}
+  suitable_domains: ["reasoning_tasks", "code_generation", "long_context_analysis"]
+  out_of_scope_use: |
+    Use in regulated, high-stakes decision environments without human validation; use where full traceability or auditability of training data is required.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Benchmark numbers, parameter specs, and impressed reasoning performance. # :contentReference[oaicite:14]{index=14}
+    public_evidence: |
+      Benchmarks are self-reported; independent peer-reviewed evaluations remain limited.
+    assessment_notes: |
+      Reliable for general-purpose reasoning tasks but requires domain-specific validation.
+
+  safe:
+    safety_measures: |
+      MIT license, open weights/distillation allowed; usage warnings included. # :contentReference[oaicite:15]{index=15}
+    known_safety_issues: |
+      Standard LLM risks: hallucination, bias, misuse.
+    assessment_notes: |
+      Deployers should layer moderation and human review.
+
+  secure_and_resilient:
+    security_features: |
+      Not detailed; typical platform hardening necessary.
+    known_vulnerabilities: |
+      Prompt injection, adversarial usage.
+    assessment_notes: |
+      Additional controls needed for enterprise deployment.
+
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Model card and repository provide architecture summary and license; dataset and full weights traceability limited.
+    assessment_notes: |
+      Works for many use-cases but may not meet high accountability demands.
+
+  explainable_and_interpretable:
+    explainability_features: |
+      Chain-of-thought (CoT) style reasoning and self-verification behaviours documented in R1-Zero variant. # :contentReference[oaicite:16]{index=16}
+    interpretability_limitations: |
+      Internal routing, expert selection and data lineage not publicly disclosed.
+    assessment_notes: |
+      Deploy as a black-box with documented behaviour rather than fully interpretable.
+
+  privacy_enhanced:
+    privacy_features: |
+      Open-source licensing; no explicit private-data mitigation details.
+    privacy_concerns: |
+      Unknown underlying data provenance or PII handling.
+    assessment_notes: |
+      Conduct privacy review for regulated deployments.
+
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Not publicly detailed.
+    known_biases: |
+      Typical large-model risk areas: bias in reasoning, language mix-up (English/Chinese) under some conditions. # :contentReference[oaicite:17]{index=17}
+    assessment_notes: |
+      Evaluate bias/harm specifically for your audience and domain.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Reproduce published benchmarks (e.g., MMLU, DROP) on your environment.  
+    - Long-context tasks (approaching 32K-128K tokens) to evaluate drift and coherence.  
+    - Code/mathematics reasoning tasks, self-verification chains.  
+    - Safety red-teaming: hallucination, misuse, language-switching behaviours.  
+    - Latency/throughput benchmarks on your infra.
+
+  key_evaluation_questions: |
+    - Does performance hold on your domain prompts and languages?  
+    - How does long-context behaviour perform beyond test benchmarks?  
+    - Are bias/harm behaviours acceptable for your target users?  
+    - Are infrastructure and cost trade-offs aligned with model size (MoE 671B/37B)?
+
+  comparison_considerations: |
+    - Compare with other leading reasoning LLMs (OpenAI o1, Claude-3.5, etc) in terms of pass@1, cost and inference efficiency.  
+    - Evaluate how the MoE 37B-activation approach stacks vs denser models of similar cost.  
+    - Check licensing (MIT) and implications for derivatives/distillation.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Enforce human oversight in high-stake reasoning tasks; track model-version and data-use logs.
+  map:
+    context_considerations: |
+      Long-context reasoning, multilingual risk (English/Chinese), domain risk of hallucination or reasoning drift.  
+    risk_categories: ["hallucination", "bias", "privacy_leakage", "prompt_injection", "long_context_degradation"]
+  measure:
+    suggested_metrics: |
+      - Error/hallucination rate per 1k prompts.  
+      - Correct-completion rate on reasoning benchmarks.  
+      - Throughput/latency vs cost for MoE architecture.  
+      - Bias/harm incident rate per 1k prompts.
+  manage:
+    risk_management_considerations: |
+      Combine automated moderation, human review, logging; monitor for drift/outlier behaviour; evaluate cost/performance; plan rollback or fallback.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://github.com/deepseek-ai/DeepSeek-R1"
+    description: "GitHub repository for DeepSeek-R1"
+  - url: "https://api-docs.deepseek.com/news/news250120"
+    description: "Official release announcement, MIT license, reasoning pipeline description"   # :contentReference[oaicite:18]{index=18}
+  benchmarks:
+  - name: "DeepSeek-R1 self-reported benchmark table (MMLU, DROP, etc)"
+    url: "https://github.com/deepseek-ai/DeepSeek-R1/blob/main/README.md"
+    result: "MMLU ~90.8, DROP ~92.2 for 3-shot/Pass@1"   # :contentReference[oaicite:19]{index=19}
+  third_party_evaluations:
+  - source: "Time article"
+    url: "https://time.com/7210888/deepseeks-hidden-ai-safety-warning/"
+    summary: "Reasoning behaviours include language-switching, potential transparency concerns"   # :contentReference[oaicite:20]{index=20}
+  news_coverage:
+  - title: "Microsoft makes DeepSeek’s R1 model available on Azure AI Foundry and GitHub"
+    url: "https://www.theverge.com/news/602162/microsoft-deepseek-r1-model-azure-ai-foundry-github"
+    date: "2025-01-29"   # :contentReference[oaicite:21]{index=21}
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "Don Fowler"
+  card_creation_date: "2025-10-24"
+  last_updated: "2025-10-24"
+  information_sources: |
+    GitHub repository, official announcements, media coverage, community commentary.
+  completeness_assessment: |
+    Good for architecture, licensing, reasoning benchmarks; moderate for training data transparency, deployment considerations; limited for real-world latency/throughput and safety/ bias third-party analyses.
+  change_log:
+  - date: "2025-10-24"
+    author: "Don Fountain"
+    changes: "Initial synthesis of DeepSeek-R1 model card."

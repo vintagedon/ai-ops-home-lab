@@ -1,0 +1,235 @@
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# =============================================================================
+# MODEL IDENTITY
+# =============================================================================
+model_identity:
+  name: "HunyuanWorld-Mirror"
+  vendor: "Tencent"
+  model_family: "HunyuanWorld"
+  version: "1.1 / Mirror"  # sometimes referenced as “World Model 1.1 (Mirror)” :contentReference[oaicite:2]{index=2}
+  release_date: "2025-10-22"  # per license file release date :contentReference[oaicite:3]{index=3}
+  model_type: "3D world-reconstruction / scene generation model (image/video → 3D geometry + representations)"
+
+  vendor_model_card_url: "https://huggingface.co/tencent/HunyuanWorld-Mirror"
+
+  license: "Tencent HunyuanWorld-Mirror Community License (non-commercial use, limited territory)". :contentReference[oaicite:4]{index=4}
+  deprecation_status: "Active"
+
+# =============================================================================
+# MODEL ARCHITECTURE & TECHNICAL SPECIFICATIONS
+# =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Feed-forward unified 3D geometric prediction model with multi-modal prior prompting (camera intrinsics/pose/depth) and universal output heads (point clouds, surface normals, multi-view depth, camera parameters)" :contentReference[oaicite:5]{index=5}
+    parameter_count: "Not publicly disclosed"  # no explicit parameter count found in public sources
+    context_window: "Not applicable in conventional sense"
+    training_data_cutoff: "Not publicly disclosed"
+
+    architectural_details: |
+      - Multi-Modal Prior Prompting: supports calibrated intrinsics, camera poses, depth maps as input priors. :contentReference[oaicite:6]{index=6}
+      - Universal Geometric Prediction: single architecture for tasks such as point-map regression, novel view synthesis, surface normal estimation. :contentReference[oaicite:7]{index=7}
+      - Input modes: single image, multi-view images, video sequences. :contentReference[oaicite:8]{index=8}
+
+  modalities:
+    supported_inputs: ["image", "multi-view image", "video", "optional camera/depth priors"]
+    supported_outputs: ["point cloud", "multi-view depth maps", "surface normals", "camera parameters", "3D Gaussians"] :contentReference[oaicite:9]{index=9}
+
+  performance_characteristics:
+    speed_tier: "Optimised for single-card inference, claims near-real-time on certain configurations" :contentReference[oaicite:10]{index=10}
+    cost_tier: "Moderate to high (3D generation tasks)"; latency/throughput not fully specified
+    latency: "Reported ‘seconds’ scale for multi-view inputs on single card in vendor description" :contentReference[oaicite:11]{index=11}
+    throughput: "Not publicly specified"
+
+# =============================================================================
+# CAPABILITIES & LIMITATIONS
+# =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    - The model supports generation of 3D space (reconstructable point clouds, depth, normals) from single illustration/photo or multi-view/video input. :contentReference[oaicite:12]{index=12}
+    - Supports illustration or anime style images in addition to real-images. :contentReference[oaicite:13]{index=13}
+    - Single GPU deployment reported (in vendor article) for version 1.1. :contentReference[oaicite:14]{index=14}
+
+  benchmark_performance: |
+    Public coverage notes: press article claims “higher quality than competing model VGGT” in certain tests of 3D scene reconstruction. :contentReference[oaicite:15]{index=15}
+    However, no widely published standard benchmark scores appear on the model page.
+
+  special_capabilities:
+    tools_support: false
+    vision_support: true
+    reasoning_support: false (primary aim is geometry/scene reconstruction not general language reasoning)
+    image_generation: false (instead output is 3D geometry)
+    additional_capabilities: ["image/video → 3D scene reconstruction", "multi-view/multi-modal prior input support"]
+
+  known_limitations:
+    vendor_disclosed: |
+      The model’s reconstruction is limited to the information present in the input; e.g., if parts of the scene are not visible in the input image, blank spaces may occur. :contentReference[oaicite:16]{index=16}
+    common_failure_modes: |
+      - Single-image inputs of complex scenes may miss occluded geometry.
+      - Performance and fidelity in untested domains (styles, rare viewpoints) may degrade.
+    unsuitable_use_cases: |
+      - High-stakes applications relying on certified 3D reconstruction without human review.
+      - Use outside the licensed territory (see license) or as unrestricted commercial product without further authorization.
+
+# =============================================================================
+# TRAINING & DATA
+# =============================================================================
+training_information:
+  training_data_description: |
+    The vendor documentation mentions “multi-view, video, large mixtures of geometry priors” but does not disclose detailed dataset sizes or sources. :contentReference[oaicite:17]{index=17}
+  training_methodology: |
+    Feed-forward architecture with prior injection triggers; curriculum learning for generalisation is referenced in third-party summary. :contentReference[oaicite:18]{index=18}
+  data_privacy_considerations: |
+    Dataset provenance, PII filtering, and full training detail not publicly disclosed; deployments should assess compliance for sensitive domains.
+
+# =============================================================================
+# INTENDED USE & SCOPE
+# =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Applications requiring rapid 3D scene generation from images or video (creatives, VR/AR worlds, game asset pipeline, simulation) as outlined in vendor/press articles. :contentReference[oaicite:19]{index=19}
+  suitable_domains: ["3D content creation", "scene reconstruction for games/VR", "novel view synthesis with geometry"]
+  out_of_scope_use: |
+    Use for regulated mission-critical geometry verification without validation; using outside of licensed territory; heavy downstream reasoning tasks unrelated to 3D scene generation.
+
+# =============================================================================
+# TRUSTWORTHINESS CHARACTERISTICS
+# =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      The README and articles describe architecture and release; model page and license are publicly available. :contentReference[oaicite:20]{index=20}
+    public_evidence: |
+      Press articles summarise its capabilities; but independent evaluation or peer-reviewed benchmark sets are limited.
+    assessment_notes: |
+      Suitable for exploratory use; integration in production should include in-house validation of geometry accuracy for target scenes.
+
+  safe:
+    safety_measures: |
+      Model includes license constraints; vendor references Acceptable Use Policy in license text. :contentReference[oaicite:21]{index=21}
+    known_safety_issues: |
+      Potential misuse: generation of scenes or geometry that mis-represent real environments, copyright/asset risks, output may include inaccurate geometry.
+    assessment_notes: |
+      Use human verification for high-risk 3D outputs, ensure downstream asset use complies with IP.
+
+  secure_and_resilient:
+    security_features: |
+      Public release allows scrutiny; local deployment possible.
+    known_vulnerabilities: |
+      Risks: adversarial inputs, blank geometry zones, quality degradation, resource exhaustion in heavy inputs.
+    assessment_notes: |
+      Infrastructure should monitor resource usage, runtime behaviour, version control.
+
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Architecture summary, license and README are available; full dataset/training logs not disclosed.
+    assessment_notes: |
+      Good for many creative uses; for regulated geometry pipelines may require additional traceability or audit of loss/data.
+
+  explainable_and_interpretable:
+    explainability_features: |
+      User can inspect output geometry; process described in README.
+    interpretability_limitations: |
+      Internal representation, dataset and training procedures not fully documented.
+    assessment_notes: |
+      Acceptable for asset generation; not sufficient for certification on accuracy sensitive tasks.
+
+  privacy_enhanced:
+    privacy_features: |
+      Local inference avoids cloud upload risk.
+    privacy_concerns: |
+      Unknown training data sources; potential for unwanted memorised geometry/scene data.
+    assessment_notes: |
+      For sensitive environments (e.g., real estate reconstructions of private property) consider additional review.
+
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      No detailed public bias/fairness audit specific to scene domains or under-represented environments.
+    known_biases: |
+      Model may perform less well on unusual styles (e.g., cartoons, abstract scenes) or rare camera-/view-points.
+    assessment_notes: |
+      Evaluate on your target domain/style and include fairness/coverage assessment if relevant (e.g., diverse architectures, environments).
+
+# =============================================================================
+# EVALUATION GUIDANCE
+# =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Run your own reconstructions using your target image/video set and measure geometry accuracy (point-cloud error, depth map fidelity, normal correctness).
+    - Evaluate multi-view vs single-image input performance differences for your application.
+    - Benchmark inference latency/throughput on your target hardware for expected scene complexity.
+    - Safety testing: verify outputs do not produce unrealistic geometry, missing regions, or misleading reconstructions.
+    - Licensing compliance: confirm use is within the licensed territory and user base size rules (i.e., “Territory excludes EU/UK/South Korea” per license) :contentReference[oaicite:22]{index=22}
+    - Asset-pipeline integration: test export, use in engine (Unity/Unreal) or VR pipeline for downstream compatibility.
+
+  key_evaluation_questions: |
+    - Does the model produce geometry of sufficient accuracy and completeness for your domain (game/VR/asset pipeline)?
+    - Can your hardware support the expected inference time and memory cost for your scenes?
+    - Are you confident your use of the model is compliant with the license (region/territory/use-case)?
+    - Is human review or QA in place for geometries where errors would cause downstream failure (collision, navigation, simulation)?
+
+  comparison_considerations: |
+    - Compare with other 3D reconstruction/generation models (e.g., Meta/Oxford VGGT, Fast3R, DUSt3R) on your task metrics.
+    - Evaluate the trade-off of speed/quality: single-image input reconstruction vs multi-view/hybrid input.
+    - Consider infrastructure and asset-pipeline cost: does the obtained geometry quality offset resource/hardware cost?
+
+# =============================================================================
+# NIST AI RMF MAPPING
+# =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      For 3D asset generation workflows, ensure version control, audit logs, user consent where capturing real property, clear disclosure when using generated worlds.
+  map:
+    context_considerations: |
+      Scene-generation from media (image, video), multi-modal prior input, 3D reconstruction risk (mis-geometry, missing regions), downstream usage in immersive apps.
+    risk_categories: ["mis-reconstruction","asset_inaccuracy","privacy_leakage","region-licensing non-compliance","resource_exhaustion"]
+  measure:
+    suggested_metrics: |
+      - Reconstruction error (e.g., depth or point-cloud error) per 1k scenes
+      - Latency/throughput per scene on your hardware
+      - Asset-failure rate (missing geometry, holes) per 1k generations
+      - Licensing non-compliance incidents per 1k uses
+  manage:
+    risk_management_considerations: |
+      Include human QA/validation in asset pipeline; enforce license and region restrictions; log versions and usage; fallback to manual asset creation when geometry quality insufficient; monitor scale and cost, version-rollback strategy.
+
+# =============================================================================
+# REFERENCES & SOURCES
+# =============================================================================
+references:
+  vendor_documentation:
+    - url: "https://huggingface.co/tencent/HunyuanWorld-Mirror"
+      description: "Model page on Hugging Face"
+    - url: "https://huggingface.co/tencent/HunyuanWorld-Mirror/blob/main/README.md"
+      description: "README describing architecture and capabilities" :contentReference[oaicite:23]{index=23}
+    - url: "https://github.com/Tencent-Hunyuan/HunyuanWorld-Mirror"
+      description: "GitHub repository indicated by vendor/README" :contentReference[oaicite:24]{index=24}
+  benchmarks:
+    - name: "Gigazine article: Introducing HunyuanWorld-Mirror 3D space generation"
+      url: "https://gigazine.net/news/20251024-tencent-hunyuan-world-mirror/"
+      result: "Single image to 3D world, multi-view/video supported" :contentReference[oaicite:25]{index=25}
+  third_party_evaluations:
+    - source: "AI-Bot summary page (Chinese) of HunyuanWorld 1.1"
+      url: "https://ai-bot.cn/hunyuanworld-mirror/"
+      summary: "Claims single-card deployment, seconds latency for multi-view input" :contentReference[oaicite:26]{index=26}
+
+# =============================================================================
+# METADATA
+# =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "Don Fountain"
+  card_creation_date: "2025-10-24"
+  last_updated: "2025-10-24"
+  information_sources: |
+    Hugging Face model page, README, license file, press articles (Gigazine, AI-Bot), GitHub repository.
+  completeness_assessment: |
+    Good for architecture description, use-case and licence; moderate for dataset/training transparency, parameter count, standard benchmark metrics; limited for production latency/throughput numbers and third-party peer-review.
+  change_log:
+    - date: "2025-10-24"
+      author: "Don Fountain"
+      changes: "Initial synthesis of HunyuanWorld-Mirror model card."
+

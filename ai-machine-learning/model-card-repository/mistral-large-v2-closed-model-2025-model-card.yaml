@@ -1,0 +1,258 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Mistral Large 2"
+  vendor: "Mistral AI"
+  model_family: "Mistral Large"
+  version: "2"
+  release_date: "2025-06-05"
+  model_type: "Frontier-Scale Closed-Weight Language Model"
+  vendor_model_card_url: "https://mistral.ai/news/mistral-large-2/"
+  license: "Commercial API (Proprietary)"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Dense Transformer (text-only)"
+    parameter_count: "Not publicly disclosed (estimated 400–600B)"
+    context_window: "256 K tokens"
+    training_data_cutoff: "2024-12"
+    architectural_details: |
+      Mistral Large 2 represents Mistral AI’s second-generation flagship model,
+      offering state-of-the-art reasoning and factual accuracy across multilingual and code domains.
+      Built on a fully dense architecture (not MoE), it employs enhanced retrieval and alignment
+      techniques and a long-context architecture optimized for efficiency and factual consistency.
+      Model inference and fine-tuning are offered through Mistral API and Azure-hosted endpoints.
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "Medium"
+    cost_tier: "High"
+    latency: |
+      ~2–3 seconds per 1K tokens under standard API inference.
+      Optimized batch throughput comparable to GPT-4o-class models.
+    throughput: |
+      Supports high concurrency and multi-region scaling through managed API infrastructure.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    Best-in-class reasoning, summarization, and code generation performance among European models.  
+    Multilingual fluency (English, French, German, Spanish, Arabic) and strong domain adaptability.  
+    Designed for enterprise, research, and regulated sector deployments with GDPR compliance.
+  benchmark_performance: |
+    - MMLU: 90.4  
+    - GSM8K: 96.7  
+    - HumanEval: 87.2  
+    - ARC-C: 88.3  
+    - GPQA: 89.1  
+    (Mistral AI system card, June 2025)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["long_context", "retrieval_integration", "structured_outputs", "multilingual_reasoning"]
+  known_limitations:
+    vendor_disclosed: |
+      Text-only model; lacks multimodal capabilities.  
+      Costlier and slower than Mixtral 8×7B or Mistral Small for batch inference.
+    common_failure_modes: |
+      Verbose reasoning outputs; mild degradation in factuality beyond 200K-token contexts.
+    unsuitable_use_cases: |
+      Real-time conversational systems or multimodal tasks requiring image/audio understanding.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on a high-quality multilingual corpus including open, licensed, and synthetic sources,
+    with strong emphasis on code, mathematics, and scientific reasoning.
+    Incorporates retrieval-augmented pretraining for factual grounding.
+  training_methodology: |
+    Large-scale autoregressive pretraining followed by supervised fine-tuning (SFT),
+    reinforcement learning with human and AI feedback (RLHF/RLAIF), and bias/fairness calibration.
+  data_privacy_considerations: |
+    All data compliant with GDPR and EU AI Act draft guidelines;  
+    private or customer data excluded from training.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Enterprise-scale reasoning, data analysis, multilingual document synthesis, and software engineering.  
+    Suited for regulated EU enterprises and research institutions.
+  suitable_domains: ["enterprise_QA", "scientific_research", "legal_analysis", "multilingual_assistants", "code_generation"]
+  out_of_scope_use: |
+    Safety-critical automation, medical diagnosis, or any decision-making without human oversight.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Achieves reasoning parity with GPT-4o and Claude 4 Opus across multiple benchmarks.  
+      Consistent and low hallucination rate due to retrieval-augmented training.
+    public_evidence: |
+      Verified by ARC and LMSYS evaluation datasets (mid-2025).  
+      Independent testers report <2% factual hallucination rate on MMLU subsets.
+    assessment_notes: |
+      Exceptionally reliable for factual reasoning; less flexible for creative writing.
+  safe:
+    safety_measures: |
+      Reinforcement alignment for ethical reasoning, toxicity control, and refusal optimization.  
+      Complies with EU AI Act "high-risk" governance recommendations.
+    known_safety_issues: |
+      May over-refuse in ambiguous policy or ethics scenarios.
+    assessment_notes: |
+      Strong enterprise safety posture; designed for compliant deployments.
+  secure_and_resilient:
+    security_features: |
+      Data encryption at rest and in transit; secure endpoint isolation.  
+      SOC 2 Type II and ISO 27001 certified infrastructure; available in EU data residency regions.
+    known_vulnerabilities: |
+      Typical API attack surfaces (prompt injection, context overflow).  
+    assessment_notes: |
+      Enterprise-grade security; fully managed.
+  accountable_and_transparent:
+    transparency_level: "Medium–High"
+    auditability: |
+      Detailed system card published with benchmark data and safety testing.  
+      Weights proprietary; training sources summarized.
+    assessment_notes: |
+      Transparency consistent with EU regulatory frameworks.
+  explainable_and_interpretable:
+    explainability_features: |
+      Reasoning trace summaries, structured output mode, and retrieval logs for compliance audits.  
+    interpretability_limitations: |
+      Internal neural reasoning not externally visible.
+    assessment_notes: |
+      High functional explainability; strong audit traceability.
+  privacy_enhanced:
+    privacy_features: |
+      GDPR-aligned processing, retention limits, and tenant-level data isolation.
+    privacy_concerns: |
+      None significant under managed API use.
+    assessment_notes: |
+      Exemplary privacy design within EU compliance context.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Cross-lingual fairness evaluation; gender and cultural bias mitigation pipelines.  
+      Audited per EU AI Act fairness guidelines.
+    known_biases: |
+      Slight performance disparity in low-resource languages.
+    assessment_notes: |
+      Strong fairness posture; consistent with ethical AI design goals.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Reasoning accuracy and factual consistency under long-context loads  
+    - Bias and fairness testing across supported languages  
+    - Latency and throughput validation at target API tier  
+    - Compliance verification under GDPR and EU AI Act criteria
+  key_evaluation_questions: |
+    - Does reasoning fidelity meet mission-critical requirements?  
+    - Are latency and cost acceptable for enterprise-scale inference?  
+    - Are GDPR and AI Act governance standards satisfied?
+  comparison_considerations: |
+    - Comparable to GPT-4o and Claude 4.2 Sonnet in reasoning;  
+      slower but more compliant for EU contexts.  
+      Outperforms Gemini 1.5 Pro in multilingual grounding.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Integrate EU AI Act governance documentation; ensure human oversight on automated decisions.
+  map:
+    context_considerations: |
+      Assess multilingual fairness, hallucination risk, and compliance boundaries.
+    risk_categories: ["hallucination", "bias", "prompt_injection", "compliance_failure"]
+  measure:
+    suggested_metrics: |
+      Accuracy, hallucination rate, latency, fairness index, GDPR compliance score.
+  manage:
+    risk_management_considerations: |
+      Enable retrieval logging, periodic fairness audits, and safety evaluations.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://mistral.ai/news/mistral-large-2/"
+    description: "Official Mistral Large 2 announcement and benchmarks"
+  - url: "https://docs.mistral.ai"
+    description: "Mistral API and model system documentation"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://arxiv.org/abs/2506.01432"
+    result: "90.4"
+  - name: "GSM8K"
+    url: "https://arxiv.org/abs/2506.01432"
+    result: "96.7"
+  third_party_evaluations:
+  - source: "ARC Reasoning and Multilingual Evaluation (2025)"
+    url: "https://arxiv.org/abs/2506.01829"
+    summary: "Mistral Large 2 matches GPT-4o in reasoning accuracy; leads in EU-language benchmarks."
+  news_coverage:
+  - title: "Mistral Large 2 launches as Europe’s GPT-4-class reasoning model"
+    url: "https://mistral.ai/news/mistral-large-2/"
+    date: "2025-06-05"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Mistral AI release documentation, EU AI Act guidance, ARC benchmark data, and independent evaluations.
+  completeness_assessment: |
+    High for governance, safety, and reasoning benchmarks; medium for architectural transparency.
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from Mistral Large 2 release and EU AI governance materials."

@@ -1,0 +1,262 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Qwen 2 7B"
+  vendor: "Alibaba Cloud / DAMO Academy"
+  model_family: "Qwen"
+  version: "2 (7B)"
+  release_date: "2024-06-06"
+  model_type: "Open-Weight Multilingual Compact Language Model"
+  vendor_model_card_url: "https://huggingface.co/Qwen/Qwen2-7B"
+  license: "Apache 2.0"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Dense Transformer (decoder-only)"
+    parameter_count: "7 billion"
+    context_window: "32 K tokens"
+    training_data_cutoff: "2024-01"
+    architectural_details: |
+      Qwen 2 7B is the compact sibling to Qwen 2 72B, built for multilingual reasoning and efficient inference.
+      It employs grouped-query attention (GQA), rotary embeddings (RoPE), and parallel transformer blocks,
+      delivering near 13B-class performance in a 7B footprint.
+      Fully open weights enable deployment on a single 24 GB GPU with quantization support.
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "Very High"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ~0.25 s per 1K tokens (fp16 on A100);  
+      <0.1 s on quantized RTX 4090 / L40 GPU.
+    throughput: |
+      Efficient for chatbots, summarization, and multilingual reasoning tasks.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    High-efficiency reasoning and multilingual fluency for open deployment.  
+    Outperforms Mistral 7B and Gemma 2 9B in multilingual QA.  
+    Fine-tuning friendly and ideal for on-prem enterprise AI copilots.
+  benchmark_performance: |
+    - MMLU: 78.5  
+    - GSM8K: 84.0  
+    - ARC-C: 80.3  
+    - C-Eval: 88.9  
+    - HellaSwag: 81.4  
+    (Alibaba DAMO Lab, Hugging Face, June 2024)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["multilingual_chat", "summarization", "translation", "code_generation"]
+  known_limitations:
+    vendor_disclosed: |
+      Weaker deep reasoning than Qwen 2 72B or LLaMA 3 70B;  
+      performance drops slightly on extended logic and coding benchmarks.  
+      No multimodal capability.
+    common_failure_modes: |
+      Occasional hallucinations in multi-hop reasoning and numeric tasks.  
+      English outputs slightly over-polished.
+    unsuitable_use_cases: |
+      Legal or compliance-critical tasks without external validation.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Derived from the same multilingual and code dataset family as Qwen 2 72B,  
+    scaled down proportionally for efficiency.  
+    Includes multilingual, synthetic reasoning, and instruction datasets across 30+ languages.
+  training_methodology: |
+    Pretrained with autoregressive text generation;  
+    supervised fine-tuning for alignment and multilingual safety calibration.
+    No RLHF; relies on SafeRL and SFT for stability.
+  data_privacy_considerations: |
+    Uses open and licensed data; no personal data included.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Lightweight multilingual model for education, research, and enterprise assistants.  
+    Supports local fine-tuning, RAG integration, and low-latency reasoning tasks.
+  suitable_domains: ["education", "translation", "chatbots", "multilingual_QA", "RAG_assistants"]
+  out_of_scope_use: |
+    Autonomous decision-making, safety-critical systems, or unmoderated deployments.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Competitive with larger open-weight models in efficiency and factual recall.  
+      Proven stability across multilingual datasets.
+    public_evidence: |
+      Verified top-10 placement on Hugging Face Open LLM Leaderboard (June 2024).  
+      Community validation confirms reproducible outputs.
+    assessment_notes: |
+      Highly reliable small model for multilingual tasks.
+  safe:
+    safety_measures: |
+      Alignment and multilingual moderation datasets applied during fine-tuning.  
+      Content filtering for toxicity and sensitive topics.
+    known_safety_issues: |
+      Over-refusal in some safety triggers; potential translation bias in low-resource languages.
+    assessment_notes: |
+      Safe for research and enterprise use with basic moderation.
+  secure_and_resilient:
+    security_features: |
+      Open weights; secure deployment through containerized or on-prem setups.  
+      Integrity hashes published for reproducibility.
+    known_vulnerabilities: |
+      Prompt injection and RAG poisoning if used without filtering.
+    assessment_notes: |
+      Secure in private infrastructure; moderate risk in public endpoints.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Full model weights, tokenizer, and pretraining documentation public.  
+      Evaluation datasets and scripts reproducible.
+    assessment_notes: |
+      Strong transparency and openness.
+  explainable_and_interpretable:
+    explainability_features: |
+      Fully compatible with interpretability and attribution tools (TransformerLens, Captum).  
+      Supports local probing for reasoning visualization.
+    interpretability_limitations: |
+      No built-in reasoning trace.
+    assessment_notes: |
+      Excellent interpretability for its class.
+  privacy_enhanced:
+    privacy_features: |
+      No data retention, telemetry, or user logging.  
+      Supports local offline inference.
+    privacy_concerns: |
+      Minimal risk; trained on public sources only.
+    assessment_notes: |
+      Excellent privacy posture.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Balanced multilingual corpus and SafeRL fairness calibration.  
+      Evaluated on C-Eval and BOLD fairness benchmarks.
+    known_biases: |
+      Slight overperformance in Chinese and English; weaker low-resource dialect coverage.
+    assessment_notes: |
+      Fairness acceptable; good coverage for multilingual deployments.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Multilingual factual QA and translation quality testing  
+    - Safety and bias audits under localized prompts  
+    - Efficiency benchmarks on target hardware (GPU/CPU/NPU)  
+    - Hallucination testing under RAG integration
+  key_evaluation_questions: |
+    - Does reasoning quality meet application needs?  
+    - Are multilingual safety filters tuned appropriately?  
+    - Does the deployment platform support quantization and low-latency inference?
+  comparison_considerations: |
+    - Outperforms Mistral 7B and Gemma 2 9B in multilingual accuracy.  
+      Trails LLaMA 3 8B and Qwen 2 72B in deep reasoning.  
+      Ideal for research, education, and lightweight enterprise copilots.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Define governance policies for multilingual model deployment and data provenance tracking.
+  map:
+    context_considerations: |
+      Identify bias or safety gaps in localized deployments.  
+      Consider regional compliance requirements.
+    risk_categories: ["hallucination", "bias", "prompt_injection", "retrieval_poisoning"]
+  measure:
+    suggested_metrics: |
+      Factual accuracy, multilingual bias index, latency, hallucination rate.
+  manage:
+    risk_management_considerations: |
+      Apply lightweight moderation and context filtering for production apps.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/Qwen/Qwen2-7B"
+    description: "Official Qwen 2 7B repository and documentation"
+  - url: "https://modelscope.cn/models/qwen/Qwen2-7B"
+    description: "ModelScope page with multilingual benchmarks"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "78.5"
+  - name: "C-Eval"
+    url: "https://arxiv.org/abs/2305.08322"
+    result: "88.9"
+  third_party_evaluations:
+  - source: "Hugging Face Open LLM Leaderboard (2024)"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    summary: "Qwen 2 7B ranked among top multilingual compact open models."
+  news_coverage:
+  - title: "Alibaba launches Qwen 2 — lightweight multilingual open LLMs"
+    url: "https://www.alibabacloud.com/blog/qwen-2-release"
+    date: "2024-06-06"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Alibaba DAMO Lab documentation, Hugging Face leaderboards, and multilingual evaluation reports.
+  completeness_assessment: |
+    High for transparency and multilingual performance; medium for fine-tuning methodology disclosure.
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from Qwen 2 7B release and benchmark data."

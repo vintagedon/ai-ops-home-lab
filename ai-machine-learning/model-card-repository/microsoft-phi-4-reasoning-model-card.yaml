@@ -1,0 +1,199 @@
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+model_identity:
+  name: "Phi-4-reasoning"
+  vendor: "Microsoft"
+  model_family: "Phi-4"
+  version: "reasoning / reasoning-plus (14B parameters)"
+  release_date: "2025-04-18"  # technical report date April 2025 :contentReference[oaicite:1]{index=1}
+  model_type: "Large Language Model (14 B dense) tuned for complex reasoning"
+
+  vendor_model_card_url: "https://www.microsoft.com/en-us/research/publication/phi-4-reasoning-technical-report/"
+
+  license: "MIT License (open-weight release) – per Microsoft announcement" :contentReference[oaicite:2]{index=2}
+  deprecation_status: "Active"
+
+technical_specifications:
+  architecture:
+    base_architecture: "Decoder-only Transformer (dense) with reasoning-specific “thinking block”" :contentReference[oaicite:3]{index=3}
+    parameter_count: "≈14 B"
+    context_window: "Not publicly disclosed (supports extended reasoning, inference-time scaling)" :contentReference[oaicite:4]{index=4}
+
+    training_data_cutoff: "March 2025 or earlier" :contentReference[oaicite:5]{index=5}
+    architectural_details: |
+      The model is built from the Phi-4 base model and uses supervised fine-tuning (SFT) on ~1.4 million STEM + coding prompts, followed by a short reinforcement learning stage for the "reasoning-plus" variant. A “thinking block” mechanism enables step-by-step reasoning trace (chain-of-thought) outputs. :contentReference[oaicite:6]{index=6}
+
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "Optimised for reasoning-tasks, moderate latency"
+    cost_tier: "Mid-tier (14 B size)"
+    latency: "Not publicly disclosed"
+    throughput: "Not publicly disclosed"
+
+capabilities:
+  vendor_claimed_strengths: |
+    - Achieves performance on math, scientific reasoning, coding benchmarks competitive with models 5-50× larger. :contentReference[oaicite:7]{index=7}
+    - Generates detailed reasoning chains, backtracks, and uses iterative refinement. :contentReference[oaicite:8]{index=8}
+    - Transferability of reasoning skill: improvements seen even in domains not explicitly trained for. :contentReference[oaicite:9]{index=9}
+
+  benchmark_performance: |
+    From Microsoft’s evaluation:
+    - AIME 2025: 62.9% for Phi-4-reasoning on selected benchmark set. :contentReference[oaicite:10]{index=10}
+    - OmniMath: 76.6% for Phi-4-reasoning. :contentReference[oaicite:11]{index=11}
+    - FlenQA (3K-token subset): 97.7% for Phi-4-reasoning. :contentReference[oaicite:12]{index=12}
+
+  special_capabilities:
+    tools_support: false
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["chain-of-thought trace generation","inference-time scaling (majority @ N)"] :contentReference[oaicite:13]{index=13}
+
+  known_limitations:
+    vendor_disclosed: |
+      Model may require additional tokens/inference compute for highest reasoning accuracy; performance may vary across domains and prompts. :contentReference[oaicite:14]{index=14}
+    common_failure_modes: |
+      - Degraded performance in domains far outside STEM/coding training (e.g., less-tested humanities).
+      - High variance across runs, especially in reasoning tasks. :contentReference[oaicite:15]{index=15}
+    unsuitable_use_cases: |
+      - High-stakes decision-making or autonomous systems without human oversight.
+      - Use beyond domain of tested reasoning tasks without validation.
+
+training_information:
+  training_data_description: |
+    Supervised fine-tuning on ~1.4 million curated prompts spanning STEM, coding, planning; synthetic chain-of-thought traces generated using a teacher model (o3-mini). A short RL phase on a limited set (~6,400) of math problems for the reasoning-plus variant. :contentReference[oaicite:16]{index=16}
+  training_methodology: |
+    Data-curation → supervised fine-tuning → optional reinforcement learning; focused on edge of base model capability to teach reasoning explicitly. :contentReference[oaicite:17]{index=17}
+  data_privacy_considerations: |
+    The report does not disclose full dataset provenance or filtering details publicly; deployers should review compliance for sensitive or regulated domains.
+
+intended_use:
+  vendor_intended_use: |
+    Assistive applications requiring complex reasoning, multi-step problem solving, STEM tutoring, coding assistants. :contentReference[oaicite:18]{index=18}
+  suitable-domains: ["complex_reasoning","STEM_tutoring","code_generation","planning"]
+  out_of_scope_use: |
+    Use in safety-critical systems without validation; unsupported domains/languages beyond training; generation of harmful or disallowed content without mitigation.
+
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Compelling internal benchmark results show strong reasoning at modest size. :contentReference[oaicite:19]{index=19}
+    public_evidence: |
+      Independent third-party evaluations still limited; most data from Microsoft internal tests and technical report.
+    assessment_notes: |
+      Good candidate for reasoning tasks but requires domain-specific validation and caution for generalisation.
+
+  safe:
+    safety_measures: |
+      Developed under Microsoft’s Responsible AI principles; model card includes safety usage guidance. :contentReference[oaicite:20]{index=20}
+    known_safety_issues: |
+      Risk of reasoning errors/hallucinations, drift, mis-interpretation especially in edge domains.
+    assessment_notes: |
+      Require layered moderation, logging, human verification for output usage.
+
+  secure_and_resilient:
+    security_features: |
+      Released as open-weight under mitigation/usage policies; deployment security depends on platform.
+    known_vulnerabilities: |
+      Prompt injection, mis-use of chain-of-thought to bypass safety filters.
+    assessment_notes: |
+      Infrastructure-level controls needed when deployed in production.
+
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Technical report available; architecture/training methods described at high level; full dataset/details not published.
+    assessment_notes: |
+      Sufficient for many uses; not fully open in dataset/weight provenance.
+
+  explainable_and_interpretable:
+    explainability_features: |
+      Model provides reasoning trace, which aids interpretability of output; documented behaviour. :contentReference[oaicite:21]{index=21}
+    interpretability_limitations: |
+      Internal mechanics remain opaque; “thinking block” structure not fully disclosed.
+    assessment_notes: |
+      Better interpretability than many LLMs due to reasoning trace; still a black-box in many respects.
+
+  privacy_enhanced:
+    privacy_features: |
+      Standard Microsoft AI Foundations protocols apply; no specific PII safeguards detailed in public report.
+    privacy_concerns: |
+      Dataset lineage and personal-data filtering not fully disclosed.
+    assessment_notes: |
+      For regulated domains, perform privacy review and compliance check.
+
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      The report acknowledges reasoning domain, but details of bias mitigation across non-STEM domains are limited.
+    known_biases: |
+      Performance may vary across languages/domains; biases typical to reasoning tasks can persist.
+    assessment_notes: |
+      Deployers should run bias/harm audits particular to their region/language/user base.
+
+evaluation_guidance:
+  recommended_tests: |
+    - Reproduce reasoning benchmarks (AIME, OmniMath, LiveCodeBench) in your domain.
+    - Test chain-of-thought trace generation and correctness.
+    - Evaluate inference-time scaling (majority @ N) for your infrastructure.
+    - Safety red-teaming: prompt injection, hallucination, reasoning drift.
+    - Latency/throughput benchmarking for your hardware given the 14 B model size.
+
+  key_evaluation_questions: |
+    - Does reasoning performance (accuracy + trace) meet your domain requirements?
+    - Are there domain/language gaps unexplored by the vendor?
+    - Are safety, auditability, and human-in-loop controls in place for your deployment?
+    - Are you prepared for model upgrade/migration (e.g., reasoning-plus variant)?
+
+  comparison_considerations: |
+    - Compare to other reasoning-specialised models (e.g., DeepSeek-R1, Qwen3, Llama4 variants) on your tasks.
+    - Evaluate trade-offs of size (14 B) vs larger/dense models in your compute budget.
+    - Consider context window, inference-scaling capabilities and cost/latency metrics.
+
+rmf_function_mapping:
+  govern:
+    notes: |
+      Ensure human-in-the-loop oversight especially for reasoning deployments; enforce versioning, output logging, explainability requirement.
+  map:
+    context_considerations: |
+      Multi-step reasoning, STEM/coding domain, majority-N inference scaling, language/domain coverage.
+    risk_categories: ["hallucination","biassed_reasoning","privacy_leakage","prompt_injection","long_context_failure"]
+  measure:
+    suggested_metrics: |
+      - Error/hallucination rate per 1k prompts.
+      - Trace correctness vs ground truth for chain-of-thought.
+      - Latency/throughput for reasoning tasks at scale.
+      - Bias/harm incident rate across languages/domains.
+  manage:
+    risk_management_considerations: |
+      Combine automated moderation, human review, proof-checking outputs especially in reasoning tasks; document incidents; plan fallback to simpler models when necessary.
+
+references:
+  vendor_documentation:
+    - url: "https://www.microsoft.com/en-us/research/publication/phi-4-reasoning-technical-report/"
+      description: "Microsoft Research technical report for Phi-4-reasoning (April 2025)"
+  benchmarks:
+    - name: "Phi-4-reasoning evaluation table (Azure AI Foundry)"
+      url: "https://ai.azure.com/catalog/models/Phi-4-reasoning"
+      result: "Benchmark table including AIME, OmniMath etc." :contentReference[oaicite:22]{index=22}
+  third_party_evaluations:
+    - source: "Trustible AI rating"
+      url: "https://aimodelratings.com/phi-4_reasoning/"
+      summary: "Transparency rating, dataset cutoff estimate, evaluation details" :contentReference[oaicite:23]{index=23}
+
+metadata:
+  card_version: "1.0"
+  card_author: "Don Fountain"
+  card_creation_date: "2025-10-24"
+  last_updated: "2025-10-24"
+  information_sources: |
+    Microsoft Research publication, Azure AI model catalog, Microsoft blog, media coverage.
+  completeness_assessment: |
+    High for benchmark & training-method information; medium for detailed architecture, dataset provenance; low for latency/throughput, multilingual domain expansion.
+  change_log:
+    - date: "2025-10-24"
+      author: "Don Fountain"
+      changes: "Initial synthesis of Phi-4-reasoning model card."

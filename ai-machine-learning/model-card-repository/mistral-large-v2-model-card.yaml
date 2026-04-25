@@ -1,0 +1,246 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Mistral Large v2"
+  vendor: "Mistral AI"
+  model_family: "Mistral Large"
+  version: "2.0"
+  release_date: "2025-03-05"
+  model_type: "Large Language Model (text-only)"
+  vendor_model_card_url: "https://mistral.ai/news/mistral-large-v2/"
+  license: "Commercial API (Proprietary)"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer (dense, decoder-only)"
+    parameter_count: "Not publicly disclosed (est. 120–140 B)"
+    context_window: "128 K tokens"
+    training_data_cutoff: "2024-12"
+    architectural_details: |
+      Mistral Large v2 is the second-generation flagship model from Mistral AI, 
+      improving reasoning and factual grounding over Mistral Large (v1.0, 2024).  
+      Supports function calling, JSON mode, and structured tool use via the Mistral API.  
+      Deployed on the Le Chat and Azure-hosted Mistral Inference Platform.
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text", "JSON"]
+  performance_characteristics:
+    speed_tier: "Medium"
+    cost_tier: "Medium"
+    latency: |
+      Typical API latency 2–3 s for 4K-token prompts; competitive with GPT-4 Turbo and Claude 4.1 Sonnet.
+    throughput: |
+      Optimized for multi-threaded inference and high concurrency workloads via API scaling.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    Balanced reasoning, multilingual fluency, and open integration via APIs.  
+    Excels at code generation, structured reasoning, and retrieval-augmented summarization.  
+    Optimized for European language diversity and enterprise deployments.
+  benchmark_performance: |
+    - MMLU: 87.9  
+    - GSM8K: 92.0  
+    - HumanEval: 84.5  
+    - HellaSwag: 87.1  
+    - ARC-C: 85.3  
+    (Vendor benchmarks and Hugging Face Open LLM Leaderboard)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["function_calling", "RAG_compatibility", "multilingual", "JSON_output"]
+  known_limitations:
+    vendor_disclosed: |
+      Slightly higher latency than small models; not multimodal; hallucination possible in abstract topics.
+    common_failure_modes: |
+      Overconfidence in numerical reasoning; verbose in summarization tasks; inconsistent citation formatting.
+    unsuitable_use_cases: |
+      Safety-critical decisions; non-text data understanding.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on multilingual and code datasets drawn from licensed, curated, and synthetic corpora, 
+    filtered for quality and toxicity.  
+    Data emphasizes European and global languages, with alignment on reasoning and factual accuracy.
+  training_methodology: |
+    Combination of supervised fine-tuning, preference optimization, and reinforcement learning with human feedback.
+  data_privacy_considerations: |
+    Mistral does not train on user-submitted data; API governed by EU data-handling standards.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Enterprise reasoning, multilingual assistants, content generation, and code support.  
+    Designed for efficiency and transparency in corporate AI workflows.
+  suitable_domains: ["enterprise_assistants", "multilingual_chat", "research", "code_generation", "summarization"]
+  out_of_scope_use: |
+    Safety-critical automation, real-time multimodal perception, or unsupervised decision-making.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Consistent performance across reasoning and language tasks; accuracy comparable to GPT-4-class systems.
+    public_evidence: |
+      Leaderboard results confirm strong parity with closed models on text reasoning and coding tasks.
+    assessment_notes: |
+      Highly reliable within reasoning and code domains; less effective in multimodal tasks.
+  safe:
+    safety_measures: |
+      Dataset filtering, red-teaming, and alignment fine-tuning on refusal behaviors.
+    known_safety_issues: |
+      Potential mild toxicity in edge conversational topics; cultural tone sensitivity.
+    assessment_notes: |
+      Moderately safe; suitable for enterprise environments with content policies.
+  secure_and_resilient:
+    security_features: |
+      European-hosted inference with strict GDPR compliance and API key isolation.
+    known_vulnerabilities: |
+      Standard LLM prompt-injection exposure if tools misconfigured.
+    assessment_notes: |
+      Strong privacy posture; integrators should sandbox high-risk tool integrations.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Mistral publishes detailed benchmark results and dataset summaries; weights not open but API reproducible.
+    assessment_notes: |
+      Strong transparency for a proprietary model; open reporting and reproducible evaluation framework.
+  explainable_and_interpretable:
+    explainability_features: |
+      Deterministic mode and structured output options (JSON); interpretable reasoning patterns in code.
+    interpretability_limitations: |
+      Internal chain-of-thought inaccessible; opaque large-context behavior.
+    assessment_notes: |
+      Functionally explainable for API workflows.
+  privacy_enhanced:
+    privacy_features: |
+      API governed by EU data laws; encryption at rest and in transit; no training on user data.
+    privacy_concerns: |
+      Data sourcing specifics undisclosed; partial dataset transparency.
+    assessment_notes: |
+      Meets GDPR and enterprise data-protection standards.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Evaluated and tuned for fairness across European languages and demographics.
+    known_biases: |
+      Slight overrepresentation of English and French corpora; mild political bias possible.
+    assessment_notes: |
+      Acceptable fairness for multilingual deployments.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Reasoning and factual accuracy validation on domain-specific datasets  
+    - Code generation correctness and unit testing  
+    - Latency and throughput profiling under load  
+    - Bias and fairness evaluation across languages
+  key_evaluation_questions: |
+    - Does latency meet your production constraints?  
+    - Are fairness and multilingual fidelity sufficient for your locale?  
+    - Is model cost-effective compared to GPT-4 Turbo or Gemini 1.5 Pro?
+  comparison_considerations: |
+    - Similar reasoning accuracy to Claude Sonnet 4.1; higher transparency and multilingual balance;
+      no multimodal capabilities unlike Gemini or GPT-4 Turbo.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Enforce API key governance, regional data processing review, and fairness documentation.
+  map:
+    context_considerations: |
+      Evaluate multilingual requirements and latency tolerance.
+    risk_categories: ["hallucination", "bias", "prompt_injection", "privacy_leakage"]
+  measure:
+    suggested_metrics: |
+      Reasoning accuracy, code correctness, latency, fairness index.
+  manage:
+    risk_management_considerations: |
+      Deploy content moderation filters; review fairness and toxicity performance quarterly.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://mistral.ai/news/mistral-large-v2/"
+    description: "Official Mistral Large v2 release announcement"
+  - url: "https://mistral.ai/product/"
+    description: "Product documentation and model capabilities"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "87.9"
+  - name: "GSM8K"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "92.0"
+  third_party_evaluations:
+  - source: "Hugging Face Open LLM Leaderboard (2025)"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    summary: "Confirms vendor benchmark parity and competitive performance."
+  news_coverage:
+  - title: "Mistral launches Large v2 with reasoning and multilingual upgrades"
+    url: "https://mistral.ai/news/mistral-large-v2/"
+    date: "2025-03-05"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Mistral AI official release documentation, product portal, and Hugging Face evaluations.
+  completeness_assessment: |
+    High for performance and safety transparency; medium for architecture and dataset details.
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from Mistral Large v2 release and leaderboard data."

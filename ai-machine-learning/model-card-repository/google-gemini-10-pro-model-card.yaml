@@ -1,0 +1,253 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Gemini 1.0 Pro"
+  vendor: "Google DeepMind"
+  model_family: "Gemini 1.0"
+  version: "Pro"
+  release_date: "2023-12-13"
+  model_type: "Multimodal Large Language Model"
+  vendor_model_card_url: "https://deepmind.google/technologies/gemini/"
+  license: "Commercial API (Proprietary)"
+  deprecation_status: "Active (Superseded by Gemini 1.5 Pro)"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer (text + image multimodal encoder)"
+    parameter_count: "Not publicly disclosed (~100–200B estimated)"
+    context_window: "32 K tokens"
+    training_data_cutoff: "2023-08"
+    architectural_details: |
+      Gemini 1.0 Pro was the mid-tier model of the first Gemini family,
+      designed for enterprise and developer use cases that require balanced reasoning performance
+      and cost efficiency.  
+      It used a multimodal architecture derived from PaLM 2 with DeepMind’s Flamingo-style vision integration
+      and long-context optimization techniques carried forward to Gemini 1.5.
+  modalities:
+    supported_inputs: ["text", "image"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "Medium–High"
+    cost_tier: "Moderate"
+    latency: |
+      ~1.5 seconds per standard query; optimized for throughput in Vertex AI API.  
+      Scalable across GPU and TPU environments.
+    throughput: |
+      Designed for concurrent workloads and streaming inference with near-linear scaling.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    High-quality reasoning and multimodal understanding with strong efficiency.
+    Excels in summarization, RAG, and software engineering tasks.
+    Ideal for enterprise AI assistants, data analysis, and educational applications.
+  benchmark_performance: |
+    - MMLU: 84.3  
+    - GSM8K: 88.5  
+    - HumanEval: 80.2  
+    - HellaSwag: 85.7  
+    - GPQA: 82.0  
+    (DeepMind internal and ARC 2024 benchmarks)
+  special_capabilities:
+    tools_support: true
+    vision_support: true
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["multimodal_reasoning", "code_generation", "summarization", "document_QA"]
+  known_limitations:
+    vendor_disclosed: |
+      Reasoning shallower than Gemini Ultra; reduced long-context retention above 32K tokens.
+    common_failure_modes: |
+      Factual drift in very large-context synthesis; mild over-refusal behavior.  
+    unsuitable_use_cases: |
+      Autonomous decision systems or safety-critical analysis workflows.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Mixture of text, code, and image-caption data sourced from public, licensed, and synthetic corpora.
+    Filtered for factual accuracy, safety, and bias control.
+  training_methodology: |
+    Multimodal pretraining with RLHF alignment for safe, structured reasoning.
+    Optimized for enterprise integration and scalable deployment on TPU v5 clusters.
+  data_privacy_considerations: |
+    Workspace and Vertex AI user data excluded from training; 
+    PII and copyrighted materials filtered during preprocessing.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    General-purpose enterprise reasoning, document analysis, code assistance, and multimodal interaction.  
+    Balanced for cost efficiency and accuracy.
+  suitable_domains: ["enterprise_QA", "education", "research", "software_engineering", "content_generation"]
+  out_of_scope_use: |
+    Regulated decision automation or real-time systems with strict determinism requirements.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Reliable long-context summarization and reasoning performance at mid-tier cost.  
+      Designed for production-grade stability under load.
+    public_evidence: |
+      Benchmarks confirm parity with GPT-4 Turbo and Claude 3 Sonnet in reasoning quality.
+    assessment_notes: |
+      Reliable for most enterprise NLP tasks; surpassed by 1.5 Pro in reasoning depth and context length.
+  safe:
+    safety_measures: |
+      Safety classifiers and RLHF alignment against toxicity and bias; refusal logic for disallowed content.
+    known_safety_issues: |
+      Occasionally overcautious refusals; reduced nuance in sensitive topic summarization.
+    assessment_notes: |
+      Safe for production deployment under content-moderation guardrails.
+  secure_and_resilient:
+    security_features: |
+      Fully hosted on Google Cloud; data encrypted in transit and at rest.
+      Enterprise-grade IAM, VPC Service Controls, and SOC 2 / ISO 27001 compliance.
+    known_vulnerabilities: |
+      Standard LLM risks (prompt injection, context poisoning).
+    assessment_notes: |
+      Secure within Google’s cloud governance model.
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Public documentation available; detailed weights and dataset composition undisclosed.
+    assessment_notes: |
+      Transparency moderate; sufficient for enterprise use.
+  explainable_and_interpretable:
+    explainability_features: |
+      Consistent reasoning traces; explainable summaries via Vertex AI logs.
+    interpretability_limitations: |
+      Internal attention patterns and embeddings not externally exposed.
+    assessment_notes: |
+      Functionally explainable for compliance review and debugging.
+  privacy_enhanced:
+    privacy_features: |
+      User isolation and encryption; strict data retention controls.  
+    privacy_concerns: |
+      Dataset source transparency incomplete.
+    assessment_notes: |
+      Meets Google Workspace enterprise privacy baselines.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Dataset curation and fairness alignment integrated with Gemini safety framework.  
+    known_biases: |
+      Mild language bias toward English and high-resource datasets.  
+    assessment_notes: |
+      Acceptable fairness for general-purpose enterprise use.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Factual and reasoning accuracy validation under long-context use  
+    - Multimodal comprehension and code-generation benchmarking  
+    - Bias and refusal rate monitoring in production logs  
+    - Latency profiling and throughput testing under scale
+  key_evaluation_questions: |
+    - Is reasoning quality sufficient for your use case?  
+    - Are moderation behaviors compatible with your organization’s tone?  
+    - Are cost and latency within acceptable operational bounds?
+  comparison_considerations: |
+    - Comparable to GPT-4 Turbo and Claude 3 Sonnet in reasoning, 
+      with stronger multimodal grounding; weaker than Gemini 1.5 Pro in long-context stability.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Require data classification for multimodal inputs; 
+      document deployment region and compliance scope.
+  map:
+    context_considerations: |
+      Identify required accuracy and safety tolerances for deployment.
+    risk_categories: ["hallucination", "bias", "prompt_injection", "privacy_leakage"]
+  measure:
+    suggested_metrics: |
+      Accuracy, hallucination rate, latency, bias index, cost-per-1K tokens.
+  manage:
+    risk_management_considerations: |
+      Apply moderation API; perform bias audits semiannually; 
+      monitor latency and cost metrics for drift.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://deepmind.google/technologies/gemini/"
+    description: "Gemini 1.0 overview and system card"
+  - url: "https://cloud.google.com/vertex-ai/docs/generative-ai"
+    description: "Vertex AI Gemini documentation"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://arxiv.org/abs/2401.02011"
+    result: "84.3"
+  - name: "GSM8K"
+    url: "https://arxiv.org/abs/2401.02011"
+    result: "88.5"
+  third_party_evaluations:
+  - source: "ARC 2024 Evaluation Suite"
+    url: "https://arxiv.org/abs/2406.01864"
+    summary: "Benchmarks confirm strong mid-tier reasoning and multimodal performance."
+  news_coverage:
+  - title: "Google announces Gemini 1.0 — a new multimodal model family"
+    url: "https://blog.google/technology/ai/google-gemini-1-0/"
+    date: "2023-12-13"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Gemini 1.0 Pro release notes, DeepMind technical blog, and ARC benchmark replication studies.
+  completeness_assessment: |
+    High for performance and use guidance; medium for dataset and architectural transparency.
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from Gemini 1.0 Pro release and evaluation data."

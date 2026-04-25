@@ -1,0 +1,251 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "MPT-7B Instruct"
+  vendor: "MosaicML (Databricks)"
+  model_family: "MPT"
+  version: "7B Instruct"
+  release_date: "2023-05-09"
+  model_type: "Open-Weight Instruction-Tuned Transformer"
+  vendor_model_card_url: "https://huggingface.co/mosaicml/mpt-7b-instruct"
+  license: "Apache 2.0"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Dense Transformer (decoder-only)"
+    parameter_count: "6.9 billion"
+    context_window: "8 K tokens"
+    training_data_cutoff: "2023-03"
+    architectural_details: |
+      MPT-7B Instruct is a compact instruction-tuned model optimized for efficient chat and reasoning tasks.
+      It employs ALiBi (Attention with Linear Biases) for scalable context windows, FlashAttention for 
+      optimized inference, and fused attention kernels for fast training.
+      It was trained on RedPajama-Data-1T, a cleaned 1-trillion-token open dataset derived from Common Crawl,
+      Wikipedia, GitHub, StackExchange, and academic corpora.
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "Very High"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ~0.15 s per 1K tokens on A100 (fp16), or ~0.05 s quantized on RTX 4090 (INT4).  
+      Extremely efficient for small-scale deployment.
+    throughput: |
+      Excellent performance for local chatbots, assistants, and summarization tasks.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • Compact open model tuned for instruction-following and reasoning.  
+    • Competitive with early LLaMA 7B and Falcon 7B models.  
+    • Optimized for efficiency, fine-tuning, and edge AI deployment.  
+  benchmark_performance: |
+    - MMLU: 61.8  
+    - GSM8K: 68.1  
+    - ARC-C: 67.3  
+    - HellaSwag: 73.8  
+    - TruthfulQA: 61.2  
+    (MosaicML internal benchmarks, Q2 2023)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["instruction_following", "summarization", "QA", "education_assistants"]
+  known_limitations:
+    vendor_disclosed: |
+      No multilingual training; primarily English.  
+      Context limited to 8K tokens.  
+      Alignment and safety coverage limited compared to 2024+ models.  
+    common_failure_modes: |
+      Verbose responses, mild hallucination in long-context QA.  
+    unsuitable_use_cases: |
+      Regulated content generation or safety-critical decision-making.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Pretrained on RedPajama-Data-1T, a 1T-token open dataset designed for reproducibility and transparency.  
+    Instruction tuning used community-curated datasets such as Dolly, Self-Instruct, and OpenAssistant.  
+  training_methodology: |
+    Trained with AdamW optimizer and FlashAttention; instruction fine-tuning applied post-pretraining.  
+    Safety filters and refusal tuning included via supervised fine-tuning.  
+  data_privacy_considerations: |
+    Training data from public web sources; PII filtered during preprocessing.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Designed for educational, research, and enterprise chatbot applications.  
+    Ideal for summarization, QA, and basic reasoning tasks on limited compute.  
+  suitable_domains: ["education", "research", "chatbots", "documentation_assistants"]
+  out_of_scope_use: |
+    Applications involving legal, medical, or real-time operational decision-making.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Stable instruction-following and reasoning for small model class.  
+    public_evidence: |
+      Verified through open replication on Hugging Face Leaderboard and community evaluation.  
+    assessment_notes: |
+      Reliable baseline for small-scale instruction-tuned deployments.
+  safe:
+    safety_measures: |
+      Safety-filtered instruction datasets used during tuning.  
+    known_safety_issues: |
+      May emit unfiltered responses if prompts bypass moderation.  
+    assessment_notes: |
+      Safe under minimal external moderation.
+  secure_and_resilient:
+    security_features: |
+      Fully open weights with integrity hashes; reproducible training process documented.  
+    known_vulnerabilities: |
+      Standard open LLM risks (prompt injection, malicious fine-tuning).  
+    assessment_notes: |
+      Secure for controlled local use.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Model weights, dataset recipes, and configuration files released under Apache 2.0.  
+    assessment_notes: |
+      High transparency and strong documentation for reproducibility.
+  explainable_and_interpretable:
+    explainability_features: |
+      ALiBi architecture simplifies interpretability; compatible with standard probing tools.  
+    interpretability_limitations: |
+      No explicit reasoning trace or retrieval transparency.  
+    assessment_notes: |
+      Highly interpretable small model for educational analysis.
+  privacy_enhanced:
+    privacy_features: |
+      PII-filtered training corpus; no telemetry or logging.  
+    privacy_concerns: |
+      Minimal risk due to public-data-only corpus.  
+    assessment_notes: |
+      Meets privacy standards for open educational use.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Filtering and safety alignment applied to reduce demographic and political bias.  
+    known_biases: |
+      English-centric language bias; underrepresentation of minority dialects.  
+    assessment_notes: |
+      Acceptable fairness for small-scale research use.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • Instruction-following quality (MT-Bench, AlpacaEval).  
+    • Factual consistency in summarization.  
+    • Safety and bias audits under open-ended prompts.  
+    • Latency and quantization benchmarking for edge deployment.
+  key_evaluation_questions: |
+    – Does performance meet your reasoning and instruction needs?  
+    – Is compute hardware sufficient for real-time inference?  
+    – Are safety and moderation filters enabled?
+  comparison_considerations: |
+    Outperforms GPT-J and early LLaMA 7B models;  
+    trails Mistral 7B v0.3 and Gemma 2 9B in reasoning.  
+    Remains one of the most accessible open 7B instruct baselines.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Document governance and derivative fine-tune attribution for Apache 2.0 models.  
+  map:
+    context_considerations: |
+      Identify hallucination and bias risk for educational and enterprise chatbots.  
+    risk_categories: ["hallucination", "bias", "prompt_injection", "alignment_limitations"]
+  measure:
+    suggested_metrics: |
+      Accuracy, latency, bias index, and safety filter performance.  
+  manage:
+    risk_management_considerations: |
+      Apply moderation, rate limiting, and evaluation of fine-tuned variants.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/mosaicml/mpt-7b-instruct"
+    description: "Official MPT-7B Instruct release and documentation"
+  - url: "https://www.mosaicml.com/blog/mpt-7b"
+    description: "MosaicML technical release blog for MPT-7B"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "61.8"
+  - name: "GSM8K"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "68.1"
+  third_party_evaluations:
+  - source: "Hugging Face Open LLM Leaderboard (2023)"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    summary: "MPT-7B Instruct validated as strong lightweight instruction model."
+  news_coverage:
+  - title: "MosaicML introduces MPT-7B — efficient open LLM for instruction tuning"
+    url: "https://www.mosaicml.com/blog/mpt-7b"
+    date: "2023-05-09"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    MosaicML documentation, Hugging Face leaderboard, community benchmarks, and replication tests.  
+  completeness_assessment: |
+    High for transparency and performance; medium for safety and bias depth.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from MPT-7B Instruct release and evaluation data."

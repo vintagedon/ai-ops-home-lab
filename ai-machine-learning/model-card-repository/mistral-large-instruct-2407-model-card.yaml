@@ -1,0 +1,829 @@
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+# Model Card: Mistral-Large-Instruct-2407
+# Filled from source: https://huggingface.co/mistralai/Mistral-Large-Instruct-2407
+# and web research with citations
+
+schema_version: "1.0.0"
+
+# =============================================================================
+# MODEL IDENTITY
+# =============================================================================
+
+model_identity:
+  name: "Mistral-Large-Instruct-2407"
+  vendor: "Mistral AI"
+  model_family: "Mistral Large"
+  version: "24.07 (2407)"
+  release_date: "2024-07-24"
+  model_type: "Large Language Model (LLM) - Instruction-tuned"
+
+  vendor_model_card_url: "https://huggingface.co/mistralai/Mistral-Large-Instruct-2407"
+
+  license: "Mistral Research License - Research and non-commercial use only. Commercial use requires separate licensing from Mistral AI."
+  
+  deprecation_status: "Superseded by Mistral-Large-Instruct-2411 (released November 2024)"
+
+# =============================================================================
+# MODEL ARCHITECTURE & TECHNICAL SPECIFICATIONS
+# =============================================================================
+
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer decoder - Dense architecture (non-mixture-of-experts)"
+    
+    parameter_count: "123B (123 billion parameters, specifically 122.6B per technical sources)"
+    
+    context_window: "128,000 tokens (128K context window)"
+    
+    training_data_cutoff: "Not publicly disclosed"
+
+    architectural_details: |
+      Dense transformer-based LLM with 123 billion parameters, designed for single-node inference 
+      with long-context applications. Incorporates Grouped Query Attention (GQA) with 48 attention 
+      heads and 8 key-value heads for computational efficiency while managing long sequences. 
+      Includes instruction fine-tuning and training focused on minimizing hallucinations. Model 
+      trained to acknowledge when it cannot find solutions or lacks sufficient information to 
+      provide a confident answer.
+
+  modalities:
+    supported_inputs: ["text"]
+    
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "Resource intensive - Requires >300GB cumulated VRAM (8 GPUs recommended)"
+    
+    cost_tier: "High - Enterprise-grade model with 123B parameters"
+    
+    latency: "Optimized for single-node inference with high throughput in long-context applications"
+    
+    throughput: "Designed for large throughput on single node - specific tokens/second not publicly disclosed"
+
+# =============================================================================
+# CAPABILITIES & LIMITATIONS
+# =============================================================================
+
+capabilities:
+  vendor_claimed_strengths: |
+    According to Mistral AI's official release blog post and model card:
+    
+    - "State-of-the-art reasoning, knowledge and coding capabilities"
+    - "Multi-lingual by design" supporting dozens of languages including English, French, German, 
+      Spanish, Italian, Chinese, Japanese, Korean, Portuguese, Dutch, Polish, Arabic, and Hindi
+    - "Proficient in coding" trained on 80+ programming languages including Python, Java, C, C++, 
+      JavaScript, Bash, Swift, and Fortran
+    - "Best-in-class agentic capabilities with native function calling and JSON outputting"
+    - "Advanced Reasoning: State-of-the-art mathematical and reasoning capabilities"
+    - "Vastly outperforms" previous Mistral Large and "performs on par with leading models such 
+      as GPT-4o, Claude 3 Opus, and Llama 3 405B"
+    - Enhanced function calling for parallel and sequential function calls
+    - Significant effort devoted to minimizing hallucinations and improving instruction following
+
+  benchmark_performance: |
+    Published benchmarks from vendor (https://huggingface.co/mistralai/Mistral-Large-Instruct-2407):
+    
+    Base Pretrained:
+    - MMLU: 84.0%
+    
+    Multilingual MMLU:
+    - French: 82.8%, German: 81.6%, Spanish: 82.7%, Italian: 82.7%
+    - Dutch: 80.7%, Portuguese: 81.6%, Russian: 79.0%
+    - Korean: 60.1%, Japanese: 78.8%, Chinese: 74.8%
+    
+    Instruction Benchmarks:
+    - MT Bench: 8.63
+    - Wild Bench: 56.3
+    - Arena Hard: 73.2
+    
+    Code & Reasoning:
+    - Human Eval: 92%
+    - Human Eval Plus: 87%
+    - MBPP Base: 80%
+    - MBPP Plus: 69%
+    
+    Mathematics:
+    - GSM8K: 93%
+    - MATH Instruct (0-shot, no CoT): 70%
+    - MATH Instruct (0-shot, CoT): 71.5%
+    
+    Third-party sources note average performance across multiple languages (76.9%) rivaling 
+    GPT-4o (77.9%), and matching Claude 3.5 Sonnet on HumanEval (92.0%).
+
+  special_capabilities:
+    tools_support: true
+    
+    vision_support: false
+    
+    reasoning_support: true
+    
+    image_generation: false
+    
+    additional_capabilities: 
+      - "Native function calling (parallel and sequential)"
+      - "JSON output formatting"
+      - "128K context window for long-document processing"
+      - "Multi-turn conversation support"
+      - "Fine-tuning support available on Mistral's platform"
+
+  known_limitations:
+    vendor_disclosed: |
+      From the official model card:
+      "The Mistral Large model is a quick demonstration that the base model can be easily 
+      fine-tuned to achieve compelling performance. It does not have any moderation mechanisms. 
+      We're looking forward to engaging with the community on ways to make the model finely 
+      respect guardrails, allowing for deployment in environments requiring moderated outputs."
+      
+      Additional limitations:
+      - Research License restricts commercial use without separate commercial license
+      - No multimodal capabilities (text-only input/output)
+      - Requires significant computational resources (>300GB VRAM)
+      - Lacks built-in content moderation mechanisms
+
+    common_failure_modes: |
+      Based on vendor acknowledgment and industry patterns for LLMs:
+      - May generate plausible but incorrect information (though training focused on reducing this)
+      - Performance varies across languages (Korean notably lower at 60.1% MMLU vs 82%+ for European languages)
+      - Limited to text-only modality
+      - Requires careful prompt engineering for optimal results
+      - May require guardrails for production deployment in sensitive contexts
+
+    unsuitable_use_cases: |
+      - Scenarios requiring multimodal understanding (images, audio, video)
+      - Deployment without content moderation in user-facing applications
+      - Use cases requiring guaranteed factual accuracy without verification
+      - High-stakes medical, legal, or financial decisions without human oversight
+      - Any commercial application without obtaining commercial license from Mistral AI
+      - Resource-constrained environments unable to support 123B parameter model
+      - Real-time applications requiring sub-second latency
+
+# =============================================================================
+# TRAINING & DATA
+# =============================================================================
+
+training_information:
+  training_data_description: |
+    Specific training data details are not publicly disclosed. From available information:
+    - Trained on "a very large proportion of code" enabling support for 80+ programming languages
+    - Includes multilingual text data covering dozens of languages
+    - Data cutoff date: Not publicly disclosed
+    - Dataset composition, size, and sources: Not publicly disclosed
+
+  training_methodology: |
+    From vendor materials:
+    - Instruction fine-tuning applied to base model
+    - Significant focus on minimizing hallucinations during training
+    - Trained to acknowledge lack of knowledge rather than generate plausible but incorrect responses
+    - Enhanced for function calling capabilities (parallel and sequential)
+    - Specific training techniques, RLHF details, and training duration: Not publicly disclosed
+    
+    Post-release, fine-tuning capabilities extended to this model on Mistral's platform.
+
+  data_privacy_considerations: |
+    Training data privacy handling not publicly disclosed. Considerations for deployment:
+    - No specific information about PII filtering in training data
+    - No disclosed information about consent mechanisms for training data sources
+    - Model requires user contact information sharing to access (gated model on HuggingFace)
+    - Mistral AI processes personal data according to their privacy policy (https://mistral.ai/terms/)
+    - Users should assume no specific privacy guarantees about training data and implement 
+      appropriate controls for sensitive deployments
+
+# =============================================================================
+# INTENDED USE & SCOPE
+# =============================================================================
+
+intended_use:
+  vendor_intended_use: |
+    From Mistral AI documentation and release materials:
+    - Research and non-commercial applications (per license terms)
+    - Advanced code generation across 80+ programming languages
+    - Mathematical problem-solving and complex reasoning tasks
+    - Multilingual natural language understanding and generation
+    - Agentic workflows with function calling and JSON output
+    - Long-context applications leveraging 128K token window
+    - Development of AI applications on Mistral's La Plateforme and partner platforms
+      (Google Vertex AI, Amazon Bedrock, Azure AI Studio, IBM watsonx.ai)
+
+  suitable_domains: 
+    - "Research and academic applications"
+    - "Software development assistance and code generation"
+    - "Multilingual content creation and translation"
+    - "Complex reasoning and mathematical problem-solving"
+    - "Document analysis and summarization (long-context)"
+    - "Conversational AI and chatbot development (non-commercial)"
+    - "Agentic workflows and function-calling applications"
+
+  out_of_scope_use: |
+    - Commercial applications without obtaining commercial license from Mistral AI
+    - Medical diagnosis, treatment decisions, or patient care without extensive validation and human oversight
+    - Legal advice or automated legal decision-making
+    - Financial trading, investment decisions, or credit scoring without verification systems
+    - Autonomous systems where errors could cause harm (vehicles, industrial equipment)
+    - Content moderation or safety-critical filtering (model lacks built-in moderation)
+    - Applications requiring multimodal understanding (vision, audio)
+    - Generating content intended to deceive, manipulate, or harm
+    - Any application violating the Mistral Research License terms
+    - High-stakes decisions affecting individuals without human review
+
+# =============================================================================
+# TRUSTWORTHINESS CHARACTERISTICS
+# =============================================================================
+
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Mistral AI claims state-of-the-art performance across benchmarks with specific focus on:
+      - Reducing hallucinations through specialized training
+      - Training model to acknowledge uncertainty rather than generate false information
+      - Strong performance on established benchmarks (MMLU 84%, HumanEval 92%, GSM8K 93%)
+    
+    public_evidence: |
+      Published benchmarks show competitive performance with leading models:
+      - MMLU (84.0%) rivals most open models except Llama 3 405B
+      - HumanEval (92%) matches Claude 3.5 Sonnet
+      - Outperforms many proprietary models on specific tasks
+      - Independent testing would be needed to verify reliability claims across diverse use cases
+    
+    assessment_notes: |
+      Benchmarks suggest strong performance but:
+      - No independent third-party validation published
+      - Benchmark performance may not reflect real-world deployment scenarios
+      - Hallucination reduction claims require testing on specific use cases
+      - Recommend thorough evaluation on domain-specific tasks before deployment
+
+  safe:
+    vendor_claims: |
+      Vendor explicitly states: "It does not have any moderation mechanisms."
+      Vendor focused training on reducing hallucinations and improving acknowledgment of uncertainty.
+    
+    public_evidence: |
+      Limited public safety evaluation data available. Vendor acknowledges lack of built-in 
+      moderation and expresses interest in community collaboration on guardrails.
+    
+    assessment_notes: |
+      Critical safety gaps:
+      - No built-in content moderation or safety filtering
+      - Requires external guardrails for production deployment
+      - Must implement application-level safety controls
+      - Thorough safety testing required before user-facing deployment
+      - Consider additional safety layers (content filtering, human review) for sensitive applications
+
+  secure_and_resilient:
+    vendor_claims: |
+      No specific security claims or adversarial robustness testing disclosed.
+    
+    public_evidence: |
+      No published adversarial testing, prompt injection resistance, or security evaluations available.
+    
+    assessment_notes: |
+      Security considerations for deployment:
+      - Recommend adversarial testing (prompt injection, jailbreaking attempts)
+      - Implement input validation and output sanitization
+      - Monitor for misuse patterns in production
+      - Standard LLM security vulnerabilities likely present
+      - Large model size may limit deployment flexibility and increase attack surface
+
+  accountable_and_transparent:
+    vendor_claims: |
+      Mistral AI provides:
+      - Open model weights under Research License
+      - Benchmark results and performance data
+      - Clear licensing terms
+    
+    public_evidence: |
+      Transparency gaps:
+      - Training data composition not disclosed
+      - Training methodology details limited
+      - Data cutoff date not specified
+      - No detailed technical paper published
+      - Limited information on safety testing procedures
+    
+    assessment_notes: |
+      Moderate transparency with significant gaps:
+      - Model weights available for inspection under license
+      - Benchmark results provided but limited to standard tests
+      - Training process and data remain opaque
+      - Recommend documenting all deployment decisions and model behavior
+      - Implement logging and monitoring for accountability in production
+
+  explainable_and_interpretable:
+    vendor_claims: |
+      No specific interpretability features or explanations disclosed.
+    
+    public_evidence: |
+      Standard transformer architecture; no specialized interpretability mechanisms noted.
+    
+    assessment_notes: |
+      Standard LLM interpretability challenges:
+      - Large model size (123B parameters) complicates interpretation
+      - No built-in explanation generation features
+      - Recommend implementing application-level logging of model decisions
+      - Consider chain-of-thought prompting to improve interpretability
+      - May require external interpretability tools for understanding behavior
+
+  privacy_enhanced:
+    vendor_claims: |
+      No specific privacy-enhancing features disclosed. Model requires user contact information 
+      to access (gated on HuggingFace).
+    
+    public_evidence: |
+      - No disclosed PII filtering in training data
+      - No privacy-preserving training techniques mentioned
+      - Gating mechanism collects user information for access
+    
+    assessment_notes: |
+      Privacy concerns:
+      - Training data privacy handling unknown
+      - No PII detection/filtering built into model
+      - Recommend implementing PII detection/redaction in application layer
+      - Monitor for potential training data leakage
+      - Consider data retention policies for user interactions
+      - Standard risks of memorization and potential data exposure in LLMs
+
+  fair_with_harmful_bias_managed:
+    vendor_claims: |
+      Multilingual design with support for dozens of languages. No specific bias mitigation 
+      strategies disclosed.
+    
+    public_evidence: |
+      Benchmark data shows performance variation across languages:
+      - European languages: 80-83% MMLU
+      - Asian languages: 60-79% MMLU (Korean notably lower at 60.1%)
+      - This suggests potential bias or limited training data for some language groups
+    
+    bias_mitigation: |
+      No specific bias mitigation techniques disclosed by vendor.
+    
+    known_biases: |
+      - Significant performance gap between European and some Asian languages (Korean 60.1% vs French 82.8% on MMLU)
+      - Potential biases inherited from training data (not disclosed)
+      - No published fairness or bias evaluation across demographic groups
+      - Potential biases in code generation across programming languages
+    
+    assessment_notes: |
+      Fairness evaluation needed:
+      - Test model performance across demographic groups relevant to use case
+      - Evaluate language performance for target user populations
+      - Assess potential biases in domain-specific applications
+      - Implement monitoring for disparate impact in production
+      - Consider whether performance gaps affect fairness for your use case
+      - Document any observed biases and mitigation strategies
+
+# =============================================================================
+# EVALUATION GUIDANCE
+# =============================================================================
+
+evaluation_guidance:
+  recommended_tests: |
+    Pre-deployment validation checklist:
+    
+    1. Accuracy and Performance:
+       - Test on domain-specific datasets relevant to your use case
+       - Validate reasoning capabilities with your specific problem types
+       - Evaluate code generation on your target programming languages
+       - Test multilingual performance if using non-English languages
+       - Measure accuracy against ground truth for critical applications
+    
+    2. Infrastructure and Resources:
+       - Verify your hardware can support >300GB VRAM requirement
+       - Benchmark latency and throughput on your infrastructure
+       - Test with your expected request volume
+       - Validate single-node inference setup
+       - Measure cost per request at expected scale
+    
+    3. Safety and Bias:
+       - Test for harmful content generation in your domain
+       - Evaluate for prompt injection vulnerabilities
+       - Test bias across demographic groups relevant to your use case
+       - Evaluate fairness across language groups if multilingual
+       - Implement and test content filtering/guardrails
+    
+    4. Function Calling and Integration:
+       - Validate function calling with your APIs and tools
+       - Test JSON output parsing and reliability
+       - Verify integration with your existing systems
+       - Test error handling and fallback behaviors
+    
+    5. Long Context:
+       - Test performance with documents up to 128K tokens
+       - Evaluate accuracy degradation with context length
+       - Test retrieval quality from long contexts
+    
+    6. Compliance and Licensing:
+       - Verify Research License terms are acceptable for your use case
+       - Determine if commercial license is needed
+       - Document compliance with license restrictions
+       - Review data handling against privacy regulations
+
+  key_evaluation_questions: |
+    Critical questions for deployment decision:
+    
+    1. Performance: Does the model meet accuracy requirements for our specific use cases?
+    2. Resources: Can our infrastructure support >300GB VRAM and expected throughput?
+    3. Licensing: Is our use case covered by Research License or do we need commercial license?
+    4. Safety: Have we implemented adequate guardrails given the lack of built-in moderation?
+    5. Bias: Have we validated fairness across our target user populations and languages?
+    6. Transparency: Are we comfortable with gaps in training data and methodology disclosure?
+    7. Privacy: Have we implemented PII detection/handling given no built-in privacy features?
+    8. Testing: Have we validated on representative data from our actual use cases?
+    9. Monitoring: Do we have systems to monitor model performance and detect issues in production?
+    10. Alternatives: Have we compared with other models (Llama 3 405B, Claude, GPT-4) for our needs?
+    11. Updates: How will we handle the fact that this model is superseded by 2411 version?
+    12. Risk appetite: Are stakeholders aligned on acceptable failure modes and mitigation strategies?
+
+  comparison_considerations: |
+    When comparing with alternative models:
+    
+    Alternative Models to Consider:
+    - Mistral-Large-Instruct-2411 (newer version, improved capabilities)
+    - Meta Llama 3 405B (larger parameter count, Apache 2.0 license)
+    - Claude 3.5 Sonnet (similar HumanEval performance, commercial offering)
+    - GPT-4o (similar performance tier, commercial API)
+    - Smaller Mistral models (Mistral Nemo, 7B variants) for cost-constrained scenarios
+    
+    Key Trade-offs:
+    - Parameter count vs. performance: 123B competitive with much larger models
+    - Licensing: Research-only vs. commercial licenses (Llama 3 more permissive)
+    - Deployment: Self-hosted vs. API (consider infrastructure costs)
+    - Modality: Text-only vs. multimodal capabilities
+    - Context window: 128K is competitive but not unique
+    - Cost: Infrastructure costs for 123B model vs. API pricing for commercial alternatives
+    - Support: Community vs. commercial vendor support
+    - Updates: Consider model superseded by newer version
+    
+    Deployment Constraints:
+    - On-device: Not feasible (requires >300GB VRAM)
+    - Cloud: Requires substantial GPU infrastructure
+    - Hybrid: API access available through Mistral platform and partners
+    - Edge: Not suitable for edge deployment
+    
+    Differentiation for Use Cases:
+    - Strong multilingual support competitive advantage
+    - Function calling capabilities well-suited for agentic workflows
+    - Large context window enables long-document applications
+    - Research license enables experimentation without commercial commitment
+    - Competitive performance at smaller parameter count than alternatives
+
+# =============================================================================
+# NIST AI RMF MAPPING
+# =============================================================================
+
+rmf_function_mapping:
+  govern:
+    notes: |
+      Governance considerations for Mistral-Large-Instruct-2407 deployment:
+      
+      Policy Alignment:
+      - Determine if Research License terms comply with organizational policies
+      - Establish approval process for model deployment
+      - Document acceptable use cases under Research License restrictions
+      - Define escalation paths for commercial licensing needs
+      
+      Oversight Requirements:
+      - Designate responsible parties for model deployment and monitoring
+      - Establish review cadence for model performance and safety
+      - Define incident response procedures for model failures
+      - Create documentation standards for model usage
+      
+      Version Control:
+      - Track model version (24.07) and supersession by 2411 version
+      - Document rationale for using 2407 vs. newer 2411 version
+      - Establish update evaluation and migration procedures
+      - Maintain audit trail of all model configuration changes
+      
+      Compliance Framework:
+      - Map to relevant AI regulations (EU AI Act, state-level AI laws)
+      - Document compliance with data privacy regulations
+      - Establish content moderation policies given lack of built-in safety
+      - Define testing and validation requirements before production
+
+  map:
+    context_considerations: |
+      Risk assessment context for deployment:
+      
+      Use Case Context:
+      - WHO: Define user populations and stakeholder groups
+      - WHAT: Specify exact applications and decision types
+      - WHERE: Identify deployment locations and jurisdictions
+      - WHEN: Determine use frequency and critical timing
+      - WHY: Document business objectives and success criteria
+      
+      Data Sensitivity:
+      - Classify sensitivity of input data (PII, confidential, public)
+      - Identify any regulated data (health, financial, legal)
+      - Document data retention and handling requirements
+      - Assess potential for sensitive information in model outputs
+      
+      Stakeholder Impacts:
+      - Identify individuals/groups affected by model outputs
+      - Assess potential for differential impacts across populations
+      - Evaluate language/cultural groups served
+      - Consider impacts of model errors on stakeholders
+      
+      Regulatory Requirements:
+      - AI-specific regulations (EU AI Act risk classification)
+      - Industry regulations (healthcare, financial services, etc.)
+      - Data privacy laws (GDPR, CCPA, etc.)
+      - Content moderation requirements
+      - Accessibility requirements
+
+    risk_categories: 
+      - "Performance risk: Hallucinations, errors in high-stakes applications"
+      - "Safety risk: Lack of built-in content moderation"
+      - "Bias and fairness risk: Language performance gaps, demographic biases"
+      - "Privacy risk: No PII filtering, potential training data exposure"
+      - "Security risk: Prompt injection, adversarial attacks"
+      - "Compliance risk: Research license restrictions, regulatory requirements"
+      - "Operational risk: Infrastructure requirements, model availability"
+      - "Reputational risk: Model errors reflecting on organization"
+
+  measure:
+    suggested_metrics: |
+      Key Performance Indicators for ongoing monitoring:
+      
+      Performance Metrics:
+      - Task accuracy/F1 score on domain-specific test sets
+      - Latency: P50, P95, P99 response times
+      - Throughput: Requests per second, tokens per second
+      - Context utilization: Performance across context lengths
+      - Function calling success rate
+      - JSON output parsing success rate
+      
+      Safety Metrics:
+      - Harmful content generation rate (define harm categories)
+      - Successful prompt injection rate in testing
+      - False information rate (sample-based evaluation)
+      - Refusal rate (appropriate vs. inappropriate refusals)
+      - Content filter activation rate (if external filtering applied)
+      
+      Fairness Metrics:
+      - Performance parity across language groups
+      - Accuracy differences across demographic groups
+      - Response quality variation by user characteristics
+      - Representation in outputs (gender, ethnicity, etc.)
+      
+      Operational Metrics:
+      - System uptime percentage
+      - Error rate by error type
+      - GPU utilization and cost per request
+      - Request volume and patterns
+      - Model loading time
+      
+      Compliance Metrics:
+      - License violation detections (commercial use attempts)
+      - Policy violation rate
+      - Audit completeness score
+      - Incident response time
+      
+      Measurement Methods:
+      - Automated testing suite for performance and safety
+      - Human evaluation for quality and safety (sample-based)
+      - User feedback collection and analysis
+      - System logging and telemetry
+      - Regular benchmark comparisons
+      
+      Thresholds and Alerts:
+      - Define acceptable ranges for each metric
+      - Set up automated alerts for threshold breaches
+      - Establish escalation procedures for critical issues
+      - Document baseline metrics from pre-deployment testing
+
+  manage:
+    risk_management_considerations: |
+      Risk mitigation strategies across multiple layers:
+      
+      Technical Controls:
+      
+      1. Input Validation and Filtering:
+         - Implement prompt injection detection
+         - Sanitize user inputs
+         - Rate limiting and abuse detection
+         - Input length validation
+      
+      2. Output Guardrails:
+         - External content filtering (toxicity, PII, harmful content)
+         - Factual consistency checking for critical applications
+         - Output validation against business rules
+         - JSON schema validation for structured outputs
+      
+      3. Monitoring and Observability:
+         - Comprehensive logging of inputs and outputs
+         - Real-time performance monitoring
+         - Anomaly detection for unusual patterns
+         - User feedback collection mechanisms
+      
+      4. Fallback Mechanisms:
+         - Human review for high-stakes decisions
+         - Confidence thresholds for automated vs. manual review
+         - Graceful degradation for system failures
+         - Alternative model or manual process fallbacks
+      
+      Process Controls:
+      
+      1. Human-in-the-Loop:
+         - Define which outputs require human review
+         - Establish review workflows and responsibilities
+         - Train reviewers on model limitations
+         - Document review decisions
+      
+      2. Escalation Procedures:
+         - Clear escalation paths for issues
+         - Defined response times by severity
+         - Communication protocols for stakeholders
+         - Post-incident review process
+      
+      3. Quality Assurance:
+         - Regular sampling and review of outputs
+         - Periodic re-validation on test sets
+         - User satisfaction surveys
+         - Bias audits on schedule
+      
+      4. Documentation:
+         - Maintain decision logs for model outputs
+         - Document all configuration changes
+         - Record incidents and resolutions
+         - Track model performance over time
+      
+      Organizational Controls:
+      
+      1. Training and Awareness:
+         - Train users on model capabilities and limitations
+         - Educate developers on safe integration practices
+         - Share best practices across teams
+         - Regular safety training updates
+      
+      2. Policies and Procedures:
+         - Clear acceptable use policies
+         - Data handling procedures
+         - Incident response playbooks
+         - Model update and deprecation procedures
+      
+      3. Governance:
+         - Regular governance reviews
+         - Stakeholder communication
+         - Risk register maintenance
+         - Compliance attestation
+      
+      Incident Response:
+      
+      1. Detection:
+         - Automated monitoring for anomalies
+         - User report mechanisms
+         - Regular security testing
+      
+      2. Response:
+         - Incident classification and triage
+         - Containment procedures (rate limiting, temporary shutdown)
+         - Communication templates for stakeholders
+         - Evidence preservation
+      
+      3. Recovery:
+         - Service restoration procedures
+         - Root cause analysis
+         - Implementation of fixes
+         - Validation of resolution
+      
+      4. Learning:
+         - Post-incident reviews
+         - Documentation of lessons learned
+         - Update of procedures
+         - Sharing insights across teams
+      
+      Continuous Improvement:
+      
+      - Regular review of metrics and KPIs
+      - Periodic model re-evaluation
+      - User feedback integration
+      - Industry best practice monitoring
+      - Consider migration to newer model versions (e.g., 2411)
+      - Update risk assessments based on operational experience
+
+# =============================================================================
+# REFERENCES & SOURCES
+# =============================================================================
+
+references:
+  vendor_documentation:
+    - url: "https://huggingface.co/mistralai/Mistral-Large-Instruct-2407"
+      description: "Official HuggingFace model card with architecture details, benchmarks, and usage instructions"
+    
+    - url: "https://mistral.ai/news/mistral-large-2407/"
+      description: "Mistral AI official release blog post announcing Mistral Large 2 (24.07)"
+    
+    - url: "https://docs.mistral.ai/getting-started/models/models_overview/"
+      description: "Mistral AI documentation - models overview"
+    
+    - url: "https://docs.mistral.ai/getting-started/changelog"
+      description: "Mistral AI changelog documenting model releases"
+
+  benchmarks:
+    - name: "MMLU (Massive Multitask Language Understanding)"
+      url: "https://huggingface.co/mistralai/Mistral-Large-Instruct-2407"
+      result: "84.0% (base pretrained), multilingual scores 60.1-82.8%"
+    
+    - name: "HumanEval (Code generation)"
+      url: "https://huggingface.co/mistralai/Mistral-Large-Instruct-2407"
+      result: "92% (matches Claude 3.5 Sonnet)"
+    
+    - name: "GSM8K (Math reasoning)"
+      url: "https://huggingface.co/mistralai/Mistral-Large-Instruct-2407"
+      result: "93%"
+    
+    - name: "MT Bench"
+      url: "https://huggingface.co/mistralai/Mistral-Large-Instruct-2407"
+      result: "8.63"
+    
+    - name: "Arena Hard"
+      url: "https://huggingface.co/mistralai/Mistral-Large-Instruct-2407"
+      result: "73.2"
+
+  third_party_evaluations:
+    - source: "TechCrunch analysis"
+      url: "https://techcrunch.com/2024/07/24/mistral-releases-large-2-meta-openai-ai-models/"
+      summary: "Mistral Large 2 outpaces Llama 3.1 405B on code and math with under third of parameters. Important to note that commercial use requires paid license."
+    
+    - source: "IBM watsonx announcement"
+      url: "https://www.ibm.com/new/announcements/mistral-ais-next-generation-flagship-llm-mistral-large-2-is-now-available-in-ibm-watsonx"
+      summary: "Analysis notes 123B parameters competitive with models of hundreds of billions of parameters. Significant effort on minimizing hallucinations. Average code performance 76.9% across languages rivals GPT-4o (77.9%)."
+    
+    - source: "AWS Bedrock documentation"
+      url: "https://aws.amazon.com/blogs/machine-learning/mistral-large-2-is-now-available-in-amazon-bedrock/"
+      summary: "Highlights multilingual capabilities, function calling, 128K context window, and focus on reducing hallucinations. Notes proficiency across 80+ programming languages."
+    
+    - source: "MarkTechPost coverage"
+      url: "https://www.marktechpost.com/2024/07/25/mistral-large-instruct-2407-released-multilingual-ai-with-128k-context-80-coding-languages-84-0-mmlu-92-humaneval-and-93-gsm8k-performance/"
+      summary: "Release date July 24, 2024. Model designed to be cost-efficient, fast, and high-performing. Enhanced function calling for parallel and sequential calls."
+    
+    - source: "Technical specifications (apxml.com)"
+      url: "https://apxml.com/models/mistral-large-2407"
+      summary: "Detailed architecture: Grouped Query Attention with 48 attention heads and 8 key-value heads. Single-node inference design. 128,000-token context window. Decoder-only Transformer architecture."
+
+# =============================================================================
+# METADATA
+# =============================================================================
+
+metadata:
+  card_version: "1.0"
+  card_author: "AI Safety Analyst"
+  card_creation_date: "2025-10-28"
+  last_updated: "2025-10-28"
+  
+  information_sources: |
+    Primary sources:
+    1. Official Mistral AI model card on HuggingFace (https://huggingface.co/mistralai/Mistral-Large-Instruct-2407)
+    2. Mistral AI official release blog post (https://mistral.ai/news/mistral-large-2407/)
+    3. Mistral AI documentation and changelog
+    
+    Secondary sources:
+    4. Third-party technical analysis (TechCrunch, IBM, AWS, MarkTechPost, apxml.com)
+    5. Cloud platform documentation (AWS Bedrock, Google Vertex AI)
+    6. HuggingFace community discussions
+    
+    All information sourced from publicly available materials as of October 28, 2025.
+    Where information was not available in sources, marked as "Not publicly disclosed" or "not listed at source".
+
+  completeness_assessment: |
+    Information completeness by section:
+    
+    COMPREHENSIVE SECTIONS:
+    - Model identity and basic specifications (name, version, release date, parameters)
+    - Architecture overview (transformer type, context window, parameter count)
+    - Vendor-published benchmarks (MMLU, HumanEval, GSM8K, etc.)
+    - Licensing terms (Research License details clear)
+    - Supported languages and modalities
+    - Hardware requirements (VRAM, GPU count)
+    - Vendor-stated capabilities and use cases
+    
+    PARTIAL/LIMITED SECTIONS:
+    - Training methodology (basic information available, detailed techniques not disclosed)
+    - Architectural details (GQA structure disclosed, but many implementation details unavailable)
+    - Safety and bias evaluation (limited to vendor acknowledgment of gaps)
+    - Multilingual performance (benchmarks available but fairness analysis limited)
+    
+    CRITICAL GAPS:
+    - Training data composition and sources (not disclosed)
+    - Training data cutoff date (not disclosed)
+    - Detailed privacy and PII handling in training data
+    - Adversarial robustness testing and security evaluation
+    - Bias mitigation techniques and fairness testing methodology
+    - Safety evaluation beyond vendor acknowledgment
+    - Technical paper with detailed methodology
+    - Third-party independent evaluations
+    
+    CONFIDENCE ASSESSMENT:
+    - High confidence: Basic specifications, benchmarks, licensing, hardware requirements
+    - Medium confidence: Capabilities assessment, comparative performance, use case suitability
+    - Low confidence: Training data details, safety robustness, bias characteristics, privacy features
+    
+    RECOMMENDATIONS TO IMPROVE ASSESSMENT:
+    - Request training data details from Mistral AI if considering deployment
+    - Conduct independent safety and bias testing on domain-specific use cases
+    - Perform adversarial robustness testing
+    - Compare with newer 2411 version for deployment decision
+    - Engage with Mistral AI for commercial licensing discussions if needed
+    - Review community reports and discussions for real-world deployment experiences
+    - Consider independent third-party evaluation if high-stakes deployment
+
+  change_log:
+    - date: "2025-10-28"
+      author: "AI Safety Analyst"
+      changes: "Initial model card creation. Populated all sections from HuggingFace model card (https://huggingface.co/mistralai/Mistral-Large-Instruct-2407) and web research. Noted model superseded by 2411 version. Marked information gaps as 'Not publicly disclosed' where sources did not provide details."

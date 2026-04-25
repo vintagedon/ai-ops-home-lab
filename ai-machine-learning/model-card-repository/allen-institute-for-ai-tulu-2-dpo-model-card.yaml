@@ -1,0 +1,252 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Tulu 2 DPO"
+  vendor: "Allen Institute for AI (AI2) & Princeton NLP"
+  model_family: "Tulu"
+  version: "2 (DPO variant)"
+  release_date: "2024-03-25"
+  model_type: "Alignment-Focused Instruction-Tuned Model (Direct Preference Optimization)"
+  vendor_model_card_url: "https://huggingface.co/allenai/tulu-2-dpo"
+  license: "Apache 2.0"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Dense Transformer (based on Mistral 7B)"
+    parameter_count: "7 billion"
+    context_window: "8 K tokens"
+    training_data_cutoff: "2024-02"
+    architectural_details: |
+      Tulu 2 DPO is a fine-tuned variant of Mistral 7B developed by AI2 and Princeton,
+      focused on alignment and preference modeling via Direct Preference Optimization (DPO).
+      It serves as a transparent research model for studying post-training alignment
+      without reinforcement learning from human feedback (RLHF).  
+      DPO directly optimizes model outputs based on preference pair datasets,
+      yielding alignment quality comparable to RLHF while maintaining full reproducibility.
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "High"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ~0.09 s per 1K tokens (fp16 A100); ~0.04 s quantized (RTX 4090).  
+      High performance for a mid-scale reasoning and alignment model.  
+    throughput: |
+      Optimized for alignment benchmarks and DPO reproducibility experiments.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • Fully open DPO training pipeline for reproducibility.  
+    • Excellent conversational alignment and refusal accuracy.  
+    • Ideal for alignment, safety, and bias reduction research.  
+  benchmark_performance: |
+    - MT-Bench: 7.3  
+    - MMLU: 71.5  
+    - GSM8K: 75.1  
+    - TruthfulQA: 66.2  
+    - Anthropic HH Alignment: 80.4  
+    (AI2 alignment benchmark suite, Mar 2024)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: strong
+    image_generation: false
+    additional_capabilities: ["alignment_research", "instruction_following", "bias_analysis", "safe_dialogue"]
+  known_limitations:
+    vendor_disclosed: |
+      Limited context size for long-chain reasoning.  
+      Conservative refusals under ambiguous prompts.  
+    common_failure_modes: |
+      Occasionally over-applies refusal tuning or hedging responses.  
+    unsuitable_use_cases: |
+      Long-context reasoning, code generation, or unmoderated creative writing.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on open instruction datasets (ShareGPT, OpenOrca, UltraChat),
+    augmented with human and AI preference pairs for alignment evaluation.
+    Uses AI2 and Princeton’s open DPO preference corpus (≈1.2M pairs).
+  training_methodology: |
+    Base model: Mistral 7B fine-tuned via Supervised Fine-Tuning (SFT),
+    followed by Direct Preference Optimization (DPO) using public preference data.  
+    No reinforcement learning required — deterministic reproducibility guaranteed.
+  data_privacy_considerations: |
+    No private data or user telemetry included; all datasets public or licensed.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Research on model alignment, preference optimization, and human-AI value consistency.  
+    Suitable for education, interpretability, and bias testing.  
+  suitable_domains: ["research", "education", "alignment", "AI_governance"]
+  out_of_scope_use: |
+    Production chat systems or decision-making applications without oversight.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Demonstrates reproducible DPO alignment without RLHF complexity.  
+    public_evidence: |
+      Verified through open benchmarks and AI2 alignment leaderboards.  
+    assessment_notes: |
+      Reliable for alignment behavior analysis and safety testing.
+  safe:
+    safety_measures: |
+      Preference tuning against harmful, biased, or unsafe responses.  
+    known_safety_issues: |
+      May underperform in nuanced moral reasoning or non-Western contexts.  
+    assessment_notes: |
+      Safe for research with basic moderation.
+  secure_and_resilient:
+    security_features: |
+      Telemetry-free, reproducible weights, open DPO configuration.  
+    known_vulnerabilities: |
+      Standard prompt injection risks.  
+    assessment_notes: |
+      Secure and deterministic for offline research environments.
+  accountable_and_transparent:
+    transparency_level: "Very High"
+    auditability: |
+      Full DPO training scripts, data, and logs released by AI2.  
+    assessment_notes: |
+      Excellent transparency benchmark for alignment studies.
+  explainable_and_interpretable:
+    explainability_features: |
+      DPO training structure inherently interpretable (explicit preference functions).  
+    interpretability_limitations: |
+      Limited insight into latent alignment dynamics.  
+    assessment_notes: |
+      Highly interpretable relative to RLHF-based models.
+  privacy_enhanced:
+    privacy_features: |
+      No private or user data; all synthetic or public conversation data.  
+    privacy_concerns: |
+      None known.  
+    assessment_notes: |
+      Meets open-model privacy standards.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      DPO preference data curated for fairness and tone moderation.  
+    known_biases: |
+      Mild Western alignment bias; limited multilingual exposure.  
+    assessment_notes: |
+      Fair and bias-controlled within scope of English alignment.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • Alignment quality (Anthropic HH benchmark).  
+    • Refusal and helpfulness behavior (MT-Bench).  
+    • Bias audits and preference robustness tests.  
+  key_evaluation_questions: |
+    – Are DPO preference functions transparent and reproducible?  
+    – Does alignment hold across cultural contexts?  
+    – Is refusal logic too conservative for open dialogue research?  
+  comparison_considerations: |
+    Outperforms most RLHF 7B models in alignment consistency;  
+    trails Claude 3 Haiku and GPT-4o-mini in nuanced moral judgment.  
+    Top open alignment model of early 2024.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Integrate DPO pipeline governance under NIST AI RMF "Govern" for transparency and accountability.  
+  map:
+    context_considerations: |
+      Identify preference drift, over-refusal, and cultural bias risks.  
+    risk_categories: ["alignment_drift", "bias", "over_refusal", "prompt_injection"]
+  measure:
+    suggested_metrics: |
+      Alignment score, refusal accuracy, bias index.  
+  manage:
+    risk_management_considerations: |
+      Regularly retrain with diversified preference datasets for global fairness.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/allenai/tulu-2-dpo"
+    description: "Official Tulu 2 DPO model card and dataset documentation"
+  - url: "https://tulu.ai2.aristo.org/"
+    description: "AI2 alignment research portal"
+  benchmarks:
+  - name: "Anthropic HH Alignment"
+    url: "https://github.com/anthropic/hh-rlhf"
+    result: "80.4"
+  - name: "MT-Bench"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "7.3"
+  third_party_evaluations:
+  - source: "Hugging Face Open LLM Leaderboard (2024)"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    summary: "Tulu 2 DPO benchmarked as top open alignment model in its class."
+  news_coverage:
+  - title: "Tulu 2: Direct Preference Optimization without RLHF"
+    url: "https://allenai.org/news/tulu2-dpo"
+    date: "2024-03-25"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    AI2 and Princeton publications, Hugging Face benchmarks, and alignment research datasets.  
+  completeness_assessment: |
+    Very high for transparency and alignment methodology; moderate for cultural fairness testing.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from Tulu 2 DPO release and benchmark data."

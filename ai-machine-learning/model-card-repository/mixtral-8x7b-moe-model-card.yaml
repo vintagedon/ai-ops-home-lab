@@ -1,0 +1,252 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Mixtral 8×7B"
+  vendor: "Mistral AI"
+  model_family: "Mixtral"
+  version: "1.0"
+  release_date: "2023-12-11"
+  model_type: "Mixture-of-Experts (MoE) Transformer"
+  vendor_model_card_url: "https://mistral.ai/news/mixtral-of-experts/"
+  license: "Apache 2.0"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Sparse Mixture-of-Experts Transformer"
+    parameter_count: "47B total (12.9B active per token)"
+    context_window: "32 K tokens (configurable to 64K)"
+    training_data_cutoff: "2023-09"
+    architectural_details: |
+      Mixtral 8×7B is a sparse Mixture-of-Experts (MoE) architecture consisting of eight 7B expert models,
+      with two active per token. This design allows high reasoning performance at lower inference cost.  
+      It supports grouped-query attention (GQA), rotary positional embeddings, and FlashAttention-2.  
+      Each expert specializes in a distinct subdomain (e.g., reasoning, writing, code), 
+      and routing is dynamically optimized at inference.
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "High"
+    cost_tier: "Low (MoE-optimized)"
+    latency: |
+      Equivalent latency to a single 12–14B dense model despite higher parameter count.  
+      1.0–1.5 s per 1K tokens under fp16 inference on 8×A100 configuration.
+    throughput: |
+      High scalability and cost efficiency; ideal for multi-tenant or batch workloads.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    Combines high reasoning power with excellent efficiency.  
+    Competitive with GPT-3.5 and Claude Instant at ~1/3 compute cost.  
+    Particularly strong in multilingual QA, summarization, and code synthesis.
+  benchmark_performance: |
+    - MMLU: 82.5  
+    - GSM8K: 87.8  
+    - HumanEval: 76.4  
+    - ARC-C: 81.1  
+    (Mistral AI and Hugging Face leaderboards, 2024)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["mixture_of_experts", "long_context", "code_generation", "translation"]
+  known_limitations:
+    vendor_disclosed: |
+      Sparse routing introduces slight nondeterminism; reasoning chain may vary between runs.  
+      Limited to text-only tasks.
+    common_failure_modes: |
+      Minor instability under temperature >1.0; rare output truncation at long context lengths.
+    unsuitable_use_cases: |
+      Real-time systems or compliance-grade reasoning tasks requiring deterministic reproducibility.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on multilingual, filtered web text and code datasets similar to Mistral 7B,
+    scaled with expert specialization and adaptive data partitioning per expert.
+  training_methodology: |
+    Each expert pretrained independently and fine-tuned jointly with router optimization.  
+    Alignment performed via supervised instruction-tuning with safety-filtered datasets.
+  data_privacy_considerations: |
+    Uses public and licensed data only; no user data involved in training.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Open-weight high-performance reasoning model for research, education, and enterprise assistants.
+  suitable_domains: ["research", "education", "multilingual_QA", "code_generation", "content_creation"]
+  out_of_scope_use: |
+    Regulated domains requiring deterministic traceability or legal reasoning.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Delivers high reasoning accuracy comparable to GPT-3.5 Turbo with open weights.  
+      Stable instruction-following and multilingual performance verified by benchmarks.
+    public_evidence: |
+      Consistently top-ranked open-weight model on ARC and Hugging Face leaderboards in early 2024.
+    assessment_notes: |
+      Excellent reliability for open deployments; minor reproducibility tradeoffs.
+  safe:
+    safety_measures: |
+      Dataset filtering, safety fine-tuning, and moderation via SFT alignment.  
+      No RLHF; safety tuned manually through synthetic alignment data.
+    known_safety_issues: |
+      May output biased or inappropriate content under adversarial prompting.
+    assessment_notes: |
+      Safe when deployed with external moderation.
+  secure_and_resilient:
+    security_features: |
+      Open weights; relies on deployment security and sandboxing.  
+      Router architecture offers some resilience to adversarial token sequences.
+    known_vulnerabilities: |
+      Standard prompt injection and output poisoning vulnerabilities.  
+    assessment_notes: |
+      Secure within managed environments; risks comparable to other open LLMs.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Full weights, training configuration, and tokenizer publicly released.  
+      Router mechanics documented in whitepaper.
+    assessment_notes: |
+      High transparency and reproducibility for an MoE model.
+  explainable_and_interpretable:
+    explainability_features: |
+      Expert routing logs available for interpretability; supports per-expert attention visualization.  
+    interpretability_limitations: |
+      Internal routing dynamics probabilistic and not easily interpretable.  
+    assessment_notes: |
+      Partial explainability; router trace data valuable for governance.
+  privacy_enhanced:
+    privacy_features: |
+      Public-domain data and open governance model; no data retention.  
+    privacy_concerns: |
+      Upstream PII in web data possible; downstream filtering recommended.
+    assessment_notes: |
+      Meets open-weight privacy baselines.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Multilingual corpus balancing and fairness filtering per expert domain.  
+    known_biases: |
+      Mild English-language dominance; low-resource languages underperform.  
+    assessment_notes: |
+      Fairness acceptable for global deployments with language coverage consideration.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Accuracy benchmarking across reasoning and code datasets  
+    - Reproducibility testing for routing nondeterminism  
+    - Bias and fairness audits across language pairs  
+    - Hallucination frequency and long-context stability tests
+  key_evaluation_questions: |
+    - Does routing nondeterminism impact your reproducibility requirements?  
+    - Are safety filters or external moderation in place?  
+    - Is infrastructure optimized for parallel MoE inference?
+  comparison_considerations: |
+    - Outperforms Mistral 7B and Falcon 40B in reasoning;  
+      rivals LLaMA 3 8B and Gemma 2 9B in quality at far lower compute.  
+      Most efficient open-weight model available as of early 2024.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Establish governance for MoE deployment (routing traceability, expert patching).
+  map:
+    context_considerations: |
+      Identify risk of nondeterministic routing in regulated use cases.
+    risk_categories: ["hallucination", "bias", "routing_nondeterminism", "prompt_injection"]
+  measure:
+    suggested_metrics: |
+      Accuracy, routing stability rate, hallucination frequency, latency per 1K tokens.
+  manage:
+    risk_management_considerations: |
+      Log expert routing data; apply external moderation and version control.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://mistral.ai/news/mixtral-of-experts/"
+    description: "Official Mixtral release notes and system card"
+  - url: "https://huggingface.co/mistralai/Mixtral-8x7B"
+    description: "Hugging Face model repository and evaluation results"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "82.5"
+  - name: "GSM8K"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "87.8"
+  third_party_evaluations:
+  - source: "ARC Open LLM Leaderboard (2024)"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    summary: "Top open-weight model by cost-adjusted performance during Q1 2024."
+  news_coverage:
+  - title: "Mistral AI debuts Mixtral 8×7B — open MoE model rivaling GPT-3.5"
+    url: "https://mistral.ai/news/mixtral-of-experts/"
+    date: "2023-12-11"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Mistral AI release documentation, Hugging Face leaderboard data, and independent MoE analysis.
+  completeness_assessment: |
+    High for transparency and benchmarks; medium for detailed routing interpretability.
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from Mixtral release materials and benchmark data."

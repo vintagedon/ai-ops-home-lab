@@ -1,0 +1,258 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Yi Lightning 70B"
+  vendor: "01.AI"
+  model_family: "Yi Lightning"
+  version: "70B"
+  release_date: "2025-07-09"
+  model_type: "Flagship Bilingual Enterprise Reasoning Model (fp8 Optimized)"
+  vendor_model_card_url: "https://huggingface.co/01-ai/Yi-Lightning-70B"
+  license: "Apache 2.0"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Dense Transformer (fp8 mixed-precision large model)"
+    parameter_count: "70 billion"
+    context_window: "64 K tokens"
+    training_data_cutoff: "2025-05"
+    architectural_details: |
+      Yi Lightning 70B is 01.AI’s flagship enterprise-scale bilingual reasoning model.
+      It integrates FP8 mixed-precision arithmetic, tensor fusion, and dual attention scaling 
+      for high-speed long-context reasoning and summarization.  
+      Designed as a drop-in replacement for Yi 1.5 70B, with quantization-aware efficiency 
+      and enterprise observability built in.  
+      Context streaming, retrieval augmentation, and precision gating allow it to serve as 
+      a high-efficiency model for regulated or on-premise deployments.
+
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "Very High (fp8 and INT4 inference)"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ~0.07 s per 1K tokens (fp8 on 8×H100); ~0.04 s per 1K tokens (INT4).  
+      Achieves 3.2× throughput improvement over Yi 1.5 70B with <2% reasoning delta.  
+    throughput: |
+      Supports 64K streaming context, distributed parallel inference, and enterprise RAG optimization.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • Frontier-tier bilingual reasoning at optimized compute cost.  
+    • FP8 mixed-precision and quantization-aware alignment for performance efficiency.  
+    • Fully auditable enterprise deployment model for research and private cloud.  
+  benchmark_performance: |
+    - MMLU (EN): 82.4  
+    - C-Eval (ZH): 86.1  
+    - GSM8K: 84.3  
+    - ARC-C: 78.9  
+    - TruthfulQA: 70.2  
+    (01.AI internal + Hugging Face Leaderboard, Jul 2025)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: very_strong
+    image_generation: false
+    additional_capabilities: ["enterprise_RAG", "document_reasoning", "translation", "summarization"]
+  known_limitations:
+    vendor_disclosed: |
+      Requires multi-GPU infrastructure; minimal performance on sub-48GB cards.  
+      English–Mandarin bias persists under long-context retrieval tasks.  
+    common_failure_modes: |
+      Overcompression of stylistic nuance during summarization.  
+    unsuitable_use_cases: |
+      Low-end edge inference or creative text generation.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on ≈7.5T bilingual and multilingual tokens emphasizing factual QA, summarization, 
+    and document reasoning.  
+    Data sourced from bilingual encyclopedias, code-mixed corpora, scientific text, and enterprise documentation.  
+    Licensed and filtered under 01.AI’s governance pipeline.
+  training_methodology: |
+    1. Bilingual pretraining from Yi 1.5 70B foundation.  
+    2. Quantization-aware fine-tuning (fp8-aware scaling).  
+    3. DPO alignment for factuality and refusal calibration.  
+    4. Enterprise observability and telemetry-free optimization via precision gates.  
+  data_privacy_considerations: |
+    Datasets fully de-identified; model designed for isolated enterprise deployment.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Enterprise reasoning, summarization, and knowledge retrieval in bilingual environments.  
+    Ideal for research institutions, RAG systems, and AI copilots.  
+  suitable_domains: ["enterprise_AI", "translation", "education", "RAG_systems", "research"]
+  out_of_scope_use: |
+    Creative writing, public chatbots, or unsupervised decision-making systems.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      >98% reasoning parity with baseline Yi 1.5 70B and 3× efficiency improvement.  
+    public_evidence: |
+      Verified on Hugging Face leaderboards and 01.AI’s enterprise validation suite.  
+    assessment_notes: |
+      Highly reliable model for enterprise-scale bilingual reasoning.
+  safe:
+    safety_measures: |
+      Bilingual DPO safety tuning and policy-conditioned refusal layer.  
+    known_safety_issues: |
+      Slight over-refusal bias under multilingual ambiguity.  
+    assessment_notes: |
+      Safe for corporate, research, and educational deployments.
+  secure_and_resilient:
+    security_features: |
+      Signed weight release, telemetry-disabled builds, FP8 quantization integrity checks.  
+    known_vulnerabilities: |
+      Minor prompt-injection susceptibility in long RAG chains.  
+    assessment_notes: |
+      Enterprise-secure when deployed within controlled architecture.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Training pipeline, evaluation datasets, and fp8 calibration code released publicly.  
+    assessment_notes: |
+      Fully compliant with open-model transparency standards.
+  explainable_and_interpretable:
+    explainability_features: |
+      Context-layer visualization, activation saliency mapping, and bilingual reasoning traces.  
+    interpretability_limitations: |
+      Reduced neuron-level precision traceability under fp8 compression.  
+    assessment_notes: |
+      Strong explainability at system-level interpretability tier.
+  privacy_enhanced:
+    privacy_features: |
+      Dataset PII scrubbed; model supports fully offline inference with no telemetry.  
+    privacy_concerns: |
+      None known.  
+    assessment_notes: |
+      Meets stringent enterprise privacy controls.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Cross-lingual corpus balancing, fairness calibration, and tone-neutral instruction data.  
+    known_biases: |
+      Minor cultural tone asymmetry (Mandarin–English politeness shifts).  
+    assessment_notes: |
+      Bias-managed for bilingual contexts; acceptable for enterprise governance.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • Reasoning accuracy across bilingual and long-context QA benchmarks.  
+    • Quantization fidelity under fp8 and INT4.  
+    • Bias and fairness audits across cross-cultural datasets.  
+    • Latency, throughput, and scaling validation in multi-GPU configurations.  
+  key_evaluation_questions: |
+    – Is factual reasoning parity preserved under fp8 compression?  
+    – Does bilingual alignment remain stable under 64K context?  
+    – Are refusal and safety filters consistent across language domains?  
+  comparison_considerations: |
+    Outperforms Falcon 180B, Yi 1.5 34B, and Mistral Large v2 in bilingual factual QA.  
+    Trails GPT-5 and Gemini 1.5 Pro in knowledge coverage.  
+    Most efficient open 70B bilingual reasoning model to date.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Document fp8 optimization governance and bias audits per NIST AI RMF "Govern."  
+  map:
+    context_considerations: |
+      Quantization drift, bilingual bias, hallucination under compression.  
+    risk_categories: ["bias", "hallucination", "quantization_drift", "alignment_drift"]
+  measure:
+    suggested_metrics: |
+      Accuracy parity, bilingual bias index, quantization fidelity, latency cost-per-token.  
+  manage:
+    risk_management_considerations: |
+      Continuous evaluation under fp8 drift and fairness thresholds for enterprise certification.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/01-ai/Yi-Lightning-70B"
+    description: "Official Yi Lightning 70B model card"
+  - url: "https://01.ai/news/yi-lightning70b-release"
+    description: "01.AI release and benchmark announcement"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "82.4"
+  - name: "C-Eval"
+    url: "https://cevalbenchmark.com/"
+    result: "86.1"
+  third_party_evaluations:
+  - source: "Hugging Face Open LLM Leaderboard (2025)"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    summary: "Yi Lightning 70B benchmarked as top open bilingual enterprise model."
+  news_coverage:
+  - title: "01.AI launches Yi Lightning 70B — flagship bilingual model with fp8 acceleration"
+    url: "https://01.ai/news/yi-lightning70b-release"
+    date: "2025-07-09"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    01.AI technical documentation, Hugging Face leaderboards, and third-party benchmark evaluations.  
+  completeness_assessment: |
+    Very high for transparency and technical efficiency documentation; moderate for cross-domain fairness.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from Yi Lightning 70B release and benchmark documentation."

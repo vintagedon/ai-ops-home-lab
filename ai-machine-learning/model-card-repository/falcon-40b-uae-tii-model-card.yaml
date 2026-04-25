@@ -1,0 +1,249 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Falcon 40B Instruct"
+  vendor: "Technology Innovation Institute (TII, UAE)"
+  model_family: "Falcon"
+  version: "40B Instruct"
+  release_date: "2023-06-13"
+  model_type: "Open-Weight Instruction-Tuned Language Model"
+  vendor_model_card_url: "https://huggingface.co/tiiuae/falcon-40b-instruct"
+  license: "Falcon License (Permissive Research + Commercial)"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Dense Transformer (decoder-only)"
+    parameter_count: "40 billion"
+    context_window: "8 K tokens"
+    training_data_cutoff: "2023-05"
+    architectural_details: |
+      Falcon 40B Instruct is an instruction-tuned variant of Falcon 40B,
+      a dense transformer optimized for text generation, summarization, and reasoning.
+      It employs rotary positional embeddings (RoPE), multi-query attention (MQA),
+      and FlashAttention kernels for efficiency.
+      Fine-tuned on conversational and instruction datasets to improve coherence and helpfulness.
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "High"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ~0.3–0.4 s per 1 K tokens (fp16 on A100);  
+      fully deployable on 1 × 24 GB GPU in quantized form (4-bit GPTQ).
+    throughput: |
+      Excellent efficiency for local chatbots, enterprise assistants, and research pipelines.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • High-quality reasoning and summarization for an open 40B model.  
+    • Tuned for instruction following and helpful conversational tone.  
+    • Outperforms LLaMA 2 30B and MPT 30B on general benchmarks.  
+  benchmark_performance: |
+    - MMLU: 63.9  
+    - GSM8K: 71.8  
+    - ARC-C: 70.4  
+    - HellaSwag: 75.2  
+    (TII and Hugging Face benchmarks, Q3 2023)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["instruction_following", "summarization", "chatbots", "RAG_ready"]
+  known_limitations:
+    vendor_disclosed: |
+      Limited factual grounding and context retention beyond 8 K tokens.  
+      Alignment and safety coverage below modern 2024–2025 standards.  
+    common_failure_modes: |
+      Verbose or repetitive answers under open-ended prompts.  
+    unsuitable_use_cases: |
+      Safety-critical or regulated domains without moderation.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Pretrained on 1 trillion tokens from RefinedWeb dataset and filtered multilingual corpora.  
+    Fine-tuned on conversational and instruction datasets (OpenAssistant, Dolly, Self-Instruct).  
+  training_methodology: |
+    Supervised fine-tuning on curated instruction pairs and chat transcripts.  
+    Reinforcement Learning from AI Feedback (RLAIF) applied for tone and safety.
+  data_privacy_considerations: |
+    Public and licensed data only; no private user data included.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Open chatbots, summarization, RAG systems, and research on instruction tuning.  
+    Designed for academic, educational, and enterprise experimentation.
+  suitable_domains: ["education", "research", "chatbots", "documentation_assistants"]
+  out_of_scope_use: |
+    Autonomous systems, content moderation, or compliance-sensitive deployments.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Stable and reproducible instruction-following performance.  
+    public_evidence: |
+      Verified through Hugging Face Open LLM Leaderboard; widely adopted for fine-tuning baselines.  
+    assessment_notes: |
+      Reliable for instruction-following tasks within 8K context.
+  safe:
+    safety_measures: |
+      Safety filters and refusal tuning included in instruction data.  
+    known_safety_issues: |
+      May generate unsafe or biased text if unmoderated.  
+    assessment_notes: |
+      Suitable for research with external moderation.
+  secure_and_resilient:
+    security_features: |
+      Open weights, reproducible hashes, and offline inference supported.  
+    known_vulnerabilities: |
+      Typical prompt-injection and data-poisoning risks.  
+    assessment_notes: |
+      Secure in private inference environments.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Weights and tokenizer public; training methodology summarized in Falcon system card.  
+    assessment_notes: |
+      High transparency; reproducible training environment.
+  explainable_and_interpretable:
+    explainability_features: |
+      Fully compatible with interpretability toolkits and activation probes.  
+    interpretability_limitations: |
+      No native reasoning trace output.  
+    assessment_notes: |
+      Ideal for interpretability and fine-tuning research.
+  privacy_enhanced:
+    privacy_features: |
+      Dataset filtered for PII; no inference logging.  
+    privacy_concerns: |
+      Minimal residual exposure from web text.  
+    assessment_notes: |
+      Meets open-model privacy standards.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Bias and toxicity reduction applied during instruction tuning.  
+    known_biases: |
+      Mild Western English-language bias; neutral style prioritization may reduce expressiveness.  
+    assessment_notes: |
+      Acceptable for general-purpose and research use.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • Instruction-following accuracy (MT-Bench, AlpacaEval).  
+    • Bias and toxicity audits.  
+    • Latency and quantization benchmarks for deployment.  
+    • Reasoning and summarization under long-context workloads.
+  key_evaluation_questions: |
+    – Does 8K context meet your operational needs?  
+    – Are moderation and safety layers configured?  
+    – Is quantization acceptable for performance trade-offs?
+  comparison_considerations: |
+    Outperforms MPT 30B and LLaMA 2 30B;  
+    trails Claude 3 Haiku and Gemma 2 9B in reasoning;  
+    best open 40B-class instruct model as of 2023.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Document governance of open-weight usage and moderation policy for fine-tuned variants.  
+  map:
+    context_considerations: |
+      Identify hallucination, bias, and safety alignment risks for deployment.  
+    risk_categories: ["hallucination", "bias", "prompt_injection", "safety_alignment"]
+  measure:
+    suggested_metrics: |
+      Instruction accuracy, bias index, toxicity rate, latency.  
+  manage:
+    risk_management_considerations: |
+      Apply prompt filtering, moderation, and regular model audits.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/tiiuae/falcon-40b-instruct"
+    description: "Official Falcon 40B Instruct model card"
+  - url: "https://falconllm.tii.ae/"
+    description: "Falcon LLM homepage and documentation"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "63.9"
+  - name: "GSM8K"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "71.8"
+  third_party_evaluations:
+  - source: "Hugging Face Open LLM Leaderboard (2023)"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    summary: "Falcon 40B Instruct achieved top-tier results in its parameter class."
+  news_coverage:
+  - title: "TII releases Falcon 40B Instruct — open LLM for research and enterprise"
+    url: "https://www.tii.ae/news/falcon-40b-launch"
+    date: "2023-06-13"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Falcon 40B documentation, Hugging Face leaderboard, and community evaluations.  
+  completeness_assessment: |
+    High for transparency and open-weight validation; medium for safety analysis depth.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from Falcon 40B Instruct release and benchmark data."

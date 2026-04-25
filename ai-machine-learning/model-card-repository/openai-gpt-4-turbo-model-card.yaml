@@ -1,0 +1,242 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "GPT-4 Turbo"
+  vendor: "OpenAI"
+  model_family: "GPT-4"
+  version: "Turbo (gpt-4-turbo-2024-04-09)"
+  release_date: "2024-04-09"
+  model_type: "Large Multimodal Transformer"
+  vendor_model_card_url: "https://openai.com/index/gpt-4-turbo-and-gpt-4-turbo-preview/"
+  license: "Commercial API (Proprietary)"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer (multimodal, proprietary variant)"
+    parameter_count: "Not publicly disclosed"
+    context_window: "128 K tokens"
+    training_data_cutoff: "2023-12"
+    architectural_details: |
+      GPT-4 Turbo is a cost-optimized and latency-improved derivative of GPT-4.
+      It retains multimodal capabilities (text + image input) and tool-use APIs.
+      Runs on OpenAI’s custom inference stack; architecture and training scale remain undisclosed.
+  modalities:
+    supported_inputs: ["text", "image"]
+    supported_outputs: ["text", "structured_data"]
+  performance_characteristics:
+    speed_tier: "High"
+    cost_tier: "Medium"
+    latency: |
+      ~2× faster than GPT-4 API baseline at half the price per token.
+    throughput: |
+      Tuned for parallel multi-request workloads and batch prompting.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    Multimodal reasoning; strong code generation; broad factual coverage up to Dec 2023.
+    Designed for production AI assistants and developer integrations with tool calling and system messages.
+  benchmark_performance: |
+    - MMLU ≈ 86.5  
+    - HumanEval ≈ 82.0  
+    - GSM8K ≈ 90.2  
+    (OpenAI system card + community benchmarks)
+  special_capabilities:
+    tools_support: true
+    vision_support: true
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["function_calling", "JSON_mode", "file_upload", "long_context"]
+  known_limitations:
+    vendor_disclosed: |
+      May hallucinate factual data beyond 2023 cutoff; limited numerical precision;
+      image-understanding errors possible for dense charts or handwriting.
+    common_failure_modes: |
+      Overconfidence in fabricated citations; context dilution near 128 K boundary.
+    unsuitable_use_cases: |
+      Safety-critical or regulated decisions without human oversight; reliance on post-2024 events.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Mixture of licensed, publicly available, and synthetic data across text, code, and images.
+    Proprietary preprocessing and filtering pipeline; dataset composition not public.
+  training_methodology: |
+    Reinforcement Learning from Human Feedback (RLHF) and large-scale preference optimization.
+    Separate visual encoder trained for image understanding.
+  data_privacy_considerations: |
+    Customer data not used for training by default; API governed by OpenAI enterprise privacy policies.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    General-purpose assistant for text and image understanding, coding, and document analysis.
+  suitable_domains: ["general_purpose", "code_generation", "analysis", "creative_writing", "education"]
+  out_of_scope_use: |
+    Safety-critical applications; automated legal, medical, or financial decisions.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      More accurate and cheaper than GPT-4; improved grounding and factuality.
+    public_evidence: |
+      Benchmarks confirm incremental accuracy gains and major cost reduction.
+    assessment_notes: |
+      High reliability for mainstream NLP tasks; long-context consistency moderate.
+  safe:
+    safety_measures: |
+      RLHF alignment, content filtering, and red-team evaluations.
+    known_safety_issues: |
+      Persistent hallucination and bias under adversarial prompts.
+    assessment_notes: |
+      Sufficient for enterprise with moderation API in place.
+  secure_and_resilient:
+    security_features: |
+      API-level sandboxing, input/output monitoring, and isolation within OpenAI infrastructure.
+    known_vulnerabilities: |
+      Prompt-injection risk and tool-use misuse if developer controls lax.
+    assessment_notes: |
+      Strong cloud-native security; external integrations must harden inputs.
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Public system card and safety documentation; no open weights or data provenance.
+    assessment_notes: |
+      Adequate for commercial audit; limited research transparency.
+  explainable_and_interpretable:
+    explainability_features: |
+      Supports deterministic JSON-mode outputs; reasoning effort indirectly tunable via temperature.
+    interpretability_limitations: |
+      Internal chain-of-thought not exposed; latent reasoning opaque.
+    assessment_notes: |
+      Operationally explainable, mechanistically opaque.
+  privacy_enhanced:
+    privacy_features: |
+      Enterprise data isolation and retention controls; SOC 2-compliant environment.
+    privacy_concerns: |
+      Dataset provenance and filtering undisclosed.
+    assessment_notes: |
+      Meets enterprise privacy expectations.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Bias-auditing and mitigation integrated in RLHF loop.
+    known_biases: |
+      Residual demographic and cultural bias; tone bias in creative writing tasks.
+    assessment_notes: |
+      Acceptable for general deployment; monitor for context-specific bias.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Factual accuracy and hallucination audit  
+    - Long-context retrieval reliability  
+    - Bias evaluation on domain data  
+    - Cost / latency profiling at target load
+  key_evaluation_questions: |
+    - Is 128 K context sufficient for your workload?  
+    - Do API moderation layers satisfy compliance?  
+    - Are hallucination rates acceptable?
+  comparison_considerations: |
+    - Faster and cheaper than GPT-4; reasoning shallower than GPT-5 or Claude 4 Opus; 
+      comparable multimodal performance to Gemini 1.5 Pro.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Require policy for API key use, data logging, and tool-access governance.
+  map:
+    context_considerations: |
+      Evaluate data sensitivity and long-context fidelity requirements.
+    risk_categories: ["hallucination", "bias", "privacy_leakage", "prompt_injection"]
+  measure:
+    suggested_metrics: |
+      Factuality rate; latency; moderation-trigger frequency; cost per request.
+  manage:
+    risk_management_considerations: |
+      Use moderation API; apply retrieval grounding for factual workflows; review tool-use permissions.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://openai.com/index/gpt-4-turbo-and-gpt-4-turbo-preview/"
+    description: "Official GPT-4 Turbo release overview"
+  - url: "https://cdn.openai.com/system-cards/gpt-4-turbo.pdf"
+    description: "System card (safety, benchmarks, limitations)"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://cdn.openai.com/system-cards/gpt-4-turbo.pdf"
+    result: "86.5"
+  - name: "GSM8K"
+    url: "https://cdn.openai.com/system-cards/gpt-4-turbo.pdf"
+    result: "90.2"
+  third_party_evaluations:
+  - source: "Independent community benchmarks (2024)"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    summary: "Confirms accuracy parity with GPT-4 at lower latency and cost."
+  news_coverage:
+  - title: "OpenAI introduces GPT-4 Turbo with 128 K context"
+    url: "https://openai.com/index/gpt-4-turbo-and-gpt-4-turbo-preview/"
+    date: "2024-04-09"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    OpenAI GPT-4 Turbo release and system card, community benchmark data.
+  completeness_assessment: |
+    High for performance and usage details; medium for architectural transparency.
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card based on OpenAI GPT-4 Turbo documentation."

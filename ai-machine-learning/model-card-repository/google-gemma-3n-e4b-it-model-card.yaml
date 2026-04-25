@@ -1,0 +1,182 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Gemma 3n E4B-IT"
+  vendor: "Google"
+  model_family: "Gemma 3n"
+  version: "E4B-IT"
+  release_date: "2025"
+  model_type: "Open-Weight Multimodal Model (Instruction-Tuned)"
+  vendor_model_card_url: "https://huggingface.co/google/gemma-3n-E4B-it"
+  license: "Gemma Terms of Use"
+  deprecation_status: "Active"
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "MatFormer with selective parameter activation"
+    parameter_count: "~8B total parameters; ~4B effective parameters"
+    context_window: "32,768 tokens"
+    training_data_cutoff: "2024-06"
+    architectural_details: |
+      Uses a MatFormer architecture that allows nesting sub-models (like E2B). Selective parameter activation allows it to run with a memory footprint comparable to a 4B model by offloading low-utilization matrices. [23]
+  modalities:
+    supported_inputs:
+    - "text"
+    - "image"
+    - "audio"
+    - "video"
+    supported_outputs:
+    - "text"
+  performance_characteristics:
+    speed_tier: "Optimized for low-resource devices"
+    cost_tier: "N/A (Open-weight)"
+    latency: "Dependent on deployment hardware."
+    throughput: "Dependent on deployment hardware."
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    A larger, more capable version of the Gemma 3n model, designed for efficient execution on low-resource devices while offering stronger performance than the E2B variant. [23]
+  benchmark_performance: |
+    - MGSM: 60.7
+    - WMT24++ (ChrF): 50.1
+    - MMLU: 64.9
+    - HumanEval: 75.0
+    - Full benchmark table available in the model card, showing consistent improvements over E2B. [23]
+  special_capabilities:
+    tools_support: false
+    vision_support: true
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities:
+    - "multilingual_support"
+    - "multimodal_understanding"
+  known_limitations:
+    vendor_disclosed: |
+      Models may struggle with subtle nuances, sarcasm, or figurative language. They are not knowledge bases and may generate incorrect or outdated factual statements. May lack common sense reasoning in certain situations. [23]
+    common_failure_modes: |
+      Performance can be influenced by the amount of context provided and the clarity of prompts. Open-ended or highly complex tasks might be challenging. [23]
+    unsuitable_use_cases: |
+      Any use that violates the Gemma Prohibited Use Policy. High-stakes decision-making without human oversight.
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on a dataset of approximately 11 trillion tokens, including web documents in over 140 languages, code, mathematics, images, and audio. [24]
+  training_methodology: |
+    Trained using JAX and ML Pathways on Google TPU hardware (TPUv4p, TPUv5p, TPUv5e). [23]
+  data_privacy_considerations: |
+    Training data underwent filtering for CSAM and certain personal information. [23]
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Content creation (text, code), chatbots, text summarization, image/audio data extraction, and research in NLP and generative models. [24]
+  suitable_domains:
+  - "content_creation"
+  - "conversational_ai"
+  - "research_and_education"
+  - "language_learning_tools"
+  out_of_scope_use: |
+    Generation of false, misleading, or harmful content. Prohibited uses are outlined in the license.
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Provides high-performance open generative model implementations designed for responsible AI development. [23]
+    public_evidence: |
+      Extensive benchmark results are published on the model card, demonstrating superior performance to the E2B variant. [23]
+    assessment_notes: |
+      Strong performance for its size class. Requires in-domain validation by the deployer.
+  safe:
+    safety_measures: |
+      Model underwent structured safety evaluations and internal red-teaming. Guidelines are provided in the Responsible Generative AI Toolkit. [23]
+    known_safety_issues: |
+      Generative models can reflect socio-cultural biases from training data. Can be misused to generate harmful content. [23]
+    assessment_notes: |
+      Deployers are responsible for implementing appropriate content safety safeguards.
+  secure_and_resilient:
+    security_features: |
+      Open-weight nature allows for local deployment, giving the deployer full control over the security environment.
+    known_vulnerabilities: |
+      Standard LLM vulnerabilities.
+    assessment_notes: |
+      Security is the responsibility of the deploying organization.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Model weights are open. Model card summarizes architecture, training data, and evaluations.
+    assessment_notes: |
+      High degree of transparency compared to proprietary models.
+  explainable_and_interpretable:
+    explainability_features: |
+      Open weights allow for research into model internals and interpretability.
+    interpretability_limitations: |
+      Full mechanistic interpretability is an open research problem.
+    assessment_notes: |
+      Offers the potential for deep analysis by researchers.
+  privacy_enhanced:
+    privacy_features: |
+      Local deployment capability supports data residency and privacy-sensitive use cases.
+    privacy_concerns: |
+      Training data was filtered, but may still contain residual personal information.
+    assessment_notes: |
+      Suitable for processing sensitive data when deployed in a secure, isolated environment.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Model underwent safety evaluations for representational harms. Continuous monitoring and de-biasing techniques are encouraged. [23]
+    known_biases: |
+      May reflect socio-cultural biases embedded in the training material.
+    assessment_notes: |
+      Deployers must perform bias audits relative to their specific audience and use case.
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Performance and latency testing on target low-resource hardware.
+    - Multimodal understanding tests using domain-specific images and audio.
+    - Bias and fairness testing for target languages and demographics.
+  key_evaluation_questions: |
+    - Does the performance gain of E4B over E2B justify the increased resource requirements for our application?
+    - Are the multimodal capabilities sufficient for our intended use case?
+  comparison_considerations: |
+    Compare against other open-weight models in the ~4B parameter class on performance, resource consumption, and multimodal capabilities.
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/google/gemma-3n-E4B-it"
+    description: "Hugging Face Model Card for Gemma 3n E4B-IT"
+  - url: "https://ai.google.dev/gemma/docs/gemma-3n"
+    description: "Official Gemma 3n Model Overview"

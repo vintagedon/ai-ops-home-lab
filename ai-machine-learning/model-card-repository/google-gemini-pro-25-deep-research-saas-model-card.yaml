@@ -1,0 +1,250 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+card_type: hybrid-service-model-card
+title: "Gemini Deep Research — Hybrid Model Card"
+version: "1.0.0"
+phase: "1.0"
+status: "active"
+author: "NIST AI RMF Cookbook Team"
+repository: "https://github.com/vintagedon/nist-ai-rmf-cookbook"
+related_artifacts:
+  underlying_model_card: "./google-gemini-25-pro-model-card.yaml"
+  supplemental_docs:
+  - "NSB_Methodology_v0_2.md"
+  - "../work-logs/worklog-deep-research-deployment.md"
+governance_function: "GOVERN"
+review_cadence: "quarterly"
+last_reviewed: "2025-10-26"
+next_review_due: "2026-01-26"
+owners:
+  responsible:
+    handle: "VintageDon"
+    role: "Platform Administrator"
+  governing:
+    name: "AI Review Board"
+    role: "Governing Body"
+  accountable:
+    name: "RadioAstronomy.io Operations"
+    role: "Accountable Org Unit"
+
+object_under_governance:
+  service_name: "Gemini Deep Research"
+  provider: "Google DeepMind"
+  deployment_type: "SaaS (managed, agentic research service)"
+  tenant_boundary: "Google Workspace Business (SSO-enforced)"
+  underlying_models:
+  - name: "Gemini 2.5 Pro"
+    reference: "./google-gemini-25-pro-model-card.yaml"
+  - name: "Gemini 2.0 Flash Thinking Experimental"
+    notes: "Used for expanded access and enhanced reasoning"
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  summary: >
+    Use of Gemini Deep Research for policy intelligence gathering, compliance  research, technical implementation guidance, and strategic analysis within  astronomy-cluster operations, optimized via Negative Space Bounding (NSB)  methodology for high-signal research convergence.
+  in_scope:
+  - Multi-jurisdictional AI policy intelligence and weekly briefings
+  - Compliance framework research and gap analysis
+  - Technical implementation guidance discovery
+  - Strategic planning research with bounded scope
+  - Multi-framework alignment research (NIST, CIS, ISO, Colorado SB24-205)
+  - Vendor technology evaluation and competitive analysis
+  out_of_scope:
+  - Real-time operational decisions without human review
+  - Processing of CUI/ITAR/export-controlled content
+  - Autonomous system configuration or deployment
+  - Handling PII/PHI or regulated financial data
+  - Production system changes without approval workflow
+  notes: "Scope and configuration reviewed quarterly; methodology refinements ongoing."
+
+service_configuration:
+  access_controls:
+    sso: true
+    mfa: "enforced"
+    workspace_integration: true
+  agentic_architecture:
+    planning_system:
+      status: "enabled"
+      description: "Multi-step research plan generation with user refinement"
+    autonomous_search:
+      status: "enabled"
+      constraints: "Bounded by user-defined semantic walls (NSB methodology)"
+    async_execution:
+      status: "enabled"
+      description: "Long-running research tasks (5-10+ minutes) with notification"
+    context_management:
+      window: "1M tokens (Gemini 2.5 Pro)"
+      rag_integration: true
+      description: "Maintains research session continuity for follow-up queries"
+  features_tools:
+    web_search:
+      status: "enabled"
+      scope: "Hundreds of websites per research session"
+    file_uploads:
+      status: "enabled"
+      constraints:
+      - "PDFs and images supported"
+      - "Google Drive document linking"
+      - "Non-sensitive content only"
+    canvas_integration:
+      status: "enabled"
+      capabilities:
+      - "Audio Overview generation"
+      - "Interactive visualizations"
+      - "Custom chart creation"
+      - "Export to Google Docs"
+    thinking_panel:
+      status: "enabled"
+      description: "Real-time visibility into agent reasoning and next steps"
+  usage_limits:
+    tier: "Google Workspace Business / Gemini Advanced"
+    daily_reports: "Higher limits than free tier (exact quota undisclosed)"
+    context_retention: "Per-session; preserved in chat history"
+  change_management:
+    vendor_change_trigger: true
+    internal_review_on_change: true
+    process: "Quarterly review of service updates; NSB methodology adjustments as needed"
+
+deployment_methodology:
+  optimization_framework: "Negative Space Bounding (NSB) v0.2"
+  framework_purpose: >
+    NSB methodology creates a two-stage collapse: (1) semantic boundaries collapse  the information retrieval space during search, (2) retrieved corpus conditions  the generative latent space for synthesis. This enables Deep Research's agentic  planning to converge on high-signal regions while maintaining autonomous discovery  of non-obvious connections.
+  integration_pattern:
+    content_boundaries:
+      description: "Semantic walls that exclude irrelevant knowledge domains"
+      examples:
+      - "NO think pieces without policy substance"
+      - "NO product news unless tied to regulatory response"
+      - "NO international policy without US operational impact"
+    process_boundaries:
+      description: "Constraints on reasoning architecture itself"
+      examples:
+      - "Bound by Recency: No sources before [date] unless essential context"
+      - "Bound by Corroboration: Require 2+ sources for primary findings"
+      - "Bound by Interpretation: No inferred intent without direct evidence"
+    narrative_anchors:
+      description: "Structural elements for long-session coherence"
+      purpose: "Prevent context drift in complex research tasks"
+    replication_prompts:
+      description: "Codified NSB patterns for recurring intelligence"
+      use_case: "Weekly policy briefings with differential analysis"
+  validation_status: "Validated through recurring policy intelligence use case"
+  research_patterns:
+    exploratory: "Initial discovery with loose boundaries"
+    deep_research: "Moderate boundaries balancing focus with discovery"
+    recurring_intelligence: "Tight boundaries with differential analysis"
+
+data_handling_and_security:
+  vendor_commitments:
+    no_training_on_workspace_data: true
+    certifications:
+    - "SOC 2 Type II"
+    - "ISO/IEC 27001"
+    encryption_in_transit: true
+    encryption_at_rest: true
+    regional_data_residency: "Available"
+  organizational_controls:
+    data_minimization: "Non-sensitive, non-regulated content only"
+    retention_policy: "Chat history retained per Workspace settings"
+    audit_evidence:
+    - "Exported reports saved to Google Docs"
+    - "Research prompts and boundaries documented"
+    - "NSB methodology version tracking"
+    output_review: "Human review required before operational use"
+  prohibited_data_classes:
+  - "PII/PHI"
+  - "Customer or government client data"
+  - "Credentials, secrets, API keys"
+  - "CUI/ITAR/EAR or export-controlled material"
+  - "Proprietary source code or trade secrets"
+
+governance_and_accountability:
+  authority_model:
+    responsible: "VintageDon"
+    governing: "AI Review Board"
+    accountable: "RadioAstronomy.io Operations"
+  approvals:
+    required_for:
+    - "Changes to intended use scope"
+    - "Processing of new data categories"
+    - "Methodology framework updates (NSB v0.3+)"
+  documentation_links:
+    methodology:
+    - "NSB_Methodology_v0_2.md"
+    worklogs:
+    - "../work-logs/worklog-deep-research-deployment.md"
+    policies:
+    - "../policies/01-ai-governance-policy.md"
+  review:
+    cadence: "quarterly"
+    early_review_triggers:
+    - "Material vendor service change"
+    - "Proposed scope expansion"
+    - "Security incident or audit finding"
+    - "NSB methodology major version update"
+
+rmf_alignment:
+  coverage: ["GOVERN"]
+  notes: >
+    At Phase 1.0 this card records governance intent, roles, boundaries,  configuration, and deployment methodology. MAP/MEASURE/MANAGE will be  added in later phases when operational metrics and risk management  procedures are formalized.
+
+agentic_capabilities_assessment:
+  planning:
+    description: "Autonomous multi-step research plan generation"
+    human_oversight: "User reviews and refines plan before execution"
+    risk_mitigation: "NSB boundaries constrain planning space"
+  search_autonomy:
+    description: "Iterative web search with self-directed refinement"
+    constraints: "Semantic walls prevent drift into irrelevant domains"
+    discovery_capability: "Can find non-obvious connections within bounds"
+  reasoning:
+    description: "Chain-of-thought processing visible in thinking panel"
+    transparency: "User can observe reasoning steps in real-time"
+    validation: "Corroboration requirements enforce epistemic standards"
+  synthesis:
+    description: "Multi-page report generation with structured findings"
+    coherence: "Narrative anchors maintain thread across long sessions"
+    quality_control: "Human review required before operational use"
+  known_agentic_risks:
+  - "May hallucinate connections between sources"
+  - "Context drift in very long research sessions"
+  - "Over-reliance on initial search results"
+  - "Interpretation bias in synthesis phase"
+  mitigations:
+  - "NSB process boundaries enforce corroboration standards"
+  - "Narrative anchors prevent drift"
+  - "Human review of all outputs"
+  - "Replication prompts maintain consistency"
+
+disclosures:
+  limitations:
+  - "Agentic planning may miss user-obvious research paths"
+  - "Search limited to publicly accessible web content"
+  - "Paywalled academic sources create gaps"
+  - "Async execution prevents real-time guidance"
+  - "NSB methodology requires prompt engineering expertise"
+  assumptions:
+  - "Service features remain as documented unless vendor updates"
+  - "NSB methodology continues to optimize research quality"
+  - "Human review catches synthesis errors and hallucinations"
+  dependencies:
+  - "Availability and terms of Google Workspace / Gemini Advanced"
+  - "Gemini 2.5 Pro model card for underlying model capabilities"
+  - "NSB methodology framework for optimal deployment"
+  - "Web search quality and coverage"
+
+change_log:
+- version: "1.0.0"
+  date: "2025-10-26"
+  author: "NIST AI RMF Cookbook Team"
+  summary: "Initial hybrid service-use card documenting Deep Research deployment with NSB methodology integration."

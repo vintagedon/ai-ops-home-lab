@@ -1,0 +1,193 @@
+C# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+model_identity:
+  name: "VibeVoice"
+  vendor: "Microsoft Research"
+  model_family: "VibeVoice"
+  version: "1.5B (research release)"  # baseline variant as announced
+  release_date: "2025-08-26"  # approximate public announcement date. :contentReference[oaicite:2]{index=2}
+  model_type: "Long-form multi-speaker text-to-speech (TTS) model"
+
+  vendor_model_card_url: "https://microsoft.github.io/VibeVoice/"
+
+  license: "MIT License (open-source research release)" :contentReference[oaicite:3]{index=3}
+  deprecation_status: "Active (research use only)"
+
+technical_specifications:
+  architecture:
+    base_architecture: "Continuous speech-tokenizer (acoustic + semantic) + next-token diffusion head + LLM backbone" :contentReference[oaicite:4]{index=4}
+    parameter_count: "≈ 1.5 billion parameters (for baseline)". :contentReference[oaicite:5]{index=5}
+    context_window: "Supports generation up to ~90 minutes of continuous audio" :contentReference[oaicite:6]{index=6}
+    training_data_cutoff: "Not publicly disclosed"
+
+    architectural_details: |
+      - Uses ultra-low frame-rate tokenization at 7.5 Hz to compress long audio sequences without quality loss. :contentReference[oaicite:7]{index=7}
+      - Multi-speaker support (up to 4 distinct speakers) with turn-taking and voice consistency in long-form dialogues. :contentReference[oaicite:8]{index=8}
+      - Handles cross-lingual (English & Chinese) generation, conversational format, and extended generation lengths. :contentReference[oaicite:9]{index=9}
+
+  modalities:
+    supported_inputs: ["text (script with speaker labels)"]
+    supported_outputs: ["audio (speech waveform)"]
+
+  performance_characteristics:
+    speed_tier: "High-compute for long-form TTS, research prototype"
+    cost_tier: "Premium resource requirement (GPU/VRAM) for full long-form generation"
+    latency: "Not publicly specified"
+    throughput: "Not publicly specified"
+
+capabilities:
+  vendor_claimed_strengths: |
+    - Ability to generate up to 90 minutes of continuous speech with four distinct voices while maintaining voice consistency and conversational flow. :contentReference[oaicite:10]{index=10}
+    - Multi-speaker dialogues (podcast style), natural prosody including breathing, pauses, voice turns. :contentReference[oaicite:11]{index=11}
+    - Cross-lingual support (English & Chinese) and conversation style rather than single-speaker narration. :contentReference[oaicite:12]{index=12}
+  benchmark_performance: |
+    Public benchmark numbers are limited; research release emphasises new ability (long-form + multi-speaker) more than standard metrics.
+  special_capabilities:
+    tools_support: false
+    vision_support: false
+    reasoning_support: false
+    image_generation: false
+    additional_capabilities: ["long-form TTS", "multi-speaker conversational audio", "cross-lingual voice generation"]
+  known_limitations:
+    vendor_disclosed: |
+      - Research release; “We do not recommend using VibeVoice in commercial or real-world applications without further testing and development.” :contentReference[oaicite:13]{index=13}
+      - Currently supports only English and Chinese (other languages may degrade). :contentReference[oaicite:14]{index=14}
+    common_failure_modes: |
+      - Quality drift or voice inconsistency in extremely long dialogues beyond tested ranges or untested speaker setups.
+      - Overlapping speech and non-speech audio (music, sound effects) not handled or supported. :contentReference[oaicite:15]{index=15}
+    unsuitable_use_cases: |
+      - High-stakes audio production without human oversight, voice cloning of individuals without consent, regulated domains requiring certification.
+
+training_information:
+  training_data_description: |
+    Not fully disclosed; model released as open-source research framework focusing on long-form multi-speaker TTS.
+  training_methodology: |
+    Leverages continuous latent tokenization of audio, LLM backbone for context, and diffusion head for waveform generation. :contentReference[oaicite:16]{index=16}
+  data_privacy_considerations: |
+    No detailed public documentation of data sources or filtering; users should conduct their own data-privacy risk assessments.
+
+intended_use:
+  vendor_intended_use: |
+    Research and development of long-form, multi-speaker conversational voice AI; content creation (podcasts, dialogues) in non-critical settings.
+  suitable_domains: ["podcast simulation","multi-voice dialogue generation","storytelling audio production","voice prototyping"]
+  out_of_scope_use: |
+    Production deployment in regulated environments without further validation; voice cloning of real individuals without consent; overlapping-speaker audio plus heavy sound-effect layering.
+
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Clearly described new capabilities (90 min, multi-speaker) and technical innovations; open-source release under MIT. :contentReference[oaicite:17]{index=17}
+    public_evidence: |
+      GitHub and project page available with architectural summary and demo. :contentReference[oaicite:18]{index=18}
+    assessment_notes: |
+      Promising technology for audio-generation use-cases; still requires domain-specific validation for accuracy, consistency, and voice style fidelity.
+  safe:
+    safety_measures: |
+      Microsoft acknowledges risk of misuse (e.g., deepfakes) and restricts commercial use until further testing. :contentReference[oaicite:19]{index=19}
+    known_safety_issues: |
+      Potential for impersonation, disinformation audio, voice-cloning misuse.
+    assessment_notes: |
+      Deploy with strong governance, human oversight, voice-consent workflows, moderation and watermarking.
+  secure_and_resilient:
+    security_features: |
+      Open-source release allows transparency; local deployment possible reducing vendor lock-in.
+    known_vulnerabilities: |
+      Requires high compute; risk of resource exhaustion or misuse if scaled broadly.
+    assessment_notes: |
+      Ensure infrastructure controls, monitoring of output usage, especially long-form audio.
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Code, architecture, demo available; detailed dataset/training logs not publicly disclosed.
+    assessment_notes: |
+      For regulated or high-assurance use, additional documentation or audit may be needed.
+  explainable_and_interpretable:
+    explainability_features: |
+      Model focuses on audio generation; voice output is human-audible and traceable; architecture is summarised.
+    interpretability_limitations: |
+      Internals of diffusion head, speaker embeddings, dataset composition not fully exposed.
+    assessment_notes: |
+      Acceptable for creative voice generation; less suitable for contexts demanding full algorithmic explainability.
+  privacy_enhanced:
+    privacy_features: |
+      Local deployment means data can remain on-premises; no cloud dependency mandatory.
+    privacy_concerns: |
+      Unknown data provenance; voice cloning and speaker impersonation potential.
+    assessment_notes: |
+      If handling personal or biometric voice data, conduct privacy / consent review.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Supports English and Chinese; other languages/effect styles may have lower fidelity; no detailed bias-audit published yet.
+    known_biases: |
+      May under-perform on languages/categories not in training; risk of speaker-style homogenisation or mis-accenting.
+    assessment_notes: |
+      Run fairness/harm audits for speaker demographics, accent groups, language variety prior to deployment.
+
+evaluation_guidance:
+  recommended_tests: |
+    - Generate representative long-form scripts (podcast style, multi-speakers) and evaluate voice consistency, naturalness, listener perception.
+    - Test speaker identity retention across long audio (>30, 60 minutes) and voice switching behaviour.
+    - Test multilingual (English/Chinese) scripts, including cross-lingual mixing if required.
+    - Conduct safety/red-teaming: impersonation risk, adversarial prompt → voice mimicry, inappropriate content generation.
+    - Benchmark resource usage (GPU/VRAM, latency, throughput) for target hardware.
+    - Validate watermarks or traceability of generated audio if deploying.
+  key_evaluation_questions: |
+    - Does the generated audio meet the required perceptual quality and speaker identity consistency across the whole duration?
+    - Is your hardware infrastructure capable of supporting the required compute and memory for long-form generation?
+    - Are governance, human-in-loop review and voice-consent mechanisms in place especially when voices represent individuals?
+    - Are licensing and use-case aligned (since research release, commercial use may require additional validation/licensing)?
+  comparison_considerations: |
+    - Compare with other TTS/voice-synthesis models (e.g., VoiceLoop, Tacotron2/VITS, open-source podcast-TTS models) in terms of voice naturalness, length capability, speaker consistency.
+    - Consider trade-offs of 1.5B parameters vs larger/smaller models for your budget, hardware and intended scale.
+    - Review compute/time cost per minute of audio for your deployment scenario.
+
+rmf_function_mapping:
+  govern:
+    notes: |
+      Implement voice-consent, track model version and usage logs, human-in-loop oversight for generated audio especially multi-speaker.
+  map:
+    context_considerations: |
+      Long-form audio, multi-voice dialogues, podcast generation, cross-lingual speech generation, voice impersonation risk.
+    risk_categories: ["voice_deepfake","misinformation_audio","speaker_identity_misuse","privacy_biometric_leakage"]
+  measure:
+    suggested_metrics: |
+      - Rate of voice consistency/fidelity errors per 1k minutes generated.
+      - Latency / GPU RAM consumption per minute of audio.
+      - Number of unauthorized voice clones/instances per 1000 uses.
+      - Bias/harm incident rate (e.g., accent mis-representation) per 1k uses.
+  manage:
+    risk_management_considerations: |
+      Add moderation pipelines (especially when voices mimic individuals); use disclaimers or watermarks in generated audio; secure voice-data and reference-audio; fallback/human verification for high-risk outputs; monitor use-cases for misuse.
+
+references:
+  vendor_documentation:
+    - url: "https://github.com/microsoft/VibeVoice"
+      description: "GitHub repo for VibeVoice (research release)" :contentReference[oaicite:20]{index=20}
+    - url: "https://microsoft.github.io/VibeVoice/"
+      description: "Project webpage / model card"
+    - url: "https://www.microsoft.com/en-us/research/articles/vibevoice/"
+      description: "Microsoft Research article describing VibeVoice capabilities" :contentReference[oaicite:21]{index=21}
+  benchmarks:
+    - name: "Windows Central article introducing VibeVoice capabilities"
+      url: "https://www.windowscentral.com/artificial-intelligence/microsofts-latest-ai-project-can-generate-a-90-minute-podcast-in-english-or-mandarin-from-nothing-but-text-and-anyone-can-try-it-out"
+      result: "90-minute audio, multi-speaker, English/Chinese" :contentReference[oaicite:22]{index=22}
+  third_party_evaluations:
+    - source: "reddit user commentary on repo changes/misuse"
+      url: "https://www.reddit.com//r/LocalLLaMA/comments/1n9hduk"
+      summary: > “VibeVoice has returned … Microsoft plans to implement censorship due to misuse.” :contentReference[oaicite:23]{index=23}
+
+metadata:
+  card_version: "1.0"
+  card_author: "Don Fountain"
+  card_creation_date: "2025-10-24"
+  last_updated: "2025-10-24"
+  information_sources: |
+    Microsoft Research article, GitHub repo, project webpage, news media coverage, community discussions.
+  completeness_assessment: |
+    Good for architecture, use-case and scale claims; moderate for dataset/training transparency, benchmark numerical detail, and production-deployment metrics; limited for full certification/third-party audit.
+  change_log:
+    - date: "2025-10-24"
+      author: "Don Fountain"
+      changes: "Initial synthesis of VibeVoice model card."
+

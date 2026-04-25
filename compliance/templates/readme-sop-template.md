@@ -3,16 +3,18 @@
 title: "[SOP Title]"
 description: "Brief, actionable description of what this procedure accomplishes and when to execute it"
 author: "VintageDon - https://github.com/vintagedon"
-ai_contributor: "[Full AI Model Name/Version]"
+ai_contributor: "[anthropic/claude-sonnet-4-5-20250929]"
+ai_linter: "[meta-llama/Meta-Llama-3-8B]"
 date: "YYYY-MM-DD"
 version: "X.Y"
 status: "[Draft/In-Review/Published/Archived]"
 tags:
-- type: sop
-- domain: [infrastructure/kubernetes/security/ai-ops/database/etc]
-- tech: [rke2/postgresql/prometheus/ansible/etc]
-- automation: [manual/semi-automated/fully-automated]
-- phase: [phase-0/phase-1/phase-2/phase-3/phase-4]
+- type: [kb-article/asset-sheet/policy/procedure/guide/reference/worklog/research-doc]
+- domain: [infrastructure/astronomy/research/data-science/ai-ml/security/compliance/governance]
+- tech: [proxmox/rke2/postgresql/ray/ollama/grafana/etc]
+- lifecycle: [operational/planning/implementation/decommissioned]
+- cis-control: [cis-01/cis-02/cis-03.../cis-18]
+- project: [proxmox-astronomy-lab]
 related_documents:
 - "[Related SOP 1](path/to/sop.md)"
 - "[Related Policy](../../security/policies/policy-name.md)"

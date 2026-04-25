@@ -1,0 +1,261 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# =============================================================================
+# MODEL IDENTITY
+# =============================================================================
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "The Top Open-Source Text-to-Speech (TTS) Models"
+  vendor: "Modal"
+  model_family: "Modal Blog – Audio Models Landscape"
+  version: "2025-08-06"
+  release_date: "2025-08-06"  # date of publication. # :contentReference[oaicite:1]{index=1}
+  model_type: "Survey / analytical article – open-source TTS model overview"
+
+  vendor_model_card_url: "https://modal.com/blog/open-source-tts"
+
+  license: "CC-BY-4.0 (assumed blog attribution)"
+  deprecation_status: "Active"
+
+# =============================================================================
+# MODEL ARCHITECTURE & TECHNICAL SPECIFICATIONS
+# =============================================================================
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "N/A (this is a blog overview, not a specific model)"
+    parameter_count: "N/A"
+    context_window: "N/A"
+    training_data_cutoff: "N/A"
+
+    architectural_details: |
+      - The article presents a comparative table of several open-source TTS models (name, parameters, creator, release, license). # :contentReference[oaicite:2]{index=2}  
+      - Introduces five key evaluation axes for TTS models: naturalness, voice-cloning, word error rate (WER), latency, parameters. # :contentReference[oaicite:3]{index=3}
+
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["audio (speech)"]
+
+  performance_characteristics:
+    speed_tier: "N/A"
+    cost_tier: "N/A"
+    latency: "N/A"
+    throughput: "N/A"
+
+# =============================================================================
+# CAPABILITIES & LIMITATIONS
+# =============================================================================
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    - Provides a curated overview of top trending open-source TTS models as of mid 2025. # :contentReference[oaicite:4]{index=4}  
+    - Helps developers compare TTS models across multiple key axes (naturalness, voice cloning, WER, latency, parameters). # :contentReference[oaicite:5]{index=5}  
+  benchmark_performance: |
+    Not applicable (not a stand-alone model)  
+  special_capabilities:
+    tools_support: false
+    vision_support: false
+    reasoning_support: true  # article includes reasoning/comparisons  
+    image_generation: false
+    additional_capabilities: ["TTS model landscape overview", "evaluation criteria guidance"]
+  known_limitations:
+    vendor_disclosed: |
+      - The overview covers a selection of trending open-source TTS models on Hugging Face and may not include every relevant model. # :contentReference[oaicite:6]{index=6}  
+      - Does not provide full deep benchmark numbers for every model listed. # :contentReference[oaicite:7]{index=7}  
+    common_failure_modes: |
+      - As a survey article, lacks model-specific detail needed for direct deployment decisions.  
+    unsuitable_use_cases: |
+      - Using the article alone for production readiness of a voice system without further model-specific evaluation.  
+      - Treating it as a TTS model to deploy itself (it is not a model).
+
+# =============================================================================
+# TRAINING & DATA
+# =============================================================================
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Not applicable (the article is not trained)  
+  training_methodology: |
+    N/A  
+  data_privacy_considerations: |
+    N/A  
+
+# =============================================================================
+# INTENDED USE & SCOPE
+# =============================================================================
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Provide engineers and product teams with an up-to-date snapshot of open-source TTS models and guidelines for comparing them. # :contentReference[oaicite:8]{index=8}  
+  suitable_domains: ["model selection", "TTS system planning", "open-source voice synthesis evaluation"]
+  out_of_scope_use: |
+    - Direct audio generation model deployment.  
+    - Production-quality voice synthesis without selecting and evaluating a specific TTS model.  
+    - Treating the article as a drop-in model rather than a guide.
+
+# =============================================================================
+# TRUSTWORTHINESS CHARACTERISTICS
+# =============================================================================
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Article clearly states its methodology and criteria for selection. # :contentReference[oaicite:9]{index=9}  
+    public_evidence: |
+      Article is publicly accessible and dated. # :contentReference[oaicite:10]{index=10}  
+    assessment_notes: |
+      Serves as a good starting point for TTS model comparison, but should not replace detailed model-specific analysis.  
+  safe:
+    safety_measures: |
+      It’s a blog article; no direct generation risk.  
+    known_safety_issues: |
+      None major for consumption as reference.  
+    assessment_notes: |
+      Safe to use for planning and research.  
+  secure_and_resilient:
+    security_features: |
+      No code execution involved in reading the article.  
+    known_vulnerabilities: |
+      None identified.  
+    assessment_notes: |
+      Low risk.  
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Criteria and model list are disclosed.  
+    assessment_notes: |
+      Good for transparency.  
+  explainable_and_interpretable:
+    explainability_features: |
+      The article explains what axes of evaluation it uses and why. # :contentReference[oaicite:11]{index=11}  
+    interpretability_limitations: |
+      Doesn’t go into deep technical internals of each TTS model.  
+    assessment_notes: |
+      Acceptable for high-level planning.  
+  privacy_enhanced:
+    privacy_features: |
+      Not applicable.  
+    privacy_concerns: |
+      None.  
+    assessment_notes: |
+      Not directly relevant for privacy.  
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Provides multiple models and multiple use-cases; however focus appears English-centric.  
+    known_biases: |
+      Likely under-represents non-English TTS or minority voice models. # :contentReference[oaicite:12]{index=12}  
+    assessment_notes: |
+      Teams focusing on non-English/lower-resource languages should supplement this with additional research.
+
+# =============================================================================
+# EVALUATION GUIDANCE
+# =============================================================================
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Use the article to identify candidate TTS models by comparing across the five axes defined (naturalness, voice-cloning, WER, latency, parameters). # :contentReference[oaicite:13]{index=13}  
+    - For each candidate, review the model’s specific documentation, benchmark results, dataset provenance and license.  
+    - Match your performance/language-requirements (real-time vs batch, voice-cloning, multilingual) against model specs.  
+  key_evaluation_questions: |
+    - Which model supports your target language(s) and voice style?  
+    - Will latency/throughput satisfy your application (e.g., interactive vs batch)?  
+    - Can the model’s voice-cloning capability handle your user base or brand voice?  
+    - Are license and compute cost aligned with your deployment constraints?  
+  comparison_considerations: |
+    - Consider trade-offs: larger parameter models may have better naturalness but higher cost and latency. The article highlights that. # :contentReference[oaicite:14]{index=14}  
+    - Recognise that newer or niche models may exist outside the article’s list; use it as starting guide, not exclusive list.  
+    - Align with your voice/region needs: if non-English, verify support separately.
+
+# =============================================================================
+# NIST AI RMF MAPPING
+# =============================================================================
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      When deploying TTS models identified via such an overview, ensure version control of model, audit logs, voice consent for cloning, licensing review, monitoring of usage.  
+  map:
+    context_considerations: |
+      TTS deployment, voice-cloning risk, multilingual audio generation, real/near-real-time voice systems.  
+    risk_categories: ["voice_cloning_misuse", "hallucinated_audio", "latency_failure", "license_violation", "voice_privacy"]
+  measure:
+    suggested_metrics: |
+      - Voice-cloning misuse incidents per 1k generated audio segments.  
+      - Latency over threshold (e.g., > 500 ms start-time) % of requests.  
+      - Re-transcription WER per 1k minutes generated.  
+      - Multi-speaker/voice-switch error rate per 100 dialogues.  
+  manage:
+    risk_management_considerations: |
+      Ensure audio generation consent workflows, version logging of model/voice, monitoring for drift or bias, fallback to human review for high-stakes voice use, compliance with license and regional voice-rights.
+
+# =============================================================================
+# REFERENCES & SOURCES
+# =============================================================================
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://modal.com/blog/open-source-tts"
+    description: "Modal blog article listing top open-source TTS models"
+  third_party_evaluations:
+  - None (article itself is survey)
+
+# =============================================================================
+# METADATA
+# =============================================================================
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "Generated-by-Assistant"
+  card_creation_date: "2025-10-24"
+  last_updated: "2025-10-24"
+  information_sources: |
+    Modal blog article.  
+  completeness_assessment: |
+    Good as a high-level overview of open-source TTS models; not a substitute for detailed evaluation of specific TTS model for production.  
+  change_log:
+  - date: "2025-10-24"
+    author: "Generated-by-Assistant"
+    changes: "Initial synthesis of Modal open-source-TTS article into model-card format."

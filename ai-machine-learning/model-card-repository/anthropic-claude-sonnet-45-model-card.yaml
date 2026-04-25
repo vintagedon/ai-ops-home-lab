@@ -1,0 +1,233 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Claude Sonnet 4.5"
+  vendor: "Anthropic"
+  model_family: "Claude 4.x"
+  version: "4.5"
+  release_date: "2025-09-29"
+  model_type: "Large Multimodal (hybrid reasoning) LLM"
+  vendor_model_card_url: "https://www.anthropic.com/claude-sonnet-4-5-system-card"
+  license: "Commercial API (Proprietary)"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer; hybrid reasoning training"
+    parameter_count: "Not publicly disclosed"
+    context_window: "Not publicly disclosed"
+    training_data_cutoff: "Not publicly disclosed"
+    architectural_details: |
+      Anthropic positions Sonnet 4.5 as a hybrid-reasoning successor to Sonnet 4 with substantial gains in
+      coding, agentic tool use, and computer use. Detailed parameterization and dataset composition are not disclosed.
+  modalities:
+    supported_inputs: ["text", "image"]
+    supported_outputs: ["text", "structured_data"]
+  performance_characteristics:
+    speed_tier: "High"
+    cost_tier: "Medium High Cost"
+    latency: |
+      Marketed as faster than prior Sonnet generation and optimized for long-running tasks and computer use;
+      no official per-request latency figures published.
+    throughput: |
+      Not publicly disclosed; available via Anthropic API and major clouds (e.g., Bedrock/Vertex across Claude 4 line).
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    "Best coding model," "strongest model for building complex agents," and "best at using computers" among Claude models,
+    with gains in reasoning and math and improved performance on long-running tasks. 
+  benchmark_performance: |
+    Vendor highlights improvements vs. Claude Sonnet 4 and Opus 4 on coding/agentic tasks; specific third-party benchmark
+    numbers are not comprehensively published in the announcement.
+  special_capabilities:
+    tools_support: true
+    vision_support: true
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["computer use", "agentic workflows", "long-running tasks"]
+  known_limitations:
+    vendor_disclosed: |
+      Anthropic system cards emphasize residual risks (e.g., jailbreaks, dual-use assistance) and document mitigations,
+      but do not claim elimination of hallucinations or bias.
+    common_failure_modes: |
+      Standard LLM failure modes may persist: hallucinations, susceptibility to adversarial prompting, long-context drift.
+    unsuitable_use_cases: |
+      Safety-critical or regulated decision making without human oversight; biosafety/cyber-dual-use assistance beyond
+      documented safeguards.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    High-level description only: mixture of public, licensed/partner, and curated data; specifics not disclosed.
+  training_methodology: |
+    Hybrid reasoning training; Anthropic safety process (Constitutional AI lineage) with red-teaming and policy filters.
+    Exact pretraining/fine-tuning recipes not disclosed.
+  data_privacy_considerations: |
+    Anthropic documents safety evaluations and surrounding safeguards; detailed dataset provenance/retention not public.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    General assistant with emphasis on coding, multi-tool "agentic" workflows, and autonomous computer use for complex tasks.
+  suitable_domains: ["general_purpose", "code_generation", "agentic_tool_use", "analysis", "multimodal_reasoning"]
+  out_of_scope_use: |
+    High-stakes domains (medical/legal/financial decisions) without domain controls and human review; sensitive dual-use domains
+    without appropriate safeguards.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Substantial quality gains over prior Claude 4 models for coding/agents/computer use.
+    public_evidence: |
+      Described in the Sonnet 4.5 announcement and system card; broader third-party replication is still emerging.
+    assessment_notes: |
+      Strong vendor positioning with growing public coverage; treat claims as requiring domain-specific validation.
+  safe:
+    safety_measures: |
+      System card details evaluations, red-teaming, and mitigations aligned to Anthropic’s Responsible Scaling/ASL approach.
+    known_safety_issues: |
+      Residual jailbreak and dual-use concerns common to LLMs; mitigations reduce but do not eliminate risk.
+    assessment_notes: |
+      Safety posture appears strengthened relative to prior Sonnet; application-level controls still required.
+  secure_and_resilient:
+    security_features: |
+      Guardrails and classifiers; documented prompt-injection awareness in system cards; platform-level controls.
+    known_vulnerabilities: |
+      General LLM threats (prompt injection, data exfiltration via tool use/computer use).
+    assessment_notes: |
+      Integrators must implement least-privilege tool scopes, network egress controls, and monitoring.
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      System card and announcements available; detailed internals (params/data) are not disclosed.
+    assessment_notes: |
+      Documentation of safety process is good; technical opacity remains on architecture/scale/data.
+  explainable_and_interpretable:
+    explainability_features: |
+      Operational traces via tool/computer use improve observability; no native mechanistic interpretability guarantees.
+    interpretability_limitations: |
+      Opaque internal reasoning; step-by-step internal traces not exposed by default.
+    assessment_notes: |
+      Adequate for ops oversight; fundamental interpretability limits persist.
+  privacy_enhanced:
+    privacy_features: |
+      Policy/process safeguards; enterprise deployment options via partner clouds.
+    privacy_concerns: |
+      Lack of granular training data provenance/retention disclosures.
+    assessment_notes: |
+      Fit for many enterprise contexts with contractual and technical controls.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Safety evaluation pipeline and filters; red-teaming across sensitive categories.
+    known_biases: |
+      Standard demographic/linguistic biases may persist.
+    assessment_notes: |
+      Perform domain-specific bias testing before high-impact use.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Coding task suites relevant to your stack (unit tests, repair tasks)
+    - Agentic workflows: tool/computer-use success rate, rollback/retry behavior
+    - Jailbreak/prompt-injection resilience for your domain
+    - Long-running task stability, cost and latency profiling
+  key_evaluation_questions: |
+    - Does computer-use capability deliver measurable productivity safely?
+    - Are coding gains material vs. alternatives (Claude Opus 4.1, GPT-5, Gemini 2.5)?
+    - What monitoring/guardrails are needed for our tools/data?
+  comparison_considerations: |
+    - Coding/agentic strength vs GPT-5 "thinking"/tools; cost/latency vs open-weights + RAG; safety posture and enterprise fit.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Require human oversight for agentic actions; define approval flows for computer-use; restrict tool scopes by role.
+  map:
+    context_considerations: |
+      Identify dual-use exposure, data sensitivity, and autonomy boundaries for computer-use tasks.
+    risk_categories: ["hallucination", "prompt_injection", "tool_misuse", "privacy_leakage", "bias", "cost_overrun"]
+  measure:
+    suggested_metrics: |
+      Coding task pass rate; agentic success + rollback rate; jailbreak pass rate; latency and $/task under realistic workloads.
+  manage:
+    risk_management_considerations: |
+      Network and filesystem sandboxing for computer-use; egress controls; periodic red-team; audit trails for tool actions.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://www.anthropic.com/news/claude-sonnet-4-5"
+    description: "Release announcement"
+  - url: "https://www.anthropic.com/claude/sonnet"
+    description: "Product page and positioning"
+  - url: "https://www.anthropic.com/claude-sonnet-4-5-system-card"
+    description: "System card (safety/evals/mitigations)"
+  benchmarks: []
+  third_party_evaluations: []
+  news_coverage:
+  - title: "Introducing Claude Sonnet 4.5"
+    url: "https://www.anthropic.com/news/claude-sonnet-4-5"
+    date: "2025-09-29"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Anthropic release announcement, product page, and system card.
+  completeness_assessment: |
+    High for capabilities/safety posture; low for undisclosed params/context limits and detailed training data provenance.
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card based on public Anthropic materials."

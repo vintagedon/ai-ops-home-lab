@@ -1,0 +1,258 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "ChatGLM 4 Plus"
+  vendor: "Zhipu AI (Tsinghua University spin-off)"
+  model_family: "ChatGLM"
+  version: "4 Plus"
+  release_date: "2024-09-02"
+  model_type: "Bilingual Instruction and Reasoning Model (Closed-Weight API + Open Research Card)"
+  vendor_model_card_url: "https://huggingface.co/THUDM/chatglm4-plus"
+  license: "Commercial (Zhipu.AI Cloud API); open evaluation card"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Dense Transformer (decoder-only)"
+    parameter_count: "Approx. 70 billion (est.)"
+    context_window: "128 K tokens"
+    training_data_cutoff: "2024-06"
+    architectural_details: |
+      ChatGLM 4 Plus is Zhipu AI’s flagship bilingual reasoning and dialogue model,
+      succeeding ChatGLM 3 and GLM-130B.  
+      It integrates long-context optimization with grouped-query attention (GQA), 
+      rotary embeddings (RoPE), dynamic token routing, and retrieval-enhanced reasoning (RER).
+      The model operates as a bilingual (Chinese–English) reasoning assistant with enterprise-level alignment,
+      optimized for safety and factual grounding.
+
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "High (optimized API)"
+    cost_tier: "Commercial (API-based)"
+    latency: |
+      200–350 ms average round-trip latency (cloud inference).  
+      On-prem deployment not publicly available.  
+    throughput: |
+      Supports batch inference and streaming generation for enterprise-scale workloads.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • Frontier-class bilingual reasoning with 128K context.  
+    • Enhanced mathematical, legal, and enterprise QA performance.  
+    • Low hallucination rate via retrieval-augmented alignment.  
+    • Comprehensive refusal and safety alignment for commercial use.  
+  benchmark_performance: |
+    - MMLU: 90.4  
+    - GSM8K: 95.1  
+    - C-Eval: 94.7  
+    - CMMLU: 95.8  
+    - ARC-C: 88.2  
+    - HumanEval: 89.5  
+    (Zhipu.AI internal + OpenCompass verification, Q4 2024)
+  special_capabilities:
+    tools_support: true
+    vision_support: true
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["bilingual_reasoning", "retrieval_grounding", "enterprise_chat", "long_context"]
+  known_limitations:
+    vendor_disclosed: |
+      Closed-weight API; evaluation based on external tests and limited research partnership data.  
+      Multimodal (vision) features restricted to enterprise plan.  
+    common_failure_modes: |
+      Verbose factual expansions in English; conservative refusals for safety topics.  
+    unsuitable_use_cases: |
+      Open-weight or offline deployment; research requiring raw weights.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on 20+ trillion tokens covering multilingual text, code, legal, financial, and academic data.  
+    Enhanced with domain-aligned instruction and retrieval-augmented datasets for factual QA.
+  training_methodology: |
+    Hybrid dense model pretraining with reinforcement learning from human and AI feedback (RLHF + RLAIF).  
+    Alignment phase emphasizes truthfulness, safety, and bilingual coherence.  
+  data_privacy_considerations: |
+    Enterprise-grade data governance; all training data filtered for PII and compliance.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Enterprise reasoning, bilingual assistants, document QA, and academic research.  
+    Suitable for education, compliance QA, and multilingual customer support.  
+  suitable_domains: ["enterprise_AI", "education", "research", "legal_QA", "knowledge_engineering"]
+  out_of_scope_use: |
+    Military, surveillance, or unmoderated generative deployments.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Consistent reasoning across long-context benchmarks; strong factual recall.  
+    public_evidence: |
+      OpenCompass and Hugging Face community benchmarks confirm top-tier reasoning accuracy.  
+    assessment_notes: |
+      Reliable API-based LLM for bilingual enterprise use.
+  safe:
+    safety_measures: |
+      Alignment stack includes SafeRL, RLHF, and red-teaming from academic labs.  
+      Refusal tuning enforced for sensitive and policy-restricted content.  
+    known_safety_issues: |
+      Limited transparency due to closed-weight status.  
+    assessment_notes: |
+      Safe for enterprise under provider SLAs and moderation.
+  secure_and_resilient:
+    security_features: |
+      ISO 27001 and GB/T 22239 compliance for API endpoints.  
+      Encrypted data transport and privacy guarantees under Chinese Cybersecurity Law.  
+    known_vulnerabilities: |
+      Standard API exposure risks; mitigated by rate limiting and monitoring.  
+    assessment_notes: |
+      Secure under enterprise-grade infrastructure.
+  accountable_and_transparent:
+    transparency_level: "Medium–High"
+    auditability: |
+      Full system card published; partial training details disclosed.  
+      Benchmark methodology open-sourced via OpenCompass.  
+    assessment_notes: |
+      Balanced transparency for a commercial closed-weight model.
+  explainable_and_interpretable:
+    explainability_features: |
+      Provides intermediate reasoning traces and RER context windows via API inspection.  
+    interpretability_limitations: |
+      Model weights proprietary; limited insight into fine-tuning internals.  
+    assessment_notes: |
+      Moderate interpretability under enterprise API framework.
+  privacy_enhanced:
+    privacy_features: |
+      Encrypted API traffic, PII filtering, and on-demand context deletion.  
+    privacy_concerns: |
+      Users reliant on vendor’s internal compliance systems.  
+    assessment_notes: |
+      Meets high enterprise privacy standards.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Extensive fairness calibration on bilingual datasets; safety alignment against social bias.  
+    known_biases: |
+      Conservative bias in controversial queries; limited support for low-resource dialects.  
+    assessment_notes: |
+      Acceptable fairness and bias management for enterprise LLM.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • Long-context QA and retrieval verification (128K context).  
+    • Bilingual bias and fairness tests (Chinese/English).  
+    • Latency and throughput profiling on API endpoints.  
+    • Safety red-team simulation under enterprise use cases.  
+  key_evaluation_questions: |
+    – Does closed-weight API meet transparency requirements?  
+    – Are SLAs in place for privacy and safety compliance?  
+    – Is retrieval augmentation configured for factual grounding?  
+  comparison_considerations: |
+    Outperforms Qwen 2 72B and Yi-Large in reasoning and safety;  
+    trails Claude 4 Opus and GPT-4 Turbo in multilingual creative tasks.  
+    Strongest Chinese commercial bilingual API model as of late 2024.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Integrate vendor SLA compliance, audit mechanisms, and access control in governance documents.  
+  map:
+    context_considerations: |
+      Identify risks from API dependencies and closed-weight alignment opacity.  
+    risk_categories: ["alignment_opacity", "hallucination", "bias", "prompt_injection"]
+  measure:
+    suggested_metrics: |
+      Factual QA accuracy, API latency, hallucination rate, fairness index.  
+  manage:
+    risk_management_considerations: |
+      Include vendor compliance attestations, periodic evaluation of safety performance, and model card updates.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/THUDM/chatglm4-plus"
+    description: "Official ChatGLM 4 Plus model card"
+  - url: "https://opencompass.org.cn/"
+    description: "OpenCompass benchmark results"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "90.4"
+  - name: "C-Eval"
+    url: "https://opencompass.org.cn/"
+    result: "94.7"
+  third_party_evaluations:
+  - source: "OpenCompass (2024)"
+    url: "https://opencompass.org.cn/"
+    summary: "ChatGLM 4 Plus ranked top among bilingual reasoning APIs in late 2024."
+  news_coverage:
+  - title: "Zhipu.AI unveils ChatGLM 4 Plus — next-gen bilingual reasoning model"
+    url: "https://www.zhipu.ai/news/chatglm4plus-release"
+    date: "2024-09-02"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Zhipu.AI documentation, OpenCompass benchmarks, academic partnership reports, Hugging Face listings.  
+  completeness_assessment: |
+    High for benchmark data and risk mapping; medium for internal dataset disclosure.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from ChatGLM 4 Plus release and benchmark data."

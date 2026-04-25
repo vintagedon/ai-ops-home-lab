@@ -1,0 +1,594 @@
+# Amazon Nova Pro Model Card
+# Following general model card template structure
+
+model_name: Amazon Nova Pro
+model_version: "1.0"
+model_date: "2024-12"
+model_type: Multimodal Large Language Model (Transformer-based)
+model_description: |
+  Amazon Nova Pro is a highly-capable multimodal foundation model that delivers the best combination 
+  of accuracy, speed, and cost for a wide range of tasks. It accepts text, images, documents, and 
+  video as input and generates text as output. Nova Pro excels at complex reasoning, agentic workflows, 
+  long-context understanding, and multimodal intelligence tasks.
+
+# Organization Information
+developer: Amazon Artificial General Intelligence (AGI)
+organization_name: Amazon
+organization_contact: nova-technical-report@amazon.com
+organization_website: https://aws.amazon.com/bedrock/nova/
+
+# Model Characteristics
+architecture: Transformer-based
+parameters: Not listed in source
+context_length: 300000  # 300k tokens
+input_modalities:
+  - text
+  - image
+  - document
+  - video
+output_modalities:
+  - text
+languages_supported:
+  primary:
+    - Arabic
+    - Dutch
+    - English
+    - French
+    - German
+    - Hebrew
+    - Hindi
+    - Italian
+    - Japanese
+    - Korean
+    - Portuguese
+    - Russian
+    - Chinese (Simplified)
+    - Spanish
+    - Turkish
+  additional: Over 200 languages supported with varying degrees of proficiency
+knowledge_cutoff: "2025-01"
+
+# Intended Use
+intended_use:
+  primary_applications:
+    - Complex language understanding and reasoning tasks
+    - Multimodal content analysis (text, image, document, video)
+    - Agentic workflows with tool use and function calling
+    - Retrieval-augmented generation (RAG) applications
+    - Long-context document analysis and reasoning
+    - Software engineering and code generation
+    - Financial analysis and quantitative reasoning
+    - Video understanding and temporal reasoning
+    - Translation between 200+ language pairs
+  
+  intended_users:
+    - Developers building AI applications via Amazon Bedrock
+    - Enterprise organizations requiring multimodal intelligence
+    - Data scientists and ML engineers
+    - Organizations implementing AI agents and automation
+    - Financial services professionals
+    - Software development teams
+  
+  use_case_examples:
+    - Analyzing financial documents and extracting insights
+    - Building AI agents that interact with web interfaces
+    - Processing and understanding long videos for content analysis
+    - Multi-step reasoning over complex document collections
+    - Code generation and software engineering assistance
+    - Document question answering with visual elements (charts, tables)
+
+out_of_scope_use:
+  prohibited_uses:
+    - Generation of content intended to harm, deceive, or exploit individuals
+    - Creation of information related to chemical, biological, radiological, or nuclear weapons
+    - Generation of malicious code, malware, vulnerability exploits, or ransomware
+    - Election-related manipulation or misinformation
+    - Content that sexualizes, grooms, abuses, or otherwise harms minors
+    - Unauthorized surveillance or privacy violations
+    - Facilitating self-harm or suicide
+    - Creating deepfakes or non-consensual intimate imagery
+    - Generating hate speech or content promoting violent extremism
+  
+  limitations:
+    - May not have information on events after January 2025 knowledge cutoff
+    - Cannot execute actions in the real world without integration with external tools
+    - Not suitable as sole decision-maker for high-stakes domains (medical, legal) without human oversight
+    - May produce hallucinations or factually incorrect information
+    - Performance varies across the 200+ supported languages
+
+# Training Data
+training_data:
+  data_sources:
+    - Licensed commercial data
+    - Proprietary Amazon data
+    - Open source datasets
+    - Publicly available data (where appropriate)
+  
+  data_composition:
+    modalities:
+      - text
+      - images
+      - documents
+      - video
+    languages: Over 200 languages with emphasis on 15 primary languages listed above
+    domains: Not fully specified in source; includes general web data, code, documents, multimedia
+  
+  data_preprocessing:
+    - Highly scalable filtering and deduplication pipelines
+    - Data enrichment processes
+    - De-identification or removal of certain types of personal data (when feasible)
+    - Content filtering based on Responsible AI objectives
+    - Pipelines built using AWS EMR and AWS Batch
+  
+  data_volume: Not listed in source
+  data_collection_period: Not listed in source
+  
+  data_labeling:
+    - Human preference data collected for RLHF
+    - Single and multi-turn RAI demonstrations
+    - Helpfulness/harmfulness studies
+    - Instruction-demonstration pairs for supervised fine-tuning
+
+# Training Procedure
+training_procedure:
+  training_stages:
+    - stage: Pretraining
+      description: |
+        Training on mixture of large amounts of multilingual and multimodal data using 
+        Transformer architecture
+    
+    - stage: Supervised Fine-Tuning (SFT)
+      description: |
+        Fine-tuning on instruction-demonstration pairs including multimodal examples, 
+        single and multi-turn RAI demonstrations in multiple languages
+    
+    - stage: Reward Model Training
+      description: |
+        Training reward models from human preference data, including RAI-specific 
+        reward models
+    
+    - stage: Alignment
+      description: |
+        Learning from human preferences via Direct Preference Optimization (DPO) and 
+        Proximal Policy Optimization (PPO) to ensure alignment with human preferences 
+        for quality and responsible behavior
+
+  training_infrastructure:
+    hardware:
+      - Amazon Trainium1 (TRN1) custom chips
+      - NVIDIA A100 GPUs (P4d instances)
+      - NVIDIA H100 GPUs (P5 instances)
+    networking: Petabit-scale non-blocking EFA network fabric
+    orchestration: AWS SageMaker-managed Elastic Kubernetes Service (EKS) clusters
+    storage:
+      - AWS FSx for performant storage
+      - AWS S3 for cost-efficient scaling
+  
+  training_optimizations:
+    - Super-Selective Activation Checkpointing (SSC) - 50% memory reduction with 2% recomputation overhead
+    - Optimized gradient reduction order and frequency for communication overlap
+    - Enhanced PyTorch memory allocator to reduce stragglers
+    - Fully distributed optimizer state and weight sharding
+    - Asynchronous checkpoint loading with observer process
+    - Cached and reused data indices
+  
+  training_performance:
+    goodput: Up to 97% weekly average
+    checkpoint_overhead: ~1 second on H100 clusters
+    mean_time_to_restart: 6.5 minutes average on TRN1 clusters
+  
+  training_duration: Not listed in source
+  training_compute: Not listed in source
+
+# Customization
+customization:
+  fine_tuning_supported: true
+  fine_tuning_types:
+    - Supervised fine-tuning on multimodal data
+    - Model distillation from larger to smaller models
+    - Custom fine-tuning via Amazon Bedrock APIs
+  fine_tuning_data_requirements: Multimodal data (text, images, documents, video)
+
+# Performance
+performance:
+  evaluation_methodology: |
+    Models evaluated on public benchmarks using standardized prompts and evaluation protocols. 
+    95% confidence intervals calculated for binary score averages assuming Gaussian distribution. 
+    Results include both cited public results and internal measurements via Bedrock API, OpenAI API, 
+    and Gemini API.
+  
+  core_capabilities:
+    language_understanding:
+      - benchmark: MMLU
+        score: 85.9
+        unit: accuracy
+        notes: 0-shot Chain-of-Thought, 57 subjects
+      
+      - benchmark: ARC-C
+        score: 94.8
+        confidence_interval: ±1.3
+        unit: accuracy
+        notes: 0-shot CoT, science QA grades 3-9
+      
+      - benchmark: DROP
+        score: 85.4
+        confidence_interval: ±0.7
+        unit: F1-score
+        notes: 0-shot CoT, discrete reasoning over paragraphs
+    
+    reasoning:
+      - benchmark: GPQA
+        score: 46.9
+        confidence_interval: ±4.6
+        unit: accuracy
+        notes: 0-shot CoT, graduate-level questions
+      
+      - benchmark: BBH
+        score: 86.9
+        unit: accuracy
+        notes: 3-shot CoT, 23 diverse reasoning tasks
+    
+    mathematics:
+      - benchmark: MATH
+        score: 76.6
+        confidence_interval: ±1.2
+        unit: accuracy
+        notes: 0-shot CoT, competition-level problems
+      
+      - benchmark: GSM8K
+        score: 94.8
+        confidence_interval: ±1.2
+        unit: accuracy
+        notes: 0-shot CoT, grade school math
+    
+    instruction_following:
+      - benchmark: IFEval
+        score: 92.1
+        confidence_interval: ±1.8
+        unit: instruction-level accuracy (loose)
+        notes: 0-shot, verifiable instruction following
+    
+    translation:
+      - benchmark: FLORES (en→14 languages)
+        scores:
+          spBLEU: 43.4
+          COMET22: 89.1
+        notes: 0-shot translation to 14 languages
+      
+      - benchmark: FLORES (14 languages→en)
+        scores:
+          spBLEU: 44.4
+          COMET22: 89.0
+        notes: 0-shot translation from 14 languages
+  
+  multimodal_capabilities:
+    image_understanding:
+      - benchmark: MMMU
+        score: 61.7
+        confidence_interval: ±3.2
+        unit: accuracy
+        notes: Chain-of-Thought, college-level multimodal understanding
+      
+      - benchmark: ChartQA
+        score: 89.2
+        confidence_interval: ±1.2
+        unit: relaxed accuracy
+        notes: Chart question answering
+      
+      - benchmark: DocVQA
+        score: 93.5
+        unit: ANLS
+        notes: Document visual question answering with OCR
+      
+      - benchmark: TextVQA
+        score: 81.5
+        unit: weighted accuracy
+        notes: Text reading in natural images
+    
+    video_understanding:
+      - benchmark: VATEX
+        score: 77.8
+        unit: CIDEr
+        notes: Video captioning, ~10 second videos
+      
+      - benchmark: EgoSchema
+        score: 72.1
+        confidence_interval: ±5.4
+        unit: accuracy
+        notes: Long-form video QA with high certificate length
+  
+  agentic_performance:
+    function_calling:
+      - benchmark: BFCL Overall
+        score: 68.4
+        unit: accuracy
+        notes: Berkeley Function Calling Leaderboard v3
+      
+      - benchmark: BFCL AST
+        score: 90.1
+        unit: accuracy
+        notes: Abstract Syntax Tree match
+      
+      - benchmark: BFCL Execution
+        score: 89.8
+        unit: accuracy
+        notes: Function execution correctness
+      
+      - benchmark: BFCL Relevance
+        score: 95.1
+        unit: accuracy
+        notes: Appropriate function selection
+      
+      - benchmark: BFCL Irrelevance
+        score: 65.1
+        unit: accuracy
+        notes: Recognizing when no function applies
+    
+    multimodal_agents:
+      - benchmark: VisualWebBench
+        score: 79.7
+        unit: composite score
+        notes: 7 web browsing tasks across 100+ websites
+      
+      - benchmark: MM-Mind2Web
+        score: 63.7
+        unit: step accuracy
+        notes: Multimodal web navigation
+      
+      - benchmark: GroundUI-1K
+        score: 81.4
+        unit: accuracy
+        notes: UI element grounding
+  
+  long_context:
+    - benchmark: Text Needle-in-Haystack
+      score: ">95%"
+      unit: recall
+      notes: Up to 300k tokens, various depths and positions
+    
+    - benchmark: SQuALITY
+      score: 19.8
+      confidence_interval: ±8.7
+      unit: ROUGE-L
+      notes: Query-based summarization of literary stories
+    
+    - benchmark: LVBench
+      score: 41.6
+      confidence_interval: ±2.5
+      unit: accuracy
+      notes: Long video understanding (99 videos, 1549 questions)
+  
+  functional_expertise:
+    software_engineering:
+      - benchmark: HumanEval Python
+        score: 89.0
+        confidence_interval: ±4.8
+        unit: pass@1
+        notes: 0-shot code generation
+    
+    financial_analysis:
+      - benchmark: FinQA
+        score: 77.2
+        confidence_interval: ±0.9
+        unit: accuracy
+        notes: 0-shot CoT, financial reasoning
+    
+    retrieval_augmented_generation:
+      - benchmark: CRAG
+        score: 50.3
+        confidence_interval: ±1.9
+        unit: accuracy
+        notes: Comprehensive RAG benchmark
+  
+  runtime_performance:
+    - metric: Time to First Token
+      value: 1.0
+      unit: seconds
+      notes: 1000 input tokens, 100 output tokens
+    
+    - metric: Output Tokens per Second
+      value: 100
+      unit: tokens/second
+      notes: Generation throughput
+    
+    - metric: Total Response Time
+      value: 1.4
+      unit: seconds
+      notes: 1000 input tokens, 100 output tokens
+
+# Limitations and Biases
+limitations:
+  technical_limitations:
+    - Knowledge cutoff of January 2025 - may not have information on more recent events
+    - Context window limited to 300k tokens
+    - May produce hallucinations or factually incorrect information
+    - Performance varies significantly across the 200+ supported languages
+    - Video understanding limited to visual and temporal information (no audio processing mentioned)
+    - Cannot execute real-world actions without integration with external tools/APIs
+  
+  domain_limitations:
+    - Not suitable as sole decision-maker in high-stakes domains without human oversight
+    - May struggle with highly specialized technical or scientific domains not well-represented in training
+    - Financial analysis should not replace professional financial advice
+    - Legal reasoning should not replace qualified legal counsel
+    - Medical information should not replace professional medical advice
+  
+  known_failure_modes:
+    - May fail to recognize when it lacks sufficient information to answer
+    - Can be influenced by adversarial prompts despite alignment efforts
+    - May exhibit bias toward more common languages in training data
+    - Long-form generation may lose coherence or drift from original topic
+    - May have difficulty with tasks requiring real-time or constantly updating information
+
+biases:
+  bias_evaluation:
+    approach: |
+      Evaluated using public benchmarks (BOLD, RealToxicityPrompts, MM-SafetyBench) and proprietary 
+      dynamically updating benchmarks across Responsible AI dimensions. Multi-pronged evaluation 
+      including internal red teaming, external expert red teaming, and automated red teaming.
+    
+    benchmarks_used:
+      - BOLD (biases in open-ended language generation)
+      - RealToxicityPrompts
+      - MM-SafetyBench
+      - Proprietary RAI benchmarks across 8 dimensions
+  
+  identified_biases:
+    - Performance varies across languages, with better performance on emphasized languages
+    - May reflect biases present in training data sources
+    - Potential Western-centric bias given data composition (inference based on typical web data)
+    - evaluation results not fully disclosed in source
+  
+  mitigation_strategies:
+    - Extensive RAI alignment during SFT and RLHF stages
+    - RAI-specific reward models
+    - Input and output moderation models as first and last line of defense
+    - Multi-turn RAI demonstrations in multiple languages
+    - Helpfulness/harmfulness studies to balance safety and utility
+    - Regular red teaming exercises (300+ distinct attack techniques)
+    - Continuous dataset updates based on red teaming findings
+
+# Responsible AI
+responsible_ai:
+  framework:
+    dimensions:
+      - name: Fairness
+        definition: Considering impacts on different groups of stakeholders
+        approach: |
+          RAI demonstrations, human preference data collection, and evaluation across 
+          demographic dimensions. Not storing or reinforcing unsafe preferences.
+      
+      - name: Explainability
+        definition: Understanding and evaluating system outputs
+        approach: |
+          Leverage explainable AI methods throughout development. Services like Amazon 
+          SageMaker Clarify enable downstream developers to explain predictions.
+      
+      - name: Privacy and Security
+        definition: Appropriately obtaining, using, and protecting data and models
+        approach: |
+          Data access controls, de-identification of personal data when feasible, 
+          red teaming for data privacy, model output alignment, watermarking (not 
+          applicable to text models, only Canvas/Reel).
+      
+      - name: Safety
+        definition: Preventing harmful system output and misuse
+        approach: |
+          Multi-stage alignment, input/output moderation, extensive red teaming across 
+          prohibited use cases, reward models focused on safety.
+      
+      - name: Controllability
+        definition: Having mechanisms to monitor and steer AI system behavior
+        approach: |
+          Partnership with Model Evaluation and Threat Research (METR) center, 
+          evaluation against risks like sensitive data exfiltration and unauthorized actions.
+      
+      - name: Veracity and Robustness
+        definition: Achieving correct system outputs, even with unexpected or adversarial inputs
+        approach: |
+          Adversarial testing including prompt injection, jailbreaking, obfuscation 
+          techniques. Over 300 distinct attack techniques tested.
+      
+      - name: Governance
+        definition: Incorporating best practices into the AI supply chain
+        approach: |
+          Working-backwards product process with RAI at design phase, design consultations, 
+          implementation assessments, routine testing, customer reviews.
+      
+      - name: Transparency
+        definition: Enabling stakeholders to make informed choices
+        approach: |
+          This model card, technical documentation, commitment to transparency in 
+          development and deployment practices.
+  
+  red_teaming:
+    internal:
+      - Trained data analysts and subject-matter experts
+      - Over 300 distinct attack techniques across multiple languages and modalities
+      - Techniques include prompt injection, jailbreaking, obfuscation, multilingual attacks
+      - Cross-modality attacks embedding adversarial content in visual inputs
+      - Iterative feedback loop for model improvement
+    
+    external_partners:
+      - partner: ActiveFence
+        focus: Hate speech, political misinformation, extremism
+        methodology: 9700+ adversarial prompts across 20 categories
+      
+      - partner: Deloitte Consulting
+        focus: Biological weapons risks (CBRN)
+        methodology: 30-question panel testing scientific knowledge and reasoning for biological risks
+      
+      - partner: Gomes Group (Carnegie Mellon University)
+        focus: Chemical weapons risks (CBRN)
+        methodology: Automated and non-automated evaluations on hazardous chemicals
+      
+      - partner: Nemesys Insights LLC
+        focus: Radiological and Nuclear risks (CBRN)
+        methodology: Uplift studies and scenario-based red teaming with 8 subject matter experts
+    
+    automated:
+      framework: FLIRT (Feedback Loop In-context Red Teaming)
+      approach: |
+        Uses seed prompts identified by human evaluators, generates additional prompts via 
+        in-context learning, evaluates responses, extracts successful attacks for next iteration. 
+        Covers multi-turn interactions, multiple languages, and multiple modalities.
+  
+  commitments:
+    - US White House voluntary commitments on safe, secure, transparent AI development
+    - G7 AI Hiroshima Process Code of Conduct
+    - Participation in AI Safety Summits (UK and Seoul)
+    - Frontier Model Forum membership
+    - Partnership on AI membership
+    - Engagement with NIST and other government forums
+  
+  runtime_mitigations:
+    input_moderation: Detects malicious, insecure, illegal content and bypass attempts
+    output_moderation: Ensures content adheres to RAI objectives
+    approach: First and last line of defense allowing rapid response to new threats
+
+# Ethical Considerations
+ethical_considerations:
+  dual_use: |
+    Model has potential for both beneficial and harmful applications. Mitigated through 
+    alignment training, moderation systems, and usage policies prohibiting harmful applications.
+  
+  environmental_impact: Not listed in source
+  
+  labor_practices: |
+    Uses third-party vendors for human evaluation and red teaming with rigorous quality 
+    standards and spot-checking processes.
+  
+  data_privacy: |
+    De-identification or removal of certain types of personal data from training when feasible. 
+    Red teaming includes data privacy assessments.
+
+# Licensing and Access
+license: Not listed in source
+access:
+  availability: Available via Amazon Bedrock
+  api_access: Yes, through Amazon Bedrock APIs
+  restrictions: Subject to Amazon Bedrock terms of service and acceptable use policies
+  pricing: Not listed in source (described as "industry-leading price performance")
+
+# Model Card Contact
+model_card_authors:
+  - Amazon Artificial General Intelligence (AGI) Team
+model_card_contact: nova-technical-report@amazon.com
+model_card_version: "1.0"
+model_card_date: "2024-12"
+
+# Citation
+citation: |
+  @misc{novatechreport,
+    author = {Amazon AGI},
+    title = {The Amazon Nova Family of Models: Technical Report and Model Card},
+    year = {2024},
+    url = {https://www.amazon.science/publications/the-amazon-nova-family-of-models-technical-report-and-model-card}
+  }
+
+# Additional Resources
+additional_resources:
+  technical_report: https://www.amazon.science/publications/the-amazon-nova-family-of-models-technical-report-and-model-card
+  documentation: https://docs.aws.amazon.com/nova/latest/userguide
+  huggingface_materials: https://huggingface.co/amazon-agi
+  bedrock_console: https://aws.amazon.com/bedrock/nova/

@@ -1,0 +1,179 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Imagen 4"
+  vendor: "Google"
+  model_family: "Imagen"
+  version: "4.0"
+  release_date: "2025-05-20"
+  model_type: "Text-to-Image Latent Diffusion Model"
+  vendor_model_card_url: "https://storage.googleapis.com/deepmind-media/Model-Cards/Imagen-4-Model-Card.pdf"
+  license: "Commercial API (Proprietary)"
+  deprecation_status: "Active"
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Latent Diffusion Model"
+    parameter_count: "Not publicly disclosed"
+    context_window: "Not applicable"
+    training_data_cutoff: "Not applicable"
+    architectural_details: |
+      A latent diffusion model that generates high-quality images from text or image inputs. It achieves high-quality performance in generative media applications. [28]
+  modalities:
+    supported_inputs:
+    - "text"
+    - "image"
+    supported_outputs:
+    - "image"
+  performance_characteristics:
+    speed_tier: "High"
+    cost_tier: "Moderate (~$0.04 per generation)"
+    latency: "Generates images in seconds."
+    throughput: "Supports high-volume generation via API."
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    Google's best text-to-image model, performing well in photorealistic composition with improved spelling, typography, and instruction following. Produces richer colors, textures, and details compared to previous versions. [28] Supports long and complex prompts. [29]
+  benchmark_performance: |
+    Scored high on human evaluations on GenAI-Bench, with one of the highest Elo scores for overall preference compared to other models. "Overall preference" measures the fulfillment of the user's intent. [28]
+  special_capabilities:
+    tools_support: false
+    vision_support: true
+    reasoning_support: false
+    image_generation: true
+    additional_capabilities:
+    - "photorealism"
+    - "typography_and_text_rendering"
+    - "style_versatility"
+    - "synthid_watermarking"
+  known_limitations:
+    vendor_disclosed: |
+      Tasks requiring numerical reasoning (e.g., generating an exact number of objects) are challenging. Prompts involving reasoning about scale, complex compositional phrases (e.g., "one red hat and a black glass book"), and actions are the hardest across all models. [28]
+    common_failure_modes: |
+      Difficulty with spatial reasoning and complex language prompts.
+    unsuitable_use_cases: |
+      Creating deceptive or harmful imagery; impersonating individuals without consent.
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on a large dataset of images, text, and associated annotations. Synthetic captions were generated using Gemini models to help the model learn small details. [28]
+  training_methodology: |
+    Trained using JAX on Google TPU hardware. The multi-stage data filtering process included removal of unsafe/low-quality images, removal of AI-generated images, deduplication, and filtering of captions for unsafe content or PII. [28]
+  data_privacy_considerations: |
+    Post-training mitigations include tools such as SynthID watermarking to reduce risks like misinformation. [28]
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    To generate high-quality, high-resolution images in a wide range of visual styles for creative and commercial applications. [28]
+  suitable_domains:
+  - "digital_marketing"
+  - "advertising"
+  - "media_production"
+  - "content_creation"
+  out_of_scope_use: |
+    Any use that violates Google's safety and acceptable use policies.
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      "Imagen 4 is Google's best text-to-image model yet." [28]
+    public_evidence: |
+      High scores on GenAI-Bench human evaluations confirm its quality and prompt adherence. [28]
+    assessment_notes: |
+      A top-tier image generation model with strong performance in photorealism and instruction following.
+  safe:
+    safety_measures: |
+      Developed in partnership with safety experts. Mitigations include pre-training data filtering and post-training tools like production filters and SynthID watermarking. Extensive red teaming was conducted. [28]
+    known_safety_issues: |
+      Risks of intentional adversarial misuse and unintentional model failure modes through benign use.
+    assessment_notes: |
+      Robust, layered safety mitigations are in place. The inclusion of SynthID is a critical feature for responsible deployment.
+  secure_and_resilient:
+    security_features: |
+      Accessed via Google's secure cloud infrastructure.
+    known_vulnerabilities: |
+      Potential for adversarial prompts to bypass safety filters.
+    assessment_notes: |
+      Standard security posture for a managed API service.
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Public model card available. SynthID provides a mechanism for tracing image provenance.
+    assessment_notes: |
+      Good transparency on safety processes and limitations.
+  explainable_and_interpretable:
+    explainability_features: |
+      None specified.
+    interpretability_limitations: |
+      The internal workings of the diffusion model are opaque.
+    assessment_notes: |
+      Typical for state-of-the-art image generation models.
+  privacy_enhanced:
+    privacy_features: |
+      Data filtering during training aimed to minimize the presence of PII. [28]
+    privacy_concerns: |
+      Full composition of training data is not public.
+    assessment_notes: |
+      Meets enterprise privacy standards.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Subject to Google's internal bias mitigation processes, including data filtering and safety evaluations.
+    known_biases: |
+      May reproduce biases present in the training data.
+    assessment_notes: |
+      Requires careful prompt design and output review to manage potential biases.
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Test prompt adherence with long, complex, and compositional prompts.
+    - Evaluate the quality and legibility of generated text and typography.
+    - Assess the photorealism and detail level for marketing and creative content.
+    - Verify the presence and robustness of the SynthID watermark in generated assets.
+  key_evaluation_questions: |
+    - Does the model's ability to follow complex instructions reduce the need for prompt engineering and iteration?
+    - Is the quality of rendered text sufficient for our branding and design needs?
+  comparison_considerations: |
+    Compare against its own variants (Fast, Ultra) and other leading text-to-image models on quality, speed, cost, and unique features like typography.
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://storage.googleapis.com/deepmind-media/Model-Cards/Imagen-4-Model-Card.pdf"
+    description: "Official Imagen 4 Model Card"
+  - url: "https://www.imagine.art/blogs/google-imagen-4-overview"
+    description: "Third-party overview of Imagen 4 and its variants."

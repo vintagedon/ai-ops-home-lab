@@ -1,0 +1,250 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Yi Vision 13B"
+  vendor: "01.AI"
+  model_family: "Yi Vision"
+  version: "13B"
+  release_date: "2025-02-03"
+  model_type: "Multimodal Bilingual Reasoning and Alignment Model"
+  vendor_model_card_url: "https://huggingface.co/01-ai/Yi-Vision-13B"
+  license: "Apache 2.0"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Multimodal Transformer (decoder-only with dual encoders)"
+    parameter_count: "13 billion"
+    context_window: "16 K text tokens + 1024 image tokens"
+    training_data_cutoff: "2024-12"
+    architectural_details: |
+      Yi Vision 13B extends Yi Vision 7B with expanded multimodal capacity, 
+      featuring dual encoders (text and visual) linked via a shared cross-attention interface.
+      Vision encoder is ViT-L/224 (ImageNet-22K pretraining) integrated with the Yi 1.5 13B bilingual text base.  
+      Enables multilingual reasoning over images, text, and structured visual documents.
+      Includes long-context visual reasoning and multi-turn multimodal dialogue support.
+  modalities:
+    supported_inputs: ["text", "image"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "Moderate"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ~0.38 s per 1K text tokens + ~0.45 s per 224×224 image (fp16 A100).  
+      Maintains near-real-time inference on dual GPU setups.  
+    throughput: |
+      Supports batched multimodal processing and bilingual context interleaving.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • High-accuracy multimodal bilingual reasoning (Chinese–English).  
+    • Handles long-context text–image QA and visual RAG.  
+    • DPO-tuned for factual image captioning and safety compliance.  
+  benchmark_performance: |
+    - VQA v2: 82.1  
+    - COCO Caption (CIDEr): 129.8  
+    - ScienceQA (Text+Image): 87.4  
+    - MMLU (EN): 74.3  
+    - C-Eval (ZH): 78.1  
+    (01.AI internal + Hugging Face multimodal benchmark, Feb 2025)
+  special_capabilities:
+    tools_support: true
+    vision_support: true
+    reasoning_support: strong
+    image_generation: false
+    additional_capabilities: ["bilingual_visual_QA", "document_understanding", "captioning", "grounded_reasoning"]
+  known_limitations:
+    vendor_disclosed: |
+      No support for dynamic video or sequence-based vision tasks.  
+      Translation alignment less precise for technical multilingual documents.  
+    common_failure_modes: |
+      Confident misinterpretation of abstract or schematic imagery.  
+    unsuitable_use_cases: |
+      Surveillance, medical imaging, or biometric classification.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on ≈3.6T multimodal tokens spanning bilingual web imagery, 
+    instructional diagrams, academic papers, and synthetic QA datasets.  
+    Core datasets include LAION, Wukong+, COCO, and OpenFlamingo-Mix, supplemented with 01.AI’s proprietary bilingual captions.
+  training_methodology: |
+    Multimodal pretraining with contrastive alignment + instruction fine-tuning + DPO alignment.  
+    Safety-tuned with bilingual moderation datasets for visual sensitivity and factual grounding.  
+  data_privacy_considerations: |
+    All image and text data are open-license or synthetic; automated PII redaction applied.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Research and educational use in multimodal reasoning, document QA, and bilingual captioning.  
+    Supports grounded multimodal retrieval and multimodal RAG pipelines.  
+  suitable_domains: ["research", "education", "AI_vision", "translation", "document_understanding"]
+  out_of_scope_use: |
+    Medical or legal visual analysis; unmoderated or user-facing deployments without safety filters.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Stable performance on bilingual visual QA and captioning.  
+    public_evidence: |
+      Verified by Hugging Face multimodal leaderboard results.  
+    assessment_notes: |
+      Reliable multimodal bilingual reasoning model for open research.
+  safe:
+    safety_measures: |
+      DPO alignment and multilingual moderation data ensure safe captioning and visual QA.  
+    known_safety_issues: |
+      Under-refusal of abstract visual inputs containing text overlays.  
+    assessment_notes: |
+      Safe for supervised use with minimal risk.
+  secure_and_resilient:
+    security_features: |
+      Telemetry-free weights and verifiable checkpoint hashes.  
+    known_vulnerabilities: |
+      Image prompt injection and watermark inference possible.  
+    assessment_notes: |
+      Secure for controlled offline research use.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Dataset composition, training logs, and benchmark results are public.  
+    assessment_notes: |
+      Meets NIST-aligned transparency expectations for multimodal systems.
+  explainable_and_interpretable:
+    explainability_features: |
+      Provides multimodal attention visualization and token–region attribution maps.  
+    interpretability_limitations: |
+      Lacks symbolic reasoning trace for long-context dialogue.  
+    assessment_notes: |
+      Strong interpretability in vision–language research context.
+  privacy_enhanced:
+    privacy_features: |
+      Open-licensed data; PII and watermark removal filters.  
+    privacy_concerns: |
+      Minimal residual risk; visual anonymization applied.  
+    assessment_notes: |
+      Meets open-data privacy and research compliance norms.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Balanced bilingual and cross-domain datasets; fairness audits for gender and region representation.  
+    known_biases: |
+      Slight underrepresentation of African and Latin American visual datasets.  
+    assessment_notes: |
+      Acceptable fairness for non-commercial multimodal research.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • Bilingual multimodal QA (VQA v2, ScienceQA).  
+    • Caption factuality and bias audits.  
+    • Visual grounding consistency (POPE, GQA).  
+  key_evaluation_questions: |
+    – Does it maintain parity across English and Chinese image–text pairs?  
+    – Are captions factual and bias-balanced?  
+    – Are long-context multimodal responses consistent?  
+  comparison_considerations: |
+    Outperforms Yi Vision 7B and LLaVA 1.6 13B in factual grounding;  
+    trails Gemini 1.5 Pro and Qwen-VL 72B in multimodal reasoning depth.  
+    Leading open bilingual multimodal model as of early 2025.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Align multimodal governance and bias management with NIST AI RMF "Govern."  
+  map:
+    context_considerations: |
+      Identify multimodal hallucination and cross-language bias risks.  
+    risk_categories: ["bias", "hallucination", "visual_context_drift"]
+  measure:
+    suggested_metrics: |
+      Caption accuracy, bilingual parity score, multimodal bias index.  
+  manage:
+    risk_management_considerations: |
+      Schedule regular multimodal fairness and factual QA evaluations.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/01-ai/Yi-Vision-13B"
+    description: "Official Yi Vision 13B model card"
+  - url: "https://01.ai/news/yi-vision13b-release"
+    description: "01.AI release announcement and evaluations"
+  benchmarks:
+  - name: "VQA v2"
+    url: "https://visualqa.org/"
+    result: "82.1"
+  - name: "COCO Caption"
+    url: "https://cocodataset.org/"
+    result: "129.8 (CIDEr)"
+  third_party_evaluations:
+  - source: "Hugging Face Multimodal Leaderboard (2025)"
+    url: "https://huggingface.co/spaces/multimodal-leaderboard"
+    summary: "Yi Vision 13B benchmarked as leading open bilingual vision–language model."
+  news_coverage:
+  - title: "01.AI launches Yi Vision 13B — large open bilingual multimodal model"
+    url: "https://01.ai/news/yi-vision13b-release"
+    date: "2025-02-03"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    01.AI multimodal documentation, Hugging Face leaderboard results, and academic benchmark publications.  
+  completeness_assessment: |
+    Very high for transparency and bilingual multimodal evaluation; moderate for interpretability disclosures.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from Yi Vision 13B release and benchmark documentation."

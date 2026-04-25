@@ -1,0 +1,179 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Gemma 3 1B-IT"
+  vendor: "Google"
+  model_family: "Gemma 3"
+  version: "1B-IT"
+  release_date: "2025"
+  model_type: "Open-Weight Multimodal Model (Instruction-Tuned)"
+  vendor_model_card_url: "https://huggingface.co/google/gemma-3-1b-it"
+  license: "Gemma Terms of Use"
+  deprecation_status: "Active"
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer-based"
+    parameter_count: "~1B"
+    context_window: "32,768 tokens"
+    training_data_cutoff: "Not publicly disclosed"
+    architectural_details: |
+      The smallest model in the Gemma 3 family, optimized for on-device deployment on platforms like Android, iOS, and Web using the LiteRT (TFLite) stack. [25]
+  modalities:
+    supported_inputs:
+    - "text"
+    - "image"
+    supported_outputs:
+    - "text"
+  performance_characteristics:
+    speed_tier: "Optimized for on-device, real-time inference."
+    cost_tier: "N/A (Open-weight)"
+    latency: "Highly dependent on device (CPU/GPU/NPU) and quantization scheme. Benchmarks available for various mobile devices."
+    throughput: "Optimized for single-user, interactive use on-device."
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    A lightweight, state-of-the-art open model suitable for deployment in environments with limited resources, such as mobile devices and laptops. [26]
+  benchmark_performance: |
+    - HellaSwag (10-shot): 62.3
+    - TriviaQA (5-shot): 39.8
+    - WMT24++ (ChrF): 36.7
+    - Full benchmark table available in the model card. [26]
+  special_capabilities:
+    tools_support: false
+    vision_support: true
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities:
+    - "on_device_deployment"
+    - "multilingual_support"
+  known_limitations:
+    vendor_disclosed: |
+      As a smaller model, it may have lower performance on complex reasoning and knowledge-intensive tasks compared to larger models in the family. Subject to standard LLM limitations like factual inaccuracies and bias. [26]
+    common_failure_modes: |
+      May struggle with long-form generation or maintaining coherence over very long conversations due to its smaller size.
+    unsuitable_use_cases: |
+      High-stakes tasks requiring deep expertise or high factual accuracy. Any use that violates the Gemma Prohibited Use Policy.
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on 2 trillion tokens from a dataset including web documents, code, mathematics, and images. [26]
+  training_methodology: |
+    Trained using JAX and ML Pathways on Google TPU hardware. [26]
+  data_privacy_considerations: |
+    Training data underwent filtering for CSAM and sensitive data. [26]
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Well-suited for a variety of text generation and image understanding tasks on resource-constrained devices like laptops, desktops, and mobile phones. [26]
+  suitable_domains:
+  - "on_device_ai"
+  - "mobile_applications"
+  - "lightweight_chatbots"
+  - "text_summarization"
+  out_of_scope_use: |
+    Use in regulated, high-stakes domains without further validation and fine-tuning.
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Provides high-performance open vision-language model implementations designed for responsible AI development. [26]
+    public_evidence: |
+      Published benchmarks provide evidence of its capabilities relative to its size. [26]
+    assessment_notes: |
+      A strong performer for the 1B parameter class, but expectations should be calibrated to its size.
+  safe:
+    safety_measures: |
+      Underwent safety evaluations for child safety, content safety, and representational harms. [26]
+    known_safety_issues: |
+      Can reflect biases from training data and be misused for generating harmful content.
+    assessment_notes: |
+      Deployers are responsible for implementing safety guardrails.
+  secure_and_resilient:
+    security_features: |
+      On-device deployment allows for a fully air-gapped and secure environment controlled by the user.
+    known_vulnerabilities: |
+      Standard LLM vulnerabilities.
+    assessment_notes: |
+      Security is the responsibility of the deployer.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Model weights are open, and the model card provides details on training and evaluation.
+    assessment_notes: |
+      High transparency enables accountability.
+  explainable_and_interpretable:
+    explainability_features: |
+      Open weights enable research into model internals.
+    interpretability_limitations: |
+      Full interpretability remains a research challenge.
+    assessment_notes: |
+      More interpretable than closed-API models.
+  privacy_enhanced:
+    privacy_features: |
+      On-device deployment ensures user data does not leave the device, providing maximum privacy.
+    privacy_concerns: |
+      Potential for memorization of training data, though less likely in a model of this size.
+    assessment_notes: |
+      Excellent choice for privacy-sensitive applications.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Data filtering and safety evaluations were performed. [26]
+    known_biases: |
+      May exhibit biases present in the training data.
+    assessment_notes: |
+      Requires use-case-specific bias testing.
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Latency and memory usage benchmarks on target mobile and web platforms.
+    - Evaluation of different quantization schemes (e.g., int4, int8) to find the best performance/resource trade-off. [25]
+    - User experience testing for on-device chatbot applications.
+  key_evaluation_questions: |
+    - What is the time-to-first-token and tokens-per-second on our target device?
+    - Does the model's output quality meet user expectations for a mobile application?
+  comparison_considerations: |
+    Compare against other open-weight models optimized for on-device deployment (e.g., Phi-3, Qwen1.5) on performance, model size, and memory footprint.
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/google/gemma-3-1b-it"
+    description: "Hugging Face Model Card for Gemma 3 1B-IT"
+  - url: "https://goo.gle/Gemma3Report"
+    description: "Gemma 3 Technical Report"

@@ -1,0 +1,249 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Claude 3 Opus"
+  vendor: "Anthropic"
+  model_family: "Claude 3"
+  version: "Opus"
+  release_date: "2024-03-04"
+  model_type: "Frontier Multimodal Reasoning Model"
+  vendor_model_card_url: "https://www.anthropic.com/news/claude-3-opus-sonnet-haiku"
+  license: "Commercial API (Proprietary)"
+  deprecation_status: "Supported (legacy frontier predecessor)"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer-based multimodal large language model"
+    parameter_count: "Not publicly disclosed (est. 1T+ parameters equivalent)"
+    context_window: "200 K tokens"
+    training_data_cutoff: "2023-12"
+    architectural_details: |
+      Claude 3 Opus was Anthropic’s flagship model for Q1 2024, 
+      marking a major step in multimodal reasoning and Constitutional AI maturity.  
+      It introduced robust vision-text fusion, improved long-context stability,
+      and enhanced refusal alignment.  
+      Served as the foundation for the Claude 4.x family released later in 2024–2025.
+  modalities:
+    supported_inputs: ["text", "image"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "Medium"
+    cost_tier: "High Cost"
+    latency: |
+      ~2–3× slower than Claude 3 Sonnet; optimized for accuracy over speed.  
+      Typical enterprise prompt latency 2.5–4.0 s.
+    throughput: |
+      Stable long-context performance up to 200K tokens; limited scaling compared to later models.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    High accuracy, reasoning depth, and multimodal comprehension.  
+    Among the top closed-weight models of 2024 in scientific, coding, and legal reasoning.  
+    Noted for factual consistency and strong refusal alignment via Constitutional AI.
+  benchmark_performance: |
+    - MMLU: 88.9  
+    - GSM8K: 93.5  
+    - HumanEval: 85.4  
+    - GPQA: 84.8  
+    - HellaSwag: 88.1  
+    (Vendor system card and community benchmarks)
+  special_capabilities:
+    tools_support: true
+    vision_support: true
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["long_context", "multimodal_reasoning", "code_generation", "chain_of_thought"]
+  known_limitations:
+    vendor_disclosed: |
+      Limited interpretability; slower performance; verbose self-reflection.  
+      Residual hallucination in numerical reasoning and edge factual cases.
+    common_failure_modes: |
+      Overconfidence in reasoning chains; redundant justification; slow convergence on long tasks.
+    unsuitable_use_cases: |
+      Latency-sensitive or cost-constrained environments; safety-critical systems without oversight.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on large-scale multilingual text, code, and image-caption datasets, including 
+    public, licensed, and synthetic sources.  
+    Extensive safety filtering and red-team augmentation performed prior to release.
+  training_methodology: |
+    Constitutional AI (v1.5) alignment with supervised fine-tuning and reinforcement learning
+    from AI feedback.  
+    Multiple alignment passes for refusal, fairness, and harmlessness.
+  data_privacy_considerations: |
+    Anthropic confirmed strong PII filtering and exclusion of customer data; training corpus proprietary.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Enterprise reasoning, multimodal document comprehension, code generation, and factual summarization.
+  suitable_domains: ["research", "enterprise_QA", "document_analysis", "coding_assistance"]
+  out_of_scope_use: |
+    Safety-critical automation, regulated reasoning domains, or unsupervised deployment.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      High factual reliability and reasoning accuracy; top performance among 2024 models.
+    public_evidence: |
+      Benchmarked by independent organizations as among best-in-class for reasoning and factual QA.
+    assessment_notes: |
+      Highly reliable for general reasoning; superseded by Claude 4.x family in 2025.
+  safe:
+    safety_measures: |
+      Constitutional AI alignment with iterative safety reinforcement; refusal logic and content filtering.
+    known_safety_issues: |
+      Minor content-policy misclassifications; verbose hedging in sensitive topics.
+    assessment_notes: |
+      Strong safety baseline; improved further in Claude 4.x lineage.
+  secure_and_resilient:
+    security_features: |
+      Model deployed via Anthropic API and AWS Bedrock with enterprise isolation and monitoring.
+    known_vulnerabilities: |
+      Tool misuse risk if external agents poorly sandboxed.
+    assessment_notes: |
+      Secure within Anthropic infrastructure; standard LLM risks remain.
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Public system card available; architecture and dataset not disclosed.
+    assessment_notes: |
+      Moderate transparency; sufficient for enterprise compliance documentation.
+  explainable_and_interpretable:
+    explainability_features: |
+      Stable reasoning patterns and self-reflective dialogue enable partial interpretability.
+    interpretability_limitations: |
+      Internal reasoning inaccessible; chain-of-thought not externally viewable.
+    assessment_notes: |
+      Functionally explainable; not scientifically interpretable.
+  privacy_enhanced:
+    privacy_features: |
+      Strong input filtering and encrypted data handling; zero customer data retention.
+    privacy_concerns: |
+      Training corpus not fully disclosed.
+    assessment_notes: |
+      Meets enterprise privacy standards.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Multiple bias mitigation stages; fairness evaluated through red-team frameworks.
+    known_biases: |
+      Residual cultural and gender bias, primarily in subjective domains.
+    assessment_notes: |
+      Strong fairness alignment for 2024; surpassed by Claude 4.x methods.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Long-context factual consistency and hallucination testing  
+    - Reasoning accuracy vs Claude 4.x and GPT-4 Turbo  
+    - Multimodal image-text QA validation  
+    - Safety and refusal accuracy audits
+  key_evaluation_questions: |
+    - Is latency acceptable for your workflow?  
+    - Are refusal behaviors aligned with organizational tone?  
+    - Does reasoning depth justify operational cost?
+  comparison_considerations: |
+    - Predecessor to Claude 4.x; comparable to GPT-4 Turbo and Gemini 1.5 Pro in reasoning and safety.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Legacy model subject to continued monitoring; document transition plan to Claude 4.x successors.
+  map:
+    context_considerations: |
+      Evaluate residual hallucination and refusal coverage; ensure compliance with updated Anthropic AUP.
+    risk_categories: ["hallucination", "bias", "prompt_injection", "privacy_leakage"]
+  measure:
+    suggested_metrics: |
+      Accuracy, refusal precision/recall, safety flag frequency, latency per 1K tokens.
+  manage:
+    risk_management_considerations: |
+      Apply updated moderation layers and contextual validators; plan migration to newer releases.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://www.anthropic.com/news/claude-3-opus-sonnet-haiku"
+    description: "Official Claude 3 Opus release announcement"
+  - url: "https://www.anthropic.com/research/claude-3-system-card"
+    description: "System card and safety documentation"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://www.anthropic.com/research/claude-3-system-card"
+    result: "88.9"
+  - name: "GSM8K"
+    url: "https://www.anthropic.com/research/claude-3-system-card"
+    result: "93.5"
+  third_party_evaluations:
+  - source: "ARC Benchmark Report (2024)"
+    url: "https://arxiv.org/abs/2406.01864"
+    summary: "Claude 3 Opus among top-ranked closed models for reasoning and factual QA."
+  news_coverage:
+  - title: "Anthropic launches Claude 3 family—Opus, Sonnet, and Haiku"
+    url: "https://www.anthropic.com/news/claude-3-opus-sonnet-haiku"
+    date: "2024-03-04"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Anthropic Claude 3 documentation, system card, and independent benchmark studies.
+  completeness_assessment: |
+    High for capability and performance; medium for architectural and dataset transparency.
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card based on Claude 3 Opus system card and benchmark analysis."

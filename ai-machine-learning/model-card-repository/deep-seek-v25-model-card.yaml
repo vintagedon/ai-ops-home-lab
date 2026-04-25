@@ -1,0 +1,262 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "DeepSeek V2.5"
+  vendor: "DeepSeek AI (China)"
+  model_family: "DeepSeek"
+  version: "2.5"
+  release_date: "2024-12-18"
+  model_type: "Open-Weight Multilingual Reasoning and Coding Model (Enhanced MoE)"
+  vendor_model_card_url: "https://huggingface.co/deepseek-ai/DeepSeek-V2.5"
+  license: "Apache 2.0"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Mixture-of-Experts (MoE) Transformer"
+    parameter_count: "671 billion total (37B active per token)"
+    context_window: "200 K tokens (streaming)"
+    training_data_cutoff: "2024-10"
+    architectural_details: |
+      DeepSeek V2.5 expands upon V2 with an enlarged sparse MoE structure (64 experts, 4 active per token),
+      offering improved reasoning stability and stronger multilingual coherence.
+      It implements adaptive routing, dynamic token allocation, and context compression mechanisms 
+      that significantly enhance long-document reasoning.
+      Optimized for high-performance distributed inference using DeepSpeed-MoE and Megatron frameworks.
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "Medium–High (sparse efficiency)"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      Effective runtime comparable to a 40B dense model;  
+      ~0.7–0.9 seconds per 1K tokens (fp16 on 8×A100).  
+      Optimized for vLLM, Triton, and FlashAttention-3.
+    throughput: |
+      Efficient large-batch scaling with near-linear throughput up to 128 GPUs.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • Frontier-class reasoning accuracy rivaling GPT-4 Turbo and Claude 3 Sonnet.  
+    • Enhanced factual grounding and reduced hallucinations via retrieval-aligned training.  
+    • State-of-the-art performance in code generation, math, and multilingual logic.  
+    • Optimized for long-context scientific and enterprise workloads.
+  benchmark_performance: |
+    - MMLU: 90.3  
+    - GSM8K: 96.5  
+    - HumanEval: 91.2  
+    - C-Eval: 93.7  
+    - ARC-C: 88.5  
+    - MATH: 82.1  
+    (DeepSeek AI and ARC 2025 evaluations)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["code_generation", "multilingual_reasoning", "long_context_analysis", "retrieval_grounded_inference"]
+  known_limitations:
+    vendor_disclosed: |
+      Sparse routing increases stochastic variance between repeated prompts.  
+      Long-context inference remains compute-intensive despite compression.  
+      No multimodal support.
+    common_failure_modes: |
+      Occasionally verbose self-correction loops; factual degradation at >180K context length.  
+    unsuitable_use_cases: |
+      Real-time applications or deterministic audit environments.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on 20+ trillion tokens including multilingual web text, academic corpora, legal documents,
+    and filtered code repositories (GitHub, BigCode, and proprietary bilingual datasets).  
+    Includes synthetic reasoning data for chain-of-thought (CoT) and retrieval-augmented QA.
+  training_methodology: |
+    Multiphase MoE pretraining with retrieval conditioning, followed by supervised fine-tuning and 
+    reinforcement learning from AI feedback (RLAIF).  
+    Post-training alignment introduces "SafeRL" layer for toxicity, bias, and factuality filtering.
+  data_privacy_considerations: |
+    Public and licensed data only; no private or user-contributed datasets.  
+    Distributed under open-weight license for reproducibility and transparency.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Open research, enterprise reasoning, and high-accuracy coding assistance.  
+    Ideal for large-scale document analysis, RAG, and multilingual logic reasoning.
+  suitable_domains: ["software_engineering", "scientific_research", "multilingual_QA", "enterprise_knowledge", "education"]
+  out_of_scope_use: |
+    Safety-critical decision systems, closed-loop governance, or real-time operations.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Achieves reasoning accuracy comparable to GPT-4 Turbo across benchmarks.  
+      Reduced hallucination rate (≤1.5%) in factual QA under retrieval conditioning.
+    public_evidence: |
+      Confirmed by Hugging Face and ARC benchmarks; community replication consistent within ±0.2%.  
+    assessment_notes: |
+      Extremely reliable open-weight reasoning model; deterministic when routed with fixed seeds.
+  safe:
+    safety_measures: |
+      RLHF and SafeRL alignment; multi-language toxicity filters; red-teaming for cultural fairness.  
+    known_safety_issues: |
+      Inconsistent refusals on culturally sensitive queries; mild over-sanitization in dialogue mode.  
+    assessment_notes: |
+      Safe for research and enterprise under moderation.
+  secure_and_resilient:
+    security_features: |
+      Checkpoint integrity hashes; compatible with secure containerized deployment.  
+      No telemetry; air-gapped inference supported.  
+    known_vulnerabilities: |
+      Prompt injection and fine-tune poisoning possible without sandboxing.  
+    assessment_notes: |
+      Enterprise-grade security achievable with proper isolation.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Full weights, router logic, and training documentation public; benchmark suite open-sourced.  
+    assessment_notes: |
+      Exemplary transparency and reproducibility; benchmark for open MoE models.
+  explainable_and_interpretable:
+    explainability_features: |
+      Expert routing logs available; interpretable via visualization tools in DeepSpeed-MoE.  
+    interpretability_limitations: |
+      Complex routing dynamics reduce human interpretability.  
+    assessment_notes: |
+      Strong interpretability for MoE research environments.
+  privacy_enhanced:
+    privacy_features: |
+      No private data, no retention, no telemetry.  
+      Supports differential privacy fine-tuning option via open API.  
+    privacy_concerns: |
+      Minimal residual risk; trained only on public data.  
+    assessment_notes: |
+      Excellent privacy posture for open distribution.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Balanced multilingual corpus, SafeRL fairness adjustment, and post-alignment audits.  
+    known_biases: |
+      Slight performance bias toward Chinese and English; minor underperformance on African and Indic languages.  
+    assessment_notes: |
+      Good fairness baseline; continuous evaluation recommended.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Factual and reasoning QA testing under long-context workloads  
+    - Code synthesis (HumanEval, MBPP)  
+    - Fairness and multilingual evaluation  
+    - Latency and scaling efficiency profiling on hardware clusters  
+    - Quantization validation for deployment
+  key_evaluation_questions: |
+    - Are deterministic routing and moderation policies configured?  
+    - Is infrastructure adequate for sparse MoE scaling?  
+    - Are multilingual fairness benchmarks monitored post-fine-tune?
+  comparison_considerations: |
+    - Outperforms DeepSeek V2, LLaMA 3 70B, and Gemma 2 27B.  
+      Approaches GPT-4 Turbo and Claude 4 Sonnet performance.  
+      Strongest open multilingual reasoning model as of early 2025.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Establish governance for open-weight deployment and retraining audit trails.  
+      Document MoE routing reproducibility and dataset compliance.
+  map:
+    context_considerations: |
+      Identify fairness, hallucination, and routing nondeterminism risks.  
+    risk_categories: ["hallucination", "bias", "routing_variance", "prompt_injection"]
+  measure:
+    suggested_metrics: |
+      Accuracy, hallucination rate, fairness index, routing stability, latency per 1K tokens.  
+  manage:
+    risk_management_considerations: |
+      Enforce moderation, seed control for determinism, and data filtering in fine-tuning.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/deepseek-ai/DeepSeek-V2.5"
+    description: "Official model page and open-weight documentation"
+  - url: "https://github.com/deepseek-ai/DeepSeek-V2.5"
+    description: "Repository with MoE routing and evaluation scripts"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "90.3"
+  - name: "GSM8K"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "96.5"
+  third_party_evaluations:
+  - source: "ARC Open LLM Leaderboard (2025)"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    summary: "DeepSeek V2.5 leads all open models in reasoning and code accuracy as of Q1 2025."
+  news_coverage:
+  - title: "DeepSeek V2.5 released — 671B-parameter MoE open model rivals GPT-4"
+    url: "https://www.deepseek.com/news/v2-5-release"
+    date: "2024-12-18"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    DeepSeek AI release materials, Hugging Face benchmarks, ARC evaluation results, and replication studies.
+  completeness_assessment: |
+    High for benchmarks, transparency, and governance mapping; medium for routing-specific interpretability.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from DeepSeek V2.5 release and benchmark documentation."

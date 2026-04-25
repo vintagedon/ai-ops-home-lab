@@ -1,0 +1,194 @@
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+model_identity:
+  name: "Phi-4-multimodal-instruct"
+  vendor: "Microsoft"
+  model_family: "Phi-4 (Multimodal)"
+  version: "5.6 B param variant"  # as described in README. :contentReference[oaicite:2]{index=2}
+  release_date: "February 2025"  # release month per README. :contentReference[oaicite:3]{index=3}
+  model_type: "Multimodal foundation model (text, image, audio → text output)"
+
+  vendor_model_card_url: "https://huggingface.co/microsoft/Phi-4-multimodal-instruct"
+
+  license: "MIT License"  :contentReference[oaicite:4]{index=4}
+  deprecation_status: "Active"
+
+technical_specifications:
+  architecture:
+    base_architecture: "Multimodal transformer combining speech, vision, and language encoders/adapters; uses Phi-4-Mini-Instruct as backbone LM."  :contentReference[oaicite:5]{index=5}
+    parameter_count: "≈ 5.6 billion parameters"  :contentReference[oaicite:6]{index=6}
+    context_window: "128 K tokens"  :contentReference[oaicite:7]{index=7}
+    training_data_cutoff: "June 2024 (publicly available data)"  :contentReference[oaicite:8]{index=8}
+
+    architectural_details: |
+      - The model accepts text, image and audio inputs to generate text outputs; supports instruction-fine-tuning, direct preference optimisation and RLHF.  :contentReference[oaicite:9]{index=9}
+      - It is described as “lightweight open multimodal” relative to larger closed systems.  :contentReference[oaicite:10]{index=10}
+
+  modalities:
+    supported_inputs: ["text", "image", "audio"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "Moderate-high (multimodal inference)";
+    cost_tier: "Relatively efficient for its capability class (5.6B param)";
+    latency: "Varies with hardware and input modalities (not explicitly published)";
+    throughput: "Not publicly disclosed"
+
+capabilities:
+  vendor_claimed_strengths: |
+    - Multilingual support: text in many languages (Arabic, Chinese, Czech, Danish, Dutch, English, Finnish, French, German, Hebrew, Hungarian, Italian, Japanese, Korean, Norwegian, Polish, Portuguese, Russian, Spanish, Swedish, Thai, Turkish, Ukrainian) :contentReference[oaicite:11]{index=11}
+    - Vision (English) and audio (English, Chinese, German, French, Italian, Japanese, Spanish, Portuguese) support. :contentReference[oaicite:12]{index=12}
+    - Strong reasoning in multimodal tasks: e.g., chart/table understanding, document reasoning, optical character recognition (OCR) tasks. :contentReference[oaicite:13]{index=13}
+    - Speech recognition & translation capabilities: e.g., word-error-rate (WER) claims to surpass 6.14 % in some ASR benchmarks. :contentReference[oaicite:14]{index=14}
+  benchmark_performance: |
+    - On selected vision-speech benchmarks: average ~72.2 (vs ~62.6 for comparable models) for certain tasks. :contentReference[oaicite:15]{index=15}
+  special_capabilities:
+    tools_support: true (instruction-aligned, tool-callable in principle)
+    vision_support: true
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["multi-modal reasoning (text+image/audio)", "long-context (128K) inference", "OCR/diagram/chart comprehension"]
+  known_limitations:
+    vendor_disclosed: |
+      - Not designed or evaluated for *all* downstream use-cases; developers should validate for domain-specific tasks.  :contentReference[oaicite:16]{index=16}
+    common_failure_modes: |
+      - Some combinations of modalities (text+image+audio simultaneously) may not be supported or performance may degrade. :contentReference[oaicite:17]{index=17}
+    unsuitable_use_cases: |
+      - Regulated domains requiring full training-data transparency;
+      - Real-time low latency use-cases on constrained hardware without adaptation.
+
+training_information:
+  training_data_description: |
+    - Text: ~5 trillion tokens
+    - Audio: ~2.3 million hours
+    - Image-text: ~1.1 trillion tokens
+      :contentReference[oaicite:18]{index=18}
+    - Mix includes synthetic and public data: documents, textbooks, code, image-text interleaves, speech-text pairs. :contentReference[oaicite:19]{index=19}
+  training_methodology: |
+    - Supervised fine-tuning, Direct Preference Optimization (DPO), RLHF, multimodal integration. :contentReference[oaicite:20]{index=20}
+  data_privacy_considerations: |
+    - Training details around PII filtering, dataset provenance not fully publicly disclosed; implementers should assess when used for sensitive domains.
+
+intended_use:
+  vendor_intended_use: |
+    To support multilingual, multimodal applications (text, vision, audio) in research or production contexts—especially where long context, reasoning, OCR/diagram/chart comprehension are required.  :contentReference[oaicite:21]{index=21}
+  suitable_domains: ["multimodal assistant","document & image analytics","speech transcription/translation","chart/diagram/table reasoning","tool-invoker agents"]
+  out_of_scope_use: |
+    - Use cases outside of supported modalities or languages without validation;
+    - Scenarios demanding training-data provenance or audit-certified models unless additional controls are added.
+
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Detailed architecture and benchmarks provided publicly.
+    public_evidence: |
+      Model card, Microsoft blog, Azure catalog. :contentReference[oaicite:22]{index=22}
+    assessment_notes: |
+      Promising for general multimodal tasks; users should validate performance/robustness in their target domain.
+  safe:
+    safety_measures: |
+      Training included red-teaming, safety datasets across text/vision/audio; multilingual evaluation. :contentReference[oaicite:23]{index=23}
+    known_safety_issues: |
+      Some languages/modalities may have higher risk of error; prompt combos involving multiple modalities may trigger limitations.
+    assessment_notes: |
+      Deploy with human review, guardrails and monitoring especially for high-risk outputs.
+  secure_and_resilient:
+    security_features: |
+      Open-source weights (MIT license) allow on-prem deployment; helps with auditability.
+    known_vulnerabilities: |
+      Large memory/computation demands; complexity increases surface for misuse/hallucination in modal fusion.
+    assessment_notes: |
+      Infrastructure should include resource monitoring and fallback strategies.
+  accountable_and_transparent:
+    transparency_level: "Medium-High"
+    auditability: |
+      Model weights and architecture open; dataset/train logs not fully disclosed.
+    assessment_notes: |
+      For regulated domains, implement additional logging, version control and output traceability.
+  explainable_and_interpretable:
+    explainability_features: |
+      Outputs are text and inspectable; prompt→output mapping transparent.
+    interpretability_limitations: |
+      Internal multimodal fusion and reasoning steps not directly observable.
+    assessment_notes: |
+      Consider augmenting with monitoring/logging of internal decisions for sensitive use.
+  privacy_enhanced:
+    privacy_features: |
+      On-premise deployment possible (open model).
+    privacy_concerns: |
+      Training data provenance not fully disclosed; multimodal inputs may embed sensitive data.
+    assessment_notes: |
+      For sensitive inputs (voice, images) ensure data processing/consent pipelines in place.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Multilingual and multimodal support indicates broad coverage; detailed bias audits not publicly published.
+    known_biases: |
+      Underrepresented languages or rare scripts/modalities may have lower fidelity; modality fusion errors possible.
+    assessment_notes: |
+      Conduct bias/harm audits across languages, modalities and target user groups.
+
+evaluation_guidance:
+  recommended_tests: |
+    - Evaluate on your target multimodal workflows: text+image, text+audio, image+audio if applicable, and combinations.
+    - Benchmark modality-specific tasks (OCR, chart reasoning, speech recognition/translation) using your data.
+    - Measure latency, memory/compute footprint on your deployment hardware (especially for long-context 128 K token inputs).
+    - Conduct red-teaming: adversarial prompts, multilingual tests, prompt fusion (image+audio) edge cases.
+    - Monitor output for hallucination, mis-recognition in speech/text/image tasks, and modality mismatch.
+  key_evaluation_questions: |
+    - Does the model meet accuracy/fidelity for your intended modalities and languages?
+    - Is your infrastructure able to handle the memory/compute demands (5.6B param, long context, multimodal inputs)?
+    - Are you implementing human review/fallback for high-risk content (especially voice/image inputs)?
+    - Are licensing, data governance, consent and privacy policies in place for using multimodal inputs (e.g., voices/images)?
+  comparison_considerations: |
+    - Compare with other open multimodal models of similar size (e.g., Qwen3-VL, InternVL) — evaluate performance vs cost/size.
+    - Assess trade-off of 5.6B param multimodal model vs larger/higher-latency models when your domain allows.
+    - Consider fine-tuning or domain-specific adaptation if your use-case involves rare languages, audio dialects, or custom imagery.
+
+rmf_function_mapping:
+  govern:
+    notes: |
+      Multimodal input systems need versioning, logging, human oversight, model lifecycle management, especially due to image/voice inputs.
+  map:
+    context_considerations: |
+      Text+image+audio input fusion, long context reasoning, OCR/diagram tasks, speech transcription/translation tasks.
+    risk_categories: ["hallucination","mis-recognition","modal-fusion_error","bias_language/script","privacy_biometric_leakage"]
+  measure:
+    suggested_metrics: |
+      - Error rate (mis-recognition, hallucination) per 1k multimodal prompts.
+      - Latency (ms) and memory footprint per session with 128K token context.
+      - Bias/disparity incidents (across languages, modalities) per 1k uses.
+  manage:
+    risk_management_considerations: |
+      Implement moderation & human review, prompt sanitisation (especially image/voice), logging of model version and inputs/outputs, fallback for unsupported modality combos, monitor deployment drift.
+
+references:
+  vendor_documentation:
+    - url: "https://huggingface.co/microsoft/Phi-4-multimodal-instruct"
+      description: "Hugging Face model page"
+    - url: "https://azure.microsoft.com/en-us/blog/empowering-innovation-the-next-generation-of-the-phi-family/"
+      description: "Microsoft Azure blog on Phi-4-multimodal" :contentReference[oaicite:24]{index=24}
+    - url: "https://docs.api.nvidia.com/nim/reference/microsoft-phi-4-multimodal-instruct"
+      description: "Model overview on NVIDIA reference" :contentReference[oaicite:25]{index=25}
+  benchmarks:
+    - name: "Azure AI Foundry catalog: Phi-4-multimodal-instruct specs and benchmarks"
+      url: "https://ai.azure.com/catalog/models/Phi-4-multimodal-instruct"
+      result: specs and benchmark summary. :contentReference[oaicite:26]{index=26}
+  third_party_evaluations:
+    - source: "Q&A forum: modality combination limitation (text+image+audio) on Phi-4-multimodal-instruct"
+      url: "https://learn.microsoft.com/en-us/answers/questions/2236372/phi-4-multimodal-does-not-support-text-audio-image"
+      summary: > “The model cannot handle all three text+audio+image in one prompt simultaneously in the current implementation.” :contentReference[oaicite:27]{index=27}
+
+metadata:
+  card_version: "1.0"
+  card_author: "Assistant"
+  card_creation_date: "2025-10-24"
+  last_updated: "2025-10-24"
+  information_sources: |
+    Model README, vendor blog, Azure catalog, Q&A forum.
+  completeness_assessment: |
+    Good for architecture, modalities, capabilities and intended use; moderate for dataset/training full details and latency/throughput; limited for independent large-scale evaluation.
+  change_log:
+    - date: "2025-10-24"
+      author: "Assistant"
+      changes: "Initial synthesis of Phi-4-multimodal-instruct model card."

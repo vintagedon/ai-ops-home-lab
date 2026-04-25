@@ -1,0 +1,1037 @@
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+# GPT-5 nano Model Card - NIST AI RMF Compliant
+# Populated from OpenAI documentation and verified web sources
+# Note: OpenAI has not disclosed all technical specifications; gaps explicitly noted
+
+schema_version: "1.0.0"
+
+# =============================================================================
+# MODEL IDENTITY
+# =============================================================================
+
+model_identity:
+  name: "GPT-5 nano"
+  vendor: "OpenAI"
+  model_family: "GPT (Generative Pre-trained Transformer)"
+  version: "gpt-5-nano (gpt-5-nano-2025-08-07)"
+  release_date: "2025-08-07"
+  model_type: "Large Language Model - Multimodal (Ultra-Low-Cost / Edge-Optimized)"
+
+  vendor_model_card_url: "https://platform.openai.com/docs/models/gpt-5-nano"
+
+  license: "Proprietary - Commercial API License"
+  
+  deprecation_status: "Active - Current ultra-low-cost variant in GPT-5 family"
+
+# =============================================================================
+# MODEL ARCHITECTURE & TECHNICAL SPECIFICATIONS
+# =============================================================================
+
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer decoder, ultra-compact variant of GPT-5. Edge-optimized for maximum speed and minimum cost."
+    
+    parameter_count: "Not publicly disclosed by OpenAI. Smallest model in GPT-5 family for maximum cost efficiency."
+    
+    context_window: "400,000 tokens maximum (272,000 input + 128,000 output)"
+    
+    training_data_cutoff: "2024-05-31"
+
+    architectural_details: |
+      GPT-5 nano is OpenAI's fastest, cheapest, and most compact version of GPT-5, optimized for 
+      high-volume, low-latency applications. Key architectural features:
+      
+      - Ultra-Cost-Optimization: 25x cheaper input than GPT-5 main ($0.05 vs $1.25 per 1M tokens)
+      - Speed-First Design: Fastest option in GPT-5 family, optimized for real-time applications
+      - Edge-Optimized: "Edge-optimized version for on-device use" with reduced capabilities but
+        privacy-preserving and low-latency characteristics
+      - Reasoning Token Support: Includes chain-of-thought reasoning with adjustable effort
+      - Average Reasoning Ability: "Average reasoning capabilities" suitable for straightforward tasks
+      - Same Training Methodology: Three-stage training (unsupervised pretraining, supervised
+        fine-tuning, RLHF)
+      - Multimodal: Supports text and image inputs, text outputs
+      - Function Calling: Supports tool calling with structured outputs
+      
+      Best suited for: Summarization, classification, high-volume batch processing, mobile apps,
+      embedded systems, offline agents, and cost-sensitive applications at massive scale.
+
+  modalities:
+    supported_inputs: ["text", "image"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "Fastest - Ultra-low latency optimized for real-time and high-volume applications"
+    
+    cost_tier: "Ultra-Low - 25x cheaper than GPT-5 main, lowest cost in GPT-5 family"
+    
+    latency: "Lowest latency in GPT-5 family. Optimized for real-time applications with minimal/low reasoning effort. Speed increases with lower reasoning settings."
+    
+    throughput: "Very high throughput optimized. Ranks in 39th percentile for speed across benchmarks. Rate-limited by tier (see pricing section)."
+
+# =============================================================================
+# CAPABILITIES & LIMITATIONS
+# =============================================================================
+
+capabilities:
+  vendor_claimed_strengths: |
+    OpenAI describes GPT-5 nano as "fastest, most cost-efficient version of GPT-5" with strengths in:
+    
+    Summarization: "Great for summarization and classification tasks" - optimized for extracting
+    key information and condensing content efficiently.
+    
+    Classification: Primary use case alongside summarization. Designed for categorization tasks
+    with high accuracy at minimal cost.
+    
+    Speed: Fastest model in GPT-5 family, enabling real-time applications and high-volume processing.
+    
+    Cost Efficiency: At $0.05-$0.40 per 1M tokens, enables applications that were previously 
+    cost-prohibitive. 25x cheaper input than GPT-5 main.
+    
+    Edge Deployment: "Edge-optimized version for on-device use" with "privacy-preserving and 
+    low-latency" characteristics suitable for mobile apps, embedded systems, offline agents.
+    
+    High-Volume Batch Processing: "Practical for high-volume workloads such as batch summarization
+    or classification at scale."
+    
+    Average Reasoning: OpenAI acknowledges "average reasoning capabilities" - not designed for
+    complex multi-step reasoning but sufficient for straightforward, well-defined tasks.
+
+  benchmark_performance: |
+    Published benchmark results from OpenAI and third-party sources:
+    
+    Third-Party Independent Evaluations:
+    - General Knowledge: 100% accuracy (best in class at price/speed point)
+    - Hallucinations: 100% accuracy (most accurate at price/speed point)
+    - Classification: 99.0% accuracy (top percentile)
+    - Reasoning: 96.0% accuracy (strong for compact model)
+    - Mathematics: 94.0% accuracy (competitive)
+    - Coding: 93.0% accuracy (solid for simple tasks)
+    - Ethics: 98.0% (moderate score)
+    - Instruction Following: 69.0% accuracy (80th percentile, area for improvement)
+    
+    Reliability:
+    - 100% success rate across all benchmarks (exceptional stability)
+    - Ranks in 39th percentile for speed
+    - Ranks in 45th percentile for pricing (competitive)
+    
+    Cost-Performance Benchmarks:
+    - AIMultiple Analysis: Among cheapest options at $0.05/$0.40 per 1M tokens
+    - Label Studio: Lowest accuracy in GPT-5 family but acceptable for simple extraction tasks
+    - Agreement with larger models: 64% minimum, 99% maximum (high task-dependent variance)
+    
+    Comparative Performance:
+    - GPT-5 mini (high): ~15-20% better accuracy, 5x more expensive
+    - GPT-5 main: Significantly better on complex reasoning, 25x more expensive on input
+    - "Half the performance for half the cost" compared to mini (SWE-bench analysis)
+    
+    OpenAI Positioning:
+    - Not included in flagship benchmark announcements (GPT-5 main focus)
+    - Positioned as utility model for cost-sensitive, high-volume use cases
+    - Trade-off: Sacrifice reasoning depth for maximum speed and minimum cost
+
+  special_capabilities:
+    tools_support: true
+    vision_support: true
+    reasoning_support: true
+    image_generation: true
+    additional_capabilities:
+      - "Reasoning token support with adjustable effort (minimal/low/medium/high)"
+      - "Structured outputs with grammar constraints"
+      - "Function/tool calling"
+      - "Extended context window (400k tokens same as other GPT-5 variants)"
+      - "Edge-optimized for on-device deployment"
+      - "Privacy-preserving characteristics for offline use"
+      - "File search support"
+      - "Code interpreter support"
+      - "Image generation support (unlike mini which lacks this)"
+
+  known_limitations:
+    vendor_disclosed: |
+      OpenAI has disclosed several limitations specific to GPT-5 nano:
+      
+      - Average Reasoning Ability: "Average reasoning capabilities" - not suitable for complex
+        multi-step reasoning or deep analysis. "Works best when task is straightforward and does
+        not require deep analysis."
+      - Reduced Capabilities: "Edge-optimized version... Reduced capabilities, but privacy-preserving
+        and low-latency." Trade-off made for speed and cost.
+      - Best for Simple Tasks: Optimized for summarization and classification, not general-purpose
+        reasoning or creative work.
+      - Training Data Cutoff: Knowledge cutoff May 31, 2024 (earlier than GPT-5 main Sep 30, 2024)
+      - Web Search Not Supported: Unlike mini which supports web search via Responses API
+      - Audio/Video Inputs: Not supported (text and image only)
+      - Fine-tuning: Not supported (per PDF documentation)
+      - Distillation: Not supported
+      
+      OpenAI positions nano as "ultra-compact speed demon for low-latency needs" - explicitly not
+      for complex reasoning or high-stakes analysis.
+
+    common_failure_modes: |
+      Publicly reported issues and failure patterns:
+      
+      Task Complexity Limitations: GPT-5 nano struggles with:
+      - Complex multi-step reasoning beyond straightforward logic
+      - Nuanced analysis requiring deep understanding
+      - Creative tasks requiring maximum model capacity
+      - Open-ended problems without clear success criteria
+      
+      Accuracy Trade-offs: Independent evaluations show:
+      - Label Studio: Lowest accuracy in GPT-5 family on document extraction
+      - High variance in agreement with larger models (64-99% depending on task)
+      - Instruction following at 69% (lowest in GPT-5 family, though still 80th percentile)
+      
+      Hallucinations: While benchmark shows 100% accuracy on hallucination tests, real-world
+      usage likely encounters hallucinations on complex tasks beyond model's designed scope.
+      
+      Prompt Sensitivity: Like mini, likely very sensitive to prompt quality and clarity.
+      Performance degrades significantly with ambiguous or poorly structured prompts.
+      
+      Edge Case Handling: Smallest model means least capacity for handling unusual inputs,
+      corner cases, or tasks at the boundary of training distribution.
+      
+      Context Understanding: While 400k context window supported, may not utilize long context
+      as effectively as larger models for complex analysis.
+
+    unsuitable_use_cases: |
+      GPT-5 nano should NOT be used for:
+      
+      Complexity Limitations (Critical):
+      - ANY complex reasoning or multi-step analysis
+      - Creative writing requiring nuance and depth
+      - High-stakes decisions even with human review (use mini/main/pro)
+      - Ambiguous tasks without clear output criteria
+      - Tasks requiring maximum accuracy (use larger models)
+      - Open-ended problem solving beyond classification/summarization
+      
+      Domain Restrictions (Same as other GPT-5 variants):
+      - Medical diagnosis or treatment planning
+      - Legal advice or contract generation
+      - Financial advice or trading decisions
+      - Safety-critical systems as primary controller
+      
+      Technical Constraints:
+      - Tasks requiring knowledge after May 31, 2024
+      - Web search tasks (not supported)
+      - Audio or video processing (not supported)
+      - On-premises deployment without internet (cloud-only despite "edge-optimized" label)
+      
+      Quality Requirements:
+      - Applications where accuracy is non-negotiable
+      - User-facing applications where errors damage brand
+      - Complex coding beyond simple refactoring/debugging
+      - Detailed analysis or research requiring depth
+      - Tasks where cost savings don't justify quality gaps
+      
+      Decision Framework:
+      - If task is simple classification/summarization at massive scale: Use nano
+      - If task requires ANY meaningful reasoning: Use mini instead (only 5x more expensive)
+      - If quality matters more than cost: Use GPT-5 main or pro
+      - When in doubt: Start with mini, not nano
+
+# =============================================================================
+# TRAINING & DATA
+# =============================================================================
+
+training_information:
+  training_data_description: |
+    OpenAI has not disclosed detailed training data for GPT-5 nano. Based on vendor statements:
+    
+    - Same training methodology as GPT-5 family (three-stage process)
+    - Multimodal training: Text and visual data trained simultaneously
+    - Training data cutoff: May 31, 2024 (same as mini, earlier than main)
+    - Optimization focus: Extreme cost-efficiency and speed while maintaining acceptable performance
+    - Edge optimization: Additional tuning for on-device deployment characteristics
+    
+    Not publicly disclosed:
+    - Exact corpus size and token count
+    - Specific dataset names and sources
+    - Training data differences from mini and main variants
+    - Model compression or distillation techniques used
+    - Architectural differences enabling 25x cost reduction
+
+  training_methodology: |
+    OpenAI describes same three-stage training as other GPT-5 variants:
+    
+    1. Unsupervised Pretraining: Large-scale multilingual and multimodal pretraining
+    2. Supervised Fine-tuning: Task-specific fine-tuning with focus on summarization/classification
+    3. Reinforcement Learning from Human Feedback (RLHF): Alignment training
+    
+    GPT-5 nano-specific methodology (inferred):
+    - Extreme cost-optimization: Architecture and training tuned for minimum inference cost
+    - Task-specific focus: Emphasis on summarization and classification during fine-tuning
+    - Edge characteristics: Optimization for privacy-preserving, low-latency deployment
+    
+    Not publicly disclosed:
+    - Specific architectural differences from mini/main (parameter count, attention patterns)
+    - Model compression techniques (quantization, pruning, distillation)
+    - Trade-offs made to achieve 25x cost reduction
+    - Training compute and infrastructure details
+
+  data_privacy_considerations: |
+    Same privacy considerations as other GPT-5 variants, with additional edge characteristics:
+    
+    Disclosed policies:
+    - API data not used for training by default
+    - GDPR and privacy regulation compliance claimed
+    
+    Edge-Optimized Privacy Claims:
+    - "Privacy-preserving" characteristics mentioned for edge deployment
+    - Suitable for "offline agents" suggesting potential for on-device use
+    - However: Still cloud-only service in practice (no true on-premises deployment disclosed)
+    
+    Concerns and gaps (same as other variants):
+    - No transparency on PII filtering during training
+    - No disclosure of consent mechanisms
+    - Cloud-hosted service despite "edge-optimized" label
+    - Data sent to API subject to same privacy policies as other models
+    
+    Critical for sensitive deployments:
+    - Verify "edge-optimized" doesn't mean actual edge deployment (still cloud API)
+    - Do not send sensitive PII without safeguards
+    - Maintain audit trail of all API interactions
+    - Consider data residency requirements
+
+# =============================================================================
+# INTENDED USE & SCOPE
+# =============================================================================
+
+intended_use:
+  vendor_intended_use: |
+    OpenAI describes GPT-5 nano as designed for:
+    
+    Primary Use Cases:
+    - Summarization at scale: High-volume batch summarization of documents, articles, transcripts
+    - Classification tasks: Categorization, tagging, routing, sentiment analysis
+    - Edge deployment: Mobile apps, embedded systems, offline agents (though cloud API in practice)
+    - Cost-sensitive applications: Where cost per request is critical constraint
+    - High-throughput applications: Real-time processing, large-scale batch jobs
+    
+    Ideal Scenarios:
+    - "Straightforward tasks that do not require deep analysis"
+    - Well-defined problems with clear success criteria
+    - Applications where speed matters more than nuance
+    - Use cases previously cost-prohibitive at higher model tiers
+    
+    OpenAI explicitly positions nano as "ultra-compact speed demon for low-latency needs" with
+    "average reasoning capabilities" - not general-purpose but task-specific optimization.
+
+  suitable_domains:
+    - "High-volume document summarization (news, articles, reports)"
+    - "Content classification and categorization at scale"
+    - "Sentiment analysis for customer feedback"
+    - "Simple data extraction with structured outputs"
+    - "Batch processing of routine queries"
+    - "Mobile app features requiring fast response"
+    - "Cost-sensitive consumer applications"
+    - "Lightweight chatbots for FAQs and routing"
+    - "Tag generation and content labeling"
+    - "Simple translation for common languages"
+
+  out_of_scope_use: |
+    Use cases falling outside safe deployment boundaries for GPT-5 nano:
+    
+    Reasoning Complexity (Critical - Use Mini or Main Instead):
+    - ANY task requiring multi-step reasoning
+    - Complex coding beyond trivial refactoring
+    - Detailed analysis or research
+    - Creative writing requiring depth
+    - Problem-solving beyond straightforward logic
+    - Ambiguous tasks requiring interpretation
+    - High-stakes decisions of any kind
+    
+    Same restrictions as other GPT-5 variants:
+    - Medical, legal, financial advice without professional validation
+    - Safety-critical systems
+    - Web search tasks (not supported for nano)
+    - Audio/video processing (not supported)
+    - Knowledge-intensive tasks after May 31, 2024 cutoff
+    
+    Quality-Driven Applications:
+    - User-facing applications where errors damage brand
+    - Customer service requiring nuanced understanding
+    - Content generation for publication without heavy editing
+    - Research or analysis tasks
+    - Applications where cost savings don't justify accuracy gaps
+    
+    Clear Decision Heuristic:
+    - Can task be described as "simple classification or summarization"? → Consider nano
+    - Does task require reasoning, analysis, or creativity? → Use mini or main instead
+    - Is maximum accuracy required? → Use main or pro
+    - Is cost <1% of total project budget? → Just use main for simplicity
+
+# =============================================================================
+# TRUSTWORTHINESS CHARACTERISTICS
+# =============================================================================
+
+trustworthiness_assessment:
+  # CHARACTERISTIC 1: Valid and Reliable
+  valid_and_reliable:
+    vendor_claims: |
+      OpenAI claims GPT-5 nano benefits from same reliability improvements as GPT-5 family,
+      including RLHF alignment. Described as having "average reasoning" but suitable for
+      "straightforward tasks."
+    
+    public_evidence: |
+      Third-party evidence shows mixed reliability:
+      - Exceptional: 100% success rate across benchmarks (stability)
+      - Excellent: 100% on hallucination detection tests
+      - Good: 99% classification, 96% reasoning, 94% math on standard tests
+      - Weak: 69% instruction following (lowest in GPT-5 family)
+      - Variable: 64-99% agreement with larger models (high task dependence)
+      
+      Label Studio: Lowest accuracy in GPT-5 family on document extraction tasks.
+      Reliability heavily dependent on task matching nano's designed capabilities.
+    
+    assessment_notes: |
+      Reliability is highly task-specific:
+      - Excellent for simple, well-defined summarization/classification
+      - Poor for complex reasoning or ambiguous tasks
+      - Test extensively on YOUR specific use case before deployment
+      - Don't assume benchmark results transfer to your domain
+      - Monitor quality continuously vs mini/main as quality baseline
+      - Plan upgrade path to mini if reliability gaps emerge
+      - Consider cost of errors vs model cost savings
+
+  # CHARACTERISTIC 2: Safe
+  safe:
+    vendor_claims: |
+      OpenAI states GPT-5 nano has same safety fine-tuning as other GPT-5 variants, including
+      RLHF training and "safe-completions" approach. 98.0% ethics score in benchmarks.
+    
+    public_evidence: |
+      Limited independent safety evaluation specific to nano. 98% ethics score suggests strong
+      but not perfect safety. Smaller model size may affect safety edge cases differently than
+      larger models.
+    
+    assessment_notes: |
+      Safety considerations for nano:
+      - Apply same safety precautions as larger GPT-5 variants
+      - Smaller capacity may mean less robust safety in edge cases
+      - Additional content filtering recommended for high-risk applications
+      - Test adversarial prompts specific to your use case
+      - Monitor for safety issues unique to smallest model
+      - Maintain incident response plan
+
+  # CHARACTERISTIC 3: Secure and Resilient
+  secure_and_resilient:
+    vendor_claims: |
+      Same infrastructure as other GPT-5 variants. Cloud-hosted on Microsoft Azure with
+      enterprise security despite "edge-optimized" label.
+    
+    public_evidence: |
+      100% success rate across benchmarks indicates exceptional stability and resilience.
+      No security incidents reported specific to nano. Cloud-only service despite edge
+      optimization claims.
+    
+    assessment_notes: |
+      Same security considerations as other GPT-5 variants:
+      - Standard API security controls required
+      - Prompt injection protections for user-facing apps
+      - Service outage planning with fallbacks
+      - "Edge-optimized" is marketing, not true edge deployment
+      - Still requires internet connectivity for API calls
+
+  # CHARACTERISTIC 4: Accountable and Transparent
+  accountable_and_transparent:
+    vendor_claims: |
+      OpenAI provides API documentation and pricing transparency. Same limited technical
+      disclosure as other GPT-5 variants. Explicit positioning as "average reasoning"
+      model helps set expectations.
+    
+    public_evidence: |
+      Same transparency gaps as other variants:
+      - No parameter count disclosed
+      - No architecture details
+      - No training data specifics
+      - No bias testing specific to nano
+      - More honest positioning about limitations ("average reasoning") than some models
+    
+    assessment_notes: |
+      Transparency is limited:
+      - Document limitations clearly to stakeholders
+      - Maintain comprehensive audit logs
+      - Don't oversell capabilities to users
+      - Be explicit about cost-quality trade-offs made
+      - Prepare to justify model selection vs larger variants
+
+  # CHARACTERISTIC 5: Explainable and Interpretable
+  explainable_and_interpretable:
+    vendor_claims: |
+      Same limited explainability as other GPT-5 variants: reasoning tokens available,
+      structured outputs supported, but no built-in attribution or confidence scoring.
+    
+    public_evidence: |
+      Black-box neural network. Smallest model in family likely has least capacity for
+      explaining its reasoning even with reasoning tokens enabled.
+    
+    assessment_notes: |
+      Explainability severely limited:
+      - Don't rely on nano for applications requiring explanations
+      - Use larger model if explainability critical
+      - Application-level tracking for post-hoc analysis
+      - Consider rule-based systems if full explainability required
+
+  # CHARACTERISTIC 6: Privacy-Enhanced
+  privacy_enhanced:
+    vendor_claims: |
+      Same privacy policies as other GPT-5 variants. "Privacy-preserving" characteristics
+      mentioned for edge deployment, but still cloud API service in practice.
+    
+    public_evidence: |
+      Same privacy concerns as other variants. "Privacy-preserving" claim appears to refer
+      to potential (not actual) edge deployment, not current API implementation.
+    
+    assessment_notes: |
+      Privacy considerations:
+      - Do not send sensitive PII without safeguards
+      - "Edge-optimized" ≠ on-device processing (still cloud API)
+      - Same data handling as other GPT-5 variants
+      - Implement data minimization strategies
+      - Maintain audit trail of API calls
+
+  # CHARACTERISTIC 7: Fair with Harmful Bias Managed
+  fair_with_harmful_bias_managed:
+    vendor_claims: |
+      Same training and alignment as other GPT-5 variants with RLHF. No specific bias
+      testing results disclosed for nano.
+    
+    public_evidence: |
+      No published bias evaluations specific to nano. Smallest model may have different
+      (potentially worse) bias patterns than larger models due to capacity constraints.
+    
+    assessment_notes: |
+      Bias management critical:
+      - Conduct domain-specific bias testing before deployment
+      - Smallest model may have amplified biases vs larger variants
+      - Test across demographic groups relevant to use case
+      - Monitor for disparate impact in production
+      - Plan bias incident response
+      - Consider whether cost savings justify potential bias risks
+
+# =============================================================================
+# PRICING INFORMATION
+# =============================================================================
+
+pricing_information:
+  api_pricing:
+    input_tokens: "$0.05 per 1M tokens (25x cheaper than GPT-5 main)"
+    cached_input_tokens: "$0.005 per 1M tokens (10x cheaper than uncached)"
+    output_tokens: "$0.40 per 1M tokens (25x cheaper than GPT-5 main)"
+    
+    cost_comparison:
+      - model: "GPT-5"
+        input_cost: "$1.25/1M (25x more expensive)"
+        output_cost: "$10.00/1M (25x more expensive)"
+      - model: "GPT-5 mini"
+        input_cost: "$0.25/1M (5x more expensive)"
+        output_cost: "$2.00/1M (5x more expensive)"
+      - model: "GPT-5 nano"
+        input_cost: "$0.05/1M (baseline - cheapest)"
+        output_cost: "$0.40/1M (baseline - cheapest)"
+  
+  rate_limits_by_tier:
+    free_tier:
+      rpm: "Not supported"
+      tpm: "Not supported"
+      batch_queue_limit: "Not supported"
+    tier_1:
+      rpm: 500
+      tpm: 200000
+      batch_queue_limit: 2000000
+    tier_2:
+      rpm: 5000
+      tpm: 2000000
+      batch_queue_limit: 20000000
+    tier_3:
+      rpm: 5000
+      tpm: 4000000
+      batch_queue_limit: 40000000
+    tier_4:
+      rpm: 10000
+      tpm: 10000000
+      batch_queue_limit: 1000000000
+    tier_5:
+      rpm: 30000
+      tpm: 180000000
+      batch_queue_limit: 15000000000
+
+# =============================================================================
+# API AND TECHNICAL DETAILS
+# =============================================================================
+
+api_information:
+  model_identifiers:
+    - "gpt-5-nano"
+    - "gpt-5-nano-2025-08-07"
+  
+  endpoints:
+    - "Chat Completions: v1/chat/completions"
+    - "Responses: v1/responses"
+    - "Realtime: v1/realtime"
+    - "Assistants: v1/assistants"
+    - "Batch: v1/batch"
+    - "Fine-tuning: v1/fine-tuning (Not supported)"
+    - "Embeddings: v1/embeddings (Not supported)"
+    - "Image generation: v1/images/generations (Supported)"
+    - "Videos: v1/videos (Not supported)"
+    - "Image edit: v1/images/edits (Not supported)"
+    - "Speech generation: v1/audio/speech (Not supported)"
+    - "Transcription: v1/audio/transcriptions (Not supported)"
+    - "Translation: v1/audio/translations (Not supported)"
+    - "Moderation: v1/moderations (Not supported)"
+    - "Completions (legacy): v1/completions (Not supported)"
+  
+  supported_features:
+    streaming: "Supported"
+    function_calling: "Supported"
+    structured_outputs: "Supported"
+    fine_tuning: "Not supported"
+    distillation: "Not supported"
+    predicted_outputs: "Not supported"
+  
+  supported_tools:
+    - "Web search: Not supported (unlike mini)"
+    - "File search: Supported"
+    - "Image generation: Supported (unlike mini which lacks this)"
+    - "Code interpreter: Supported"
+    - "Computer use: Not supported"
+    - "MCP: Supported"
+
+# =============================================================================
+# EVALUATION GUIDANCE
+# =============================================================================
+
+evaluation_guidance:
+  recommended_tests: |
+    Pre-deployment validation tests specific to GPT-5 nano:
+    
+    1. Task Suitability Validation (CRITICAL):
+       - Can your task be described as "simple classification or summarization"?
+       - If not → Stop evaluation, use mini or main instead
+       - If yes → Proceed with extensive testing to validate suitability
+    
+    2. Cost-Quality Trade-off Analysis:
+       - Run identical tests on nano, mini, and main
+       - Calculate accuracy gap: mini vs nano, main vs nano
+       - Calculate cost difference at production scale
+       - Determine if quality sacrifice justifies cost savings
+       - Remember: Mini only 5x more expensive, often worth the upgrade
+    
+    3. Accuracy Floor Validation:
+       - Create evaluation dataset of 200+ representative examples
+       - Measure accuracy on YOUR specific tasks (not public benchmarks)
+       - Set minimum accuracy threshold (e.g., "must be >90% for deployment")
+       - Compare nano performance to mini/main baseline
+       - Identify task types where nano underperforms critically
+    
+    4. Edge Case Testing:
+       - Test with unusual inputs, corner cases, ambiguous prompts
+       - Measure how gracefully nano handles out-of-distribution inputs
+       - Compare failure modes to mini/main
+       - Document scenarios requiring upgrade to larger model
+    
+    5. Instruction Following Validation:
+       - Nano scored 69% on instruction following (weak point)
+       - Test extensively with your specific instruction patterns
+       - Verify nano can follow your required output formats
+       - Consider if weak instruction following is acceptable
+    
+    6. Latency and Throughput Benchmarking:
+       - Measure actual latency improvement vs mini (should be significant)
+       - Test at expected production load
+       - Verify rate limits sufficient for high-volume use
+       - Confirm speed advantage justifies quality trade-offs
+    
+    7. Cost Projection and Break-Even Analysis:
+       - Model monthly costs at expected scale
+       - Compare: (nano cost + quality gap impact) vs (mini cost)
+       - Calculate break-even volume where nano makes sense
+       - Include cost of handling nano's errors vs mini's higher accuracy
+       - Factor in engineering effort to work around nano limitations
+
+  key_evaluation_questions: |
+    Critical questions for GPT-5 nano deployment decision:
+    
+    Task Suitability (Most Important):
+    - Is task TRULY just simple classification or summarization?
+    - Can we tolerate "average reasoning" for this use case?
+    - Are we oversimplifying task complexity to justify cheap model?
+    - Would mini (5x more expensive) actually be worth it?
+    
+    Quality Requirements:
+    - What is absolute minimum acceptable accuracy?
+    - Can we tolerate nano's weaker instruction following (69%)?
+    - How will quality gaps affect user experience?
+    - What's the cost of nano's errors vs mini's higher accuracy?
+    
+    Volume Economics:
+    - What scale makes nano vs mini cost difference meaningful?
+    - At what volume does 5x cost difference justify quality sacrifice?
+    - Are we doing >100M tokens/month where cost matters?
+    - Would better prompting on mini outperform nano at acceptable cost?
+    
+    Risk Tolerance:
+    - Can we afford to be wrong about task simplicity?
+    - Do we have monitoring to detect quality degradation?
+    - Can we upgrade to mini quickly if nano underperforms?
+    - Is this a pilot or production-critical application?
+    
+    Strategic Considerations:
+    - Is extreme cost optimization our competitive advantage?
+    - Would using mini be "good enough" without optimization hassle?
+    - Are we optimizing prematurely before validating product-market fit?
+    - Will nano limitations constrain future product evolution?
+    
+    Default Recommendation:
+    - Unless processing >100M tokens/month on simple tasks → Use mini instead
+    - Nano is extreme optimization for proven use cases at massive scale
+    - Most teams should start with mini, optimize to nano only if needed
+
+  comparison_considerations: |
+    Framework for comparing GPT-5 nano with alternatives:
+    
+    Within GPT-5 Family (Most Important Comparison):
+    
+    Nano vs Mini (5x cost difference):
+    - Mini: 5x more expensive, significantly better reasoning and accuracy
+    - Decision: Unless extreme cost sensitivity at massive scale, use mini
+    - Break-even: Need >100M tokens/month for nano to make economic sense
+    - Quality: Mini's improvements often worth 5x cost for most applications
+    - Instruction following: Mini much better (significant for complex outputs)
+    
+    Nano vs Main (25x cost difference):
+    - Main: 25x more expensive, dramatically better on all dimensions
+    - Decision: Only use nano if task proven to need minimal reasoning
+    - Quality gap: Main appropriate for anything beyond classification/summarization
+    
+    Against Other Low-Cost Models:
+    - Gemini Flash: Similar speed optimization, different pricing
+    - Claude Haiku: Similar tier, may have different quality-cost profile
+    - Cost comparison: Nano at $0.05-$0.40 among cheapest available
+    
+    Key Decision Factors:
+    
+    The "Mini Threshold" Question:
+    - Is nano saving worth sacrificing mini's capabilities?
+    - Mini only 5x more expensive but significantly more capable
+    - For most use cases: Mini's 5x cost premium is worth it
+    - Nano sweet spot: Proven simple tasks at >100M token/month scale
+    
+    Volume Economics:
+    - Low volume (<10M tokens/month): Cost difference trivial, use mini
+    - Medium volume (10-100M tokens/month): Test both, usually choose mini
+    - High volume (>100M tokens/month): Nano worth consideration if task proven simple
+    - Very high volume (>1B tokens/month): Nano optimization becomes meaningful
+    
+    Task Complexity Reality Check:
+    - Teams often underestimate task complexity to justify cheaper model
+    - Start with mini to establish baseline quality
+    - Only optimize to nano if mini costs become burden AND quality acceptable
+    - Resist premature optimization before product-market fit
+    
+    Recommended Decision Process:
+    1. Start with GPT-5 mini as baseline (best cost-quality balance)
+    2. If costs exceed budget at scale → Test nano on representative tasks
+    3. If nano quality acceptable AND volume >100M tokens/month → Use nano
+    4. Otherwise → Stick with mini (5x cost premium usually worth it)
+    5. Never start with nano without mini baseline for comparison
+
+# =============================================================================
+# NIST AI RMF MAPPING
+# =============================================================================
+
+rmf_function_mapping:
+  govern:
+    notes: |
+      Governance considerations specific to GPT-5 nano:
+      
+      Extreme Cost-Optimization Rationale:
+      - Document why nano chosen over mini (5x cheaper but weaker)
+      - Justify quality-cost trade-off with quantitative analysis
+      - Establish upgrade criteria to mini if quality issues emerge
+      - Define acceptable accuracy thresholds for nano deployment
+      
+      Quality Monitoring Requirements:
+      - Continuous comparison vs mini baseline
+      - Automated quality degradation alerts
+      - Regular human review of nano outputs
+      - Fast upgrade path to mini documented
+      
+      Same governance framework as other GPT-5 variants:
+      - Acceptable use policy
+      - Human oversight requirements
+      - Incident response plan
+      - Version control and change management
+
+  map:
+    context_considerations: |
+      Critical context factors for nano decision:
+      
+      Volume Economics Context:
+      - Are we processing >100M tokens/month where cost matters?
+      - Is 5x cost difference vs mini meaningful to business?
+      - Would better prompting on mini beat nano performance?
+      - Are we optimizing prematurely before scale achieved?
+      
+      Task Simplicity Validation:
+      - Have we proven tasks are truly simple classification/summarization?
+      - Are we underestimating complexity to justify cheap model?
+      - Can we objectively measure "simple" vs "requires mini"?
+      - What happens when tasks evolve beyond nano's capabilities?
+      
+      Risk Tolerance Context:
+      - Can we afford to be wrong about nano suitability?
+      - What's cost of nano errors vs mini higher accuracy?
+      - Is this pilot or production-critical application?
+      - Can we upgrade quickly if nano fails?
+    
+    risk_categories:
+      - "Task Complexity Underestimation Risk - Choosing nano for tasks requiring mini"
+      - "Quality-Cost Trade-off Risk - Sacrificing too much quality for cost savings"
+      - "Premature Optimization Risk - Optimizing before achieving scale"
+      - "Evolution Constraint Risk - Nano limits future product capabilities"
+      - "Same as other GPT-5: Hallucination, Bias, Privacy, Safety, Security, Vendor Lock-in"
+
+  measure:
+    suggested_metrics: |
+      Nano-specific metrics beyond standard monitoring:
+      
+      Cost-Quality Comparison Metrics:
+      - Accuracy gap: (Mini accuracy - Nano accuracy) / Mini accuracy
+      - Cost savings realized vs budget
+      - Cost per correct answer: Nano vs mini
+      - Error cost: Impact of nano errors vs mini accuracy improvement cost
+      
+      Upgrade Indicators:
+      - Percentage of tasks where nano accuracy <threshold
+      - User complaint rate about nano outputs
+      - Escalation rate to human review
+      - Frequency of manual corrections needed
+      
+      Volume Economics Tracking:
+      - Monthly token volume (need >100M for nano to make sense)
+      - Cost difference: Actual nano cost vs hypothetical mini cost
+      - Break-even analysis: Volume where nano cost benefit appears
+      
+      Task Complexity Validation:
+      - Percentage of tasks actually simple classification/summarization
+      - Tasks requiring reasoning beyond nano's "average" capability
+      - Feature requests blocked by nano limitations
+
+  manage:
+    risk_management_considerations: |
+      Risk management strategies specific to nano's limitations:
+      
+      Quality Floor Enforcement:
+      - Automated quality checks on every nano output
+      - Human review sampling at higher rate than mini
+      - Immediate escalation when quality drops below threshold
+      - Circuit breaker: Auto-upgrade to mini if quality degrades
+      
+      Task Routing Intelligence:
+      - Classify requests as "nano-suitable" vs "requires-mini"
+      - Route simple tasks to nano, complex to mini automatically
+      - Learn from errors to improve routing over time
+      - Measure cost savings vs quality impact of routing decisions
+      
+      Upgrade Path Management:
+      - One-click upgrade from nano to mini in production
+      - A/B testing framework: Nano vs mini on same tasks
+      - Cost monitoring alerts when approaching nano break-even
+      - Documentation of mini integration for fast pivot
+      
+      Error Cost Mitigation:
+      - Calculate cost of nano errors (user churn, manual correction, etc.)
+      - Compare error cost to mini's 5x higher API cost
+      - If error cost > API cost difference → Upgrade to mini
+      - Track error costs as key business metric
+      
+      Same risk management as other GPT-5 variants:
+      - Technical controls: Input/output validation, guardrails
+      - Process controls: Human-in-loop, logging, evaluation
+      - Organizational controls: Training, policies, oversight
+
+# =============================================================================
+# REFERENCES & SOURCES
+# =============================================================================
+
+references:
+  vendor_documentation:
+    - url: "https://platform.openai.com/docs/models/gpt-5-nano"
+      description: "Official OpenAI platform documentation for GPT-5 nano"
+    
+    - url: "https://openai.com/index/introducing-gpt-5-for-developers/"
+      description: "OpenAI developer blog on GPT-5 variants including nano"
+  
+  benchmarks:
+    - name: "Benchable.ai GPT-5 Nano Evaluation"
+      url: "https://benchable.ai/models/openai/gpt-5-nano-2025-08-07"
+      result: "100% success rate, 99% classification, 96% reasoning, 93% coding, 69% instruction following"
+  
+  third_party_evaluations:
+    - source: "Label Studio - GPT-5 Series Evaluation"
+      url: "https://labelstud.io/blog/evaluating-the-gpt-5-series-on-custom-benchmarks/"
+      summary: "Custom benchmark showing nano as lowest accuracy in GPT-5 family but acceptable for simple tasks"
+    
+    - source: "AIMultiple - LLM Parameters Analysis"
+      url: "https://research.aimultiple.com/llm-parameters/"
+      summary: "Cost-performance analysis across GPT-5 variants, nano positioning"
+    
+    - source: "PromptHub - GPT-5 Nano Model Card"
+      url: "https://www.prompthub.us/models/gpt-5-nano"
+      summary: "Comprehensive nano specifications and use case guidance"
+    
+    - source: "Simon Willison - GPT-5 Analysis"
+      url: "https://simonwillison.net/2025/Aug/7/gpt-5/"
+      summary: "Independent analysis of GPT-5 family positioning and capabilities"
+    
+    - source: "Encord Technical Breakdown"
+      url: "https://encord.com/blog/gpt-5-a-technical-breakdown/"
+      summary: "GPT-5 family technical analysis including nano as 'edge-optimized' variant"
+    
+    - source: "Artificial Analysis - GPT-5 nano"
+      url: "https://artificialanalysis.ai/models/gpt-5-nano"
+      summary: "Performance and price analysis across metrics"
+
+# =============================================================================
+# METADATA
+# =============================================================================
+
+metadata:
+  card_version: "1.0"
+  card_author: "AI Risk Assessment Team"
+  card_creation_date: "2025-10-28"
+  last_updated: "2025-10-28"
+  
+  information_sources: |
+    Primary sources for this model card:
+    
+    1. Official OpenAI Documentation:
+       - Platform API documentation (gpt-5-nano model page)
+       - User-uploaded PDF: gpt-5-nano.pdf with specifications
+       - OpenAI developer blog on GPT-5 variants
+    
+    2. Independent Benchmarks:
+       - Benchable.ai comprehensive evaluation (100% reliability, 69% instruction following)
+       - Label Studio comparative evaluation vs mini/main
+       - AIMultiple cost-performance analysis
+    
+    3. Technical Analysis:
+       - Simon Willison independent analysis
+       - Encord technical breakdown
+       - PromptHub model card compilation
+    
+    Strong consensus across sources: Nano is extreme cost optimization for simple tasks only.
+    Critical finding: Mini only 5x more expensive but significantly more capable - most teams
+    should default to mini, not nano.
+
+  completeness_assessment: |
+    Information completeness by section:
+    
+    COMPREHENSIVE SECTIONS (>80% complete):
+    - Model Identity: Full vendor information, release date, pricing
+    - Pricing: Complete API pricing ($0.05-$0.40) and rate limits
+    - Cost-Quality Trade-off: Extensive analysis vs mini/main
+    - Benchmark Results: Multiple independent evaluations
+    - Use Case Guidance: Clear positioning for simple tasks only
+    
+    PARTIAL SECTIONS (40-80% complete):
+    - Technical Specifications: Context window confirmed; parameter count NOT disclosed
+    - Capabilities: "Average reasoning" positioning clear; absolute performance task-dependent
+    - Limitations: Well-documented weakness areas; nano-specific failure modes partially known
+    - Decision Framework: Strong guidance on nano vs mini choice
+    
+    LIMITED SECTIONS (<40% complete):
+    - Architecture Details: "Edge-optimized" described; exact differences NOT disclosed
+    - Parameter Count: NOT disclosed (only known to be smallest in family)
+    - Compression Techniques: How 25x cost reduction achieved NOT disclosed
+    - Nano-Specific Testing: Limited independent bias/safety evaluation separate from family
+    
+    CRITICAL INFORMATION GAPS:
+    - No disclosed parameter count or model size
+    - No details on compression/optimization techniques enabling cost reduction
+    - No guidance on exact break-even volume for nano vs mini choice
+    - "Edge-optimized" claim vs cloud-only reality not clearly explained
+    - Limited nano-specific bias and fairness testing
+    
+    CONFIDENCE IMPROVEMENT NEEDS:
+    - OpenAI guidance on nano vs mini selection criteria with volume thresholds
+    - Production case studies showing nano cost-benefit at scale
+    - More extensive benchmarks on classification/summarization tasks
+    - Nano-specific bias testing separate from family-level results
+    - Clarity on "edge-optimized" marketing vs actual deployment options
+
+  change_log:
+    - date: "2025-10-28"
+      author: "AI Risk Assessment Team"
+      changes: "Initial model card creation for GPT-5 nano. Populated from official OpenAI documentation (platform docs, user-uploaded PDF), independent benchmarks (Benchable.ai showing 69% instruction following weakness, Label Studio showing lowest accuracy in family), and technical analyses. Strong emphasis on mini vs nano decision framework - recommending mini as default unless proven high-volume simple tasks justify extreme optimization. Gaps in architecture and compression techniques documented."
+
+# =============================================================================
+# USAGE NOTES
+# =============================================================================
+
+usage_notes: |
+  This model card follows NIST AI RMF principles with critical focus on the nano vs mini
+  decision framework for OpenAI's GPT-5 nano model.
+  
+  Key Characteristics of GPT-5 nano:
+  - Ultra-low-cost: 25x cheaper than GPT-5 main, 5x cheaper than mini ($0.05-$0.40 per 1M tokens)
+  - Fastest speed: Optimized for maximum throughput and minimum latency
+  - Average reasoning: Explicitly "average reasoning capabilities" per OpenAI
+  - Task-specific: Designed for simple classification and summarization only
+  - Edge-optimized: Marketing claim, still cloud API in practice
+  - 100% reliability: Exceptional stability across benchmarks
+  - Weak instruction following: 69% accuracy (lowest in GPT-5 family)
+  
+  CRITICAL DECISION FRAMEWORK:
+  
+  ❌ Default to Nano If:
+  You're processing >100M tokens/month on proven simple classification/summarization tasks
+  AND 5x cost difference vs mini is meaningful to business
+  AND you've validated nano quality is acceptable on YOUR specific tasks
+  
+  ✅ Default to Mini Instead If:
+  - Volume <100M tokens/month (cost difference trivial)
+  - Tasks require ANY meaningful reasoning
+  - Instruction following quality matters
+  - You're uncertain about task complexity
+  - You haven't validated nano on production data
+  - Cost is <1% of total project budget
+  
+  Why Mini Usually Wins:
+  - Only 5x more expensive, significantly better on all dimensions
+  - Better instruction following (critical for structured outputs)
+  - Handles task complexity gracefully (nano doesn't)
+  - Reduces risk of underestimating task complexity
+  - Allows product evolution without model constraints
+  
+  When Nano Makes Sense (Rare):
+  ✓ Proven simple tasks at massive scale (>100M tokens/month)
+  ✓ Cost optimization is competitive advantage
+  ✓ Quality validation complete on representative data
+  ✓ Fast upgrade path to mini if nano fails
+  ✓ Continuous quality monitoring vs mini baseline
+  
+  Common Mistakes to Avoid:
+  ❌ Choosing nano to save money before achieving scale
+  ❌ Underestimating task complexity to justify cheap model
+  ❌ Starting with nano without mini baseline comparison
+  ❌ Assuming "simple" tasks stay simple as product evolves
+  ❌ Optimizing prematurely before product-market fit
+  
+  Recommended Approach:
+  1. Start with GPT-5 mini (best cost-quality balance for most teams)
+  2. If mini costs become budget burden at scale → Test nano thoroughly
+  3. If nano quality acceptable AND volume >100M tokens/month → Switch to nano
+  4. Otherwise → Stick with mini (5x cost premium almost always worth it)
+  5. Maintain continuous quality monitoring if using nano
+  
+  Bottom Line:
+  GPT-5 nano is extreme optimization for proven use cases at massive scale.
+  For 95% of teams: Use mini instead. Only optimize to nano after validating
+  at scale that quality trade-offs are acceptable.
+  
+  This card should be updated as:
+  - Production deployments reveal nano-mini cost-quality patterns
+  - OpenAI publishes nano-specific guidance and break-even volumes
+  - Independent evaluations provide more nano-specific testing
+  - Real-world case studies show nano success/failure at scale

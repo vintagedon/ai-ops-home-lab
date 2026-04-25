@@ -1,0 +1,469 @@
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+# Model card for Meta Llama 3.2 1B Instruct
+# This card follows NIST AI RMF principles for trustworthiness assessment
+
+schema_version: "1.0.0"
+
+# =============================================================================
+# MODEL IDENTITY
+# =============================================================================
+
+model_identity:
+  name: "Llama 3.2 1B Instruct"
+  vendor: "Meta (Facebook AI Research)"
+  model_family: "Llama 3.2"
+  version: "3.2-1B-Instruct"
+  release_date: "2024-09-25"
+  model_type: "Large Language Model - Instruction-tuned for Edge/Mobile Deployment"
+
+  vendor_model_card_url: "https://huggingface.co/meta-llama/Llama-3.2-1B-Instruct"
+
+  license: "Llama 3.2 Community License - Permits commercial use with restrictions on competing model training"
+  
+  deprecation_status: "Active - Current generation lightweight edge model"
+
+# =============================================================================
+# MODEL ARCHITECTURE & TECHNICAL SPECIFICATIONS
+# =============================================================================
+
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer decoder - pruned and distilled from Llama 3.1 8B"
+    
+    parameter_count: "1.24B (1,235.8M parameters including head)"
+    
+    context_window: "128,000 tokens (128K)"
+    
+    training_data_cutoff: "2023-12 (December 2023)"
+
+    architectural_details: |
+      - Created through structured pruning of Llama 3.1 8B in single-shot manner
+      - Knowledge distillation from Llama 3.1 8B and 70B models during pre-training
+      - Auto-regressive language model with optimized transformer architecture
+      - Post-training includes Supervised Fine-Tuning (SFT), Rejection Sampling (RS), and Direct Preference Optimization (DPO)
+      - Optimized for edge and mobile deployment (Qualcomm, MediaTek, ARM processors)
+      - Context length scaled to 128K tokens during post-training
+      - Multilingual capabilities across 8 officially supported languages
+      
+    quantization_support: |
+      - Multiple quantization formats available
+      - Optimized versions for mobile and edge devices
+      - bf16, PTQ (Post-Training Quantization), SpinQuant, QLoRA variants available
+      - TensorRT-LLM acceleration for NVIDIA GPUs
+      
+  training_approach:
+    pretraining_summary: |
+      - Pre-trained on up to 9 trillion tokens from publicly available sources
+      - Incorporated logits from Llama 3.1 8B and 70B as token-level targets during pre-training
+      - Structured pruning from Llama 3.1 8B followed by knowledge distillation
+      - Several rounds of alignment: SFT → RS → DPO
+      - Synthetic data generation with careful processing and filtering
+      
+    compute_requirements:
+      training_compute: "916,000 GPU hours (H100-80GB, 700W TDP)"
+      training_emissions: "240 tons CO2eq (location-based)"
+      
+  multilingual_capabilities:
+    officially_supported_languages:
+      - "English (en)"
+      - "German (de)"
+      - "French (fr)"
+      - "Italian (it)"
+      - "Portuguese (pt)"
+      - "Hindi (hi)"
+      - "Spanish (es)"
+      - "Thai (th)"
+    
+    additional_training_data: "Trained on broader collection of languages beyond 8 officially supported"
+
+# =============================================================================
+# PERFORMANCE CHARACTERISTICS
+# =============================================================================
+
+performance_characteristics:
+  benchmark_results:
+    general_knowledge:
+      mmlu_5shot:
+        score: 49.3
+        metric: "macro_avg/acc"
+        notes: "Competitive for 1B model class; significantly lower than 3B (63.4) and 8B (69.4)"
+      
+      mmlu_pro:
+        score: "~23-25"
+        metric: "accuracy"
+        notes: "Missing from official documentation; struggles with complex reasoning tasks"
+    
+    mathematical_reasoning:
+      gsm8k_cot_8shot:
+        score: 44.4
+        metric: "em_maj1@1"
+        notes: "8-shot chain-of-thought; trails Llama 3.2 3B (77.7) and Llama 3.1 8B (84.5) significantly"
+      
+      math_cot:
+        score: 30.6
+        metric: "final_em"
+        notes: "0-shot; considerably lower than 3B (48.0) and 8B (51.9)"
+    
+    reasoning:
+      arc_challenge:
+        score: "Missing from source"
+        metric: "accuracy"
+        notes: "5-shot; not disclosed in official benchmarks for 1B variant"
+    
+    instruction_following:
+      ifeval:
+        score: 59.5
+        metric: "Avg(Prompt/Instruction acc Loose/Strict)"
+        notes: "0-shot; reasonable for edge model, though trails 3B (77.4) and 8B (80.4)"
+    
+    tool_use:
+      bfcl_v2:
+        score: 25.7
+        metric: "accuracy"
+        notes: "Significant gap vs 3B model (67.0); limited tool-use capabilities at 1B scale"
+    
+    summarization:
+      tldr9plus:
+        score: 16.8
+        metric: "rougeL"
+        notes: "Competitive for summarization tasks; slightly lower than 3B (19.0)"
+    
+    rewriting:
+      open_rewrite_eval:
+        score: 41.6
+        metric: "micro_avg/rougeL"
+        notes: "0-shot; maintains strong rewriting capability comparable to larger variants"
+    
+    long_context:
+      nih_multi_needle:
+        score: "Missing from source"
+        metric: "accuracy"
+        notes: "128K context window supported but long-context benchmark scores not published for 1B"
+
+  latency_throughput:
+    time_to_first_token: "0.43 seconds (TTFT)"
+    output_speed: "86.6 tokens/second"
+    notes: |
+      - Lower latency compared to average models
+      - Slower output speed than average (optimized for edge constraints)
+      - Performance varies significantly based on quantization and deployment platform
+      - Optimized for Qualcomm, MediaTek, and ARM processors
+
+  pricing:
+    input_token_cost: "$0.05 per 1M tokens"
+    output_token_cost: "$0.06 per 1M tokens"
+    blended_cost: "$0.05 per 1M tokens (3:1 input/output ratio)"
+    
+    cost_context: |
+      - Among cheapest models available
+      - Significant cost advantage for high-volume edge deployments
+      - Self-hosting option eliminates API costs for on-device use
+      - Pricing from third-party API providers; on-device deployment has zero marginal cost
+
+# =============================================================================
+# CAPABILITIES & USE CASES
+# =============================================================================
+
+capabilities_and_use_cases:
+  primary_strengths:
+    - "Edge and mobile deployment - fits on resource-constrained devices"
+    - "Fast inference with low latency for on-device use cases"
+    - "Multilingual support across 8 languages"
+    - "Summarization and rewriting tasks"
+    - "Basic instruction following for simple queries"
+    - "128K context window enables document-length processing"
+    - "Low cost and energy efficiency"
+  
+  primary_limitations:
+    - "Significantly weaker mathematical reasoning than larger models"
+    - "Limited tool use capabilities (BFCL V2: 25.7 vs 67.0 for 3B)"
+    - "Lower general knowledge (MMLU 49.3 vs 63.4 for 3B, 69.4 for 8B)"
+    - "Struggles with complex reasoning tasks (MMLU-Pro ~23-25)"
+    - "Not suitable for tasks requiring high accuracy or advanced reasoning"
+    - "Constrained environment requires different safety/helpfulness tradeoffs"
+  
+  recommended_use_cases:
+    - name: "Edge AI applications"
+      rationale: "Optimized for mobile devices, IoT, and embedded systems; low latency and resource requirements"
+      
+    - name: "Mobile AI writing assistants"
+      rationale: "Text rewriting (41.6 rougeL) and summarization (16.8 rougeL) performance adequate for on-device assistance"
+      
+    - name: "Query and prompt rewriting"
+      rationale: "Instruction following (59.5 IFEval) suitable for reformulating user queries"
+      
+    - name: "Retrieval augmentation"
+      rationale: "128K context window supports retrieval-augmented generation for document Q&A"
+      
+    - name: "Basic agentic tasks"
+      rationale: "Limited tool use capability sufficient for simple agent workflows with constrained action spaces"
+      
+    - name: "Multilingual edge applications"
+      rationale: "8 officially supported languages enable global deployment on edge devices"
+  
+  discouraged_use_cases:
+    - name: "Complex mathematical problem solving"
+      rationale: "GSM8K 44.4 and MATH 30.6 scores significantly lag larger models; unsuitable for math-heavy applications"
+      
+    - name: "Advanced reasoning tasks"
+      rationale: "MMLU 49.3 indicates knowledge gaps; not reliable for expert-level reasoning"
+      
+    - name: "Production tool use and API calling"
+      rationale: "BFCL V2 score of 25.7 indicates poor tool-use capabilities; unreliable for multi-step agent workflows"
+      
+    - name: "Mission-critical decision making"
+      rationale: "1B parameter count limits reliability and accuracy; requires larger model or human oversight"
+      
+    - name: "High-stakes content generation"
+      rationale: "Knowledge and reasoning limitations increase hallucination risk"
+
+  modality_support:
+    text_input: true
+    text_output: true
+    image_input: false
+    image_output: false
+    audio_input: false
+    audio_output: false
+    video_input: false
+    
+    modality_notes: "Text-only model; vision capabilities available in separate 11B and 90B Llama 3.2 variants"
+
+# =============================================================================
+# TRUST CHARACTERISTICS (NIST AI RMF)
+# =============================================================================
+
+trust_characteristics:
+  safety:
+    evaluations_conducted:
+      - "Red teaming exercises for adversarial prompting"
+      - "96% of prompts deemed safe in community testing"
+      - "CBRNE weapons proliferation risk assessment (inherited from Llama 3.1 testing)"
+      - "Child safety risk assessment with expert review"
+      - "Scaled evaluations with Purple Llama safeguards for input/output filtering"
+    
+    known_risks:
+      - "Constrained environment deployment requires lighter safety mechanisms (Llama Guard 3-1B recommended)"
+      - "Smaller models have different alignment profiles than larger systems"
+      - "Lower capability ceiling may lead to unpredictable failure modes"
+      - "96% safety rate indicates 4% of prompts may bypass safety mechanisms"
+    
+    mitigation_strategies:
+      - "Recommended pairing with Llama Guard 3-1B for input/output filtering"
+      - "Mobile-optimized safety mechanisms available"
+      - "Context-specific evaluation datasets recommended for deployment"
+      - "Several rounds of alignment (SFT, RS, DPO) during post-training"
+  
+  fairness_and_bias:
+    bias_evaluations: |
+      - No comprehensive fairness benchmarks disclosed in official documentation
+      - Trained on publicly available data with potential historical biases
+      - Multilingual support across 8 languages may have varying quality
+      - Smaller model size may amplify bias due to reduced nuance capacity
+      - Missing from source: demographic fairness testing, toxicity benchmarks
+    
+    known_biases: "Insufficient documentation; assumed to inherit biases from training data and teacher models"
+  
+  transparency:
+    model_transparency: |
+      - Open weights under Llama 3.2 Community License
+      - Training methodology well-documented (pruning + distillation)
+      - Architecture details publicly available
+      - Benchmark scores disclosed for multiple tasks
+      - Training compute and emissions reported
+      
+    data_transparency: |
+      - Pre-trained on up to 9 trillion tokens from publicly available sources
+      - Specific dataset composition not disclosed
+      - Knowledge distillation from Llama 3.1 8B and 70B documented
+      - December 2023 knowledge cutoff stated
+      - Missing from source: detailed data sourcing, consent mechanisms, data quality controls
+    
+    limitations_disclosure: |
+      - Constrained environment deployment considerations explicitly documented
+      - Capability gaps acknowledged (lower MMLU, GSM8K scores)
+      - Safety/helpfulness tradeoffs for smaller models discussed
+      - Recommended use cases and limitations clearly stated
+      - Missing from source: quantified hallucination rates, known failure modes
+  
+  accountability:
+    responsible_ai_practices: |
+      - Meta AI developer responsible for model development
+      - Llama 3.2 Community License governs use
+      - Acceptable Use Policy prohibits harmful applications
+      - Red teaming exercises conducted during development
+      - Purple Llama safeguards available for system-level protection
+      
+    monitoring_mechanisms: |
+      - Developers responsible for deployment safety
+      - Recommendation to build dedicated evaluation datasets for specific use cases
+      - Lighter system safeguards (Llama Guard 3-1B) recommended for edge deployment
+      - Missing from source: post-deployment monitoring, incident response procedures
+  
+  security_and_privacy:
+    security_considerations: |
+      - Open weights enable security auditing by third parties
+      - Edge deployment reduces data transmission to cloud services
+      - On-device inference improves privacy for sensitive use cases
+      - Quantization and optimization maintain security properties
+      
+    privacy_considerations: |
+      - On-device deployment minimizes data exposure
+      - 128K context window requires careful handling of sensitive documents
+      - No built-in privacy mechanisms (e.g., differential privacy)
+      - Missing from source: memorization testing, data extraction vulnerability assessment
+    
+    vulnerabilities: |
+      - Prompt injection and jailbreaking risks not quantified
+      - Adversarial robustness not comprehensively tested
+      - Smaller model may be more susceptible to manipulation
+      - Edge deployment security depends on device security posture
+  
+  reliability:
+    consistency_and_accuracy: |
+      - MMLU 49.3 indicates moderate knowledge reliability
+      - GSM8K 44.4 shows significant mathematical reasoning gaps
+      - Summarization (rougeL 16.8) and rewriting (rougeL 41.6) demonstrate consistent task performance
+      - 128K context window supported with claimed quality maintenance
+      - Missing from source: hallucination rates, long-context accuracy degradation
+    
+    robustness: |
+      - Pruning and distillation methodology may create unexpected failure modes
+      - Smaller model size reduces resilience to edge cases
+      - Multilingual support quality varies across 8 languages
+      - Missing from source: adversarial robustness testing, out-of-distribution performance
+    
+    uncertainty_quantification: "Missing from source - no confidence scoring or uncertainty estimates provided"
+
+# =============================================================================
+# COMPARISON TO SIMILAR MODELS
+# =============================================================================
+
+competitive_landscape:
+  direct_competitors:
+    - model: "Gemma 3 1B"
+      comparison: |
+        - Gemma 3 1B: Stronger math (GSM8K: higher, HumanEval: higher) and coding capabilities
+        - Llama 3.2 1B: Stronger broad knowledge (MMLU 49.3 vs lower for Gemma 3 1B)
+        - Llama 3.2 1B: 128K context window (larger than Gemma)
+        - Gemma 3: Favors thin-deep architecture; Llama 3.2: Wide-shallow architecture
+        - Similar on-device performance characteristics
+    
+    - model: "Phi-3.5-mini"
+      comparison: |
+        - Phi-3.5-mini: Significantly stronger math (GSM8K: 86.2 vs 44.4) and reasoning (ARC Challenge: 87.4)
+        - Phi-3.5-mini: Higher parameter count, not as optimized for ultra-constrained edge deployment
+        - Llama 3.2 1B: Better cost and latency for edge use cases
+        - Llama 3.2 1B: 128K context window advantage
+    
+    - model: "Llama 3.2 3B"
+      comparison: |
+        - Llama 3.2 3B significantly outperforms across all benchmarks (MMLU: 63.4 vs 49.3, GSM8K: 77.7 vs 44.4)
+        - Llama 3.2 3B: Much stronger tool use (BFCL V2: 67.0 vs 25.7)
+        - Llama 3.2 1B: Lower resource requirements, faster inference on constrained devices
+        - Both share 128K context window and multilingual support
+        - 3B recommended over 1B unless extreme resource constraints exist
+  
+  model_family_positioning: |
+    Llama 3.2 1B is the smallest and most resource-efficient model in the Llama family:
+    - Llama 3.2 1B: Edge/mobile deployment, basic tasks
+    - Llama 3.2 3B: Improved edge performance with better reasoning
+    - Llama 3.1 8B: Desktop/server deployment, strong general capabilities
+    - Llama 3.1 70B/405B: High-performance server deployment, advanced reasoning
+    - Llama 3.2 11B/90B Vision: Multimodal image+text understanding
+    
+    The 1B variant trades significant capability for deployment flexibility and cost efficiency.
+
+# =============================================================================
+# DEPLOYMENT CONSIDERATIONS
+# =============================================================================
+
+deployment_guidance:
+  recommended_platforms:
+    - "Mobile devices (iOS, Android) with on-device inference"
+    - "Edge devices with ARM, Qualcomm, or MediaTek processors"
+    - "IoT devices with limited compute resources"
+    - "Embedded systems requiring low-latency NLP"
+    - "Cloud API services (Amazon Bedrock, etc.) for low-cost inference"
+  
+  optimization_options:
+    - "TensorRT-LLM for NVIDIA GPU acceleration"
+    - "Quantization (bf16, PTQ, SpinQuant, QLoRA) for memory reduction"
+    - "Mobile-optimized versions for iOS/Android"
+    - "Llama Stack Distribution for production deployment"
+  
+  integration_considerations: |
+    - Pair with Llama Guard 3-1B for safety filtering (also mobile-optimized)
+    - 128K context requires ~3-4GB VRAM in fp16, less with quantization
+    - On-device inference eliminates API costs but requires local compute
+    - Qualcomm, MediaTek, and ARM optimizations available for mobile platforms
+    - Consider Llama 3.2 3B if resource constraints allow (significantly better performance)
+  
+  fine_tuning_guidance: |
+    - Fine-tuning available via torchtune
+    - Parameter-efficient methods (QLoRA) recommended for edge deployment
+    - Custom domain adaptation can improve performance in specialized tasks
+    - Pre-trained model available for custom post-training pipelines
+    - Fine-tuned models can be deployed via Amazon Bedrock custom models
+
+# =============================================================================
+# ADDITIONAL CONTEXT
+# =============================================================================
+
+additional_information:
+  related_resources:
+    - "Llama Guard 3-1B for input/output safety filtering"
+    - "Purple Llama safeguards for system-level protection"
+    - "torchtune for fine-tuning workflows"
+    - "torchchat for local deployment"
+    - "Llama Stack Distribution for production infrastructure"
+    - "Amazon Bedrock and SageMaker JumpStart for cloud deployment"
+  
+  model_card_metadata:
+    card_version: "1.0.0"
+    last_updated: "2025-01-09"
+    card_author: "Hatz.ai Evaluation Project"
+    
+  data_quality_assessment: |
+    COMPLETE DATA:
+    - Technical specifications (architecture, parameters, context window)
+    - Core benchmark scores (MMLU, GSM8K, MATH, IFEval, summarization, rewriting)
+    - Training methodology (pruning, distillation, alignment)
+    - Multilingual support and deployment platforms
+    - Performance characteristics (latency, throughput, cost)
+    - License and usage restrictions
+    
+    PARTIAL DATA:
+    - Tool use capabilities (BFCL V2 documented but limited)
+    - Safety evaluations (red teaming mentioned, details sparse)
+    - Long-context performance (128K supported, benchmarks missing)
+    
+    CRITICAL GAPS:
+    - Detailed training dataset composition and sourcing
+    - Comprehensive fairness and bias testing across demographics
+    - Hallucination rate quantification
+    - Adversarial robustness evaluation
+    - Privacy testing (memorization, extraction)
+    - Long-context accuracy degradation analysis
+    - Tool use failure modes and reliability
+    
+    Confidence level: MODERATE-HIGH
+    - Core technical specifications and benchmarks well-documented by Meta
+    - Performance characteristics validated by third-party testing
+    - Training methodology transparent (pruning + distillation)
+    - Use case recommendations based on disclosed limitations
+    - Critical gaps in fairness, safety, and privacy evaluation
+    - Edge deployment considerations explicitly documented
+    
+    Recommended additional testing:
+    - Task-specific accuracy evaluation in target domain
+    - Hallucination rate measurement for edge use cases
+    - Bias and fairness auditing for multilingual applications
+    - Privacy and memorization testing with sensitive data
+    - Long-context performance validation (128K window)
+    - Safety mechanism effectiveness in constrained environments
+    - Tool use reliability assessment for agentic workflows
+
+  change_log:
+    - date: "2025-01-09"
+      author: "Hatz.ai Evaluation Project"
+      changes: "Initial model card creation based on Meta documentation, Hugging Face model card, third-party benchmarks, and deployment guidance from AWS and community testing"

@@ -1,0 +1,255 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "FLUX.1 [dev]"
+  vendor: "Black Forest Labs"
+  model_family: "FLUX.1"
+  version: "[dev]"
+  release_date: "2024-10-14"  # approximate announcement date from Black Forest Labs blog page. # :contentReference[oaicite:2]{index=2}
+  model_type: "12 B parameter rectified-flow text-to-image transformer"
+
+  vendor_model_card_url: "https://huggingface.co/black-forest-labs/FLUX.1-dev"  # :contentReference[oaicite:3]{index=3}
+
+  license: "FLUX.1 [dev] Non-Commercial License"  # :contentReference[oaicite:4]{index=4}
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Rectified flow transformer model (flow matching) with hybrid diffusion/transformer blocks"  # :contentReference[oaicite:5]{index=5}
+    parameter_count: "≈ 12 B parameters"  # :contentReference[oaicite:6]{index=6}
+    context_window: "Not applicable (image generation model)"
+    training_data_cutoff: "Not publicly disclosed"
+
+    architectural_details: |
+      The announcement states the model is a "12 B parameter rectified flow transformer capable of generating images from text descriptions." :contentReference[oaicite:7]{index=7}
+
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["image"]
+
+  performance_characteristics:
+    speed_tier: "Mid-to-high (image-gen, 12B param model, efficient via guidance-distillation)"
+    cost_tier: "Moderate-Premium (GPU memory/ineference cost likely non-trivial)"
+    latency: "Not publicly disclosed"
+    throughput: "Not publicly disclosed"
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    - High output quality, nearly matching their flagship "pro" model while being more efficient. # :contentReference[oaicite:8]{index=8}  
+    - Good prompt-following and image generation from text prompts. # :contentReference[oaicite:9]{index=9}  
+    - Weights are open (subject to license) enabling research and development. # :contentReference[oaicite:10]{index=10}
+
+  benchmark_performance: |
+    The vendor claims surpassing existing open models in prompt adherence and image quality, though numerical benchmarks are not clearly published. # :contentReference[oaicite:11]{index=11}
+
+  special_capabilities:
+    tools_support: false
+    vision_support: image generation only (so "vision_support" = false in the sense of vision→text)
+    reasoning_support: false
+    image_generation: true
+    additional_capabilities: ["text-to-image generation", "open-weight research model", "guidance-distilled variant"]
+
+  known_limitations:
+    vendor_disclosed: |
+      The model is "not intended or able to provide factual information." It may amplify biases. # :contentReference[oaicite:12]{index=12}  
+    common_failure_modes: |
+      - May fail to follow prompts perfectly. # :contentReference[oaicite:13]{index=13}  
+      - Being a large image model, inference may be resource-intensive and slower on smaller hardware. (User reports) # :contentReference[oaicite:14]{index=14}  
+    unsuitable_use_cases: |
+      - High-stakes decision-making systems (the model is image gen, not decision model)  
+      - Use requiring factual accuracy or text output reasoning.
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    The vendor announcement describes training of the FLUX.1 suite using flow-matching and hybrid diffusion/transformer blocks, but does not detail public dataset size or cutoff. # :contentReference[oaicite:15]{index=15}  
+  training_methodology: |
+    Guidance-distilled from the FLUX.1 [pro] model. # :contentReference[oaicite:16]{index=16}  
+  data_privacy_considerations: |
+    No detailed public disclosure of dataset filtering, PII mitigation or data provenance.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Research, education, personal experimentation with text-to-image generation under non-commercial licence. # :contentReference[oaicite:17]{index=17}  
+  suitable_domains: ["generative_art", "image_prototyping", "text_to_image_research"]
+  out_of_scope_use: |
+    Commercial production use (without separate commercial licence), regulated decision pipelines, text reasoning tasks.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Transparent about open-weight status and non-commercial license. # :contentReference[oaicite:18]{index=18}  
+    public_evidence: |
+      Limited independent academic evaluation; some community feedback on inference cost. # :contentReference[oaicite:19]{index=19}  
+    assessment_notes: |
+      Suitable for research and prototyping; reliability for production/high-throughput not yet broadly validated.
+
+  safe:
+    safety_measures: |
+      The model card includes disclaimers around non-factuality and bias amplification. # :contentReference[oaicite:20]{index=20}  
+    known_safety_issues: |
+      Typical generative image model risks: biased outputs, possible misuse, leaks of unintended content.  
+    assessment_notes: |
+      Users should implement moderation, filter outputs accordingly, track usage.
+
+  secure_and_resilient:
+    security_features: |
+      Code and weights support local deployment; open-weight increases transparency.  
+    known_vulnerabilities: |
+      Resource exhaustion/inference cost; prompt engineering vulnerabilities typical of generative models.  
+    assessment_notes: |
+      Deployers should monitor resource consumption and abuse vectors.
+
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Model weights and licence publicly available; dataset/training details limited.  
+    assessment_notes: |
+      Acceptable for research use; production use may require stronger transparency or audit controls.
+
+  explainable_and_interpretable:
+    explainability_features: |
+      Being an image generator, output-level interpretability is limited to prompt → image.  
+    interpretability_limitations: |
+      Internal flow/transformer architecture and training dynamics not fully exposed.  
+    assessment_notes: |
+      Treat model as black-box generator; log prompts and outputs for traceability.
+
+  privacy_enhanced:
+    privacy_features: |
+      Local hosting possible reducing third-party inference exposure.  
+    privacy_concerns: |
+      Data provenance, potential memorised content or artefacts not publicly described.  
+    assessment_notes: |
+      For privacy-sensitive domains, apply additional review.
+
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      No detailed public bias mitigation plan disclosed.  
+    known_biases: |
+      Amplification of societal biases in image generation is noted. # :contentReference[oaicite:21]{index=21}  
+    assessment_notes: |
+      Users should apply fairness/harm assessment especially for sensitive demographics or style/content biases.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Generate representative sample prompts and assess image quality, prompt adherence and diversity.  
+    - Evaluate inference cost and latency on your hardware (note community feedback). # :contentReference[oaicite:22]{index=22}  
+    - Conduct bias/harm audits across style, content, demographic representation.  
+    - Confirm licence compliance if transitioning to semi-commercial or production use.  
+    - For local hosting, benchmark memory/compute footprint and throughput.
+
+  key_evaluation_questions: |
+    - Does the model meet your visual quality and prompt-adherence requirements for your target domain?  
+    - Are your hardware and resource budget sufficient for inference with this 12 B-param image-generation model?  
+    - Are you comfortable with the licence (non-commercial) and infrastructure/operation cost for your use-case?  
+    - Have you tested for bias/harm across target content and user communities?
+
+  comparison_considerations: |
+    - Compare with other text-to-image open models (e.g., Stable Diffusion 3 Ultra, Midjourney v6) for quality, compute cost, licence. # :contentReference[oaicite:23]{index=23}  
+    - Evaluate trade-offs of model size/quality vs inference cost vs hardware availability.  
+    - Assess value of open-weight vs API-only alternatives given your workflow.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Require human review or moderation of generated imagery, track model version and usage; ensure licence compliance.  
+  map:
+    context_considerations: |
+      Image generation workflow, prompt→image, general-purpose creative use, non-commercial license.  
+    risk_categories: ["image_hallucination", "bias", "copyright_infringement", "model_misuse", "resource_exhaustion"]
+  measure:
+    suggested_metrics: |
+      - Invalid or low-quality image rate per 1k prompts.  
+      - Prompt adherence score (manual rating) across domain-specific prompts.  
+      - Inference cost/time per image on your hardware.  
+      - Audit incident count for biased/harmful output per 1k images.  
+  manage:
+    risk_management_considerations: |
+      Set moderation pipelines for output imagery, log prompts/outputs, restrict high-risk prompt domains, budget/infrastructure monitoring.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/black-forest-labs/FLUX.1-dev"
+    description: "Hugging Face repository for FLUX.1 [dev]"
+  - url: "https://bfl.ai/announcing-black-forest-labs"
+    description: "Black Forest Labs announcement / model family overview"   # :contentReference[oaicite:24]{index=24}  
+  - url: "https://flux1ai.com/dev"
+    description: "Model webpage for FLUX.1 dev"   # :contentReference[oaicite:25]{index=25}  
+  benchmarks:
+  - name: "Community feedback – inference cost for FLUX.1 dev"
+    url: "https://discuss.huggingface.co/t/how-long-does-image-generation-with-black-forest-labs-flux-1-dev-take/163940"
+    result: "User reports slow inference (~20 min for 512×512 on RTX 3090) without quantisation"   # :contentReference[oaicite:26]{index=26}  
+  third_party_evaluations:
+  - source: "Reddit user discussion on troubleshooting"
+    url: "https://www.reddit.com/r/StableDiffusion/comments/1jvp9dn"
+    summary: "Users report issues when hardware not sufficient or missing auxiliary files"   # :contentReference[oaicite:27]{index=27}  
+  news_coverage:
+  - title: "Flux (text-to-image model) – Wikipedia entry summarising dev variant"
+    url: "https://en.wikipedia.org/wiki/Flux_(text-to-image_model)"
+    date: "2025-??-??"   # :contentReference[oaicite:28]{index=28}
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "Don Fountain"
+  card_creation_date: "2025-10-24"
+  last_updated: "2025-10-24"
+  information_sources: |
+    Hugging Face model page, vendor announcements, model family overview, community performance feedback.  
+  completeness_assessment: |
+    Good for architecture, intention, licence and open-weight status; moderate for dataset/training details and benchmark numbers; limited for latency/throughput specs and wider independent evaluation.  
+  change_log:
+  - date: "2025-10-24"
+    author: "Don Fountain"
+    changes: "Initial synthesis of FLUX.1 [dev] model card."

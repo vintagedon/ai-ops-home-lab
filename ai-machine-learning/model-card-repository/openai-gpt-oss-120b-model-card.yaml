@@ -1,0 +1,269 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# =============================================================================
+# MODEL IDENTITY
+# =============================================================================
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "gpt-oss-120b"
+  vendor: "OpenAI"
+  model_family: "gpt-oss"
+  version: "120B"
+  release_date: "2025-08-05"
+  model_type: "Large Language Model (Mixture-of-Experts, reasoning-optimized)"
+
+  vendor_model_card_url: "https://huggingface.co/openai/gpt-oss-120b"
+
+  license: "Apache 2.0" # :contentReference[oaicite:2]{index=2}
+  deprecation_status: "Active"
+
+# =============================================================================
+# MODEL ARCHITECTURE & TECHNICAL SPECIFICATIONS
+# =============================================================================
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Decoder-only Transformer with MoE (Mixture-of-Experts)" # :contentReference[oaicite:3]{index=3}
+    parameter_count: "≈117B total parameters, ~5.1B active per token" # :contentReference[oaicite:4]{index=4}
+    context_window: "Up to 128k tokens" # :contentReference[oaicite:5]{index=5}
+    architectural_details: |
+      The model uses alternating dense and locally-banded sparse attention, grouped multi-query attention (GQA), and supports reasoning-mode toggling (low/medium/high). # :contentReference[oaicite:6]{index=6}
+
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "High compute (large MoE model)"
+    cost_tier: "Premium infrastructure (single 80 GB GPU recommended)" # :contentReference[oaicite:7]{index=7}
+    latency: "Not publicly disclosed"
+    throughput: "Not publicly disclosed"
+
+# =============================================================================
+# CAPABILITIES & LIMITATIONS
+# =============================================================================
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    - Designed for high-reasoning use cases, agentic workflows, tool use (web browsing, function calling) and chain-of-thought outputs. # :contentReference[oaicite:8]{index=8}
+    - Fine-tunable, open-weight, runs on a single H100/80-GB GPU. # :contentReference[oaicite:9]{index=9}
+  benchmark_performance: |
+    The model card claims near-parity with OpenAI’s proprietary o4-mini on reasoning benchmarks, and outperforms o3-mini on many tasks. # :contentReference[oaicite:10]{index=10}
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["configurable reasoning-effort", "agentic operation support"]
+  known_limitations:
+    vendor_disclosed: |
+      The model is not intended to substitute professional judgement (e.g., medical diagnosis) and remains subject to typical LLM limitations of accuracy/hallucination. # :contentReference[oaicite:11]{index=11}
+    common_failure_modes: |
+      - Hallucination, bias, knowledge cutoff effects.
+      - Potential drift in long-context scenarios despite 128k token support.
+    unsuitable_use_cases: |
+      Use in regulated high-stakes systems without human oversight; deployment requiring full training-data transparency.
+
+# =============================================================================
+# TRAINING & DATA
+# =============================================================================
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained primarily on text-only data with a STEM/coding focus; pre-training followed by fine-tuning and reinforcement-learning for reasoning alignment. # :contentReference[oaicite:12]{index=12}
+  training_methodology: |
+    Pre-training with MoE transformer, followed by supervised fine-tuning, high-compute RL stage, and tool/instruction-tuning. # :contentReference[oaicite:13]{index=13}
+  data_privacy_considerations: |
+    No detailed public disclosure of full dataset provenance or filtering; deployers should review for compliance.
+
+# =============================================================================
+# INTENDED USE & SCOPE
+# =============================================================================
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    General-purpose reasoning and generation tasks; agentic workflows that integrate functions, browsing and long-form context. # :contentReference[oaicite:14]{index=14}
+  suitable_domains: ["reasoning_tasks", "agentic_systems", "long_context_generation", "code_generation"]
+  out_of_scope_use: |
+    Safety-critical decision-making without review; regulated domains requiring full traceability.
+
+# =============================================================================
+# TRUSTWORTHINESS CHARACTERISTICS
+# =============================================================================
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Detailed public model card and benchmark claims. # :contentReference[oaicite:15]{index=15}
+    public_evidence: |
+      Mostly vendor-reported; independent third-party evaluations still limited.
+    assessment_notes: |
+      Good base model for reasoning, but deployers must validate domain-specific performance.
+  safe:
+    safety_measures: |
+      Open license, public weights, reasoning-effort controls, chain-of-thought exposure for auditability. # :contentReference[oaicite:16]{index=16}
+    known_safety_issues: |
+      Standard LLM risks (misinformation, bias, misuse of agentic capabilities).
+    assessment_notes: |
+      Additional moderation, logging, human-in-loop required for production deployment.
+  secure_and_resilient:
+    security_features: |
+      Designed for efficient inference; hardware support for MXFP4 quantization provides deployment flexibility. # :contentReference[oaicite:17]{index=17}
+    known_vulnerabilities: |
+      Prompt-injection, tool misuse, long-context failure modes.
+    assessment_notes: |
+      Infrastructure controls required.
+  accountable_and_transparent:
+    transparency_level: "Medium-High"
+    auditability: |
+      Public release of weights, model card, architecture summary; but training data not fully disclosed.
+    assessment_notes: |
+      Satisfies many corporate governance needs; still not "fully open" in dataset details.
+  explainable_and_interpretable:
+    explainability_features: |
+      Chain-of-thought reasoning enabled by design, assisting interpretability.
+    interpretability_limitations: |
+      Internals still opaque; routing of experts not detailed.
+    assessment_notes: |
+      Better than many earlier LLMs but still requires oversight.
+  privacy_enhanced:
+    privacy_features: |
+      Open-weight release reduces "black-box" risk; hardware local deployment enables data residency.
+    privacy_concerns: |
+      Unknown training data provenance and possible PII exposure.
+    assessment_notes: |
+      For regulated domains apply additional privacy review.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Some attention to safety and alignment cited; no detailed public bias mitigation audit.
+    known_biases: |
+      Typical LLM bias risks persist; multilingual coverage and lesser-studied domains may have higher error rates.
+    assessment_notes: |
+      Conduct domain- and language-specific bias/harm evaluations.
+
+# =============================================================================
+# EVALUATION GUIDANCE
+# =============================================================================
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Reproduce vendor benchmark claims on your infrastructure for reasoning, tool use, and long-context tasks.
+    - Test configurable reasoning-effort modes and measure latency vs performance trade-offs.
+    - Evaluate chain-of-thought transparency and correctness for your domain.
+    - Deploy agentic workflows and monitor for tool misuse, hallucination, or drift in extended context scenarios.
+    - Benchmark latency/throughput for your compute setup (single H100 or equivalent).
+  key_evaluation_questions: |
+    - Does the model meet your reliability/accuracy thresholds in your domain and languages?
+    - Are your moderation, tool invocation controls and logging mechanisms robust?
+    - Can your infrastructure support the model’s compute/hardware requirements?
+    - Have you assessed long-context behaviour and agentic tool invocation risk for your use case?
+  comparison_considerations: |
+    - Compare with other open-weight reasoning models (e.g., DeepSeek-R1, Llama-4 variants) for cost/performance trade-offs.
+    - Consider model size (117B total/5.1B active) vs inference cost and infrastructure footprint.
+    - Review license (Apache 2.0) and deployment constraints in your environment.
+
+# =============================================================================
+# NIST AI RMF MAPPING
+# =============================================================================
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Ensure human-in-the-loop oversight in agentic scenarios; maintain versioning and audit logs; ensure compliance with license.
+  map:
+    context_considerations: |
+      Reasoning chains, long-context risks, tool invocation, agentic workflows.
+    risk_categories: ["hallucination", "bias", "tool_misuse", "privacy_leakage", "long_context_failure"]
+  measure:
+    suggested_metrics: |
+      - Hallucination/error rate per 1k prompts.  
+      - Tool-call failure or misuse rate.  
+      - Throughput/latency performance on your hardware.  
+      - Bias/harm incident rate per 1k interactions across languages/domains.
+  manage:
+    risk_management_considerations: |
+      Use layered controls (moderation, logging, human review, fallback models); monitor real-time, enable rollback; test long-context drift; ensure tool-safe design.
+
+# =============================================================================
+# REFERENCES & SOURCES
+# =============================================================================
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://openai.com/index/introducing-gpt-oss"
+    description: "OpenAI blog announcing gpt-oss models (Aug 5 2025)"   # :contentReference[oaicite:18]{index=18}
+  - url: "https://huggingface.co/openai/gpt-oss-120b"
+    description: "Hugging Face model page for gpt-oss-120b"   # :contentReference[oaicite:19]{index=19}
+  benchmarks:
+  - name: "OpenAI statement on performance vs o4-mini"
+    url: "https://openai.com/index/introducing-gpt-oss"
+    result: "Claims near-parity with o4-mini on reasoning benchmarks"   # :contentReference[oaicite:20]{index=20}
+  third_party_evaluations:
+  - source: ""
+    url: ""
+    summary: ""
+  news_coverage:
+  - title: "OpenAI releases a free GPT model that can run on your laptop"
+    url: "https://www.theverge.com/openai-gpt-oss-open-model-release"
+    date: "2025-08-05"   # :contentReference[oaicite:21]{index=21}
+
+# =============================================================================
+# METADATA
+# =============================================================================
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "Don Fountain"
+  card_creation_date: "2025-10-24"
+  last_updated: "2025-10-24"
+  information_sources: |
+    OpenAI blog, Hugging Face model page, news coverage, implementation guides.
+  completeness_assessment: |
+    High for architecture, reasoning focus, licensing; medium for detailed dataset/training disclosure and independent evaluations; low for latency/throughput in real-world production.
+  change_log:
+  - date: "2025-10-24"
+    author: "Don Fountain"
+    changes: "Initial synthesis of gpt-oss-120b model card."

@@ -1,0 +1,187 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Gemini 2.0 Flash"
+  vendor: "Google"
+  model_family: "Gemini 2.0"
+  version: "2.0 Flash (Feb 2025)"
+  release_date: "2025-02-05"
+  model_type: "Large Multimodal Model"
+  vendor_model_card_url: "https://modelcards.withgoogle.com/assets/documents/gemini-2-flash.pdf"
+  license: "Commercial API (Proprietary)"
+  deprecation_status: "Active (Discontinuation: 2026-02-05)"
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Sparse Mixture-of-Experts (MoE) Transformer"
+    parameter_count: "Not publicly disclosed"
+    context_window: "1,048,576 tokens (input)"
+    training_data_cutoff: "2024-06"
+    architectural_details: |
+      Builds upon the MoE Transformer architecture used in Gemini 1.5, with refined design and optimization methods for improved training stability and efficiency. Designed to power agentic systems. [2]
+  modalities:
+    supported_inputs:
+    - "text"
+    - "code"
+    - "image"
+    - "audio"
+    - "video"
+    supported_outputs:
+    - "text"
+    - "image (experimental)"
+  performance_characteristics:
+    speed_tier: "High"
+    cost_tier: "Moderate"
+    latency: "Provides low-latency support for real-time streaming."
+    throughput: "Supports high concurrency and batch prediction."
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    Improves upon Gemini 1.5 Flash with enhanced quality at similar speeds. Outperforms Gemini 1.5 Pro on key benchmarks at twice the speed. Well-suited for daily tasks and agentic workflows with native tool use. [2, 20]
+  benchmark_performance: |
+    - MMLU-Pro: 77.6%
+    - GPQA (diamond): 60.1%
+    - MATH: 90.9%
+    - MMMU: 71.7%
+    - Full benchmark table available in the official model card. [2]
+  special_capabilities:
+    tools_support: true
+    vision_support: true
+    reasoning_support: true
+    image_generation: true
+    additional_capabilities:
+    - "code_execution"
+    - "grounding_with_google_search"
+    - "structured_output"
+    - "multimodal_live_api"
+    - "tuning"
+  known_limitations:
+    vendor_disclosed: |
+      May exhibit general limitations of foundation models, such as hallucinations, and limitations around causal understanding, complex logical deduction, and counterfactual reasoning. [2]
+    common_failure_modes: |
+      Over-refusals and tone. The model will sometimes refuse to answer prompts where an answer would not violate policies (e.g., "Do I sound Italian?"). [2]
+    unsuitable_use_cases: |
+      High-stakes applications requiring guaranteed factuality without human oversight.
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Pre-training on a large-scale, diverse multimodal corpus (web-documents, code, images, audio, video). Post-training on vetted instruction tuning data, human preference data, and tool-use data. [2]
+  training_methodology: |
+    Trained using Google's TPUs with JAX and ML Pathways. Data processing included deduplication, safety filtering, and quality filtering. [2]
+  data_privacy_considerations: |
+    Follows Google Cloud data privacy and security standards.
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Offers enhanced multimodal understanding for reasoning across images, video, audio, and text. Well-suited for daily tasks, delivering strong overall performance and low-latency support for real-time streaming. An upgrade path for Gemini 1.5 Flash or 1.5 Pro users. [2]
+  suitable_domains:
+  - "agentic_systems"
+  - "real_time_streaming_applications"
+  - "general_purpose_multimodal_tasks"
+  - "code_generation"
+  out_of_scope_use: |
+    Safety-critical systems or domains requiring formal verification of outputs.
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      "drastically enhanced quality" compared to Gemini 1.5 Flash, and outperforms Gemini 1.5 Pro on key benchmarks at twice the speed. [2]
+    public_evidence: |
+      Extensive benchmark results are published in the official model card, covering general reasoning, code, math, and multimodality. [2]
+    assessment_notes: |
+      A significant step up from the 1.5 generation, offering a strong balance of performance and speed.
+  safe:
+    safety_measures: |
+      Development included partnership with internal safety, security, and responsibility teams, with multiple rounds of red teaming and assurance evaluations. [2]
+    known_safety_issues: |
+      Main safety limitations are over-refusals and a "preachy" tone in refusals, though tone has improved over Gemini 1.5. [2]
+    assessment_notes: |
+      Mature safety profile for an enterprise-grade model.
+  secure_and_resilient:
+    security_features: |
+      Deployment via Vertex AI provides enterprise-grade security controls.
+    known_vulnerabilities: |
+      Standard LLM vulnerabilities like prompt injection.
+    assessment_notes: |
+      Secure for enterprise use when deployed with appropriate application-level controls.
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Detailed model card and technical report summaries are public. Training data and model weights are not.
+    assessment_notes: |
+      Good transparency on performance and safety evaluations.
+  explainable_and_interpretable:
+    explainability_features: |
+      None specified beyond standard API outputs.
+    interpretability_limitations: |
+      Internal reasoning of the MoE model is opaque.
+    assessment_notes: |
+      Typical for large, proprietary models.
+  privacy_enhanced:
+    privacy_features: |
+      Data handling is governed by Google Cloud's privacy policies.
+    privacy_concerns: |
+      Lack of full transparency into training data sources.
+    assessment_notes: |
+      Meets enterprise standards.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Safety and responsibility were built in throughout the training lifecycle, including dataset filtering and post-training fine-tuning. [2]
+    known_biases: |
+      May reflect biases from the training data.
+    assessment_notes: |
+      Requires domain-specific bias evaluation.
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Evaluate performance of the Multimodal Live API for real-time voice and video applications.
+    - Benchmark against Gemini 1.5 Pro to verify the claimed performance improvements at higher speed.
+    - Test tool-use capabilities for complex, multi-step agentic workflows.
+  key_evaluation_questions: |
+    - Does the model provide a tangible speed and quality improvement over Gemini 1.5 Pro for our workloads?
+    - Are the experimental image generation capabilities suitable for production use?
+  comparison_considerations: |
+    Compare against Gemini 2.5 Flash for the latest capabilities. Compare against other models in the market on multimodal performance, latency, and cost.
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://modelcards.withgoogle.com/assets/documents/gemini-2-flash.pdf"
+    description: "Official Gemini 2.0 Flash Model Card"
+  - url: "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/models/gemini/2-0-flash"
+    description: "Vertex AI Documentation for Gemini 2.0 Flash"

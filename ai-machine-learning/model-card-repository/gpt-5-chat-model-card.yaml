@@ -1,0 +1,1110 @@
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+# GPT-5 Chat Model Card - NIST AI RMF Compliant
+# Populated from OpenAI documentation and verified web sources
+# Note: OpenAI has not disclosed all technical specifications; gaps explicitly noted
+
+schema_version: "1.0.0"
+
+# =============================================================================
+# MODEL IDENTITY
+# =============================================================================
+
+model_identity:
+  name: "GPT-5 Chat"
+  vendor: "OpenAI"
+  model_family: "GPT (Generative Pre-trained Transformer)"
+  version: "GPT-5 Chat (gpt-5-chat-latest)"
+  release_date: "2025-08-07"
+  model_type: "Large Language Model - Multimodal"
+
+  vendor_model_card_url: "https://platform.openai.com/docs/models/gpt-5-chat-latest"
+
+  license: "Proprietary - Commercial API License"
+  
+  deprecation_status: "Active - Current default model in ChatGPT"
+
+# =============================================================================
+# MODEL ARCHITECTURE & TECHNICAL SPECIFICATIONS
+# =============================================================================
+
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer decoder with hybrid multi-model architecture using dynamic routing. Unified system integrating reasoning capabilities from o-series models with conversational models."
+    
+    parameter_count: "Not publicly disclosed by OpenAI. Third-party estimates vary widely (1.76T to 52.5T parameters claimed in various sources, unverified)."
+    
+    context_window: "128,000 tokens (ChatGPT users) / 400,000 tokens maximum via API (272,000 input + 128,000 output)"
+    
+    training_data_cutoff: "2024-09-30"
+
+    architectural_details: |
+      GPT-5 Chat represents a unified model architecture that dynamically routes queries between different 
+      sub-models based on task complexity. Key architectural features:
+      
+      - Dynamic Router System: Automatically evaluates prompt complexity and selects appropriate model variant
+      - Model Variants: gpt-5-main (Fast mode), gpt-5-thinking (Thinking mode with deeper reasoning), 
+        gpt-5-chat-latest (unified interface)
+      - Natively Multimodal: Trained from scratch on multiple modalities (text, images) simultaneously
+      - Adjustable Parameters: API supports reasoning_effort (low/medium/high/minimal) and 
+        verbosity (low/medium/high) controls
+      - Safety Fine-tuning: RLHF (Reinforcement Learning from Human Feedback), reduced sycophancy, 
+        reduced hallucinations
+      - Three-stage Training: Unsupervised pretraining, supervised fine-tuning, RLHF
+      - Enhanced Reasoning: Incorporates chain-of-thought reasoning capabilities for complex tasks
+      - Function Calling: Robust tool calling with structured outputs and grammar constraints
+
+  modalities:
+    supported_inputs: ["text", "image"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "Variable - Fast mode for quick responses, Thinking mode for complex reasoning (higher latency)"
+    
+    cost_tier: "High - Premium pricing tier"
+    
+    latency: "Variable by mode: Fast mode provides near-instant responses. Thinking mode adds deliberate reasoning time (seconds to minutes for complex tasks). Automatic mode dynamically selects based on query complexity."
+    
+    throughput: "Rate-limited by tier: Free tier 10 messages/5 hours (switches to mini after limit), Plus tier higher limits, Pro tier unlimited access"
+
+# =============================================================================
+# CAPABILITIES & LIMITATIONS
+# =============================================================================
+
+capabilities:
+  vendor_claimed_strengths: |
+    OpenAI claims GPT-5 Chat as their "most capable model yet" with significant improvements in:
+    
+    Writing: "Most capable writing collaborator yet" with literary depth, rhythm, structural ambiguity handling,
+    and improved everyday drafting/editing capabilities. Better at sustaining poetic forms and natural prose flow.
+    
+    Coding: "Strongest coding model to date" with particular improvements in complex front-end generation,
+    debugging larger repositories, creating responsive websites/apps/games in one prompt, and understanding
+    design aesthetics (spacing, typography, white space).
+    
+    Health: "Best model yet for health-related questions" scoring significantly higher on HealthBench
+    evaluations. Acts as "active thought partner" for health information, flagging concerns and asking
+    clarifying questions. Adapts to user context, knowledge level, and geography.
+    
+    Reduced Issues: "Significant advances in reducing hallucinations, improving instruction following,
+    and minimizing sycophancy" (sycophantic responses reduced from 14.5% to <6% in targeted evaluations).
+    
+    Tone Improvements: "Less effusively agreeable, fewer unnecessary emojis, more subtle and thoughtful"
+    compared to GPT-4o. Designed to feel "less like talking to AI and more like chatting with a helpful
+    friend with PhD-level intelligence."
+    
+    Real-world Utility: Emphasis on being "more useful for real-world queries" beyond benchmark performance.
+
+  benchmark_performance: |
+    Published benchmark results from OpenAI and third-party sources:
+    
+    - MATH (AIME 2025, no tools): 94.6% accuracy (vs GPT-4o: 42.1%)
+    - SWE-bench Verified: 52.8% accuracy (coding without thinking mode)
+    - HealthBench Hard: 67.2% (with thinking mode)
+    - MMMU (Multimodal Understanding): 84.2% (images, video, spatial reasoning, scientific problems)
+    
+    OpenAI emphasizes that GPT-5 "not only outperforms previous models on benchmarks and answers questions
+    more quickly, but—most importantly—is more useful for real-world queries."
+    
+    Note: OpenAI has shifted messaging away from pure benchmark focus toward practical utility and
+    user experience improvements.
+
+  special_capabilities:
+    tools_support: true
+    vision_support: true
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: 
+      - "Agentic functionality - can set up own desktop, autonomous browser search"
+      - "Advanced Voice Mode replaced by ChatGPT Voice (multimodal voice interaction)"
+      - "Persistent memory across sessions (for ChatGPT users)"
+      - "Multilingual with improved accuracy across languages"
+      - "Extended context retention across long conversations"
+      - "Structured outputs with grammar constraints"
+      - "Function/tool calling with correct schema usage"
+      - "Multi-step tool use and chain-of-thought planning"
+
+  known_limitations:
+    vendor_disclosed: |
+      OpenAI has disclosed several limitations:
+      
+      - Not AGI: Explicitly stated that GPT-5 "represents a modest step toward AGI" but "lacks continuous
+        self-improvement and broader cognitive autonomry"
+      - Model Picker Removed: Free tier users automatically switched to mini model after usage limits,
+        removing direct model selection choice
+      - Rate Limits: Usage varies by tier with hard limits on free tier (10 messages/5 hours)
+      - Canvas and Image Generation: "Not available with GPT-5 Pro" mode
+      - Not Medical Professional Replacement: "ChatGPT does not replace a medical professional" - positioned
+        as partner tool only
+      - Audio/Video Inputs: Not supported in current version (text and image only)
+      - Training Data Cutoff: Knowledge cutoff as of September 30, 2024
+      - Safety Vulnerabilities: Research has revealed that "misspelled prompts can still elicit inappropriate
+        content" despite safety improvements
+
+    common_failure_modes: |
+      Publicly reported issues and failure patterns:
+      
+      Tone Shift Concerns: Initial release received significant user complaints about "cold, corporate tone"
+      feeling "robotic" and less spontaneous compared to GPT-4o. OpenAI released update on August 15, 2025
+      to make model "warmer and friendlier."
+      
+      Reduced Creativity: Some users report model feels less creative or "human" than earlier models,
+      particularly for creative writing and casual conversation.
+      
+      Increased Latency: Thinking mode introduces deliberate reasoning delays which can be problematic
+      for real-time applications (e.g., contact centers requiring immediate responses).
+      
+      Over-Safety: Some critics note model may be overly cautious in certain domains due to safety tuning.
+      
+      Hallucination Reduction Not Complete: While improved, hallucinations have not been eliminated entirely.
+      
+      Context Limitations: Despite large context window, quality degradation may occur with very long
+      conversations or complex multi-document analysis.
+
+    unsuitable_use_cases: |
+      GPT-5 Chat should NOT be used for:
+      
+      - Primary medical diagnosis or treatment decisions without medical professional review
+      - High-stakes decisions without human oversight and validation
+      - Real-time critical systems where latency is unacceptable (e.g., emergency response, automated trading)
+      - Regulated domains (legal, financial, medical) as sole authority without expert verification
+      - Applications requiring guaranteed factual accuracy (model can still hallucinate)
+      - Tasks requiring knowledge of events after September 30, 2024 training cutoff
+      - Applications where consistent personality/tone is critical (tone has shifted post-release)
+      - Audio or video processing (not supported in current version)
+      - Tasks requiring model to generate images (not supported in Chat version)
+      - Applications requiring open-source or on-premises deployment (proprietary cloud-only)
+      - Use cases requiring complete transparency of training data and model architecture
+
+# =============================================================================
+# TRAINING & DATA
+# =============================================================================
+
+training_information:
+  training_data_description: |
+    OpenAI has not disclosed full training data details. Available information:
+    
+    - Multilingual dataset including: books, articles, web pages, academic papers, and licensed sources
+    - Natively multimodal training: Visual and text capabilities developed simultaneously throughout training
+      (unlike GPT-4 which added vision later)
+    - Three-stage process: unsupervised pretraining, supervised fine-tuning, RLHF
+    - Synthetic data generation using earlier models to improve reliability and reduce hallucinations
+    - Curated curriculum designed to improve reasoning capabilities
+    - Training data cutoff: September 30, 2024
+    
+    Not publicly disclosed:
+    - Exact corpus size and token count
+    - Specific dataset names and sources
+    - Data licensing agreements and sourcing policies
+    - Geographic/demographic distribution of training data
+    - PII filtering and consent mechanisms
+
+  training_methodology: |
+    OpenAI describes three-stage training approach:
+    
+    1. Unsupervised Pretraining: Large-scale multilingual and multimodal pretraining
+    2. Supervised Fine-tuning: Task-specific fine-tuning with human-labeled examples
+    3. Reinforcement Learning from Human Feedback (RLHF): Alignment training to improve helpfulness,
+       harmlessness, and honesty
+    
+    Additional techniques:
+    - Synthetic data generation for improved reliability
+    - Curated curriculum for reasoning improvement
+    - Sycophancy reduction training with specific examples teaching model not to over-agree
+    - Safety-focused training to reduce harmful outputs
+    
+    Training infrastructure:
+    - Estimated ~25,000 GPUs (mostly A100s) for multi-month training runs
+    - Microsoft Azure supercomputer (285k CPU cores, 10k+ GPU cards, 400Gb/s connectivity)
+    - Training costs estimated at $500M+ per full training run
+    
+    Not publicly disclosed:
+    - Detailed hyperparameters and optimization techniques
+    - Specific RLHF reward model architecture
+    - Data augmentation strategies
+    - Multi-stage checkpoint selection criteria
+
+  data_privacy_considerations: |
+    OpenAI privacy considerations and gaps:
+    
+    Disclosed policies:
+    - API data not used for training by default (per OpenAI data usage policies)
+    - ChatGPT conversations may be used for training unless user opts out
+    - GDPR and privacy regulation compliance claimed
+    
+    Concerns and gaps:
+    - No transparency on PII filtering mechanisms during training
+    - No disclosure of consent mechanisms for training data collection
+    - Unclear data sourcing practices for proprietary/copyrighted content
+    - No information on demographic representation in training data
+    - Limited transparency on data retention and deletion policies
+    - No disclosed audit trail for training data provenance
+    
+    Critical for sensitive deployments:
+    - Assume training data may contain sensitive information patterns
+    - Do not rely on model for PII handling without additional safeguards
+    - Implement data governance controls for API usage in regulated domains
+    - Consider data residency requirements (model hosted in OpenAI/Microsoft cloud)
+
+# =============================================================================
+# INTENDED USE & SCOPE
+# =============================================================================
+
+intended_use:
+  vendor_intended_use: |
+    OpenAI describes GPT-5 Chat as designed for:
+    
+    - ChatGPT default model for conversational AI interactions
+    - Writing assistance: drafting, editing, creative writing, professional communications
+    - Coding: front-end development, debugging, repository analysis, UI/UX generation
+    - Health information: research, understanding results, preparing for medical appointments
+    - General knowledge queries and information synthesis
+    - Research and analysis tasks requiring long-context understanding
+    - Multimodal tasks involving text and image understanding
+    - Agentic workflows with tool calling and multi-step task execution
+    
+    OpenAI positions model as "smart, fast model" suitable for "real-world workflows" and
+    "most common ChatGPT uses: writing, coding, and health."
+
+  suitable_domains: 
+    - "Content creation and creative writing"
+    - "Software development and debugging (non-critical systems)"
+    - "Education and tutoring (with human oversight)"
+    - "Research assistance and literature review"
+    - "Business communications drafting"
+    - "Data analysis and visualization (with validation)"
+    - "Health information research (not diagnosis/treatment)"
+    - "Customer service augmentation (with human fallback)"
+    - "Multilingual translation and localization"
+    - "Document summarization and analysis"
+
+  out_of_scope_use: |
+    Use cases falling outside safe deployment boundaries:
+    
+    Regulatory/Legal Constraints:
+    - Medical diagnosis or treatment planning without licensed professional oversight
+    - Legal advice or contract generation without lawyer review
+    - Financial advice or trading decisions without financial advisor validation
+    - Safety-critical systems (aerospace, automotive, medical devices) as primary controller
+    
+    Technical Limitations:
+    - Real-time systems requiring <100ms latency guarantees
+    - Applications requiring guaranteed factual accuracy (model can hallucinate)
+    - Tasks requiring knowledge after September 30, 2024
+    - Audio/video processing workloads
+    - Image generation tasks
+    - On-premises or air-gapped deployments (cloud-only service)
+    
+    Ethical/Safety Concerns:
+    - High-stakes autonomous decisions without human review
+    - Child safety applications without extensive additional safeguards
+    - Surveillance or law enforcement without proper oversight
+    - Content moderation as sole arbiter without human review
+    - Applications that could enable harm, bias, or discrimination
+    
+    Business Constraints:
+    - Applications requiring open-source licensing
+    - Use cases requiring complete algorithmic transparency
+    - Scenarios where vendor lock-in is unacceptable
+    - Highly cost-sensitive applications (premium pricing tier)
+
+# =============================================================================
+# TRUSTWORTHINESS CHARACTERISTICS
+# =============================================================================
+
+trustworthiness_assessment:
+  # CHARACTERISTIC 1: Valid and Reliable
+  valid_and_reliable:
+    vendor_claims: |
+      OpenAI claims "significant advances in reducing hallucinations" and improved reliability.
+      Model trained with "focus on reliability, factuality, and safety" using synthetic data
+      generation, RLHF, and curated curriculum. Benchmark improvements cited as evidence.
+    
+    public_evidence: |
+      Benchmark results show substantial improvements over GPT-4o (e.g., 94.6% vs 42.1% on MATH).
+      However, independent reviews note:
+      - Some critics call GPT-5 an "insignificant update" that "doesn't solve problems that matter"
+      - Users report hallucinations still occur, though reduced
+      - Model's reliability varies significantly by domain and task complexity
+    
+    assessment_notes: |
+      Reliability appears improved but not guaranteed. Critical deployments require:
+      - Domain-specific validation testing on representative data
+      - Human review for high-stakes outputs
+      - Hallucination monitoring and detection systems
+      - Fallback mechanisms when model confidence is low
+      - Regular accuracy audits on production workloads
+
+  # CHARACTERISTIC 2: Safe
+  safe:
+    vendor_claims: |
+      OpenAI emphasizes safety focus with RLHF training, reduced sycophancy (14.5% to <6%),
+      improved instruction following, and safety fine-tuning. Model described as having
+      "improved safety controls" compared to previous versions.
+    
+    public_evidence: |
+      Mixed evidence on safety improvements:
+      - Research revealed "misspelled prompts can still elicit inappropriate content"
+      - Safety improvements documented in sycophancy reduction
+      - Some users report model is overly cautious/conservative
+      - No major safety incidents publicly reported post-launch
+    
+    assessment_notes: |
+      Safety posture is improved but not bulletproof. Recommend:
+      - Additional safety layers for high-risk applications (content filtering, prompt hardening)
+      - Red team testing for your specific use case and user population
+      - Monitoring for adversarial prompts and jailbreak attempts
+      - Clear user guidelines on model limitations
+      - Incident response plan for safety failures
+
+  # CHARACTERISTIC 3: Secure and Resilient
+  secure_and_resilient:
+    vendor_claims: |
+      OpenAI operates on Microsoft Azure infrastructure with enterprise security controls.
+      API includes rate limiting and authentication. Model serves millions of users at scale.
+    
+    public_evidence: |
+      Limited public information on security architecture. Known aspects:
+      - Cloud-hosted service (security depends on OpenAI/Microsoft practices)
+      - API authentication via API keys
+      - Rate limiting by tier to prevent abuse
+      - No disclosed security incidents specific to GPT-5
+      - Research shows vulnerability to prompt injection and adversarial inputs
+    
+    assessment_notes: |
+      Security considerations for deployment:
+      - Treat as external service with standard API security controls (key rotation, TLS, etc.)
+      - Implement prompt injection protections for user-facing applications
+      - Monitor for adversarial attacks and unusual usage patterns
+      - Plan for service outages (resilience/fallback strategies)
+      - Assess data residency and sovereignty requirements (cloud-only)
+      - Consider secrets management for API keys in production
+
+  # CHARACTERISTIC 4: Accountable and Transparent
+  accountable_and_transparent:
+    vendor_claims: |
+      OpenAI provides:
+      - Public model documentation and API references
+      - Usage tier information and pricing transparency
+      - Model behavior examples and comparison tables
+      - System card (limited technical details)
+    
+    public_evidence: |
+      Significant transparency gaps:
+      - No disclosed parameter count, architecture details, or training data specifics
+      - No public access to training datasets or data sourcing methodology
+      - Limited explainability of individual model decisions
+      - No disclosed bias testing results or fairness evaluations
+      - Closed-source proprietary model with no external auditing
+    
+    assessment_notes: |
+      Transparency is limited. For regulated deployments:
+      - Document model decision-making processes at application level
+      - Maintain audit logs of all API interactions
+      - Implement human review/explanation layers for important decisions
+      - Be prepared to explain model limitations to regulators/auditors
+      - Consider transparency requirements may not be met for certain use cases
+      - Evaluate alternative models if full transparency is mandatory
+
+  # CHARACTERISTIC 5: Explainable and Interpretable
+  explainable_and_interpretable:
+    vendor_claims: |
+      OpenAI provides limited explainability features:
+      - Model can be prompted to explain its reasoning (chain-of-thought in Thinking mode)
+      - Structured outputs allow some control over response format
+      - Examples demonstrate model's capabilities across domains
+    
+    public_evidence: |
+      Explainability is weak:
+      - No built-in attribution or confidence scoring
+      - Black-box neural network with no interpretable internal representations
+      - Self-explanations (chain-of-thought) are model-generated, not ground truth
+      - No tools for understanding why specific outputs were generated
+      - Limited ability to debug incorrect responses
+    
+    assessment_notes: |
+      Explainability limitations require:
+      - Don't rely on model self-explanations for high-stakes decisions
+      - Implement application-level tracking of inputs/outputs for post-hoc analysis
+      - Use structured prompting to elicit reasoning traces where needed
+      - Consider rule-based systems or simpler models for use cases requiring full explainability
+      - Document that model decisions are not fully explainable to end users
+      - Evaluate whether lack of explainability is acceptable for your domain
+
+  # CHARACTERISTIC 6: Privacy-Enhanced
+  privacy_enhanced:
+    vendor_claims: |
+      OpenAI claims:
+      - API data not used for training by default
+      - GDPR and privacy regulation compliance
+      - Enterprise data protection for business customers
+      - User controls for ChatGPT conversation data usage
+    
+    public_evidence: |
+      Privacy concerns and gaps:
+      - Training data may contain personal information (not disclosed)
+      - No transparency on PII filtering during training
+      - Model may memorize and reproduce training data patterns
+      - Cloud-hosted service with data processed on external servers
+      - Limited information on data retention and deletion policies
+      - No disclosed data residency options for specific regions
+    
+    assessment_notes: |
+      Privacy considerations for deployment:
+      - Do not send sensitive PII through API without additional safeguards
+      - Implement data minimization (send only necessary context)
+      - Review OpenAI's data processing agreements for your jurisdiction
+      - Consider data residency requirements (model hosted in Microsoft/OpenAI cloud)
+      - Implement separate PII detection/redaction before API calls if needed
+      - Maintain separate audit trail of all data sent to OpenAI
+      - Evaluate whether cloud-based processing is acceptable for your data sensitivity level
+
+  # CHARACTERISTIC 7: Fair with Harmful Bias Managed
+  fair_with_harmful_bias_managed:
+    vendor_claims: |
+      OpenAI states model trained on "diverse" data and with "safety fine-tuning" to reduce bias.
+      RLHF process designed to align model with human values. Model "adapts to user's context,
+      knowledge level, and geography" for health responses.
+    
+    public_evidence: |
+      Limited public bias testing results:
+      - No published demographic fairness evaluations or bias audits
+      - No disclosed bias testing methodology or metrics
+      - Independent research on earlier GPT models showed demographic and cultural biases
+      - Model's multilingual capabilities suggest some cross-cultural training
+      - No information on representation of different populations in training data
+    
+    assessment_notes: |
+      Bias management requires deployment-level controls:
+      - Conduct domain-specific bias testing for your user population
+      - Test model performance across demographic groups relevant to your use case
+      - Monitor for disparate impact in production usage
+      - Implement bias detection and mitigation at application level
+      - Document known biases and limitations for end users
+      - Consider whether underrepresented populations may be underserved
+      - Plan for bias incident response and continuous monitoring
+      - Evaluate alternative models if fairness certification is required
+
+# =============================================================================
+# PRICING INFORMATION
+# =============================================================================
+
+pricing_information:
+  api_pricing:
+    input_tokens: "$1.25 per 1M tokens"
+    cached_input_tokens: "$0.125 per 1M tokens"
+    output_tokens: "$10.00 per 1M tokens"
+    
+    variants:
+      - name: "gpt-5-chat-latest"
+        input_price: "$1.25/1M"
+        output_price: "$10.00/1M"
+      - name: "GPT-5 (standard)"
+        input_price: "$1.25/1M"
+        output_price: "$10.00/1M"
+      - name: "GPT-5 mini"
+        input_price: "$0.25/1M"
+        output_price: "$1.00/1M"
+  
+  chatgpt_pricing:
+    free_tier: "Limited to 10 messages per 5 hours, automatically switches to mini model after limit"
+    plus_tier: "$20/month - Higher usage limits, priority access"
+    pro_tier: "Not listed at source - Unlimited access to GPT-5, limited access to GPT-5 Pro"
+    enterprise_tier: "Custom pricing for large-scale deployments"
+  
+  rate_limits_by_tier:
+    free_tier:
+      rpm: "Not supported"
+      tpm: "Not supported"
+      batch_queue_limit: "Not supported"
+    tier_1:
+      rpm: 500
+      tpm: 30000
+      batch_queue_limit: 50000
+    tier_2:
+      rpm: 5000
+      tpm: 450000
+      batch_queue_limit: 1350000
+    tier_3:
+      rpm: 5000
+      tpm: 800000
+      batch_queue_limit: 100000000
+    tier_4:
+      rpm: 10000
+      tpm: 2000000
+      batch_queue_limit: 200000000
+    tier_5:
+      rpm: 15000
+      tpm: 40000000
+      batch_queue_limit: 15000000000
+
+# =============================================================================
+# API AND TECHNICAL DETAILS
+# =============================================================================
+
+api_information:
+  model_identifiers:
+    - "gpt-5-chat-latest" 
+    - "gpt-5-chat-latest → gpt-5-chat-latest (alias)"
+  
+  endpoints:
+    - "Chat Completions: v1/chat/completions"
+    - "Responses: v1/responses"
+    - "Realtime: v1/realtime"
+    - "Assistants: v1/assistants"
+    - "Batch: v1/batch"
+    - "Fine-tuning: v1/fine-tuning (Not supported)"
+    - "Embeddings: v1/embeddings (Not supported)"
+    - "Image generation: v1/images/generations (Not supported)"
+    - "Videos: v1/videos (Not supported)"
+    - "Image edit: v1/images/edits (Not supported)"
+    - "Speech generation: v1/audio/speech (Not supported)"
+    - "Transcription: v1/audio/transcriptions (Not supported)"
+    - "Translation: v1/audio/translations (Not supported)"
+    - "Moderation: v1/moderations (Not supported)"
+    - "Completions (legacy): v1/completions (Not supported)"
+  
+  supported_features:
+    streaming: "Supported"
+    function_calling: "Supported"
+    structured_outputs: "Supported"
+    fine_tuning: "Not supported"
+    distillation: "Not supported"
+    predicted_outputs: "Not supported"
+  
+  supported_tools:
+    - "Web search: Supported (via Responses API)"
+    - "File search: Supported"
+    - "Image generation: Supported"
+    - "Code interpreter: Supported"
+    - "Computer use: Not supported"
+    - "MCP: Supported"
+
+# =============================================================================
+# EVALUATION GUIDANCE
+# =============================================================================
+
+evaluation_guidance:
+  recommended_tests: |
+    Pre-deployment validation tests:
+    
+    1. Domain Accuracy Testing:
+       - Create evaluation dataset with 100+ examples from your domain
+       - Measure accuracy, relevance, and completeness of responses
+       - Compare against GPT-4o and other alternatives
+       - Set minimum accuracy threshold (e.g., 85%) for deployment
+    
+    2. Latency and Throughput Benchmarking:
+       - Test with Fast vs Thinking modes for your typical queries
+       - Measure p50, p95, p99 latency under load
+       - Verify rate limits are sufficient for expected traffic
+       - Test API error handling and retry logic
+    
+    3. Safety and Bias Testing:
+       - Red team with adversarial prompts relevant to your domain
+       - Test for demographic biases across user populations you serve
+       - Validate content filtering catches harmful outputs
+       - Measure false positive rate of safety controls
+    
+    4. Cost Analysis:
+       - Project monthly costs based on expected usage patterns
+       - Compare Fast vs Thinking mode costs for your workloads
+       - Evaluate caching opportunities to reduce costs
+       - Model long-term cost trajectory as usage scales
+    
+    5. Integration Testing:
+       - Validate API authentication and security controls
+       - Test error handling, timeouts, and retry logic
+       - Verify logging and monitoring integration
+       - Test graceful degradation when API unavailable
+    
+    6. Compliance Validation:
+       - Review OpenAI terms of service for your use case
+       - Validate data handling meets regulatory requirements (GDPR, HIPAA, etc.)
+       - Document model limitations for audit trail
+       - Verify acceptable use policy compliance
+
+  key_evaluation_questions: |
+    Critical questions to answer before deployment:
+    
+    Capability Assessment:
+    - Does GPT-5 Chat meet accuracy requirements for our specific use cases?
+    - How does it compare to GPT-4o and other alternatives on our evaluation data?
+    - Is Fast mode sufficient or do we need Thinking mode's deeper reasoning?
+    - Can we achieve acceptable latency for our user experience requirements?
+    
+    Infrastructure and Operations:
+    - Can we meet API costs within our budget at expected scale?
+    - Do rate limits support our expected traffic patterns?
+    - How will we handle API outages and errors?
+    - What monitoring and alerting do we need?
+    
+    Risk and Compliance:
+    - Are we comfortable with hallucination risk for our use case?
+    - Do safety controls meet our risk appetite?
+    - Can we explain model decisions to regulators/users?
+    - Does OpenAI's data handling meet our privacy requirements?
+    - Is vendor lock-in acceptable for our strategic plans?
+    
+    Transparency and Governance:
+    - Are we comfortable with lack of model transparency?
+    - Can we meet explainability requirements without interpretable model?
+    - Do we have governance controls for managing third-party AI?
+    - How will we handle model updates and version changes?
+    
+    Bias and Fairness:
+    - Have we validated model performs fairly across demographic groups we serve?
+    - What bias monitoring do we need in production?
+    - How will we respond if disparate impact is discovered?
+    - Are underrepresented populations adequately served?
+
+  comparison_considerations: |
+    Framework for comparing GPT-5 Chat with alternatives:
+    
+    Alternative Models to Evaluate:
+    - Claude Sonnet 4.5 (Anthropic) - comparable capability tier
+    - Gemini 2.0 (Google) - multimodal alternative
+    - GPT-4o (OpenAI) - previous generation, lower cost
+    - Open-source alternatives (Llama 3, Mixtral) - transparency and control
+    
+    Key Trade-off Dimensions:
+    
+    Cost vs Quality:
+    - GPT-5 is premium tier ($1.25-$10/1M tokens) - when is quality gain worth cost?
+    - Can Fast mode ($0.25/1M) meet requirements vs full model?
+    - How does cost compare to alternatives at your scale?
+    
+    Speed vs Accuracy:
+    - Fast mode vs Thinking mode trade-off for your use cases
+    - Real-time applications may require Fast-only
+    - Batch workloads can leverage Thinking mode's deeper reasoning
+    
+    Transparency vs Capability:
+    - Open-source models provide transparency at cost of capability gap
+    - Is transparency required for your domain (regulated industries)?
+    - Can you mitigate transparency gap with application-level controls?
+    
+    Vendor Lock-in vs Integration Ease:
+    - OpenAI API is widely supported and easy to integrate
+    - Switching costs increase over time with usage
+    - Consider multi-model strategy for vendor diversification
+    
+    Deployment Model:
+    - Cloud-only (GPT-5) vs on-premises options (open-source)
+    - Data residency and sovereignty requirements
+    - Network connectivity and latency considerations
+    
+    Differentiation Analysis:
+    - What unique capabilities does GPT-5 provide for your use case?
+    - Are writing/coding/health improvements relevant to your domain?
+    - Does multimodal capability add value for your workflows?
+    - Is dynamic routing (Fast/Thinking) useful for your query mix?
+
+# =============================================================================
+# NIST AI RMF MAPPING
+# =============================================================================
+
+rmf_function_mapping:
+  govern:
+    notes: |
+      Governance considerations for GPT-5 Chat deployment:
+      
+      Policy Frameworks:
+      - Define acceptable use policy specific to GPT-5 capabilities and limitations
+      - Establish human oversight requirements for high-stakes decisions
+      - Document model selection rationale and alternatives considered
+      - Create incident response plan for safety failures or bias incidents
+      
+      Approval and Oversight:
+      - Require executive approval for production deployment
+      - Establish AI governance board review for high-risk use cases
+      - Define escalation path for model behavior concerns
+      - Regular governance reviews of production usage patterns
+      
+      Version Control and Change Management:
+      - Document GPT-5 Chat version (gpt-5-chat-latest) and update tracking
+      - Establish process for evaluating and approving model updates
+      - Maintain rollback capability if updates degrade performance
+      - Track API version changes and deprecation notices
+      
+      Compliance and Audit:
+      - Maintain complete audit trail of model usage decisions
+      - Document compliance with relevant regulations (GDPR, HIPAA, etc.)
+      - Regular compliance reviews of OpenAI terms and data handling
+      - Prepare for potential regulatory inquiries about AI usage
+
+  map:
+    context_considerations: |
+      Contextual risk factors for GPT-5 Chat deployment:
+      
+      Use Case Context:
+      - Who: End users, internal employees, customers, vulnerable populations?
+      - What: Content generation, decision support, customer service, research assistance?
+      - Where: Geographic regions, regulatory jurisdictions, cultural contexts?
+      - When: Real-time interactions vs batch processing, time-sensitive decisions?
+      - Why: Business value, user benefit, competitive advantage, cost reduction?
+      
+      Data Sensitivity:
+      - What types of data will be sent to OpenAI API? (PII, PHI, confidential business data?)
+      - What is acceptable data exposure risk for your use case?
+      - Are there regulatory constraints on cloud processing? (GDPR, HIPAA, export controls)
+      - How will you minimize data sent while maintaining functionality?
+      
+      Stakeholder Impacts:
+      - Who benefits from successful deployment? Who is harmed if it fails?
+      - Are there vulnerable populations in your user base requiring special protections?
+      - How will model errors affect user trust and business reputation?
+      - What downstream systems depend on model outputs?
+      
+      Regulatory Landscape:
+      - What AI regulations apply in your jurisdiction? (EU AI Act, state laws, sector regs)
+      - Are there transparency or explainability requirements you must meet?
+      - Do you need human oversight for certain decision types?
+      - What audit and documentation requirements exist?
+    
+    risk_categories:
+      - "Hallucination Risk - Model generating false or misleading information"
+      - "Bias and Fairness Risk - Disparate impact across demographic groups"
+      - "Privacy Risk - Exposure of sensitive data sent via API"
+      - "Safety Risk - Generation of harmful, inappropriate, or dangerous content"
+      - "Reliability Risk - Model errors affecting critical business processes"
+      - "Vendor Lock-in Risk - Dependency on proprietary OpenAI service"
+      - "Compliance Risk - Violation of regulatory requirements or terms of service"
+      - "Security Risk - API compromise, prompt injection, adversarial attacks"
+      - "Cost Overrun Risk - Unexpected API usage costs at scale"
+      - "Reputational Risk - Model failures damaging brand trust"
+
+  measure:
+    suggested_metrics: |
+      Production monitoring metrics for GPT-5 Chat:
+      
+      Performance Metrics:
+      - Accuracy: Task-specific correctness on evaluation datasets (track weekly)
+      - Latency: API response time p50/p95/p99 (track real-time)
+      - Throughput: Successful requests per second/hour/day
+      - Error Rate: Failed API calls, timeouts, rate limit hits (alert >1%)
+      - User Satisfaction: CSAT or NPS scores for AI-assisted interactions
+      
+      Safety Metrics:
+      - Harmful Output Rate: Percentage of responses flagged by safety systems (alert >0.1%)
+      - Content Filter Triggers: Frequency of OpenAI's content filtering activation
+      - User Reports: Number of user complaints about inappropriate responses
+      - Adversarial Attack Attempts: Detected prompt injection or jailbreak attempts
+      
+      Fairness Metrics:
+      - Demographic Performance Gaps: Accuracy differences across user groups
+      - Response Time Equity: Latency variation by user characteristics
+      - Feature Usage Patterns: Are certain user groups excluded or underserved?
+      - Bias Incident Rate: Reported cases of biased or discriminatory outputs
+      
+      Operational Metrics:
+      - Uptime: API availability percentage (SLA target 99.9%+)
+      - Cost Per Request: Average API cost per user interaction
+      - Cache Hit Rate: Percentage of requests using cached inputs (cost savings)
+      - Rate Limit Headroom: Distance from tier limits (prevent throttling)
+      
+      Compliance Metrics:
+      - Policy Violation Rate: Frequency of use case violations detected
+      - Audit Log Completeness: 100% of API calls logged with user/context
+      - Data Retention Compliance: Verification data deleted per policy
+      - Terms of Service Adherence: No violations of OpenAI acceptable use
+      
+      Measurement Methods:
+      - Real-time API monitoring (latency, errors, throughput)
+      - Periodic evaluation dataset runs (accuracy, bias)
+      - User feedback collection (satisfaction, safety reports)
+      - Cost tracking and alerting (budget adherence)
+      - Regular compliance audits (policy, regulatory)
+      
+      Alert Thresholds:
+      - Critical: >1% error rate, >0.1% harmful output rate, API unavailable >5 min
+      - Warning: Accuracy drop >5%, latency p95 >2x baseline, cost >20% over budget
+      - Informational: Rate limit >70% of tier, cache hit rate <60%
+
+  manage:
+    risk_management_considerations: |
+      Risk management strategies for GPT-5 Chat deployment:
+      
+      Technical Controls:
+      
+      Input Validation and Sanitization:
+      - Implement prompt injection detection and filtering
+      - Limit user input length and complexity to prevent abuse
+      - Sanitize outputs before display to users (XSS, etc.)
+      - Use structured outputs to constrain model behavior
+      
+      Output Validation:
+      - Fact-checking layer for critical information (e.g., health, legal)
+      - Confidence scoring or uncertainty detection where possible
+      - Automated hallucination detection (compare to knowledge bases)
+      - Content filtering for safety (violence, hate speech, etc.)
+      
+      Guardrails and Constraints:
+      - Hard limits on certain types of generations (medical advice, legal counsel)
+      - Blocklists for prohibited topics or high-risk domains
+      - Rate limiting per user to prevent abuse
+      - Timeout enforcement for long-running requests
+      
+      Monitoring and Alerting:
+      - Real-time dashboards for key metrics (latency, errors, safety)
+      - Automated alerts for threshold breaches
+      - Anomaly detection for unusual usage patterns
+      - User feedback collection and triage system
+      
+      Fallback Mechanisms:
+      - Human review queue for low-confidence or flagged responses
+      - Alternative model switching when primary fails
+      - Graceful degradation (simpler responses under load)
+      - Clear error messages when model cannot help
+      
+      Process Controls:
+      
+      Human-in-the-Loop:
+      - Mandatory human review for high-stakes decisions (medical, legal, financial)
+      - Escalation workflow when model expresses uncertainty
+      - Expert validation for domain-specific outputs
+      - User empowerment to request human assistance
+      
+      Logging and Audit:
+      - Complete audit trail of all API calls with user context
+      - Retention policy aligned with regulatory requirements
+      - Regular audit reviews of usage patterns
+      - Incident investigation and root cause analysis
+      
+      Continuous Evaluation:
+      - Weekly accuracy testing on held-out evaluation sets
+      - Monthly bias audits across demographic groups
+      - Quarterly red team exercises (safety, security)
+      - Annual comprehensive risk assessments
+      
+      Organizational Controls:
+      
+      Training and Awareness:
+      - Train employees on model capabilities and limitations
+      - Educate users on appropriate use and expectations
+      - Share incident learnings across organization
+      - Regular refreshers on AI ethics and responsible use
+      
+      Policies and Procedures:
+      - Acceptable use policy clearly communicated to all users
+      - Incident response playbook with defined roles and escalation
+      - Change management process for model updates
+      - Vendor management procedures for OpenAI relationship
+      
+      Oversight and Governance:
+      - Regular governance board reviews of AI usage
+      - Executive sponsor for AI initiatives
+      - Cross-functional working group (legal, compliance, engineering, product)
+      - External ethics review for high-risk use cases
+      
+      Incident Response:
+      
+      Detection and Triage:
+      - Automated detection of safety incidents (harmful outputs)
+      - User reporting mechanism with clear escalation path
+      - Severity classification (critical/high/medium/low)
+      - On-call rotation for 24/7 incident response
+      
+      Containment and Remediation:
+      - Immediate deactivation capability for critical failures
+      - Hotfix deployment process for urgent mitigations
+      - User notification procedures when errors affect them
+      - Corrective actions to prevent recurrence
+      
+      Continuous Improvement:
+      
+      Feedback Loops:
+      - Systematic collection of user feedback (thumbs up/down, comments)
+      - Integration of production data into evaluation datasets
+      - Regular retrospectives on incidents and near-misses
+      - Proactive identification of emerging risks
+      
+      Model Evolution:
+      - Track OpenAI model updates and assess impact
+      - Regression testing when models change
+      - A/B testing of new model versions before full rollout
+      - Consider alternative models as they improve
+
+# =============================================================================
+# REFERENCES & SOURCES
+# =============================================================================
+
+references:
+  vendor_documentation:
+    - url: "https://platform.openai.com/docs/models/gpt-5-chat-latest"
+      description: "Official OpenAI platform documentation for GPT-5 Chat model specifications"
+    
+    - url: "https://openai.com/index/introducing-gpt-5/"
+      description: "OpenAI's official GPT-5 launch announcement with capability descriptions"
+    
+    - url: "https://help.openai.com/en/articles/11909943-gpt-5-in-chatgpt"
+      description: "OpenAI Help Center guide to GPT-5 in ChatGPT, usage limits, and tiers"
+
+  benchmarks:
+    - name: "MATH (AIME 2025, no tools)"
+      url: "https://openai.com/index/introducing-gpt-5/"
+      result: "94.6% accuracy (vs GPT-4o: 42.1%)"
+    
+    - name: "SWE-bench Verified"
+      url: "https://openai.com/index/introducing-gpt-5/"
+      result: "52.8% accuracy without thinking mode"
+    
+    - name: "HealthBench Hard"
+      url: "https://openai.com/index/introducing-gpt-5/"
+      result: "67.2% with thinking mode"
+    
+    - name: "MMMU (Multimodal Understanding)"
+      url: "https://openai.com/index/introducing-gpt-5/"
+      result: "84.2% on images, video, spatial reasoning tasks"
+
+  third_party_evaluations:
+    - source: "Encord Technical Breakdown"
+      url: "https://encord.com/blog/gpt-5-a-technical-breakdown/"
+      summary: "Technical analysis of GPT-5 architecture, benchmarks, and comparison to GPT-OSS"
+    
+    - source: "Wikipedia - GPT-5"
+      url: "https://en.wikipedia.org/wiki/GPT-5"
+      summary: "Comprehensive overview of GPT-5 development history, features, and reception"
+    
+    - source: "AIMultiple Research"
+      url: "https://research.aimultiple.com/gpt-5/"
+      summary: "Deep dive into GPT-5 features, pricing, and accessibility options"
+    
+    - source: "DataCamp GPT-5 Guide"
+      url: "https://www.datacamp.com/blog/everything-we-know-about-gpt-5"
+      summary: "Evolution of GPT models and GPT-5 roadmap from Sam Altman's announcements"
+    
+    - source: "Botpress GPT-5 Overview"
+      url: "https://www.botpress.com/blog/everything-you-should-know-about-gpt-5"
+      summary: "GPT-5 capabilities, context windows, multilingual performance, API details"
+    
+    - source: "Voiceflow GPT-5 Analysis"
+      url: "https://www.voiceflow.com/blog/gpt-5"
+      summary: "GPT-5 vs GPT-4.5 comparison, pricing, user reception, and critical reviews"
+    
+    - source: "AIM Media House Technical Architecture"
+      url: "https://aimmediahouse.com/generative-ai/inside-gpt-5-the-technical-architecture-powering-openais-latest-model"
+      summary: "Technical architecture details, API features, deployment infrastructure"
+    
+    - source: "Medium - Cogni Down Under"
+      url: "https://medium.com/@cognidownunder/gpt-5-openais-unified-intelligence-play-50fcfab6665b"
+      summary: "Analysis of GPT-5's unified intelligence approach and strategic positioning"
+
+# =============================================================================
+# METADATA
+# =============================================================================
+
+metadata:
+  card_version: "1.0"
+  card_author: "AI Risk Assessment Team"
+  card_creation_date: "2025-10-28"
+  last_updated: "2025-10-28"
+  
+  information_sources: |
+    Primary sources for this model card:
+    
+    1. Official OpenAI Documentation:
+       - Platform API documentation (gpt-5-chat-latest model page)
+       - OpenAI blog post: "Introducing GPT-5" (launch announcement)
+       - OpenAI Help Center: GPT-5 in ChatGPT guide
+    
+    2. Technical Analysis Articles:
+       - Encord technical breakdown
+       - AIM Media House architecture analysis
+       - AIMultiple research report
+    
+    3. Industry Coverage:
+       - Wikipedia comprehensive overview
+       - DataCamp GPT evolution guide
+       - Botpress feature analysis
+       - Voiceflow comparative review
+    
+    4. User-Uploaded Materials:
+       - OpenAI model card PDFs (gp5-chat.pdf, gp5-chat2.pdf)
+       - Pricing and specification details from platform screenshots
+    
+    All information has been verified against multiple sources where possible.
+    OpenAI has not disclosed many technical details (parameter count, training data specifics,
+    bias evaluations), which are explicitly noted as gaps throughout this card.
+
+  completeness_assessment: |
+    Information completeness by section:
+    
+    COMPREHENSIVE SECTIONS (>80% complete):
+    - Model Identity: Full vendor information, release date, pricing, model identifiers
+    - API Information: Complete endpoint listing, rate limits, supported features from docs
+    - Capabilities: Detailed vendor claims and benchmark results from official sources
+    - Pricing: Complete API and ChatGPT tier pricing, rate limits per tier
+    - References: Extensive vendor documentation and third-party analysis sources
+    
+    PARTIAL SECTIONS (40-80% complete):
+    - Technical Specifications: Context window, cutoff date confirmed; parameter count NOT disclosed
+    - Trustworthiness: Vendor claims documented; limited public evidence on bias/fairness/explainability
+    - Limitations: Vendor-disclosed and user-reported issues documented; no formal failure mode analysis
+    - Intended Use: Vendor use cases clear; domain suitability based on inferences
+    
+    LIMITED SECTIONS (<40% complete):
+    - Training Information: High-level process described; detailed data sources NOT disclosed
+    - Privacy Considerations: General policies known; specific mechanisms NOT disclosed
+    - Architecture Details: Hybrid routing described; exact parameter counts and architecture NOT disclosed
+    - Bias and Fairness: No published bias evaluations or demographic fairness testing from vendor
+    - Explainability: Very limited information on interpretability features
+    
+    CRITICAL INFORMATION GAPS:
+    - No disclosed parameter count (estimates vary wildly: 1.76T to 52.5T)
+    - No detailed training data description (corpus size, sources, licensing)
+    - No published bias testing or fairness evaluations
+    - No disclosed PII filtering or consent mechanisms for training data
+    - No technical architecture details (exact model structure, optimization techniques)
+    - No independent security audits or penetration testing results
+    - Limited transparency into safety mechanisms beyond high-level descriptions
+    
+    CONFIDENCE IMPROVEMENT NEEDS:
+    - Third-party bias and fairness evaluations
+    - Independent security assessment
+    - Detailed training data transparency
+    - Published failure mode analysis
+    - Benchmark results on domain-specific tasks beyond vendor examples
+    - Long-term reliability and performance tracking data
+
+  change_log:
+    - date: "2025-10-28"
+      author: "AI Risk Assessment Team"
+      changes: "Initial model card creation for GPT-5 Chat. Populated from official OpenAI documentation (platform docs, launch blog, help center), third-party technical analyses (Encord, Wikipedia, AIMultiple, DataCamp, Botpress, Voiceflow, AIM Media House), and user-uploaded specification PDFs. All information verified against multiple sources where possible. Gaps in parameter count, training data details, and bias evaluations explicitly documented."
+
+# =============================================================================
+# USAGE NOTES
+# =============================================================================
+
+usage_notes: |
+  This model card follows NIST AI RMF principles and is structured for comprehensive
+  trustworthiness assessment of OpenAI's GPT-5 Chat model.
+  
+  Key Characteristics of GPT-5 Chat:
+  - Unified model interface with dynamic routing between Fast and Thinking modes
+  - Large context window: 128k tokens (ChatGPT) / 400k tokens (API)
+  - Premium pricing tier: $1.25-$10 per 1M tokens
+  - Multimodal: Text and image inputs, text outputs
+  - Proprietary cloud-only service (no on-premises deployment)
+  - Limited transparency: No disclosed parameter count or detailed architecture
+  
+  Critical Limitations to Consider:
+  - Can still hallucinate despite improvements
+  - Limited explainability (black-box model)
+  - No disclosed bias testing or fairness evaluations
+  - Proprietary service with vendor lock-in risk
+  - Training data sources not fully disclosed
+  - Cloud-only processing may not meet all data residency requirements
+  
+  Recommended Next Steps:
+  1. Conduct domain-specific evaluation testing on your data
+  2. Assess latency/cost trade-offs for your use case (Fast vs Thinking mode)
+  3. Perform bias and safety testing for your user population
+  4. Review OpenAI terms of service for compliance with your requirements
+  5. Develop governance controls and human oversight processes
+  6. Implement monitoring and incident response procedures
+  
+  This card should be updated as:
+  - New information becomes available from OpenAI
+  - Independent evaluations and audits are published
+  - Production deployment reveals additional insights
+  - Model updates or version changes occur

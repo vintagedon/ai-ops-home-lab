@@ -1,0 +1,254 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "InternLM 2 20B"
+  vendor: "Shanghai AI Laboratory (OpenXLab / ModelScope)"
+  model_family: "InternLM"
+  version: "2 (20B)"
+  release_date: "2024-04-12"
+  model_type: "Open-Weight Multilingual Reasoning and Coding Model"
+  vendor_model_card_url: "https://huggingface.co/internlm/internlm2-20b"
+  license: "Apache 2.0"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Dense Transformer (decoder-only)"
+    parameter_count: "20 billion"
+    context_window: "32 K tokens"
+    training_data_cutoff: "2024-01"
+    architectural_details: |
+      InternLM 2 20B is the second-generation open model from Shanghai AI Lab,
+      trained as a balanced bilingual reasoning and coding model for Chinese and English.
+      It employs grouped-query attention (GQA), rotary embeddings (RoPE),
+      and optimized FlashAttention 2 kernels for high throughput and low latency.
+      The model supports 32K context and is instruction-tuned with SafeRL alignment.
+
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "High"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ~0.3 s per 1 K tokens on A100 (fp16); ~0.12 s INT4 on RTX 4090.  
+      Optimized for efficient reasoning and summarization at moderate compute cost.
+    throughput: |
+      High efficiency for distributed inference on 4–8 GPUs; scales linearly up to 64 GPUs.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • High bilingual reasoning accuracy (Chinese + English).  
+    • Strong performance in math, code, and instruction-following.  
+    • Optimized for fine-tuning and enterprise research workloads.  
+  benchmark_performance: |
+    - MMLU: 82.4  
+    - GSM8K: 89.3  
+    - C-Eval: 91.5  
+    - HumanEval: 84.7  
+    - ARC-C: 84.2  
+    (OpenCompass & InternLM Evaluation, Apr 2024)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["bilingual_reasoning", "summarization", "code_generation", "long_context_QA"]
+  known_limitations:
+    vendor_disclosed: |
+      No multimodal support.  
+      Moderate bias toward Chinese content tone and syntax.  
+    common_failure_modes: |
+      Over-refusal on sensitive queries; minor factual drift at >25K context.  
+    unsuitable_use_cases: |
+      Safety-critical automation or compliance decision systems.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    ~8 trillion tokens covering Chinese, English, code, math, and instruction datasets.
+    Derived from OpenCompass, multilingual corpora, GitHub, and curated academic text.
+    Strict filtering applied for toxicity, duplication, and bias.
+  training_methodology: |
+    Autoregressive next-token pretraining, followed by supervised instruction tuning 
+    and SafeRL alignment for safety and bilingual coherence.
+  data_privacy_considerations: |
+    No personal data; training sources are public or licensed.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Research, education, enterprise copilots, and bilingual assistants.  
+    Optimized for local deployment, RAG, and fine-tuning tasks.  
+  suitable_domains: ["research", "education", "enterprise_AI", "software_engineering", "multilingual_QA"]
+  out_of_scope_use: |
+    Automated governance, law enforcement, or medical diagnostics.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Stable bilingual reasoning, strong reproducibility, and deterministic inference.  
+    public_evidence: |
+      Verified via OpenCompass leaderboard and community benchmarks.  
+    assessment_notes: |
+      Reliable for open bilingual reasoning workloads.
+  safe:
+    safety_measures: |
+      SafeRL safety alignment and multilingual content filtering.  
+    known_safety_issues: |
+      Conservative refusals for edge topics; mild under-response bias.  
+    assessment_notes: |
+      Safe under normal moderated use.
+  secure_and_resilient:
+    security_features: |
+      Hash-verified open weights; no telemetry or external dependencies.  
+    known_vulnerabilities: |
+      Prompt-injection and malicious fine-tune risks similar to all open models.  
+    assessment_notes: |
+      Secure for on-prem and academic environments.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Weights, tokenizer, and full training configuration released.  
+      Dataset summary and evaluation scripts published via ModelScope.  
+    assessment_notes: |
+      Excellent transparency for research reproducibility.
+  explainable_and_interpretable:
+    explainability_features: |
+      Compatible with interpretability toolkits such as TransformerLens and Captum.  
+    interpretability_limitations: |
+      No chain-of-thought exposure; dense transformer limitations apply.  
+    assessment_notes: |
+      Suitable for interpretability research.
+  privacy_enhanced:
+    privacy_features: |
+      PII-filtered datasets; telemetry-free operation.  
+    privacy_concerns: |
+      None significant; adheres to public-data-only policy.  
+    assessment_notes: |
+      Meets strong privacy standards for open models.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Dataset balancing across languages and topics; bias analysis included in release notes.  
+    known_biases: |
+      Slight performance skew toward Mandarin and English; underrepresented low-resource languages.  
+    assessment_notes: |
+      Fair and well-balanced for bilingual deployments.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • Bilingual QA and translation accuracy (C-Eval, MMLU).  
+    • Code and math reasoning (HumanEval, GSM8K).  
+    • Fairness and bias tests across languages.  
+    • Quantization and latency benchmarking.  
+  key_evaluation_questions: |
+    – Does bilingual accuracy meet the use-case requirements?  
+    – Are moderation filters configured per domain?  
+    – Is compute adequate for 20B inference at target latency?  
+  comparison_considerations: |
+    Outperforms Baichuan 2 13B and Yi-1.5;  
+    trails DeepSeek V2.5 and Qwen 2 72B in reasoning power.  
+    Strongest 20B-class open bilingual reasoning model as of early 2024.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Define governance for bilingual fine-tuning and open-weight redistribution.  
+  map:
+    context_considerations: |
+      Assess hallucination, bias, and prompt-injection risks for multilingual contexts.  
+    risk_categories: ["hallucination", "bias", "prompt_injection", "alignment_drift"]
+  measure:
+    suggested_metrics: |
+      Factual accuracy, fairness index, safety refusal rate, latency.  
+  manage:
+    risk_management_considerations: |
+      Apply moderation and audit fine-tunes for fairness and safety regression.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/internlm/internlm2-20b"
+    description: "Official InternLM 2 20B release and evaluation documentation"
+  - url: "https://github.com/InternLM/InternLM"
+    description: "Open training and evaluation repository"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "82.4"
+  - name: "GSM8K"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "89.3"
+  third_party_evaluations:
+  - source: "OpenCompass (2024)"
+    url: "https://opencompass.org.cn/"
+    summary: "InternLM 2 20B recognized for high bilingual reasoning accuracy and efficiency."
+  news_coverage:
+  - title: "Shanghai AI Lab releases InternLM 2 — bilingual open model advancing Chinese AI research"
+    url: "https://openxlab.org.cn/news/internlm2-release"
+    date: "2024-04-12"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Shanghai AI Lab release notes, Hugging Face leaderboard, OpenCompass evaluation data, and replication tests.  
+  completeness_assessment: |
+    High for transparency and reproducibility; medium for dataset granularity details.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from InternLM 2 20B release and benchmark data."

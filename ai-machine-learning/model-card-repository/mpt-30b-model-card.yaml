@@ -1,0 +1,257 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "MPT-30B"
+  vendor: "MosaicML (acquired by Databricks)"
+  model_family: "MPT"
+  version: "30B"
+  release_date: "2023-07-25"
+  model_type: "Open-Weight Instruction-Tuned Reasoning Model"
+  vendor_model_card_url: "https://huggingface.co/mosaicml/mpt-30b-instruct"
+  license: "Apache 2.0"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Decoder-only Transformer (dense)"
+    parameter_count: "30 billion"
+    context_window: "8 K tokens"
+    training_data_cutoff: "2023-04"
+    architectural_details: |
+      MPT 30B is a dense transformer model trained by MosaicML (now Databricks)
+      using a next-token prediction objective.  
+      The model introduces ALiBi (Attention with Linear Biases) positional encoding for scalable context,  
+      FlashAttention, and optimized fused kernels for efficient training and inference.  
+      It was trained on a mixture of English web text, code, and academic corpora.  
+      The "Instruct" variant applies post-training alignment for instruction-following and conversation.
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "High"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ~0.35 s per 1 K tokens on A100 (fp16);  
+      0.15 s on quantized consumer GPUs (INT4).  
+    throughput: |
+      High throughput and memory efficiency via MosaicML Composer and FSDP integration.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • Robust instruction following and code generation in a 30B open model.  
+    • Excellent summarization and QA for its scale.  
+    • Balanced training dataset with strong factual grounding.  
+    • Fully permissive Apache 2.0 license for research and commercial use.
+  benchmark_performance: |
+    - MMLU: 66.3  
+    - GSM8K: 72.0  
+    - ARC-C: 70.8  
+    - HellaSwag: 76.1  
+    - HumanEval: 70.4  
+    (MosaicML evaluation, Aug 2023)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["summarization", "instruction_following", "QA", "code_generation"]
+  known_limitations:
+    vendor_disclosed: |
+      Limited to English; no multilingual pretraining.  
+      Context length limited to 8 K tokens; no retrieval integration.  
+      Alignment weaker than Claude or GPT-class models.  
+    common_failure_modes: |
+      Occasional verbosity or redundancy; minor factual drift under open prompts.  
+    unsuitable_use_cases: |
+      Legal, compliance, or safety-critical tasks.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on ~1.1 trillion tokens from the RedPajama dataset (filtered Common Crawl, Wikipedia, books, 
+    StackExchange, GitHub, and academic papers).  
+    Refined for safety and factuality; minimal PII presence.
+  training_methodology: |
+    Pretraining with MosaicML Composer; optimized for hardware efficiency and scalability.  
+    Supervised fine-tuning applied for instruction tuning; no RLHF phase.  
+    Final alignment verified via MT-Bench and AlpacaEval.
+  data_privacy_considerations: |
+    Uses public and licensed data; no private data or telemetry.  
+    Datasets filtered for toxic and sensitive content.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Research, education, enterprise copilots, and developer assistants.  
+    Ideal for summarization, QA, and software support scenarios.  
+  suitable_domains: ["research", "education", "code_generation", "summarization", "enterprise_assistants"]
+  out_of_scope_use: |
+    Safety-critical domains or automated policy generation.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Stable instruction-following and summarization accuracy; reproducible open baseline.  
+    public_evidence: |
+      Verified on Hugging Face leaderboard and through community benchmarks.  
+    assessment_notes: |
+      Reliable open foundation for instruction and code tasks.
+  safe:
+    safety_measures: |
+      Safety filters applied during dataset curation; moderation guidelines published.  
+    known_safety_issues: |
+      May still emit unsafe or biased text under edge prompts.  
+    assessment_notes: |
+      Safe for moderated or research use.
+  secure_and_resilient:
+    security_features: |
+      Open-weight model; reproducible hashes and signed checkpoints.  
+    known_vulnerabilities: |
+      Standard open model risks (prompt injection, unsafe fine-tunes).  
+    assessment_notes: |
+      Secure for controlled deployments.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Full weights, tokenizer, dataset overview, and Composer configuration released.  
+    assessment_notes: |
+      High transparency and reproducibility.
+  explainable_and_interpretable:
+    explainability_features: |
+      ALiBi encoding and dense architecture compatible with standard interpretability tools.  
+    interpretability_limitations: |
+      No reasoning-trace metadata.  
+    assessment_notes: |
+      Strong interpretability and suitable for attention analysis research.
+  privacy_enhanced:
+    privacy_features: |
+      Publicly available training data; dataset filtered for PII.  
+      No data logging or retention in inference.  
+    privacy_concerns: |
+      Minimal; limited to public text exposure.  
+    assessment_notes: |
+      Meets open-model privacy standards.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Data filtering and neutral alignment to minimize demographic bias.  
+    known_biases: |
+      English-centric tone; minor bias toward Western cultural context.  
+    assessment_notes: |
+      Acceptable fairness profile for open-model deployment.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • Instruction-following benchmarks (MT-Bench, AlpacaEval).  
+    • Reasoning accuracy (MMLU, GSM8K).  
+    • Code performance (HumanEval).  
+    • Safety and bias testing under open-ended prompts.
+  key_evaluation_questions: |
+    – Does 8K context meet your workload requirements?  
+    – Are external moderation and governance layers in place?  
+    – Is quantized inference quality acceptable?
+  comparison_considerations: |
+    Outperforms Falcon 40B Instruct and LLaMA 2 30B on instruction tasks;  
+    trails Claude 3 Haiku and Mistral 7B v0.3 in reasoning and conciseness.  
+    Best open 30B instruct model for enterprise research use in 2023.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Establish governance for open-weight derivative usage and attribution tracking.  
+  map:
+    context_considerations: |
+      Identify hallucination and bias risks for enterprise or research use.  
+    risk_categories: ["hallucination", "bias", "prompt_injection", "toxicity"]
+  measure:
+    suggested_metrics: |
+      Accuracy, bias index, toxicity rate, reasoning benchmark scores.  
+  manage:
+    risk_management_considerations: |
+      Apply moderation and audit fine-tuned variants for safety regression.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/mosaicml/mpt-30b-instruct"
+    description: "Official MPT-30B Instruct release and documentation"
+  - url: "https://www.mosaicml.com/blog/mpt-30b"
+    description: "MosaicML technical overview blog"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "66.3"
+  - name: "GSM8K"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "72.0"
+  third_party_evaluations:
+  - source: "Hugging Face Open LLM Leaderboard (2023)"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    summary: "MPT-30B recognized as strong open baseline for instruction-following tasks."
+  news_coverage:
+  - title: "MosaicML releases MPT-30B — efficient open-weight instruct model"
+    url: "https://www.mosaicml.com/blog/mpt-30b"
+    date: "2023-07-25"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    MosaicML and Databricks documentation, Hugging Face leaderboard, and community benchmarks.  
+  completeness_assessment: |
+    High for transparency and performance; medium for dataset attribution detail.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from MPT 30B release and benchmark data."

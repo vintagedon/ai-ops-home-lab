@@ -1,0 +1,258 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Mistral Large 2 (mistral-large-2407)"
+  vendor: "Mistral AI"
+  model_family: "Mistral Large"
+  version: "2 / 24.07"
+  release_date: "2024-07-24"
+  model_type: "Dense Large Language Model (≈123B parameters)"
+
+  vendor_model_card_url: "https://mistral.ai/news/mistral-large-2407/"
+
+  license: "Mistral Research License (research use) / Commercial licence for deployment"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Dense Transformer, single-node inference optimised"
+    parameter_count: "≈123 B parameters" # :contentReference[oaicite:2]{index=2}
+    context_window: "128 k tokens" # :contentReference[oaicite:3]{index=3}
+    training_data_cutoff: "Not publicly disclosed"
+
+    architectural_details: |
+      According to Mistral AI’s announcement, the model is designed for high throughput on a single node; supports function-calling, large multilingual/coding support, and very long context. # :contentReference[oaicite:4]{index=4}
+
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "High—flagship size but optimised for single-node deployment"
+    cost_tier: "Premium"
+    latency: "Not publicly disclosed"
+    throughput: "Not publicly disclosed"
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    - High performance in reasoning, mathematics, code generation tasks. # :contentReference[oaicite:5]{index=5}  
+    - Multilingual support, including major world languages (French, German, Spanish, Italian, Portuguese, Arabic, Hindi, Russian, Chinese, Japanese, Korean). # :contentReference[oaicite:6]{index=6}  
+    - Supports 80+ programming languages for code generation. # :contentReference[oaicite:7]{index=7}  
+    - Large 128k-token context window enables long-document tasks (e.g., retrieval-augmented generation, multi-turn chains).  
+
+  benchmark_performance: |
+    - Achieved ~84.0% on MMLU according to press summary. # :contentReference[oaicite:8]{index=8}  
+    - Outperforms its predecessor in math and inference tasks per release notes. # :contentReference[oaicite:9]{index=9}  
+
+  special_capabilities:
+    tools_support: false (not explicitly noted as built-in)
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["function calling", "large context document understanding", "multilingual + code generation"]
+
+  known_limitations:
+    vendor_disclosed: |
+      Released under research licence; commercial licence required for deployment. Standard large language model caveats (hallucination, prompt sensitivity) apply. # :contentReference[oaicite:10]{index=10}  
+    common_failure_modes: |
+      - When used outside tested domains (non-STEM, niche languages) performance may degrade.  
+      - Cost/inference resources remain high given 123B size; throughput/latency not fully public.  
+    unsuitable_use_cases: |
+      - Critical safety-live deployments without human oversight and domain-specific validation.  
+      - Regulated domains where full dataset provenance or explainability are required.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Mistral’s announcement references multilingual/coding/long-context training, but detailed dataset composition, volumes and filtering are not publicly disclosed.  
+  training_methodology: |
+    Dense transformer pre-training followed by instruction-tuning and performance-optimisation for inference throughput (as per Mistral summary). # :contentReference[oaicite:11]{index=11}  
+  data_privacy_considerations: |
+    The release note does not provide detailed data provenance or PII filtering pipelines—deployers should assess compliance for regulated domains.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    High-complexity generative tasks including reasoning, code generation, retrieval-augmented generation (RAG) and long-form document understanding. # :contentReference[oaicite:12]{index=12}  
+  suitable_domains: ["reasoning_tasks", "code_generation", "multilingual_assistant", "long_document_analysis", "RAG"]
+  out_of_scope_use: |
+    Use without human oversight in safety-critical workflows; domains requiring full open dataset/weight traceability; deploying under research licence only without commercial agreement.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Public summary of benchmarks and capabilities provided. # :contentReference[oaicite:13]{index=13}  
+    public_evidence: |
+      Press coverage summarising release; no independent peer-reviewed evaluation published yet.  
+    assessment_notes: |
+      Good foundation-level candidate; still needs in-domain benchmarking and organisational validation.
+
+  safe:
+    safety_measures: |
+      Research licence signals limitation for production; typical mitigation needs (moderation, human oversight) implied.  
+    known_safety_issues: |
+      Hallucination, bias, prompt-injection risk inherent to large LLMs.  
+    assessment_notes: |
+      Deployers should layer controls consistent with your governance posture (CIS L2, NIST 800-53, AI RMF).
+
+  secure_and_resilient:
+    security_features: |
+      Not explicitly described; model runs on standard hardware/inference infra.  
+    known_vulnerabilities: |
+      Risk of prompt injection, long-context misuse, cost shock.  
+    assessment_notes: |
+      Ensure infrastructure monitoring, workload isolation and incident management.
+
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Public announcement and some metrics; training dataset and full evaluation details not disclosed.  
+    assessment_notes: |
+      For your compliance stack, treat as semi-transparent — fine for creative/assist tasks, more caution for regulated uses.
+
+  explainable_and_interpretable:
+    explainability_features: |
+      Supports function-calling and 128k context which aids auditability of chains; but internal architecture details (layer counts, attention patterns) not fully published.  
+    interpretability_limitations: |
+      Lacks granular tooling to inspect expert routing or internal token flows.  
+    assessment_notes: |
+      Suitable for many applications, but treat as black-box requiring review and output logging.
+
+  privacy_enhanced:
+    privacy_features: |
+      Long-context support may create privacy risk (accidental leakage); no explicit PII mitigation publicly described.  
+    privacy_concerns: |
+      Unknown data provenance and filter pipelines; for regulated data use, additional controls advised.  
+    assessment_notes: |
+      Review for privacy-compliance (ISO 27001, NIST 800-53) before sensitive data ingestion.
+
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      The announcement emphasises multilingual capability but does not detail bias mitigation methods.  
+    known_biases: |
+      Standard large-model risks (language under-representation, cultural bias) remain.  
+    assessment_notes: |
+      Conduct bias/harm evaluation aligned with your governance framework (RAVGVR method) prior to broad deployment.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Reproduce reported benchmark metrics (e.g., MMLU ~84%) on your infrastructure and domain prompts.  
+    - Test long-context behaviour (128k tokens) for drift or coherence issues.  
+    - Code generation tasks across 80+ languages; compare against your baseline.  
+    - Test multilingual behaviour across target languages (e.g., Japanese, Arabic, Hindi) for fairness/performance.  
+    - Safety red-teaming: prompt injection, chain-of-thought tampering, hallucination risk in long context.  
+    - Measure throughput/latency under your compute environment.
+
+  key_evaluation_questions: |
+    - Does the model maintain accuracy and consistency across your domain + target languages?  
+    - Are your human-in-loop, review, provenance, and logging controls in place for the use case?  
+    - Can your infrastructure support 123B size and 128k context without cost/latency platform risk?  
+    - Are usage/ licensing terms (research vs commercial) compatible with your deployment scenario?
+
+  comparison_considerations: |
+    - Compare with other large models (e.g., Llama 4, DeepSeek-R1) on reasoning, cost, context length.  
+    - Evaluate trade-off between 123B dense vs MoE or smaller models in your compute budget.  
+    - Assess licensing/licence cost and ability to fine-tune or host internally.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Require human review for outputs, version control, licensing compliance, usage logging.  
+  map:
+    context_considerations: |
+      Long-form and code generation context, multilingual risk, licensing risk, hallucination risk.  
+    risk_categories: ["hallucination", "bias", "privacy_leakage", "prompt_injection", "adversarial_long_context"]
+  measure:
+    suggested_metrics: |
+      - Error/hallucination rate per 1k generations.  
+      - Long-context drift rate beyond 32k/64k tokens.  
+      - Code generation failure/bug-rate across languages.  
+      - Bias/harm incident rate across language groups.  
+  manage:
+    risk_management_considerations: |
+      Integrate moderation, provenance tracking, versioning; monitor for usage anomalies; implement fallback models or manual review for high-risk outputs.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://mistral.ai/news/mistral-large-2407/"
+    description: "Mistral AI official announcement of Mistral Large 2 (24.07)"
+  - url: "https://cloud.google.com/blog/products/ai-machine-learning/announcing-new-mistral-large-model-on-vertex-ai"
+    description: "Google Cloud blog noting Mistral Large 24.11 but references 24.07 release earlier."   # :contentReference[oaicite:14]{index=14}  
+  benchmarks:
+  - name: "MarkTechPost article on Mistral Large Instruct 24.07"
+    url: "https://marktechpost.com/2024/07/25/mistral-large-instruct-2407-released-multilingual-ai-with-128k-context-80-coding-languages-84-0-mmlu-92-humaneval-and-93-gsm8k-performance/"
+    result: "Summary of model specs & benchmarks"   # :contentReference[oaicite:15]{index=15}  
+  third_party_evaluations:
+  - source: ""
+    url: ""
+    summary: ""
+  news_coverage:
+  - title: "French AI Lab Mistral Releases 'Mistral Large 2' with significantly improved code generation, mathematics and inference capabilities"
+    url: "https://gigazine.net/gsc_news/en/20240725-mistral-large-2-released/"
+    date: "2024-07-25"   # :contentReference[oaicite:16]{index=16}  
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "Don Fountain"
+  card_creation_date: "2025-10-24"
+  last_updated: "2025-10-24"
+  information_sources: |
+    Mistral AI announcement, MarkTechPost summary, cloud provider blog, press summaries.
+  completeness_assessment: |
+    Good for architecture/parameters/context length; moderate for dataset/training details; low for latency, throughput, deployment cost/real-world audit.  
+  change_log:
+  - date: "2025-10-24"
+    author: "Don Fountain"
+    changes: "Initial synthesis of Mistral Large 2 (24.07) model card."
+

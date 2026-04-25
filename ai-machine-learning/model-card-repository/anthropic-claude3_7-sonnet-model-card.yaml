@@ -1,0 +1,158 @@
+schema_version: Not Listed in Source
+model_identity:
+  name: Claude 3.7 Sonnet
+  vendor: Anthropic
+  model_family: Claude 3.7
+  version: Not Listed in Source
+  release_date: Not Listed in Source
+  model_type: Not Listed in Source
+  vendor_model_card_url: Not Listed in Source
+  license: Not Listed in Source
+  deprecation_status: Not Listed in Source
+technical_specifications:
+  architecture:
+    base_architecture: Not Listed in Source
+    parameter_count: Not Listed in Source
+    context_window: Not Listed in Source
+    training_data_cutoff: Not Listed in Source
+    architectural_details: Hybrid reasoning model in the Claude 3 family; supports
+      visible extended thinking.
+    training_techniques: Pretraining on diverse data; RLHF; Constitutional AI with
+      added disability-rights principle (starting in 3.5 Sonnet).
+    knowledge_cutoff: end of October 2024
+  modalities:
+    supported_inputs:
+    - Not Listed in Source
+    - Not Listed in Source
+    - Not Listed in Source
+    - Not Listed in Source
+    - Not Listed in Source
+    supported_outputs:
+    - Not Listed in Source
+    - Not Listed in Source
+    - Not Listed in Source
+    - Not Listed in Source
+    - Not Listed in Source
+    - Not Listed in Source
+    input_types:
+    - text
+    - image
+    multimodal_alignment: Vision capabilities referenced across evaluations and safety
+      analyses.
+  performance_characteristics:
+    speed_tier: Not Listed in Source
+    cost_tier: Not Listed in Source
+    latency: Not Listed in Source
+    throughput: Not Listed in Source
+    reasoning_mode: Extended thinking supported; internal evals used up to 8,192 thinking
+      tokens.
+capabilities:
+  vendor_claimed_strengths:
+  - Visible extended thinking (configurable tokens).
+  - Appropriate Harmlessness training to reduce unnecessary refusals.
+  benchmark_performance:
+  - 'BBQ Bias: Disambig -0.98%, Ambig -0.98%'
+  - 'BBQ Accuracy: Disambig 84.0%, Ambig 84.0%'
+  - 'SWE-bench Verified (hard subset): 23% pass rate; avg 9.65/42'
+  - 'METR Data Deduplication: median F1 70.2% (4/30 trials >80% F1)'
+  - 'RE-Bench subset: avg normalized score 0.2386'
+  - 'Cyber evals: Web 6/7 easy; 1/1 medium | Crypto 6/7 easy; 1/1 medium | Pwn 6/7
+    easy; 1/1 medium | Network 6/7 easy; 1/1 medium | Cyber-range 1/1 easy; 1/2 medium'
+  - 'Cybench subset: 15 successes at least once out of 34 challenges'
+  special_capabilities: Real-time streaming classifier can encrypt harmful content
+    within thinking blocks.
+  known_limitations: CoT faithfulness limited (avg 0.30 on MMLU; 0.19 on GPQA).
+training_information:
+  training_data_description: Not Listed in Source
+  training_methodology: Not Listed in Source
+  data_privacy_considerations: Not Listed in Source
+intended_use:
+  vendor_intended_use: Not Listed in Source
+  suitable_domains:
+  - Not Listed in Source
+  - Not Listed in Source
+  - Not Listed in Source
+  out_of_scope_use: Not Listed in Source
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: Not Listed in Source
+    public_evidence: Not Listed in Source
+    assessment_notes: Not Listed in Source
+  safe:
+    safety_measures: Not Listed in Source
+    known_safety_issues: Not Listed in Source
+    assessment_notes: Not Listed in Source
+  secure_and_resilient:
+    security_features: Not Listed in Source
+    known_vulnerabilities: Not Listed in Source
+    assessment_notes: Not Listed in Source
+  accountable_and_transparent:
+    transparency_level: Not Listed in Source
+    auditability: Not Listed in Source
+    assessment_notes: Not Listed in Source
+  explainable_and_interpretable:
+    explainability_features: Not Listed in Source
+    interpretability_limitations: Not Listed in Source
+    assessment_notes: Not Listed in Source
+  privacy_enhanced:
+    privacy_features: Not Listed in Source
+    privacy_concerns: Not Listed in Source
+    assessment_notes: Not Listed in Source
+  fair_with_harmful_bias_managed:
+    bias_mitigation: Not Listed in Source
+    known_biases: Not Listed in Source
+    assessment_notes: Not Listed in Source
+  safety_overview: Assessed under Anthropic RSP; deployment at ASL-2 with proactive
+    safeguards and monitoring.
+  safety_certifications: 'RSP ASL determination: ASL-2'
+  observed_behavior_risks:
+  - Deceptive reasoning 0.37% (hallucination 0.31%, omission 0.08%, sycophancy 0.01%)
+  - Harmful-action reasoning 0.04% (espousing harmful views 0.02%, rationalization
+    0.04%)
+  - Distress indicators 0%
+evaluation_guidance:
+  recommended_tests: Not Listed in Source
+  key_evaluation_questions: Validate extended thinking benefits on your tasks; assess
+    guardrails and prompt-injection resilience in your environment.
+  comparison_considerations: Compare to Claude 3.5 Sonnet (new) for latency/refusal
+    tradeoffs; confirm autonomy/cyber capabilities meet your risk thresholds.
+rmf_function_mapping:
+  govern:
+    notes: Not Listed in Source
+  map:
+    context_considerations: Not Listed in Source
+    risk_categories:
+    - Not Listed in Source
+    - Not Listed in Source
+    - Not Listed in Source
+  measure:
+    suggested_metrics: Not Listed in Source
+  manage:
+    risk_management_considerations: Not Listed in Source
+references:
+  vendor_documentation:
+  - 'Local file: Feb_2025_Model_Card.pdf'
+  benchmarks:
+  - BBQ
+  - SWE-bench Verified (hard subset)
+  - METR Data Deduplication
+  - RE-Bench subset
+  - Cybench subset
+  - Prompt Injection Eval (internal)
+  third_party_evaluations:
+  - U.S. AISI pre-deployment testing
+  - U.K. AISI pre-deployment testing
+metadata:
+  card_version: 0.4-claude3_7-sonnet-from-system-card
+  card_author: Governance Assistant
+  card_creation_date: '2025-10-28'
+  last_updated: Not Listed in Source
+  information_sources:
+  - 'Local file: Feb_2025_Model_Card.pdf'
+  completeness_assessment: Filled only with values explicitly present in the Claude
+    3.7 Sonnet system card; remaining fields left 'Not Listed in Source'.
+  change_log:
+  - date: '2025-10-28'
+    author: Governance Assistant
+    changes: Created Claude 3.7 Sonnet card from Feb 2025 system card.
+  review_cycle: Quarterly

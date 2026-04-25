@@ -1,0 +1,207 @@
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+model_identity:
+  name: "Nanonets-OCR2-3B"
+  vendor: "Nanonets"
+  model_family: "Nanonets-OCR2"
+  version: "3B"
+  release_date: "2025-10-14"  # approximate release date per announcement. :contentReference[oaicite:2]{index=2}
+  model_type: "Vision-Language Model (image → structured markdown/text)"
+
+  vendor_model_card_url: "https://huggingface.co/nanonets/Nanonets-OCR2-3B"
+
+  license: "Qwen Research License"  # user discussion indicates research license for this variant. :contentReference[oaicite:3]{index=3}
+  deprecation_status: "Active"
+
+technical_specifications:
+  architecture:
+    base_architecture: "Fine-tuned from Qwen2.5‑VL‑3B‑Instruct (image-text VLM) according to model tree. :contentReference[oaicite:5]{index=5}"
+    parameter_count: "≈ 3 B active parameters"  # model labelled “3B” (even though some artifacts list 4B) :contentReference[oaicite:6]{index=6}
+    context_window: "Not explicitly disclosed (image-input based architecture)"
+    training_data_cutoff: "Not publicly disclosed"
+
+    architectural_details: |
+      The model is designed for document-image → structured markdown output (see features such as table extraction, LaTeX equation recognition, image description, signature/watermark detection). :contentReference[oaicite:7]{index=7}
+
+  modalities:
+    supported_inputs: ["image","text prompt"]
+    supported_outputs: ["text (markdown/HTML)"]
+
+  performance_characteristics:
+    speed_tier: "Moderate to high (image-to-text, 3B–scale VLM)"
+    cost_tier: "Mid-tier compute (GPU recommended)"
+    latency: "Not publicly disclosed"
+    throughput: "Not publicly disclosed"
+
+capabilities:
+  vendor_claimed_strengths: |
+    - Converts document images into structured markdown including tables, LaTeX equations, image captions, checkboxes, watermarks, signatures. :contentReference[oaicite:8]{index=8}
+    - Handles multilingual documents, handwritten documents, complex layouts (tables, flowcharts) and supports VQA (visual question answering). :contentReference[oaicite:9]{index=9}
+    - Specifically tailored for output consumable by LLM workflows (markdown/HTML) rather than plain OCR text. :contentReference[oaicite:10]{index=10}
+
+  benchmark_performance: |
+    From model page:
+    - On VQA tasks: DocVQA ~89.43% for OCR2-3B. :contentReference[oaicite:11]{index=11}
+    - On ChartQA: ~78.56% for OCR2-3B. :contentReference[oaicite:12]{index=12}
+    - On comparisons vs other models for markdown extraction tasks: wins/lose percentages listed. :contentReference[oaicite:13]{index=13}
+
+  special_capabilities:
+    tools_support: false
+    vision_support: true (image input)
+    reasoning_support: true (structured output, VQA)
+    image_generation: false
+    additional_capabilities: ["LaTeX equation recognition","signature/watermark detection","flowchart to mermaid","multilingual/hands-written support"]
+
+  known_limitations:
+    vendor_disclosed: |
+      While strong in document-image workflows, full data provenance, dataset sizes and training detail not publicly disclosed. :contentReference[oaicite:14]{index=14}
+    common_failure_modes: |
+      - May degrade in unusual languages/scripts or extremely low-quality images.
+      - Complex nested table extraction or extremely long documents may still challenge accuracy. Users report inference cost/VRAM sensitivity. :contentReference[oaicite:15]{index=15}
+    unsuitable_use_cases: |
+      - High-stakes decision-making systems without human review (legal/financial) purely on this model’s output.
+      - Use cases requiring full transparency of training data or certified traceability.
+
+training_information:
+  training_data_description: |
+    The model family documentation states training on large datasets: “>3 million pages including synthetic + human-annotated documents covering tables, formulas, flows, handwritten, multilingual, etc.” :contentReference[oaicite:16]{index=16}
+  training_methodology: |
+    Fine-tuned from a VLM base (Qwen2.5-VL-3B-Instruct) then adapted for image-document → structured markdown output.
+  data_privacy_considerations: |
+    No full public breakdown of dataset likewise privacy/PII filtering mechanisms; deployer should assess for regulated or sensitive-data use.
+
+intended_use:
+  vendor_intended_use: |
+    Document-image processing pipelines: digitizing scanned documents, forms, financial/academic reports, legal contracts into LLM-friendly markdown/HTML for downstream analysis. :contentReference[oaicite:17]{index=17}
+  suitable_domains: ["document_digitization","finance/academic/legal form processing","flowchart/table extraction","multilingual OCR + VQA"]
+  out_of_scope_use: |
+    - Autonomous decision-making without verification
+    - Domains requiring certified traceability of training data or mission-critical compliance use without human oversight
+    - Pure text-generation tasks or image-generation tasks (not the model’s focus)
+
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Provide benchmark metrics and feature listing publicly.
+    public_evidence: |
+      Model page includes win/lose tables and VQA results. :contentReference[oaicite:18]{index=18}
+    assessment_notes: |
+      Promising for document-image workflows; because dataset/training transparency limited, users should validate within their domain.
+
+  safe:
+    safety_measures: |
+      Model outputs structured text (markdown), reducing free-form hallucination risk relative to generic OCR; but general LLM/hallucination risks remain.
+    known_safety_issues: |
+      Output errors (mis-extraction, mis-formatted tables), bias in multilingual/handwriting recognition, watermark/signature detection errors.
+    assessment_notes: |
+      Prior human validation recommended for sensitive document processing.
+
+  secure_and_resilient:
+    security_features: |
+      Weights publicly available (subject to license) so local deployment possible; reduces vendor-lock-in or cloud-dependency.
+    known_vulnerabilities: |
+      Resource/inference cost may be non-trivial; adversarial or low-quality images may degrade results.
+    assessment_notes: |
+      Ensure runtime monitoring, input-validation and fallback workflows.
+
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Architecture, features, base model disclosed; but full dataset and fine-tuning logs not public.
+    assessment_notes: |
+      Suitable for many production uses when layered with human review; for highly regulated cases may require more audit trail.
+
+  explainable_and_interpretable:
+    explainability_features: |
+      Outputs in markdown/HTML, representation easy to inspect; feature of structured output aids traceability.
+    interpretability_limitations: |
+      Internals of model (layer counts, expert routing, dataset specifics) not exposed.
+    assessment_notes: |
+      Sufficient for document-processing pipeline; not fully white-box.
+
+  privacy_enhanced:
+    privacy_features: |
+      Local deployment capability supports data-residency; structured output reduces ambiguous free-form text generation.
+    privacy_concerns: |
+      Unknown dataset provenance, possible inclusion of PII in training data, risk of memorised sensitive content.
+    assessment_notes: |
+      For regulated domains (e.g., healthcare/finance) run data-lineage and PII-exposure reviews.
+
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Multilingual & handwriting support helps but no detailed published bias/fairness audit.
+    known_biases: |
+      Likely higher error rates for under-represented languages/scripts, styles of handwriting not well covered. :contentReference[oaicite:19]{index=19}
+    assessment_notes: |
+      Conduct your own bias/harm assessments relative to target languages/scripts and document types prior to broad deployment.
+
+evaluation_guidance:
+  recommended_tests: |
+    - Run document-image → structured markdown tests on your specific document types (tables, forms, handwritten, multilingual) and measure extraction accuracy (text, table structure, equations).
+    - Benchmark latency/throughput on your infrastructure given your input resolution and output length (markdown/HTML).
+    - Check table extraction quality: nested tables, merged cells, and conversion to HTML/Markdown.
+    - Evaluate equation recognition (LaTeX correctness), signature/watermark detection accuracy.
+    - Safety red-teaming: adversarial image inputs, ambiguous layouts, low-quality scans, malicious watermarks/signatures.
+    - Monitor output error/hallucination rate, structured output correctness, and fallback/human-in-loop triggers.
+
+  key_evaluation_questions: |
+    - Does the model achieve required accuracy and reliability for your document types (language, handwritten vs printed, layouts)?
+    - Is your infrastructure capable of handling the inference cost and prompt size/resolution?
+    - Are human-in-loop and review processes in place for sensitive document content?
+    - Does the license (research vs commercial) and your intended use align with vendor terms?
+
+  comparison_considerations: |
+    - Compare with other OCR/Document-VLM models (e.g., PaddleOCR‑VL, Qwen‑VL family, generic OCR + LLM solutions) in terms of table/equation extraction accuracy and compute cost.
+    - Evaluate cost vs benefit trade-off: a 3B-parameter model vs smaller/richer domain-specific models.
+    - Assess if further fine-tuning or adaptation (e.g., on your document types, language scripts) is warranted.
+
+rmf_function_mapping:
+  govern:
+    notes: |
+      Require version control, usage logging, human oversight for document extraction workflows; enforce license compliance and data-governance policies.
+  map:
+    context_considerations: |
+      Document parsing (image → structured text), multilingual/handwritten inputs, table and form extraction, downstream LLM uses.
+    risk_categories: ["mis-extraction/hallucination","structured-output-error","privacy_leakage","bias_language/script","adversarial_image_input"]
+  measure:
+    suggested_metrics: |
+      - Error/hallucination rate per 1k documents.
+      - Table-cell correctness rate (merged vs un-merged) per 1k tables.
+      - Equation transcription accuracy per 1000 equations.
+      - Latency/throughput per 1000 pages.
+      - Language/script error/harm incident rate per 1000 docs.
+  manage:
+    risk_management_considerations: |
+      Integrate moderation/human verification for extracted content; maintain fallback (e.g., manual review) for high-risk document types; monitor model drift or degrade/wrong outputs over time; versioning and rollback processes.
+
+references:
+  vendor_documentation:
+    - url: "https://huggingface.co/nanonets/Nanonets-OCR2-3B"
+      description: "Hugging Face model page for Nanonets-OCR2-3B"
+    - url: "https://nanonets.com/research/nanonets-ocr-2/"
+      description: "Nanonets OCR2 research overview" :contentReference[oaicite:22]{index=22}
+    - url: "https://medium.com/%40mandalsouvik/we-have-released-a-new-version-of-this-model-https-huggingface-co-nanonets-nanonets-ocr2-3b-4860de52ad6a"
+      description: "Release announcement blog by author" :contentReference[oaicite:23]{index=23}
+  benchmarks:
+    - name: "Hugging Face model page win/lose evaluations and VQA metrics"
+      url: "https://huggingface.co/nanonets/Nanonets-OCR2-3B#evaluation"
+      result: "Win/lose tables, VQA results" :contentReference[oaicite:24]{index=24}
+  third_party_evaluations:
+    - source: "Reddit discussion on model features and performance"
+      url: "https://www.reddit.com/r/AI_India/comments/1o73up0"
+      summary: > “We have released Nanonets-OCR2-3B trained on 3 million documents including complex tables and layouts.” :contentReference[oaicite:25]{index=25}
+
+metadata:
+  card_version: "1.0"
+  card_author: "Don Fountain"
+  card_creation_date: "2025-10-24"
+  last_updated: "2025-10-24"
+  information_sources: |
+    Hugging Face model page, vendor blog/announcement, Reddit community discussion, research overview page.
+  completeness_assessment: |
+    Good for feature listing, architecture base, use cases and benchmark summaries; moderate for dataset/training details and latency/production-deployment metrics; low for full independent third-party evaluation and detailed infrastructure spec.
+  change_log:
+    - date: "2025-10-24"
+      author: "Don Fountain"
+      changes: "Initial synthesis of Nanonets-OCR2-3B model card."

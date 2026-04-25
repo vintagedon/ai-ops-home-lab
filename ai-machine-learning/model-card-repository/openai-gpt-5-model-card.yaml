@@ -1,0 +1,261 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "GPT-5"
+  vendor: "OpenAI"
+  model_family: "GPT-5"
+  version: "Initial public release"
+  release_date: "2025-08-07"
+  model_type: "Large Multimodal Reasoning LLM"
+  vendor_model_card_url: "https://cdn.openai.com/gpt-5-system-card.pdf"
+  license: "Commercial API (Proprietary)"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer (with distinct 'main' and 'thinking' variants routed at runtime)"
+    parameter_count: "Not publicly disclosed"
+    context_window: "400K tokens total (≈272K input, 128K output)"
+    training_data_cutoff: "Not publicly disclosed"
+    architectural_details: |
+      System consists of fast/high-throughput 'gpt-5-main' and deeper reasoning 'gpt-5-thinking' variants
+      with a real-time router; API exposes reasoning variants including mini/nano. Details such as layer counts,
+      MoE configuration, and parameter size are not publicly disclosed.
+
+  modalities:
+    supported_inputs: ["text", "image"]
+    supported_outputs: ["text", "structured_data"]
+
+  performance_characteristics:
+    speed_tier: "Premium"
+    cost_tier: "Premium"
+    latency: |
+      Not publicly benchmarked in ms; vendor positions 'gpt-5-main' for high throughput and 'gpt-5-thinking'
+      for higher-quality reasoning at greater compute.
+    throughput: |
+      Not publicly disclosed in tokens/sec. API pricing and batch/prompt-caching features are available.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    Reduced hallucinations, improved instruction-following and minimized sycophancy; strongest OpenAI model
+    for coding and agentic tool use; robust long-context retrieval; safer 'safe-completions' behavior.
+  benchmark_performance: |
+    Examples (vendor-published):
+    - SWE-bench Verified: 74.9% (↑ vs o3)
+    - AIME ’25 (no tools): 94.6%
+    - GPQA (diamond): 85.7%
+    - Long-context: strong on OpenAI-MRCR and BrowseComp (128K–256K inputs)
+  special_capabilities:
+    tools_support: true
+    vision_support: true
+    reasoning_support: true
+    image_generation: true
+    additional_capabilities: ["parallel/sequence tool calling", "prompt caching", "Batch API", "built-in web & file search"]
+  known_limitations:
+    vendor_disclosed: |
+      Model can still hallucinate and may present residual safety risks in dual-use domains (bio/cyber).
+      OpenAI treats GPT-5-thinking as High capability in Bio/Chem under its Preparedness Framework, activating
+      additional mitigations.
+    common_failure_modes: |
+      Residual factual errors; potential brittleness under adversarial prompts; long-context edge cases;
+      standard LLM limitations (e.g., non-determinism, sensitivity to prompt phrasing).
+    unsuitable_use_cases: |
+      High-stakes, safety-critical decisions without human oversight; regulated advice (medical, legal, etc.)
+      without domain controls and independent verification.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on diverse datasets: public web data, licensed/partnered data, and data from users/trainers.
+    OpenAI states use of filtering to reduce personal information and safety classifiers during processing.
+  training_methodology: |
+    Reinforcement learning–based reasoning training for 'thinking' variants; additional safety training
+    (safe-completions). Exact pretraining recipe and parameterization not disclosed.
+  data_privacy_considerations: |
+    Vendor claims rigorous filtering to reduce personal information; moderation/safety classifiers are applied.
+    Full dataset composition and provenance are not disclosed.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    General-purpose assistant for writing, coding, analysis, and multimodal understanding; agentic workflows
+    with tool use; long-context retrieval tasks.
+  suitable_domains: ["general_purpose", "code_generation", "analysis", "multimodal_reasoning", "agentic_tool_use"]
+  out_of_scope_use: |
+    Safety-critical applications without human oversight; high-risk bio/cyber dual-use assistance beyond safe-completions;
+    domains requiring guaranteed factuality or formal proofs.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Reduced hallucinations; improved instruction following; increased correctness on core uses (writing, coding, health).
+    public_evidence: |
+      Vendor-reported benchmark gains (SWE-bench, AIME, GPQA, long-context); system card safety evals and red-teaming.
+    assessment_notes: |
+      Strong published results; independent replication across diverse community benchmarks pending.
+  safe:
+    safety_measures: |
+      Safe-completions training; multi-tier monitoring (topic classifier + reasoning monitor); red-team campaigns;
+      account-level and API-level mitigations; Trusted Access Program.
+    known_safety_issues: |
+      Dual-use risk (bio/cyber); jailbreak attempts; residual deceptive behaviors monitored in evals.
+    assessment_notes: |
+      Robust disclosed safeguards relative to prior models; residual risk remains and requires governance controls.
+  secure_and_resilient:
+    security_features: |
+      Monitors for risky domains; system-level protections; API restrictions; prompt-attack mitigations.
+    known_vulnerabilities: |
+      General LLM risks (prompt injection, data exfiltration via tools/browsing) require application-level hardening.
+    assessment_notes: |
+      Security posture improved vs predecessors; still depends heavily on integrator hardening and least-privilege design.
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      System card, addenda, and developer docs available; logs and enterprise telemetry depend on platform integration.
+    assessment_notes: |
+      Good public documentation of safety process; limited disclosure on architecture/params/data.
+  explainable_and_interpretable:
+    explainability_features: |
+      Reasoning-effort controls; structured outputs; tool-use traces aid operational interpretability.
+    interpretability_limitations: |
+      Internal reasoning remains opaque; chain-of-thought not publicly exposed; no formal interpretability guarantees.
+    assessment_notes: |
+      Practical operational transparency improved; fundamental interpretability limits remain.
+  privacy_enhanced:
+    privacy_features: |
+      Filtering to reduce personal info; policy-based data handling; enterprise features (prompt caching, batch) that can
+      reduce data movement.
+    privacy_concerns: |
+      Lack of detailed dataset provenance; potential retention/telemetry varies by product configuration.
+    assessment_notes: |
+      Adequate for many enterprise contexts with correct configuration; sensitive workloads require contracts and controls.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Safety training and classifiers; red-team/process mitigations across sensitive categories.
+    known_biases: |
+      Standard LLM demographic/linguistic biases may persist; vendor reports reductions but not elimination.
+    assessment_notes: |
+      Improvements claimed; independent, domain-specific bias testing still needed per deployment.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Domain-specific factual accuracy and long-context retrieval
+    - Agentic tool-use robustness (error handling, retries, parallelization)
+    - Safety/jailbreak resilience in your domain (bio/cyber if applicable)
+    - Latency/cost profiling under realistic prompts and reasoning_effort settings
+  key_evaluation_questions: |
+    - Does reasoning_effort vs speed meet SLOs?
+    - Are safe-completions sufficient for our dual-use risk?
+    - Do long-context tasks stay accurate at 128K–272K inputs?
+    - Do costs align with workload and caching strategy?
+  comparison_considerations: |
+    - Coding/agentic strength vs Claude/Gemini; vision vs Gemini; cost vs open-weights + RAG; privacy/enterprise telemetry needs.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Require human oversight for high-impact uses; define role-based access; enable audit logging; document reasoning_effort
+      policies and tool access scopes.
+  map:
+    context_considerations: |
+      Identify dual-use exposure (bio/cyber), data sensitivity, long-context needs, agentic autonomy boundaries.
+    risk_categories: ["hallucination", "bias", "privacy_leakage", "prompt_injection", "tool_misuse", "cost_overrun"]
+  measure:
+    suggested_metrics: |
+      Task-level factuality; jailbreak pass rate; tool-use error recovery rate; latency at target reasoning_effort; cost per task;
+      long-context retrieval accuracy.
+  manage:
+    risk_management_considerations: |
+      Enforce least-privilege tool scopes; enable safety monitors; set guard-rails for browsing/code tools; use prompt caching;
+      run periodic red-team tests; tiered model selection (main vs thinking) by use case.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://openai.com/index/introducing-gpt-5/"
+    description: "Release announcement"
+  - url: "https://openai.com/index/introducing-gpt-5-for-developers/"
+    description: "Developer details, context limits, pricing, benchmarks"
+  - url: "https://cdn.openai.com/gpt-5-system-card.pdf"
+    description: "System card (safety, training, evaluations)"
+  - url: "https://openai.com/index/gpt-5-system-card-addendum-gpt-5-codex/"
+    description: "Addendum: GPT-5-Codex safety"
+  benchmarks:
+  - name: "SWE-bench Verified"
+    url: "https://openai.com/index/introducing-gpt-5-for-developers/"
+    result: "74.9% (vendor-reported)"
+  - name: "AIME ’25"
+    url: "https://openai.com/index/introducing-gpt-5-for-developers/"
+    result: "94.6% (vendor-reported)"
+  - name: "GPQA (diamond)"
+    url: "https://openai.com/index/introducing-gpt-5-for-developers/"
+    result: "85.7% (vendor-reported)"
+  third_party_evaluations: []
+  news_coverage:
+  - title: "Introducing GPT-5"
+    url: "https://openai.com/index/introducing-gpt-5/"
+    date: "2025-08-07"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Vendor system card and developer documentation.
+  completeness_assessment: |
+    High for capability/safety and context limits; low for undisclosed architecture/params and full training data provenance.
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card based on release docs and system card."

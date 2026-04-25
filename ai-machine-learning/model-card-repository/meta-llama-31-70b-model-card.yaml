@@ -1,0 +1,246 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Llama 3.1 70B"
+  vendor: "Meta AI"
+  model_family: "Llama 3.x"
+  version: "3.1"
+  release_date: "2025-07-23"
+  model_type: "Open-weight Large Language Model"
+  vendor_model_card_url: "https://ai.meta.com/llama/"
+  license: "Llama 3 Community License"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer (Decoder-only, GQA)"
+    parameter_count: "70 B parameters"
+    context_window: "128 K tokens"
+    training_data_cutoff: "2024-12"
+    architectural_details: |
+      Llama 3.1 70B is a long-context open-weight LLM built with Grouped Query Attention (GQA)
+      and extended rotary position encodings for long-context performance. 
+      It improves factuality, reasoning, and multilingual robustness over Llama 3.0.
+      Released alongside 8B and 405B variants with optimized quantization support.
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "Medium"
+    cost_tier: "Low Cost"
+    latency: |
+      Inference latency ≈25–35 ms/token on A100-class GPUs. 
+      Quantized versions run efficiently on local clusters using 4–8 GPUs.
+    throughput: |
+      ~30–50 tokens/s per GPU stream using vLLM or TGI runtimes; scales horizontally via tensor parallelism.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    Balanced open-weight model offering high reasoning, factual accuracy, and multilingual fluency. 
+    Outperforms many closed commercial models on standard benchmarks while remaining fully transparent.
+  benchmark_performance: |
+    - MMLU: 83.4
+    - GSM8K: 90.5
+    - HumanEval: 78.0
+    - ARC-C: 83.6
+    (Meta official and Hugging Face Open LLM Leaderboard results)
+  special_capabilities:
+    tools_support: false
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["long_context", "multilingual", "quantization_friendly", "RAG_integration"]
+  known_limitations:
+    vendor_disclosed: |
+      Not safety-tuned for general deployment; hallucinations possible on factual queries; 
+      no built-in moderation or refusal behavior.
+    common_failure_modes: |
+      May produce confident but incorrect facts; loses coherence past ~100 K tokens; 
+      limited numerical precision and reasoning under ambiguous prompts.
+    unsuitable_use_cases: |
+      Regulated, safety-critical, or dual-use environments without moderation or retrieval grounding.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on a large-scale mixture of web, licensed, academic, and synthetic data; 
+    datasets filtered for quality, toxicity, and PII. Total training volume ≈15T tokens (undisclosed source mix).
+  training_methodology: |
+    Pretrained via distributed next-token prediction; fine-tuned with instruction datasets and preference optimization (DPO).
+  data_privacy_considerations: |
+    Filtered to remove personal identifiers and toxic data; integrators responsible for downstream data governance.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Foundation model for research, fine-tuning, RAG, and deployment as transparent enterprise LLMs.
+  suitable_domains: ["research", "RAG_pipelines", "enterprise_chatbots", "education", "code_assistance"]
+  out_of_scope_use: |
+    Autonomous systems or safety-critical applications without human-in-the-loop; content moderation without filters.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      High factual reliability and general reasoning ability across domains for an open-weight model.
+    public_evidence: |
+      Benchmarks confirm strong accuracy vs closed models in the same class.
+    assessment_notes: |
+      Reliable for general use; requires external grounding for high-stakes factual tasks.
+  safe:
+    safety_measures: |
+      Training data filtering and responsible-use licensing; community guidelines published.
+    known_safety_issues: |
+      Open-weight misuse potential and absence of runtime moderation.
+    assessment_notes: |
+      Safety must be enforced at integration layer.
+  secure_and_resilient:
+    security_features: |
+      None intrinsic; secure deployment achievable through container isolation.
+    known_vulnerabilities: |
+      Prompt injection and jailbreak risks in conversational use.
+    assessment_notes: |
+      Security depends entirely on downstream integrator controls.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Full model weights, tokenizer, and evaluation scripts public; training data details partial.
+    assessment_notes: |
+      High transparency for architecture, parameters, and benchmarks; limited for corpus provenance.
+  explainable_and_interpretable:
+    explainability_features: |
+      Fully open weights support interpretability studies and visualization tools.
+    interpretability_limitations: |
+      No built-in interpretability or reasoning trace API.
+    assessment_notes: |
+      Excellent for research transparency; moderate for practical explainability.
+  privacy_enhanced:
+    privacy_features: |
+      PII-filtered pretraining; local deployment prevents data exfiltration.
+    privacy_concerns: |
+      Original corpus not fully documented; some residual web-crawled material.
+    assessment_notes: |
+      Suitable for private deployments with proper access control.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Toxicity filters and demographic balancing in dataset preparation.
+    known_biases: |
+      Some cultural and gender bias persist; weaker fairness in underrepresented languages.
+    assessment_notes: |
+      Fairness improved over 3.0; still requires application-specific bias evaluation.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Domain-specific factuality and bias evaluations
+    - Latency and throughput profiling for production hardware
+    - Retrieval-augmented performance assessment
+  key_evaluation_questions: |
+    - Does it meet accuracy and latency requirements for your deployment environment?
+    - Are moderation and filtering layers adequate?
+  comparison_considerations: |
+    - Stronger reasoning than Mistral 7B v0.3; slower than Llama 3.1 8B but more accurate;
+      competitive with Gemini Flash tier for many enterprise tasks.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Define open-weight usage boundaries; require review for compliance with Meta AI license.
+  map:
+    context_considerations: |
+      Evaluate data sensitivity, compute resources, and moderation strategy.
+    risk_categories: ["hallucination", "bias", "prompt_injection", "privacy_leakage"]
+  measure:
+    suggested_metrics: |
+      Accuracy, hallucination rate, latency, cost per inference, and bias index.
+  manage:
+    risk_management_considerations: |
+      Deploy content moderation filters; red-team model outputs; document local fine-tuning provenance.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://ai.meta.com/llama/"
+    description: "Official Llama 3.1 documentation and model overview"
+  - url: "https://huggingface.co/meta-llama/Llama-3.1-70B"
+    description: "Model repository and evaluation results"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "83.4"
+  - name: "GSM8K"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "90.5"
+  - name: "HumanEval"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "78.0"
+  third_party_evaluations:
+  - source: "Hugging Face Open LLM Leaderboard"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    summary: "Community evaluations confirm benchmark parity with closed models."
+  news_coverage:
+  - title: "Meta releases Llama 3.1 model family"
+    url: "https://ai.meta.com/blog/llama-3-1/"
+    date: "2025-07-23"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Meta AI documentation, Hugging Face evaluations, and community leaderboards.
+  completeness_assessment: |
+    High for architecture, benchmarks, and licensing; medium for data provenance and safety detail.
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card based on Meta AI and public evaluations."

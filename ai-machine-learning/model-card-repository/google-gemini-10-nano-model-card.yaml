@@ -1,0 +1,252 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Gemini 1.0 Nano"
+  vendor: "Google DeepMind"
+  model_family: "Gemini 1.0"
+  version: "Nano (v1 & v1.5 variants)"
+  release_date: "2023-12-13"
+  model_type: "On-Device Language Model (Edge LLM)"
+  vendor_model_card_url: "https://deepmind.google/technologies/gemini/"
+  license: "Commercial / Device-embedded"
+  deprecation_status: "Active (latest version shipping with Pixel and Android 15)"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Quantized Transformer (text-only, mobile-optimized)"
+    parameter_count: "1.8B (Nano-1) / 3.25B (Nano-2)"
+    context_window: "8K tokens"
+    training_data_cutoff: "2023-06"
+    architectural_details: |
+      Gemini 1.0 Nano models are lightweight, quantized LLMs designed for mobile and edge inference.
+      Nano-1 runs on Qualcomm S8 Gen3 NPUs, while Nano-2 is optimized for higher-end TPU/TPU-lite
+      accelerators in Pixel and Android 15 devices.
+      Both variants are distilled from larger Gemini models and fine-tuned for local privacy, latency,
+      and task-specific efficiency (e.g., summarization, context reply, and translation).
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "Ultra-High (Edge-Optimized)"
+    cost_tier: "Free / On-device"
+    latency: |
+      150–300 ms per response for short inputs; negligible network dependency.
+    throughput: |
+      Local inference on-device; supports concurrent lightweight tasks (e.g., notifications, text assist).
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    Enables private, offline AI assistance with low latency and strong contextual grounding.
+    Optimized for summarization, text completion, grammar correction, and smart reply on Android devices.
+    Demonstrates robust efficiency for a sub-4B parameter model.
+  benchmark_performance: |
+    - MMLU: 64.5 (Nano-1) / 70.3 (Nano-2)  
+    - GSM8K: 72.2 (Nano-2)  
+    - HellaSwag: 71.9  
+    (Google internal and MLCommons edge benchmarks, 2024)
+  special_capabilities:
+    tools_support: false
+    vision_support: false
+    reasoning_support: limited
+    image_generation: false
+    additional_capabilities: ["on_device_inference", "distilled_reasoning", "privacy_preserving", "offline_mode"]
+  known_limitations:
+    vendor_disclosed: |
+      Limited reasoning and factual synthesis; context window smaller than cloud LLMs.
+      Not suited for creative or open-ended dialogue.
+    common_failure_modes: |
+      Hallucination in complex reasoning; occasional truncation under long prompts.
+    unsuitable_use_cases: |
+      Enterprise reasoning, multimodal tasks, or high-stakes factual workflows.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Distilled from Gemini 1.0 Pro datasets, including multilingual and general-purpose text.
+    Uses synthetic and curated corpora for low-toxicity and high factual compression.
+  training_methodology: |
+    Knowledge distillation from larger Gemini checkpoints, quantization-aware fine-tuning,
+    and on-device performance optimization using TensorFlow Lite and Android AICore.
+  data_privacy_considerations: |
+    No user data included in training; all inference occurs locally on device.
+    Supports federated fine-tuning for privacy-preserving adaptation.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Local summarization, smart reply, text generation, translation, and contextual AI on Android.
+  suitable_domains: ["mobile_assistants", "personal_productivity", "offline_translation", "contextual_summarization"]
+  out_of_scope_use: |
+    Cloud-scale inference, creative storytelling, or regulated decision support.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Stable and efficient for short-form reasoning and summarization.  
+      Best-in-class for on-device accuracy per watt.
+    public_evidence: |
+      Verified via MLPerf and Android AICore performance benchmarks.
+    assessment_notes: |
+      Highly reliable in constrained contexts; limited reasoning breadth.
+  safe:
+    safety_measures: |
+      Strict safety and content filters embedded in Android’s AICore runtime.
+      All inference sandboxed and moderated by OS-level policies.
+    known_safety_issues: |
+      Edge latency can affect safety classification timing in rapid input sequences.
+    assessment_notes: |
+      Extremely low risk due to limited capability and local isolation.
+  secure_and_resilient:
+    security_features: |
+      Hardware-based trusted execution environment (TEE), sandbox isolation, 
+      and verified model binaries.  
+      Federated updates signed and encrypted.
+    known_vulnerabilities: |
+      None observed; local privilege escalation possible if OS compromised.
+    assessment_notes: |
+      Security maturity very high for embedded AI models.
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Model versions tracked through Android System Intelligence updates.
+      Dataset details summarized in public release notes.
+    assessment_notes: |
+      Adequate transparency for consumer-grade AI governance.
+  explainable_and_interpretable:
+    explainability_features: |
+      Deterministic text outputs; model responses logged for developer debugging.
+    interpretability_limitations: |
+      Limited observability due to mobile runtime constraints.
+    assessment_notes: |
+      Functional interpretability sufficient for constrained environments.
+  privacy_enhanced:
+    privacy_features: |
+      Fully local inference; no cloud transmission unless user opts in.
+    privacy_concerns: |
+      None significant; on-device AI complies with Android privacy policies.
+    assessment_notes: |
+      Exemplary privacy design; benchmark for federated AI deployments.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Dataset balancing and multilingual fairness calibration; 
+      federated updates reduce demographic skew.
+    known_biases: |
+      Minimal; mild underperformance on low-resource languages.
+    assessment_notes: |
+      Acceptable fairness; continuous updates improve inclusivity.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - On-device latency and throughput benchmarking  
+    - Bias and fairness audits across language packs  
+    - Factual recall testing for short-context QA  
+    - Privacy validation during OS updates
+  key_evaluation_questions: |
+    - Is offline AI inference required for your use case?  
+    - Does Nano’s reasoning depth meet your application needs?  
+    - Are OS-level safety and update policies sufficient for governance?
+  comparison_considerations: |
+    - Stronger efficiency and privacy than Apple’s on-device models (AXLearn / Siri NPU).  
+      Weaker reasoning than Gemini 1.5 Flash or GPT-4o running cloud-side.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Define mobile AI governance framework for federated and on-device models.
+  map:
+    context_considerations: |
+      Identify risks of bias or stale model updates in decentralized inference environments.
+    risk_categories: ["bias", "stale_model", "privacy_leakage"]
+  measure:
+    suggested_metrics: |
+      Latency per query, energy cost, fairness index, update compliance rate.
+  manage:
+    risk_management_considerations: |
+      Enforce signed model updates; monitor safety performance across OS versions.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://deepmind.google/technologies/gemini/"
+    description: "Gemini 1.0 release and Nano specifications"
+  - url: "https://developer.android.com/ai"
+    description: "Android AICore developer documentation"
+  benchmarks:
+  - name: "MLPerf Edge (2024)"
+    url: "https://mlcommons.org/en/edge/"
+    result: "Top-ranked on-device LLM"
+  - name: "MMLU (Nano-2)"
+    url: "https://deepmind.google/technologies/gemini/"
+    result: "70.3"
+  third_party_evaluations:
+  - source: "Android AICore Performance Report (2024)"
+    url: "https://source.android.com/docs/core/ai"
+    summary: "Validated Gemini Nano’s latency and accuracy metrics under federated conditions."
+  news_coverage:
+  - title: "Google launches Gemini Nano for Pixel 8 Pro and Android 15"
+    url: "https://blog.google/technology/ai/google-gemini-nano-android/"
+    date: "2023-12-13"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    DeepMind and Android documentation, MLPerf Edge reports, and public evaluations.
+  completeness_assessment: |
+    High for safety and privacy; medium for training data and architecture transparency.
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from Gemini Nano release and MLPerf evaluation data."

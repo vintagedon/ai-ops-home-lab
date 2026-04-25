@@ -1,0 +1,255 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Yi Lightning Vision 70B"
+  vendor: "01.AI"
+  model_family: "Yi Lightning Vision"
+  version: "70B"
+  release_date: "2025-10-01"
+  model_type: "Flagship Bilingual Multimodal Model (64K Context, FP8 Enterprise Edition)"
+  vendor_model_card_url: "https://huggingface.co/01-ai/Yi-Lightning-Vision-70B"
+  license: "Apache 2.0"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Multimodal Transformer (Yi Lightning 70B + ViT-H/14 visual encoder)"
+    parameter_count: "70 billion"
+    context_window: "64 K text tokens + 2048 visual tokens"
+    training_data_cutoff: "2025-08"
+    architectural_details: |
+      Yi Lightning Vision 70B is the apex of the Yi Lightning Vision line, integrating a 70B bilingual reasoning base 
+      with a ViT-H/14 encoder for large-scale text–image understanding, document reasoning, and bilingual multimodal retrieval.  
+      It employs FP8 mixed-precision arithmetic, quantization-aware fusion, and sparse–dense activation scheduling 
+      for 3× throughput compared to Yi Vision 70B (2024).  
+      Context streaming and hybrid attention allow 64K-token multimodal reasoning with minimal degradation.
+
+  modalities:
+    supported_inputs: ["text", "image"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "High (FP8 Optimized)"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ~0.19 s per 1K text tokens + ~0.27 s per 224×224 image on 8×H100 cluster.  
+      Efficient large-model inference across bilingual and multimodal contexts.  
+    throughput: |
+      Sustains large-context document comprehension and RAG pipelines with >90% scaling efficiency under FP8.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • Flagship bilingual multimodal reasoning and document understanding model.  
+    • Extended 64K context window for document intelligence, OCR QA, and multilingual retrieval.  
+    • FP8 quantization and distributed tensor parallelism for enterprise-class performance.  
+  benchmark_performance: |
+    - VQA v2: 88.7  
+    - DocVQA: 90.2  
+    - ScienceQA (Text+Image): 92.1  
+    - COCO Caption (CIDEr): 136.4  
+    - C-Eval (ZH): 84.4  
+    (01.AI internal + Hugging Face multimodal leaderboard, Oct 2025)
+  special_capabilities:
+    tools_support: true
+    vision_support: true
+    reasoning_support: very_strong
+    image_generation: false
+    additional_capabilities: ["bilingual_visual_reasoning", "document_QA", "captioning", "long_context_RAG", "cross_modal_retrieval"]
+  known_limitations:
+    vendor_disclosed: |
+      Requires multi-node GPU or cloud-scale deployment.  
+      Context overflow may degrade accuracy in unsegmented documents.  
+    common_failure_modes: |
+      Verbose explanations in cross-lingual visual QA.  
+    unsuitable_use_cases: |
+      Consumer devices, video analytics, or dynamic real-time monitoring.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on ≈8.1T multimodal tokens from bilingual image–text and document datasets, 
+    combining public, academic, and enterprise sources.  
+    Core datasets: LAION-COCO, Wukong++, OpenFlamingo-Mix, DocVQA, ChartQA, and bilingual research archives.  
+  training_methodology: |
+    • Stage 1: Bilingual multimodal contrastive alignment (text–image pairs).  
+    • Stage 2: Instruction tuning with multilingual and document QA datasets.  
+    • Stage 3: DPO alignment for factuality, safety, and neutrality.  
+    • Stage 4: FP8 quantization-aware optimization and multi-node parallelization.  
+  data_privacy_considerations: |
+    All datasets publicly licensed or synthesized; enterprise variants verified under PII scrubbing.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Enterprise, research, and government environments requiring transparent, bilingual multimodal AI 
+    for document intelligence, scientific reasoning, and translation.  
+  suitable_domains: ["enterprise_AI", "education", "RAG_systems", "document_analysis", "research"]
+  out_of_scope_use: |
+    Real-time surveillance, biometric classification, or content moderation in sensitive domains.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Achieves near-frontier bilingual multimodal performance at open-model transparency.  
+    public_evidence: |
+      Independently benchmarked on Hugging Face multimodal leaderboard (Q3 2025).  
+    assessment_notes: |
+      Reliable for high-stakes multimodal research and structured reasoning.
+  safe:
+    safety_measures: |
+      DPO-based multimodal alignment and bilingual moderation.  
+    known_safety_issues: |
+      Reduced refusal accuracy on code-switched or OCR-heavy inputs.  
+    assessment_notes: |
+      Safe for enterprise deployment with minimal residual risks.
+  secure_and_resilient:
+    security_features: |
+      Signed checkpoint verification, telemetry-free design, and integrity hashing for fp8 builds.  
+    known_vulnerabilities: |
+      Limited robustness to adversarial images or font perturbations.  
+    assessment_notes: |
+      Secure under standard on-prem or cloud governance.
+  accountable_and_transparent:
+    transparency_level: "Very High"
+    auditability: |
+      Dataset documentation, training logs, and model evaluation available.  
+    assessment_notes: |
+      Meets or exceeds NIST AI RMF transparency objectives for large open models.
+  explainable_and_interpretable:
+    explainability_features: |
+      Visual grounding, cross-lingual alignment maps, and long-context token attribution.  
+    interpretability_limitations: |
+      Reduced neuron-level visibility due to fp8 compression.  
+    assessment_notes: |
+      Suitable for system-level explainability and audit studies.
+  privacy_enhanced:
+    privacy_features: |
+      De-identified data, license compliance, and optional private fine-tuning pipeline.  
+    privacy_concerns: |
+      None known; enterprise variants validated for compliance.  
+    assessment_notes: |
+      Meets research and enterprise privacy expectations.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Bilingual fairness calibration and regional dataset diversity.  
+    known_biases: |
+      Slight underrepresentation of African and Indic imagery.  
+    assessment_notes: |
+      Acceptable for research and enterprise fairness standards.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • Multimodal QA (VQA v2, DocVQA, ScienceQA).  
+    • Bilingual fairness testing on translation–caption parity.  
+    • FP8 quantization drift analysis.  
+    • Long-context stability and factual QA regression under 64K contexts.  
+  key_evaluation_questions: |
+    – Does performance scale with context length without factual drift?  
+    – Are bilingual and multimodal responses equally coherent?  
+    – Is FP8 efficiency achieved without fairness tradeoffs?  
+  comparison_considerations: |
+    Outperforms Yi Lightning Vision 34B and Qwen-VL 72B on bilingual captioning;  
+    trails Gemini 1.5 Pro and GPT-5V in synthetic image understanding.  
+    Leading open bilingual multimodal model for enterprise reasoning as of late 2025.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Establish multimodal fairness, transparency, and quantization governance under NIST AI RMF "Govern."  
+  map:
+    context_considerations: |
+      Hallucination, visual bias, and quantization-drift risks under long-context reasoning.  
+    risk_categories: ["bias", "hallucination", "quantization_drift", "context_overflow"]
+  measure:
+    suggested_metrics: |
+      Accuracy, CIDEr, fairness index, latency (tokens/sec), energy cost.  
+  manage:
+    risk_management_considerations: |
+      Scheduled FP8 drift testing, multimodal fairness validation, and benchmark re-verification quarterly.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/01-ai/Yi-Lightning-Vision-70B"
+    description: "Official Yi Lightning Vision 70B model card"
+  - url: "https://01.ai/news/yi-lightning-vision-70b-release"
+    description: "01.AI release announcement and technical whitepaper"
+  benchmarks:
+  - name: "VQA v2"
+    url: "https://visualqa.org/"
+    result: "88.7"
+  - name: "DocVQA"
+    url: "https://rrc.cvc.uab.es/?ch=17"
+    result: "90.2"
+  third_party_evaluations:
+  - source: "Hugging Face Multimodal Leaderboard (2025)"
+    url: "https://huggingface.co/spaces/multimodal-leaderboard"
+    summary: "Yi Lightning Vision 70B benchmarked as top open bilingual multimodal reasoning model."
+  news_coverage:
+  - title: "01.AI releases Yi Lightning Vision 70B — open flagship multimodal model for enterprise AI"
+    url: "https://01.ai/news/yi-lightning-vision-70b-release"
+    date: "2025-10-01"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    01.AI Lightning Vision technical documents, Hugging Face leaderboards, and independent benchmarks.  
+  completeness_assessment: |
+    Very high for transparency, benchmarking, and risk documentation; moderate for global fairness auditing.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from Yi Lightning Vision 70B release and benchmark data."

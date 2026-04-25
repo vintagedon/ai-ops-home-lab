@@ -1,0 +1,255 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Pythia 12B"
+  vendor: "EleutherAI"
+  model_family: "Pythia"
+  version: "12B"
+  release_date: "2023-04-26"
+  model_type: "Fully Transparent Pretrained Open-Weight Foundation Model"
+  vendor_model_card_url: "https://huggingface.co/EleutherAI/pythia-12b"
+  license: "Apache 2.0"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Decoder-only Transformer (GPT-NeoX)"
+    parameter_count: "12 billion"
+    context_window: "2 K tokens"
+    training_data_cutoff: "2023-03"
+    architectural_details: |
+      Pythia 12B is part of EleutherAI’s fully open Pythia model suite (70M–12B), 
+      trained with complete transparency to enable research on scaling laws, interpretability, 
+      and training dynamics.  
+      Built on the GPT-NeoX architecture using standard rotary embeddings, 
+      Pythia 12B was trained on The Pile, an open 825GB text dataset spanning code, academic papers, 
+      books, and web data.  
+      This model serves as a reference for reproducible pretraining experiments.
+
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "Medium"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ~0.22 s per 1K tokens (fp16 A100);  
+      ~0.09 s quantized (INT4 RTX 4090).  
+      Optimized for academic experimentation rather than latency-sensitive deployment.
+    throughput: |
+      Excellent reproducibility and consistency across seeds for scaling-law experiments.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • Full transparency across all scales (70M–12B).  
+    • Enables research on scaling laws, bias evolution, and pretraining reproducibility.  
+    • Clean, auditable training data and hyperparameters.  
+  benchmark_performance: |
+    - Perplexity (Pile Test): 14.1  
+    - MMLU: 55.6  
+    - ARC-C: 59.3  
+    - HellaSwag: 68.2  
+    - TruthfulQA: 48.7  
+    (EleutherAI and Hugging Face community benchmarks, mid-2023)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: basic
+    image_generation: false
+    additional_capabilities: ["scaling_law_research", "interpretability", "AI_governance_training"]
+  known_limitations:
+    vendor_disclosed: |
+      No instruction tuning or alignment applied.  
+      Limited reasoning and safety alignment compared to modern open models.  
+    common_failure_modes: |
+      Hallucination, bias reflection, and unmoderated completions.  
+    unsuitable_use_cases: |
+      Conversational agents or production workloads.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on The Pile — 825 GB of diverse open datasets including books, code, 
+    academic papers, web text, and open-source repositories.  
+    Dataset designed for diversity, representativeness, and open-access research.
+  training_methodology: |
+    Pretrained using GPT-NeoX framework with public hyperparameters, loss curves, and weight snapshots.  
+    Emphasizes reproducibility and interpretability rather than alignment.  
+  data_privacy_considerations: |
+    Publicly available data sources only; no proprietary or user data.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Research on model interpretability, training dynamics, bias, and scaling behavior.  
+    Intended as a reproducible foundation model for fine-tuning and educational study.  
+  suitable_domains: ["research", "education", "AI_governance", "interpretability"]
+  out_of_scope_use: |
+    End-user chatbots, compliance-heavy enterprise applications, or factual QA systems.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Training pipeline and evaluation completely reproducible.  
+    public_evidence: |
+      Model, code, and intermediate checkpoints fully released; verified by EleutherAI community.  
+    assessment_notes: |
+      Reliable research baseline for transparency and open science.
+  safe:
+    safety_measures: |
+      None applied; raw pretrained model.  
+    known_safety_issues: |
+      May output toxic or biased content due to unaligned corpus.  
+    assessment_notes: |
+      Safe only under controlled research supervision.
+  secure_and_resilient:
+    security_features: |
+      Telemetry-free; deterministic training; reproducible architecture.  
+    known_vulnerabilities: |
+      Unfiltered text generation; prompt injection potential.  
+    assessment_notes: |
+      Secure for controlled, offline use in research labs.
+  accountable_and_transparent:
+    transparency_level: "Very High"
+    auditability: |
+      All data, hyperparameters, training scripts, and loss curves are public.  
+    assessment_notes: |
+      One of the most transparent open foundation models in existence.
+  explainable_and_interpretable:
+    explainability_features: |
+      Full access to neuron activations, attention maps, and per-step checkpoints.  
+    interpretability_limitations: |
+      No alignment layer; reasoning traces not human-aligned.  
+    assessment_notes: |
+      Excellent for mechanistic interpretability and scaling studies.
+  privacy_enhanced:
+    privacy_features: |
+      Public, non-PII dataset; no telemetry or tracking.  
+    privacy_concerns: |
+      Minimal; open data sources documented in The Pile.  
+    assessment_notes: |
+      Meets open data research privacy norms.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      No active mitigation; bias transparency achieved via documentation.  
+    known_biases: |
+      Reflects biases of open web and English-language sources.  
+    assessment_notes: |
+      Acceptable for bias analysis research, not for end-user deployment.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • Bias, toxicity, and scaling law analysis.  
+    • Reproducibility and checkpoint verification.  
+    • Perplexity and loss curve comparison to published benchmarks.  
+  key_evaluation_questions: |
+    – Does training transparency meet governance requirements?  
+    – Are biases quantified and documented?  
+    – Is reproducibility verifiable through open checkpoints?  
+  comparison_considerations: |
+    Outperforms GPT-NeoX 20B in reproducibility;  
+    trails OLMo 7B and Phi-3 Mini in reasoning.  
+    Benchmark reference for pretraining transparency studies.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Incorporate full documentation of data provenance and reproducibility under NIST AI RMF "Govern."  
+  map:
+    context_considerations: |
+      Identify bias, hallucination, and unaligned reasoning risks.  
+    risk_categories: ["bias", "hallucination", "alignment_absence", "open_data_reuse"]
+  measure:
+    suggested_metrics: |
+      Transparency index, perplexity, and reproducibility metrics.  
+  manage:
+    risk_management_considerations: |
+      Apply moderation filters or alignment fine-tuning before end-user exposure.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/EleutherAI/pythia-12b"
+    description: "Official EleutherAI model card and evaluation"
+  - url: "https://github.com/EleutherAI/pythia"
+    description: "Full training scripts and configurations"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "55.6"
+  - name: "HellaSwag"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "68.2"
+  third_party_evaluations:
+  - source: "EleutherAI community validation (2023)"
+    url: "https://github.com/EleutherAI/pythia"
+    summary: "Pythia confirmed as fully transparent open pretraining baseline."
+  news_coverage:
+  - title: "EleutherAI releases Pythia — a fully transparent open foundation model suite"
+    url: "https://www.eleuther.ai/blog/pythia/"
+    date: "2023-04-26"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    EleutherAI Pythia documentation, The Pile dataset papers, Hugging Face leaderboard results.  
+  completeness_assessment: |
+    High for transparency and reproducibility; low for safety and alignment coverage.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from EleutherAI Pythia 12B release and open data sources."

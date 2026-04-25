@@ -1,0 +1,1129 @@
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+# Model card for Meta Llama 3.1 8B Instruct
+# This card follows NIST AI RMF principles for trustworthiness assessment
+
+schema_version: "1.0.0"
+
+# =============================================================================
+# MODEL IDENTITY
+# =============================================================================
+
+model_identity:
+  name: "Llama 3.1 8B Instruct"
+  vendor: "Meta (Facebook AI Research)"
+  model_family: "Llama 3.1"
+  version: "3.1-8B-Instruct"
+  release_date: "2024-07-23"
+  model_type: "Large Language Model - Instruction-tuned"
+
+  vendor_model_card_url: "https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct"
+
+  license: "Llama 3.1 Community License - Permits commercial use with restrictions on competing model training"
+  
+  deprecation_status: "Active - Current generation model"
+
+# =============================================================================
+# MODEL ARCHITECTURE & TECHNICAL SPECIFICATIONS
+# =============================================================================
+
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer decoder with optimized architecture"
+    
+    parameter_count: "8.03B (8,030.3M parameters)"
+    
+    context_window: "128,000 tokens"
+    
+    training_data_cutoff: "2023-12 (December 2023)"
+
+    architectural_details: |
+      - Auto-regressive language model using optimized transformer architecture
+      - Instruction-tuned variant optimized for multilingual dialogue use cases
+      - Post-training: Supervised Fine-Tuning (SFT) + Reinforcement Learning with Human Feedback (RLHF)
+      - Aligned with human preferences for helpfulness and safety
+      - Significantly longer context (128K vs 8K in Llama 3)
+      - Enhanced tool use and reasoning capabilities
+      - Multilingual support: English, German, French, Italian, Portuguese, Hindi, Spanish, Thai
+      - Total pretraining: 15T tokens
+      - Training compute: 39.3M GPU hours on H100-80GB GPUs (700W TDP)
+      - Greenhouse gas emissions: 11,390 tons CO2eq for training (net-zero via renewable energy matching)
+
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "Fast - 160 tokens/second average output speed"
+    
+    cost_tier: "Low - $0.09 per 1M input tokens, $0.10 per 1M output tokens (blended: $0.09/1M)"
+    
+    latency: "0.33s time to first token (TTFT) - lower than average"
+    
+    throughput: "160 tokens/second output speed - faster than average for 8B class"
+
+# =============================================================================
+# CAPABILITIES & LIMITATIONS
+# =============================================================================
+
+capabilities:
+  vendor_claimed_strengths: |
+    Per Meta documentation:
+    - Optimized for multilingual dialogue use cases across 8 languages
+    - Outperforms many available open source and closed chat models on common industry benchmarks
+    - Enhanced capabilities for long-form text summarization, multilingual conversational agents, and coding assistants
+    - State-of-the-art tool use capabilities
+    - Stronger reasoning capabilities compared to Llama 3 8B
+    - Suitable for advanced use cases including coding assistance and complex conversations
+    - Maintains quality while being resource-efficient for 8B parameter class
+
+  benchmark_performance: |
+    Official Meta benchmarks (post-training, instruction-tuned):
+    - MMLU (5-shot): 69.4% (macro average)
+    - MMLU (0-shot CoT): Estimated 69-70%
+    - GSM8K (8-shot maj@1): 84.5%
+    - HumanEval (0-shot): 72.6% (pass@1)
+    - MATH (0-shot CoT): 51.9%
+    - ARC-Challenge: Not specified in official card
+    - GPQA: 32.8% (5-shot)
+    
+    Third-party validation (Artificial Analysis):
+    - Intelligence Index: 17 (lower than average, as expected for 8B class)
+    - Performance competitive with other 8B models
+    - Superior to predecessor Llama 3 8B Instruct (MMLU: 67.4% vs 69.4%)
+    
+    Note: Llama 3.1 8B shows significant improvements over Llama 3 8B across reasoning,
+    knowledge, and coding benchmarks. Context window expansion from 8K to 128K enables
+    document-length processing not possible in predecessor.
+
+  special_capabilities:
+    tools_support: true  # Enhanced tool use capabilities
+    vision_support: false  # Text-only model
+    reasoning_support: true  # Strong reasoning with CoT
+    image_generation: false  # Text output only
+    additional_capabilities: 
+      - "Multilingual support (8 languages)"
+      - "128K token context window"
+      - "Function calling capabilities"
+      - "Code generation and assistance"
+      - "Long-form content generation"
+
+  known_limitations:
+    vendor_disclosed: |
+      From Meta documentation:
+      - Model knowledge cutoff: December 2023 (information after this date not in training)
+      - Primary optimization for instruction-following and dialogue; may not perform optimally for other tasks
+      - 8B parameter size limits capability ceiling compared to 70B/405B variants
+      - Multilingual performance varies by language (best in English)
+      - May require additional fine-tuning for highly specialized domains
+      - RLHF alignment may affect performance on certain edge cases or creative tasks
+      - Context window of 128K may approach quality degradation at extreme lengths
+      - Not designed for high-stakes decision making without human oversight
+
+    common_failure_modes: |
+      Known patterns from testing and community reports:
+      - Hallucination: Can generate plausible but incorrect information, especially on topics after knowledge cutoff
+      - Instruction following: Generally strong but can misinterpret complex or ambiguous instructions
+      - Consistency: May produce inconsistent responses across multiple generations
+      - Arithmetic: Improved with GSM8K performance but may still make calculation errors on complex problems
+      - Context retention: Performance may degrade in extremely long conversations approaching 128K limit
+      - Prompt sensitivity: Output quality can vary significantly with prompt phrasing
+      - Bias manifestation: Demographic and cultural biases from training data (see fairness section)
+
+    unsuitable_use_cases: |
+      This model should NOT be used for:
+      - Medical diagnosis or treatment decisions without qualified professional review
+      - Legal advice or binding legal interpretation
+      - Financial trading decisions or investment advice without human oversight
+      - Safety-critical systems (autonomous vehicles, industrial control, aviation)
+      - High-stakes individual assessments (hiring, credit, admissions) as sole decision maker
+      - Real-time factual information retrieval about events after December 2023
+      - Generation of content requiring current/up-to-date information
+      - Tasks requiring >128K token context
+      - Mission-critical applications where hallucination is unacceptable
+      - Regulated industries without appropriate validation and human oversight
+
+# =============================================================================
+# TRAINING & DATA
+# =============================================================================
+
+training_information:
+  training_data_description: |
+    Per Meta disclosure:
+    - Pretraining corpus: 15 trillion tokens
+    - Multilingual data covering English, German, French, Italian, Portuguese, Hindi, Spanish, Thai
+    - Training period: Data through December 2023
+    - Dataset composition: Not fully disclosed; standard practices suggest web text, code, books, academic papers
+    - Training infrastructure: Custom Meta GPU clusters, production infrastructure
+    - Fine-tuning data: Supervised fine-tuning datasets and RLHF preference data (composition not disclosed)
+    
+    Data transparency gaps:
+    - Specific dataset sources not disclosed
+    - Web scraping methodology not detailed
+    - Consent mechanisms not fully documented
+    - Filtering and curation processes partially disclosed
+
+  training_methodology: |
+    Training approach:
+    1. Pretraining: Autoregressive language modeling on 15T tokens using custom training libraries
+    2. Supervised Fine-Tuning (SFT): Instruction-following optimization
+    3. Reinforcement Learning with Human Feedback (RLHF): Alignment with human preferences for helpfulness and safety
+    
+    Training compute:
+    - 39.3M GPU hours on H100-80GB hardware (700W TDP)
+    - Custom Meta training libraries and GPU clusters
+    - Production infrastructure for fine-tuning, annotation, and evaluation
+    
+    Safety measures:
+    - CBRNE (Chemical, Biological, Radiological, Nuclear, Explosive) risk mitigation testing
+    - Child safety expert red-teaming and risk assessment
+    - Cybersecurity evaluation (CyberSecEval benchmark)
+    - Adversarial testing across multiple attack vectors
+
+  data_privacy_considerations: |
+    Privacy and data handling:
+    - Training data includes web-scraped content; consent mechanisms not fully disclosed
+    - No explicit PII filtering disclosure in public documentation
+    - Recommend privacy review before deployment in sensitive contexts
+    - User data in API deployments subject to provider privacy policies (not Meta-controlled)
+    - Model outputs may inadvertently reference training data
+    
+    Concerns for sensitive deployments:
+    - Data provenance not fully transparent
+    - Potential for training data memorization and regurgitation
+    - No guarantees about specific dataset exclusions
+    - Recommend additional privacy testing for regulated industries
+
+# =============================================================================
+# INTENDED USE & SCOPE
+# =============================================================================
+
+intended_use:
+  vendor_intended_use: |
+    Per Meta documentation:
+    - Multilingual dialogue and conversational AI applications
+    - Coding assistants and software development tools
+    - Long-form text summarization and content generation
+    - Knowledge-intensive tasks and question answering
+    - Tool use and function calling applications
+    - Educational and research applications
+    - General-purpose assistant applications
+    
+    Explicitly stated as optimized for:
+    - Instruction-following tasks
+    - Multi-turn conversations
+    - Multilingual interactions (8 supported languages)
+
+  suitable_domains: 
+    - "Content generation and writing assistance"
+    - "Customer service chatbots (with human oversight)"
+    - "Code generation and programming assistance"
+    - "Educational tutoring and learning support"
+    - "Research assistance and information synthesis"
+    - "Documentation and technical writing"
+    - "Data analysis and summarization"
+    - "Creative writing and brainstorming"
+    - "Translation assistance (for supported languages)"
+    - "Tool use and API integration scenarios"
+
+  out_of_scope_use: |
+    Out of scope or requiring significant additional validation:
+    - Healthcare: Medical diagnosis, treatment planning, clinical decision support
+    - Legal: Legal advice, contract interpretation, regulatory compliance determination
+    - Finance: Investment decisions, credit scoring, fraud detection (as sole authority)
+    - Safety-critical: Autonomous systems, industrial control, transportation
+    - High-stakes decisions: Employment screening, educational admissions, parole/sentencing
+    - Regulated industries: Use cases subject to regulatory approval without proper validation
+    - Real-time factual queries: Information after December 2023 knowledge cutoff
+    - Specialized technical domains: May require domain-specific fine-tuning
+    
+    Requires human oversight:
+    - Any application where errors could cause significant harm
+    - Content moderation and safety classification
+    - Fact-checking and information verification
+    - Professional advice of any kind
+
+# =============================================================================
+# TRUSTWORTHINESS CHARACTERISTICS
+# =============================================================================
+
+trustworthiness_assessment:
+  # CHARACTERISTIC 1: Valid and Reliable
+  valid_and_reliable:
+    vendor_claims: |
+      Meta claims strong performance across industry benchmarks (MMLU, GSM8K, HumanEval)
+      and rigorous testing across diverse use cases. Model validated on over 150 benchmark
+      datasets spanning multiple languages and domains.
+
+    public_evidence: |
+      Independent validation via third-party benchmarking:
+      - Artificial Analysis confirms competitive performance in 8B class
+      - Benchmark scores align with Meta's published results
+      - Output speed (160 tok/s) and latency (0.33s TTFT) verified by multiple API providers
+      
+      Reliability considerations:
+      - Consistent performance within benchmark testing
+      - Output variability inherent to LLM generation (temperature-dependent)
+      - Performance degrades on out-of-distribution inputs
+      - Hallucination rate not quantified in public documentation
+
+    assessment_notes: |
+      Deployment recommendations:
+      - Validate on domain-specific test sets before production deployment
+      - Establish acceptable error rates for your use cases
+      - Monitor output quality in production (not just latency/throughput)
+      - Test edge cases and adversarial inputs
+      - Compare with alternative 8B models for your specific workload
+      - Consider ensemble approaches for critical applications
+      
+      Testing priorities:
+      1. Task-specific accuracy on representative data
+      2. Hallucination rate measurement and mitigation
+      3. Consistency across multiple generations
+      4. Performance at context window limits (near 128K)
+      5. Multilingual performance for non-English deployments
+
+  # CHARACTERISTIC 2: Safe
+  safe:
+    safety_measures: |
+      Meta-documented safety measures:
+      - RLHF alignment for safety and helpfulness
+      - Red-team testing for harmful content generation
+      - CBRNE (weapons) proliferation testing and mitigation
+      - Child safety expert evaluation
+      - CyberSecEval benchmark testing for security vulnerabilities
+      - Adversarial testing across multiple attack vectors
+      - System-level safety measures and guardrails recommended in deployment
+      
+      Safety testing focus areas:
+      - Harmful content generation
+      - Prompt injection and jailbreaking resistance
+      - Adversarial robustness
+      - Cybersecurity risks
+
+    known_risks: |
+      Identified safety risks:
+      - Jailbreaking: Alignment can be bypassed with adversarial prompts
+      - Harmful content: May generate inappropriate content despite safety training
+      - Dual-use: Can assist with malicious activities if misused
+      - Misinformation: Can generate convincing false information
+      - Prompt injection: Vulnerable to instruction-following attacks
+      - Training data leakage: May reproduce memorized training content
+      
+      Risk factors:
+      - Open-weights model: Can be fine-tuned to remove safety controls
+      - No runtime content filtering: Safety depends on RLHF alignment only
+      - Multilingual risks: Safety performance may vary across languages
+
+    assessment_notes: |
+      Safety deployment requirements:
+      - Implement application-level content filtering (input and output)
+      - Monitor for harmful content generation patterns
+      - Establish clear usage policies and terms of service
+      - Implement rate limiting and abuse detection
+      - Log interactions for safety auditing
+      - Develop incident response procedures
+      - Consider user reporting mechanisms
+      - Test safety controls before production deployment
+      
+      Critical: Safety alignment is not sufficient for high-risk applications.
+      Implement defense-in-depth with multiple safety layers.
+
+  # CHARACTERISTIC 3: Secure and Resilient
+  secure_and_resilient:
+    security_considerations: |
+      Model security characteristics:
+      - Open-weights: Full model access enables security analysis but also attack research
+      - Gated access on Hugging Face: Requires license acceptance
+      - No runtime security controls: Security depends on deployment infrastructure
+      
+      Cybersecurity testing:
+      - CyberSecEval benchmark results indicate awareness of security concerns
+      - Prompt injection vulnerability testing conducted
+      - Adversarial robustness testing performed
+      
+      Deployment security requirements:
+      - API key management and authentication
+      - Input validation and sanitization
+      - Output filtering and sanitization
+      - Rate limiting and DDoS protection
+      - Logging and monitoring for security events
+
+    resilience_factors: |
+      Operational resilience:
+      - Model stability: Deterministic given fixed seed and temperature
+      - Graceful degradation: Generally degrades gracefully on out-of-distribution inputs
+      - Recovery: Stateless model allows easy recovery from failures
+      - Redundancy: Can be deployed across multiple instances
+      
+      Infrastructure resilience:
+      - Requires inference infrastructure (8B model manageable on single GPU)
+      - Available from multiple API providers (redundancy possible)
+      - Self-hosting option available (operational control)
+
+    assessment_notes: |
+      Security testing priorities:
+      1. Prompt injection attack testing
+      2. Data exfiltration attempt testing (context window exploitation)
+      3. Jailbreaking and alignment bypass testing
+      4. Input validation and sanitization effectiveness
+      5. Output filtering and safety control validation
+      6. API security and authentication testing
+      7. Logging and monitoring capability verification
+      
+      Resilience considerations:
+      - Establish failover procedures
+      - Plan for model version updates
+      - Document rollback procedures
+      - Test disaster recovery scenarios
+
+  # CHARACTERISTIC 4: Accountable and Transparent
+  accountable_and_transparent:
+    transparency_level: |
+      Transparency assessment:
+      
+      High transparency:
+      - Model architecture publicly documented
+      - Parameter count disclosed (8.03B)
+      - Training compute disclosed (39.3M GPU hours)
+      - Benchmark results extensively published
+      - License terms clearly stated
+      - Safety testing approach described
+      
+      Moderate transparency:
+      - Training methodology described at high level
+      - RLHF process outlined but not detailed
+      - Multilingual capabilities documented
+      - Context window size disclosed (128K)
+      
+      Low transparency:
+      - Training data composition not fully disclosed
+      - Specific datasets not enumerated
+      - RLHF preference data not described
+      - Fine-tuning data specifics not provided
+      - Filtering and curation processes partially disclosed
+      
+      Transparency gaps impact:
+      - Difficult to assess data-related risks (bias, privacy, IP)
+      - Cannot fully evaluate training data quality
+      - Challenging to predict edge case behavior
+      - Limited ability to assess memorization risks
+
+    accountability_mechanisms: |
+      Accountability structures:
+      - Vendor: Meta Platforms, Inc. (responsible party)
+      - Model card: Available on Hugging Face with technical details
+      - License: Llama 3.1 Community License defines usage terms
+      - Version control: Versioned releases (3.1 designation)
+      - Issue reporting: Hugging Face discussions and GitHub issues
+      
+      Accountability limitations:
+      - Open-weights: Downstream use difficult to track or control
+      - Community deployments: No central accountability for derivatives
+      - Limited recourse: No service-level agreements for open model
+      - Indirect liability: Deployer assumes responsibility for applications
+
+    assessment_notes: |
+      Governance recommendations:
+      - Maintain model inventory with version tracking
+      - Document model selection rationale
+      - Establish approval process for deployment
+      - Define roles and responsibilities for model governance
+      - Implement usage logging and audit trails
+      - Develop model update and deprecation policies
+      - Create documentation for model behavior and limitations
+      
+      Transparency mitigation:
+      - Conduct independent testing to fill knowledge gaps
+      - Document observed behavior and failure modes
+      - Maintain internal knowledge base of model characteristics
+      - Consider requiring supplier transparency for procurement
+
+  # CHARACTERISTIC 5: Explainable and Interpretable
+  explainable_and_interpretable:
+    explainability_capabilities: |
+      Inherent explainability:
+      - Text-based outputs are human-readable (surface-level interpretability)
+      - Can be prompted to explain reasoning (chain-of-thought capabilities)
+      - Attention mechanisms theoretically analyzable (not practical at scale)
+      
+      Explainability limitations:
+      - Black-box neural network: Internal decision process not transparent
+      - 8B parameters: Too complex for human understanding of weights
+      - Emergent behavior: Capabilities arise from training, not explicit programming
+      - Post-hoc explanations: Model-generated explanations may be unreliable
+      
+      No built-in explainability features:
+      - No attention visualization tools provided
+      - No confidence scores or uncertainty quantification
+      - No causal tracing capabilities
+      - No guaranteed accurate self-explanation
+
+    interpretability_challenges: |
+      Fundamental challenges:
+      - Scale: 8B parameters beyond human comprehension
+      - Distributed representations: Knowledge encoded across network
+      - Non-linear: Complex non-linear transformations obscure reasoning
+      - Stochastic: Sampling introduces randomness (temperature-dependent)
+      
+      Practical limitations:
+      - Cannot definitively explain any specific output
+      - Post-hoc explanations may be fabricated or rationalized
+      - Attention weights poorly correlate with importance
+      - Debugging failure modes requires extensive testing
+
+    assessment_notes: |
+      Explainability strategies:
+      - Use chain-of-thought prompting for reasoning tasks (improves interpretability)
+      - Implement output validation independent of model explanations
+      - Don't rely on model-generated explanations for high-stakes decisions
+      - Use multiple prompts to test consistency of reasoning
+      - Consider ensemble approaches for critical applications
+      
+      Regulatory considerations:
+      - May not satisfy explainability requirements for regulated domains
+      - Human oversight essential for decisions requiring explanation
+      - Document known limitations in explainability
+      - Maintain audit trails separate from model outputs
+      
+      Not suitable for:
+      - Applications requiring legally defensible explanations
+      - Regulated decisions with "right to explanation" requirements
+      - Critical systems where failure modes must be understood
+
+  # CHARACTERISTIC 6: Privacy-Enhanced
+  privacy_enhanced:
+    privacy_protections: |
+      Privacy considerations:
+      
+      Model-level:
+      - No explicit PII filtering disclosed in training
+      - May have memorized training data (including PII from web scraping)
+      - No differential privacy guarantees
+      - No unlearning mechanisms available
+      
+      Deployment-level (varies by provider):
+      - API deployments subject to provider privacy policies
+      - Self-hosting provides data control
+      - No inherent logging of user interactions (implementation-dependent)
+      
+      Privacy testing:
+      - No public disclosure of privacy evaluation results
+      - Extraction attacks not thoroughly documented
+      - Membership inference vulnerability unknown
+
+    data_handling: |
+      Training data handling:
+      - Web-scraped data likely includes PII (consent not documented)
+      - No disclosure of data anonymization processes
+      - Data retention and deletion policies not specified
+      - Training data access controls not disclosed
+      
+      Inference data handling (deployment-dependent):
+      - Prompts and outputs may be logged by API providers
+      - Self-hosting provides full control over data
+      - No built-in privacy-preserving inference techniques
+      - Context window (128K) may expose significant user data
+
+    assessment_notes: |
+      Privacy deployment requirements:
+      - Implement data minimization in prompts
+      - Redact PII before model interaction if possible
+      - Use self-hosting for sensitive data applications
+      - Review API provider privacy policies carefully
+      - Implement retention policies for prompts and outputs
+      - Consider federated or edge deployment for privacy-critical applications
+      - Test for training data memorization and PII leakage
+      
+      High-risk privacy scenarios:
+      - Healthcare: PHI exposure risk
+      - Financial: PII and financial data exposure
+      - Legal: Privileged information exposure
+      - Government: Classified or sensitive information
+      
+      Privacy testing priorities:
+      1. PII extraction testing (prompt for known training data)
+      2. Context window data handling validation
+      3. Logging and retention policy review
+      4. Data deletion capability verification
+      5. Compliance validation (GDPR, HIPAA, etc.)
+
+  # CHARACTERISTIC 7: Fair with Harmful Bias Managed
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Vendor-disclosed bias mitigation:
+      - RLHF training includes fairness considerations (not detailed)
+      - Multilingual training data intended to reduce language bias
+      - Safety testing includes demographic fairness evaluation (limited disclosure)
+      
+      Bias mitigation limitations:
+      - Training data biases not fully characterized
+      - No demographic parity guarantees
+      - Mitigation effectiveness not quantified
+      - Fairness across protected attributes not systematically evaluated
+      
+      Testing conducted:
+      - Red-team testing for harmful stereotypes (not fully disclosed)
+      - Community feedback incorporated (process not detailed)
+
+    known_biases: |
+      Expected biases from training data:
+      - Language performance: Best in English, variable in other supported languages
+      - Cultural biases: Likely reflects Western/English-language web dominance
+      - Demographic biases: Training data likely underrepresents certain demographics
+      - Geographic biases: May perform better on Western contexts
+      - Temporal bias: Knowledge cutoff December 2023
+      
+      Common LLM bias patterns (likely present):
+      - Gender bias in occupational associations
+      - Racial/ethnic stereotyping in descriptive tasks
+      - Socioeconomic bias in scenario generation
+      - Age bias in assumptions and recommendations
+      - Disability representation gaps
+      
+      Bias manifestation areas:
+      - Content generation may reflect stereotypes
+      - Question answering may favor dominant perspectives
+      - Language quality varies by dialect/variant
+      - Cultural context understanding uneven
+
+    assessment_notes: |
+      Bias testing requirements:
+      - Evaluate on domain-specific fairness benchmarks
+      - Test with demographically diverse prompts
+      - Assess output quality across protected attributes
+      - Measure performance gaps across languages/dialects
+      - Evaluate stereotype perpetuation in generated content
+      
+      Fairness deployment considerations:
+      - Human review for decisions affecting individuals
+      - Diverse testing teams for bias detection
+      - Demographic performance monitoring
+      - User feedback mechanisms for bias reporting
+      - Regular fairness audits
+      
+      High-risk bias scenarios:
+      - Hiring/recruitment: Perpetuating occupational stereotypes
+      - Criminal justice: Racial/socioeconomic bias in risk assessment
+      - Healthcare: Disparate quality across demographics
+      - Education: Bias in assessment or content generation
+      - Financial services: Credit/loan decision bias
+      
+      Mitigation strategies:
+      - Implement bias detection in outputs
+      - Use diverse prompt engineering
+      - Ensemble with specialized fairness models
+      - Maintain human oversight for fairness-critical applications
+      - Document observed biases for transparency
+
+# =============================================================================
+# EVALUATION GUIDANCE
+# =============================================================================
+
+evaluation_guidance:
+  recommended_tests: |
+    Pre-deployment testing checklist:
+    
+    1. ACCURACY & PERFORMANCE
+       - Domain-specific accuracy testing on representative data
+       - Hallucination rate measurement (fact-checking against ground truth)
+       - Consistency testing (same prompt, multiple generations)
+       - Context window testing (performance at various lengths up to 128K)
+       - Latency benchmarking on target infrastructure
+       - Throughput testing under expected load
+       Pass criteria: Define acceptable error rates for your use case
+    
+    2. SAFETY & SECURITY
+       - Prompt injection attack testing
+       - Jailbreaking attempt testing
+       - Harmful content generation testing
+       - Content filtering effectiveness validation
+       - Adversarial input robustness testing
+       Pass criteria: Zero critical safety failures, defined threshold for edge cases
+    
+    3. FAIRNESS & BIAS
+       - Demographic performance gap analysis
+       - Stereotype perpetuation testing
+       - Language/dialect quality comparison
+       - Protected attribute handling evaluation
+       Pass criteria: Performance gaps within acceptable thresholds, no egregious stereotypes
+    
+    4. PRIVACY
+       - PII extraction testing
+       - Training data memorization testing
+       - Data handling compliance validation (GDPR, HIPAA, etc.)
+       Pass criteria: No PII leakage, compliant data handling
+    
+    5. OPERATIONAL
+       - Integration testing with your systems
+       - Failover and recovery testing
+       - Monitoring and logging capability validation
+       - Version upgrade/rollback testing
+       Pass criteria: Smooth integration, reliable operations
+    
+    6. COMPLIANCE
+       - License terms acceptance and compliance validation
+       - Regulatory requirement mapping
+       - Documentation completeness review
+       Pass criteria: All compliance requirements satisfied
+
+  key_evaluation_questions: |
+    Critical decision questions:
+    
+    CAPABILITY MATCH:
+    - Does model performance meet our accuracy requirements?
+    - Are 8B parameters sufficient, or do we need 70B/405B?
+    - Is the 128K context window adequate for our use cases?
+    - Do multilingual capabilities match our language needs?
+    - Are reasoning capabilities sufficient for our tasks?
+    
+    RESOURCE & OPERATIONS:
+    - Can our infrastructure support model hosting (GPU, latency, throughput)?
+    - Are we comfortable with self-hosting vs API deployment?
+    - Do we have expertise to operate and monitor the model?
+    - What are total cost implications (compute, storage, bandwidth)?
+    
+    RISK & GOVERNANCE:
+    - Are safety controls adequate for our risk appetite?
+    - Is explainability sufficient for our use cases?
+    - Are bias levels acceptable for our application?
+    - Does privacy protection meet our requirements?
+    - Are we comfortable with training data transparency gaps?
+    
+    LEGAL & COMPLIANCE:
+    - Do license terms permit our intended use?
+    - Are we comfortable with Llama 3.1 Community License restrictions?
+    - Do we meet regulatory requirements (with this model)?
+    - Have we documented model selection rationale for auditing?
+    
+    ALTERNATIVES:
+    - How does this compare to Claude, GPT, or other options?
+    - Are we choosing this for capability, cost, control, or combination?
+    - Have we validated trade-offs against our priorities?
+
+  comparison_considerations: |
+    Alternative model comparison framework:
+    
+    8B CLASS ALTERNATIVES:
+    - Mistral 7B/8B variants: Compare speed, cost, benchmark performance
+    - Gemma 7B/9B: Compare quality, safety, Google ecosystem integration
+    - Phi-3.5 Mini: Compare reasoning, cost, Microsoft ecosystem
+    - Qwen 7B/8B: Compare multilingual capability, Chinese language support
+    
+    COMPARISON DIMENSIONS:
+    
+    Cost vs Quality:
+    - Llama 3.1 8B: Low cost ($0.09/M tokens), good quality for size
+    - Consider: Are 70B/405B quality improvements worth higher cost?
+    
+    Speed vs Accuracy:
+    - Llama 3.1 8B: Fast (160 tok/s), moderate accuracy (8B limitations)
+    - Consider: Can we trade latency for quality with larger model?
+    
+    Open vs Closed:
+    - Llama 3.1 8B: Open weights (control, customization, privacy)
+    - Consider: Do proprietary models (Claude, GPT) justify API lock-in?
+    
+    Self-host vs API:
+    - Llama 3.1 8B: Manageable to self-host (single GPU)
+    - Consider: Infrastructure burden vs API convenience?
+    
+    Deployment constraints:
+    - On-device: Too large for mobile (consider Llama 3.2 1B/3B)
+    - Edge: Possible with quantization
+    - Cloud: Flexible (self-host or API)
+    - Hybrid: Open weights enable mixed deployment
+    
+    USE CASE DIFFERENTIATION:
+    - Coding: Compare HumanEval scores (Llama 3.1 8B: 72.6%)
+    - Reasoning: Compare GSM8K/MATH scores (84.5%/51.9%)
+    - Multilingual: Compare language coverage and quality
+    - Tool use: Evaluate function calling capabilities
+    - Long context: 128K window is competitive advantage
+    
+    TOTAL COST OF OWNERSHIP:
+    - API costs: Input/output token pricing
+    - Infrastructure: GPU hosting costs if self-hosting
+    - Operations: Monitoring, updates, support
+    - Integration: Development time and complexity
+    - Risk: Safety incidents, compliance violations
+
+# =============================================================================
+# NIST AI RMF MAPPING
+# =============================================================================
+
+rmf_function_mapping:
+  # GOVERN: Organizational policies and oversight
+  govern:
+    notes: |
+      Governance framework considerations:
+      
+      POLICY ALIGNMENT:
+      - Document model in organizational AI inventory
+      - Map to existing AI use policies
+      - Establish approval workflow for Llama 3.1 8B deployments
+      - Define acceptable use cases and prohibited uses
+      - Assign ownership and accountability (model steward)
+      
+      VERSION CONTROL:
+      - Track model version (3.1-8B-Instruct)
+      - Maintain change log for model updates
+      - Document prompt engineering changes
+      - Version control integration code
+      
+      OVERSIGHT MECHANISMS:
+      - Define review frequency for model performance
+      - Establish escalation procedures for incidents
+      - Implement usage auditing and logging
+      - Create reporting structure for AI governance board
+      
+      DOCUMENTATION REQUIREMENTS:
+      - Maintain this model card (update as new information emerges)
+      - Document deployment architecture
+      - Record evaluation results and decisions
+      - Track incident history and mitigations
+
+  # MAP: Context and risk identification
+  map:
+    context_considerations: |
+      Risk context assessment:
+      
+      USE CASE CONTEXT:
+      - Who: End users, internal staff, external customers?
+      - What: Task description, criticality, impact scope
+      - Where: Geographic deployment, regulatory jurisdiction
+      - When: Real-time, batch, on-demand?
+      - Why: Business justification, alternatives considered
+      
+      DATA SENSITIVITY:
+      - Public information only: Lower risk profile
+      - PII/confidential data: Requires privacy controls
+      - Regulated data (PHI, financial): May be unsuitable
+      - Intellectual property: Consider confidentiality
+      
+      STAKEHOLDER IMPACT:
+      - Direct users: Immediate impact of errors
+      - Indirect affected parties: Broader societal impact
+      - Protected groups: Fairness and bias considerations
+      - Vulnerable populations: Enhanced protection needed
+      
+      REGULATORY LANDSCAPE:
+      - GDPR (EU): Data protection requirements
+      - AI Act (EU): Risk-based compliance obligations
+      - HIPAA (US): Healthcare data restrictions
+      - FCRA (US): Employment/credit decision transparency
+      - Industry-specific: Sector regulations (finance, etc.)
+
+    risk_categories: 
+      - "Accuracy risk: Hallucination, factual errors, outdated information"
+      - "Safety risk: Harmful content generation, jailbreaking, misuse"
+      - "Security risk: Prompt injection, data exfiltration, adversarial attacks"
+      - "Privacy risk: Training data memorization, PII exposure, data leakage"
+      - "Bias risk: Demographic performance gaps, stereotype perpetuation"
+      - "Explainability risk: Inability to justify decisions, black-box nature"
+      - "Operational risk: Downtime, performance degradation, version instability"
+      - "Legal risk: License compliance, regulatory violations, liability"
+      - "Reputational risk: Public incidents, brand damage, trust erosion"
+
+  # MEASURE: Metrics and monitoring
+  measure:
+    suggested_metrics: |
+      Operational metrics:
+      
+      PERFORMANCE METRICS:
+      - Accuracy: Task-specific error rates (measure against ground truth)
+      - Latency: Time to first token (TTFT), end-to-end response time
+      - Throughput: Requests per second, tokens per second
+      - Availability: Uptime percentage, mean time between failures
+      - Context length utilization: Average/max tokens per request
+      
+      QUALITY METRICS:
+      - Hallucination rate: Fact-checking against known information
+      - Consistency: Variation across multiple generations
+      - User satisfaction: Feedback scores, thumbs up/down
+      - Task completion rate: Successful task execution percentage
+      
+      SAFETY METRICS:
+      - Harmful content rate: Flagged outputs per total outputs
+      - Prompt injection attempts: Detection and blocking rate
+      - Content filter effectiveness: False positive/negative rates
+      - Incident frequency: Safety-related escalations per time period
+      
+      FAIRNESS METRICS:
+      - Demographic performance gaps: Accuracy across protected attributes
+      - Stereotype rate: Biased outputs per total outputs
+      - Language quality variance: Performance across supported languages
+      - User complaint rate: Bias-related feedback
+      
+      OPERATIONAL METRICS:
+      - Error rate: Technical failures per requests
+      - API response codes: Distribution of success/failure codes
+      - Resource utilization: GPU/CPU/memory usage
+      - Cost per request: Infrastructure and API costs
+      
+      COMPLIANCE METRICS:
+      - Policy violations: Usage outside approved use cases
+      - Audit trail completeness: Logging coverage percentage
+      - SLA adherence: Meeting defined service levels
+      
+      MEASUREMENT METHODS:
+      - Automated testing: Continuous evaluation on test sets
+      - User feedback: Ratings, reports, surveys
+      - Manual review: Sample-based quality audits
+      - Logging analysis: Automated pattern detection
+      
+      THRESHOLDS:
+      - Define acceptable ranges for each metric
+      - Establish alerting for threshold breaches
+      - Create escalation procedures for critical issues
+
+  # MANAGE: Risk controls and responses
+  manage:
+    risk_management_considerations: |
+      Risk management framework:
+      
+      TECHNICAL CONTROLS:
+      
+      Input controls:
+      - Input validation and sanitization
+      - Prompt injection detection
+      - Content filtering (pre-processing)
+      - Rate limiting per user/API key
+      - PII redaction before model interaction
+      
+      Output controls:
+      - Content filtering (post-processing)
+      - Fact-checking for critical applications
+      - Output validation against business rules
+      - Harmful content detection and blocking
+      - Confidence scoring (if implemented)
+      
+      Monitoring controls:
+      - Real-time safety monitoring
+      - Anomaly detection for unusual patterns
+      - Performance degradation alerting
+      - Security event logging and alerting
+      - Audit trail generation
+      
+      Infrastructure controls:
+      - Access controls and authentication
+      - Network segmentation
+      - Encryption in transit and at rest
+      - Backup and disaster recovery
+      - Version control and rollback capability
+      
+      PROCESS CONTROLS:
+      
+      Human oversight:
+      - Human-in-the-loop for high-stakes decisions
+      - Review workflows for sensitive outputs
+      - Escalation procedures for edge cases
+      - Expert review for domain-critical applications
+      
+      Quality assurance:
+      - Regular accuracy testing
+      - Bias auditing
+      - Safety testing
+      - User acceptance testing
+      
+      Change management:
+      - Controlled model updates
+      - Testing before production deployment
+      - Gradual rollout procedures
+      - Rollback plans
+      
+      ORGANIZATIONAL CONTROLS:
+      
+      Training:
+      - User training on model capabilities and limitations
+      - Developer training on secure integration
+      - Incident responder training
+      
+      Policies:
+      - Acceptable use policy
+      - Data handling policy
+      - Incident response policy
+      - Model governance policy
+      
+      Documentation:
+      - Model behavior documentation
+      - Known limitations documentation
+      - Incident playbooks
+      - User guidance and disclaimers
+      
+      INCIDENT RESPONSE:
+      
+      Preparation:
+      - Define incident severity levels
+      - Assign incident response roles
+      - Create communication templates
+      - Establish escalation paths
+      
+      Detection:
+      - Monitoring and alerting
+      - User reporting mechanisms
+      - Automated anomaly detection
+      
+      Response:
+      - Immediate mitigations (circuit breakers, feature flags)
+      - Root cause analysis
+      - Corrective actions
+      - Communication to stakeholders
+      
+      Recovery:
+      - Service restoration procedures
+      - Data integrity verification
+      - Post-incident review
+      
+      Lessons learned:
+      - Incident documentation
+      - Control improvements
+      - Training updates
+      - Model card updates
+      
+      CONTINUOUS IMPROVEMENT:
+      
+      Regular reviews:
+      - Quarterly model performance review
+      - Annual risk assessment
+      - Ongoing bias audits
+      - Regular safety testing
+      
+      Feedback loops:
+      - User feedback incorporation
+      - Incident analysis integration
+      - Benchmark tracking
+      - Industry best practice adoption
+      
+      Evolution:
+      - Model update evaluation
+      - Alternative model assessment
+      - Capability expansion planning
+      - Risk control enhancement
+
+# =============================================================================
+# REFERENCES & SOURCES
+# =============================================================================
+
+references:
+  vendor_documentation:
+    - url: "https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct"
+      description: "Official Hugging Face model card with technical specifications, benchmarks, and usage instructions"
+    - url: "https://ai.meta.com/blog/meta-llama-3-1/"
+      description: "Meta AI blog post announcing Llama 3.1 family with overview of capabilities"
+    - url: "https://github.com/meta-llama/llama-models/blob/main/models/llama3_1/MODEL_CARD.md"
+      description: "Detailed model card from Meta's GitHub repository"
+    - url: "https://github.com/meta-llama/llama-models/blob/main/models/llama3_1/eval_details.md"
+      description: "Comprehensive evaluation methodology and benchmark details"
+
+  benchmarks:
+    - name: "MMLU (Massive Multitask Language Understanding)"
+      url: "https://github.com/meta-llama/llama-models/blob/main/models/llama3_1/eval_details.md"
+      result: "69.4% (5-shot, post-trained), 65.6% (5-shot, pre-trained)"
+    - name: "GSM8K (Grade School Math)"
+      url: "https://github.com/meta-llama/llama-models/blob/main/models/llama3_1/eval_details.md"
+      result: "84.5% (8-shot maj@1, post-trained)"
+    - name: "HumanEval (Code Generation)"
+      url: "https://github.com/meta-llama/llama-models/blob/main/models/llama3_1/eval_details.md"
+      result: "72.6% (0-shot pass@1, post-trained)"
+    - name: "MATH (Competition Math)"
+      url: "https://github.com/meta-llama/llama-models/blob/main/models/llama3_1/eval_details.md"
+      result: "51.9% (0-shot CoT, post-trained)"
+    - name: "GPQA (Graduate-Level Science Q&A)"
+      url: "https://github.com/meta-llama/llama-models/blob/main/models/llama3_1/eval_details.md"
+      result: "32.8% (5-shot, post-trained)"
+
+  third_party_evaluations:
+    - source: "Artificial Analysis - Performance Benchmarking"
+      url: "https://artificialanalysis.ai/models/llama-3-1-instruct-8b"
+      summary: "Intelligence Index: 17, Speed: 160 tok/s, Cost: $0.09-0.10 per 1M tokens, Latency: 0.33s TTFT. Confirms competitive performance in 8B class."
+    - source: "Artificial Analysis - API Provider Comparison"
+      url: "https://artificialanalysis.ai/models/llama-3-1-instruct-8b/providers"
+      summary: "Multi-provider benchmarking across Microsoft Azure, Hyperbolic, Amazon Bedrock, Groq, Together.ai, and others"
+    - source: "Analytics Vidhya - Llama 3.1 Storm 8B Analysis"
+      url: "https://www.analyticsvidhya.com/blog/2024/08/llama-3-1-storm-8b/"
+      summary: "Fine-tuned variant demonstrates potential for improvement over base Llama 3.1 8B Instruct across multiple benchmarks"
+    - source: "Medium - Llama 3.1 8B vs 3.2 3B Comparison"
+      url: "https://medium.com/@marketing_novita.ai/llama-3-1-8b-vs-llama-3-2-3b-balancing-power-and-mobile-efficiency-eb4c3856c4af"
+      summary: "Llama 3.1 8B outperforms 3.2 3B on MMLU, HumanEval, GPQA; positioned as general-purpose model vs mobile-optimized variant"
+
+# =============================================================================
+# METADATA
+# =============================================================================
+
+metadata:
+  card_version: "1.0"
+  card_author: "Hatz.ai Evaluation Project"
+  card_creation_date: "2025-01-09"
+  last_updated: "2025-01-09"
+  
+  information_sources: |
+    Primary sources:
+    - Meta official model card (Hugging Face)
+    - Meta GitHub repository (llama-models)
+    - Meta AI blog announcements
+    - Official evaluation details documentation
+    
+    Third-party sources:
+    - Artificial Analysis benchmarking
+    - Community research and analysis
+    - Independent performance testing
+    - Academic papers and technical reports
+    
+    Testing basis:
+    - Published benchmark results
+    - Third-party validation studies
+    - Community feedback and reports
+
+  completeness_assessment: |
+    Information completeness by section:
+    
+    COMPREHENSIVE (high confidence):
+    - Model architecture and specifications
+    - Context window and parameter count
+    - Published benchmark performance
+    - License terms and deployment options
+    - Multilingual capabilities
+    - Performance characteristics (speed, latency)
+    
+    GOOD (moderate confidence):
+    - Safety testing approach
+    - Training methodology overview
+    - Intended use cases
+    - Known limitations from vendor
+    - Tool use and reasoning capabilities
+    
+    PARTIAL (limited confidence):
+    - Training data composition (not fully disclosed)
+    - RLHF methodology details
+    - Bias mitigation specifics
+    - Privacy protections
+    - Fairness evaluation results
+    - Security vulnerability testing results
+    
+    CRITICAL GAPS:
+    - Specific training dataset enumeration
+    - Data sourcing and consent mechanisms
+    - Quantified hallucination rates
+    - Systematic fairness benchmarks across demographics
+    - Privacy evaluation (memorization, extraction)
+    - Real-world safety incident data
+    - Long-term reliability data
+    
+    Confidence level: MODERATE
+    - Technical specifications well-documented
+    - Performance characteristics validated by third parties
+    - Training data transparency limited
+    - Safety/fairness testing not comprehensively disclosed
+    
+    Recommended additional testing:
+    - Domain-specific accuracy evaluation
+    - Hallucination rate measurement
+    - Bias and fairness auditing
+    - Privacy and memorization testing
+    - Security vulnerability assessment
+    - Long-context performance validation
+
+  change_log:
+    - date: "2025-01-09"
+      author: "Hatz.ai Evaluation Project"
+      changes: "Initial model card creation based on Meta documentation, Hugging Face model card, third-party benchmarks, and community evaluation reports"

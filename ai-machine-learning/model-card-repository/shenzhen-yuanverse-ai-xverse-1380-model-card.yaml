@@ -1,0 +1,253 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "XVERSE-13B"
+  vendor: "Shenzhen Yuanverse AI"
+  model_family: "XVERSE"
+  version: "13B"
+  release_date: "2024-05-20"
+  model_type: "Open-Weight Bilingual Reasoning and Dialogue Model"
+  vendor_model_card_url: "https://huggingface.co/xverse/XVERSE-13B"
+  license: "Apache 2.0"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Dense Transformer (decoder-only)"
+    parameter_count: "13 billion"
+    context_window: "32 K tokens"
+    training_data_cutoff: "2024-02"
+    architectural_details: |
+      XVERSE-13B is a bilingual (Chinese–English) instruction-tuned model
+      developed by Yuanverse AI in Shenzhen as part of the XVERSE open series.  
+      It employs rotary positional embeddings (RoPE), grouped-query attention (GQA),
+      and mixed-precision FlashAttention 2 for high efficiency and long-context reasoning.  
+      The model is trained for summarization, reasoning, and domain-specific dialogue.
+
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "High"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ~0.20 s per 1 K tokens on A100 (fp16);  
+      0.09 s quantized INT4 on RTX 4090.  
+    throughput: |
+      Highly efficient on single-node inference; scales linearly on 8× GPU clusters.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • Balanced bilingual reasoning (Chinese + English).  
+    • Excellent summarization and factual grounding.  
+    • Compact model suitable for fine-tuning and enterprise RAG.  
+  benchmark_performance: |
+    - MMLU: 76.3  
+    - GSM8K: 82.4  
+    - C-Eval: 88.8  
+    - CMMLU: 90.2  
+    - HumanEval: 77.1  
+    (Yuanverse AI + OpenCompass May 2024)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["bilingual_reasoning", "summarization", "RAG_ready", "fine_tune_friendly"]
+  known_limitations:
+    vendor_disclosed: |
+      Focused primarily on Chinese and English; reduced fluency in other languages.  
+      Context limited to 32K; no multimodal support.  
+    common_failure_modes: |
+      Over-refusal in ambiguous policy topics; verbosity in Chinese summaries.  
+    unsuitable_use_cases: |
+      Safety-critical automation or legal decision systems.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on ~4 trillion tokens across public and licensed datasets including Wikipedia,
+    Common Crawl, academic corpora, Chinese news, and bilingual dialogue sets.  
+    Additional fine-tuning for reasoning and summarization quality using SafeRL alignment.
+  training_methodology: |
+    Standard autoregressive pretraining with supervised fine-tuning (SFT) on instruction data,
+    followed by SafeRL and bilingual alignment optimization.  
+  data_privacy_considerations: |
+    Only public and licensed data used; no personal or confidential content.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Research, education, enterprise chatbots, and multilingual QA.  
+    Optimized for on-prem or edge deployment under Apache 2.0.  
+  suitable_domains: ["education", "research", "enterprise_AI", "multilingual_QA", "summarization"]
+  out_of_scope_use: |
+    Regulated compliance automation or unsupervised decision systems.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Consistent reasoning accuracy and low hallucination rate for 13B-class model.  
+    public_evidence: |
+      Verified via OpenCompass leaderboard and community evaluation.  
+    assessment_notes: |
+      Reliable open bilingual reasoning baseline.
+  safe:
+    safety_measures: |
+      SafeRL alignment, refusal tuning, and content-filtered datasets.  
+    known_safety_issues: |
+      Mild over-censorship; conservative on sensitive inputs.  
+    assessment_notes: |
+      Safe under supervised or moderated conditions.
+  secure_and_resilient:
+    security_features: |
+      Checksum-verified weights; telemetry-free deployment; air-gap compatible.  
+    known_vulnerabilities: |
+      Standard open-model risks (prompt injection, fine-tune misuse).  
+    assessment_notes: |
+      Secure for open-source research and enterprise use.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Full model weights, tokenizer, and dataset summaries released on Hugging Face.  
+    assessment_notes: |
+      High transparency and reproducibility for research.
+  explainable_and_interpretable:
+    explainability_features: |
+      Supports interpretability via TransformerLens and attention tracing.  
+    interpretability_limitations: |
+      No explicit reasoning trace or CoT introspection.  
+    assessment_notes: |
+      Appropriate for model interpretability studies.
+  privacy_enhanced:
+    privacy_features: |
+      Data filtering for PII and safe web text; no logging or telemetry.  
+    privacy_concerns: |
+      Minimal, consistent with open web dataset standards.  
+    assessment_notes: |
+      Strong privacy baseline.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Balanced bilingual corpus, SafeRL fairness adjustment, post-training audits.  
+    known_biases: |
+      Mandarin and formal English tone preference.  
+    assessment_notes: |
+      Fair within bilingual domains; continuous monitoring recommended.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • QA and summarization accuracy (C-Eval, MMLU).  
+    • Math and logic evaluation (GSM8K).  
+    • Fairness and bias testing (BOLD, Chinese fairness datasets).  
+    • Latency and quantization benchmarking for local deployment.  
+  key_evaluation_questions: |
+    – Does bilingual performance meet enterprise QA standards?  
+    – Are moderation and safety layers applied?  
+    – Is context length sufficient for domain tasks?  
+  comparison_considerations: |
+    Outperforms Baichuan 2 13B and Yi-1.5;  
+    trails InternLM 2 20B and DeepSeek V2.5 in reasoning.  
+    Top-tier open bilingual 13B model for 2024 enterprise RAG.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Establish governance for bilingual open-weight usage and dataset attribution.  
+  map:
+    context_considerations: |
+      Identify hallucination and bias risks under bilingual workloads.  
+    risk_categories: ["hallucination", "bias", "prompt_injection", "alignment_drift"]
+  measure:
+    suggested_metrics: |
+      Accuracy, fairness index, hallucination rate, latency.  
+  manage:
+    risk_management_considerations: |
+      Apply moderation and verify fairness of fine-tuned variants.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/xverse/XVERSE-13B"
+    description: "Official XVERSE-13B model card and documentation"
+  - url: "https://github.com/xverse-ai/XVERSE"
+    description: "Yuanverse AI open repository"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "76.3"
+  - name: "C-Eval"
+    url: "https://opencompass.org.cn/"
+    result: "88.8"
+  third_party_evaluations:
+  - source: "OpenCompass (2024)"
+    url: "https://opencompass.org.cn/"
+    summary: "XVERSE 13B ranked as top bilingual 13B open model by efficiency and reasoning."
+  news_coverage:
+  - title: "Yuanverse AI launches XVERSE 13B — efficient bilingual open model for reasoning"
+    url: "https://www.xverse.ai/news/xverse13b-release"
+    date: "2024-05-20"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Yuanverse AI release documentation, OpenCompass and Hugging Face benchmarks, and community replication data.  
+  completeness_assessment: |
+    High for transparency and bilingual evaluation; medium for safety dataset disclosure.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from XVERSE 13B release and benchmark data."

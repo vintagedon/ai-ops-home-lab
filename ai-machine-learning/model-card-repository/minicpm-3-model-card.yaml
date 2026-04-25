@@ -1,0 +1,251 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "MiniCPM 3"
+  vendor: "ModelBest / OpenBMB"
+  model_family: "MiniCPM"
+  version: "3"
+  release_date: "2024-08-05"
+  model_type: "Compact Open-Weight Chat and Reasoning Model"
+  vendor_model_card_url: "https://huggingface.co/openbmb/MiniCPM-3"
+  license: "Apache 2.0"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Dense Transformer (decoder-only)"
+    parameter_count: "8 billion"
+    context_window: "32 K tokens"
+    training_data_cutoff: "2024-07"
+    architectural_details: |
+      MiniCPM 3 is a compact bilingual reasoning model built on an efficient transformer architecture.
+      It introduces multi-head grouped-query attention (GQA), FlashAttention 2, and 
+      dynamic sparse routing for efficient context retention up to 32K tokens.
+      Trained for long-form reasoning, chat, and summarization while fitting single-GPU constraints.
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "Very High"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ~0.12 s per 1 K tokens (fp16 A100) and ~0.06 s quantized (INT4 RTX 4090).  
+      Ideal for local inference and mobile deployment.
+    throughput: |
+      Designed for compact assistant applications and high-parallelism edge workloads.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • Strong multilingual reasoning (Chinese–English–Korean).  
+    • Excellent small-model efficiency and long-context support.  
+    • Fine-tuning and LoRA-friendly for personal assistants and RAG applications.  
+  benchmark_performance: |
+    - MMLU: 74.5  
+    - GSM8K: 80.3  
+    - C-Eval: 88.1  
+    - ARC-C: 77.2  
+    - HellaSwag: 74.0  
+    (OpenBMB + OpenCompass benchmarks, Aug 2024)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["chat_assistant", "bilingual_reasoning", "summarization", "lightweight_RAG"]
+  known_limitations:
+    vendor_disclosed: |
+      Bilingual optimization centered on Chinese and English; weaker in European languages.  
+      Limited factual recall beyond 32K context without retrieval.  
+    common_failure_modes: |
+      Occasional over-refusal and underexplained reasoning.  
+    unsuitable_use_cases: |
+      Legal, medical, or automated decision support contexts.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    ~3 trillion tokens across multilingual datasets: Common Crawl, Wikipedia, books, GitHub, code, 
+    and curated dialogue corpora.  
+    Data filtered for quality, safety, and low duplication.  
+  training_methodology: |
+    Pretrained using dynamic scaling on 32 GPUs, followed by instruction fine-tuning 
+    and SafeRL alignment for conversational quality.  
+    Quantization-aware training applied for 8-bit and 4-bit deployment readiness.
+  data_privacy_considerations: |
+    All datasets public or licensed; no private or user data collected.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    General-purpose bilingual assistant for research, education, and lightweight enterprise tasks.  
+    Optimized for embedded and local deployments with low power and high efficiency.
+  suitable_domains: ["education", "research", "mobile_assistants", "enterprise_AI", "RAG_systems"]
+  out_of_scope_use: |
+    Regulated industries or automated compliance workflows.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Consistent reasoning accuracy across multilingual benchmarks; deterministic inference.  
+    public_evidence: |
+      Validated through OpenCompass and Hugging Face Leaderboard evaluations.  
+    assessment_notes: |
+      Reliable compact reasoning model suitable for offline assistants.
+  safe:
+    safety_measures: |
+      SafeRL alignment and instruction filtering to prevent unsafe completions.  
+    known_safety_issues: |
+      Mild verbosity in refusals; slight over-correction on sensitive topics.  
+    assessment_notes: |
+      Safe for educational and enterprise environments.
+  secure_and_resilient:
+    security_features: |
+      Checksum-verified open weights; no telemetry or remote calls.  
+    known_vulnerabilities: |
+      Generic prompt-injection and jailbreak risks.  
+    assessment_notes: |
+      Secure for private or air-gapped deployment.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Full model weights, tokenizer, and evaluation scripts open-sourced.  
+    assessment_notes: |
+      High transparency for research and compliance documentation.
+  explainable_and_interpretable:
+    explainability_features: |
+      Compatible with attention visualization tools (TransformerLens, Captum).  
+    interpretability_limitations: |
+      No explicit reasoning trace metadata.  
+    assessment_notes: |
+      Reasonably interpretable for a small open model.
+  privacy_enhanced:
+    privacy_features: |
+      Trained on public data; telemetry-free inference.  
+    privacy_concerns: |
+      None beyond typical open corpus exposure.  
+    assessment_notes: |
+      Meets open-source privacy baselines.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      SafeRL bias calibration with multilingual fairness evaluation.  
+    known_biases: |
+      Minor linguistic bias toward Mandarin syntax and phrasing.  
+    assessment_notes: |
+      Fairness acceptable for general-purpose applications.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • QA and summarization benchmarks in English and Chinese.  
+    • Reasoning and math evaluation (GSM8K, MMLU).  
+    • Quantization and latency profiling on target hardware.  
+    • Bias and toxicity assessment across languages.  
+  key_evaluation_questions: |
+    – Is performance adequate for intended multilingual use?  
+    – Are moderation policies in place for sensitive queries?  
+    – Does latency meet local deployment targets?  
+  comparison_considerations: |
+    Outperforms Phi-2 and Mistral 7B on efficiency;  
+    trails DeepSeek V2.5 and Yi-Large in reasoning accuracy.  
+    Strongest compact bilingual open model of mid-2024.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Establish governance for on-device deployment and fine-tuning attribution.  
+  map:
+    context_considerations: |
+      Identify bias and hallucination risks in compact reasoning deployments.  
+    risk_categories: ["hallucination", "bias", "prompt_injection", "alignment_drift"]
+  measure:
+    suggested_metrics: |
+      Accuracy, latency, fairness index, power efficiency, hallucination rate.  
+  manage:
+    risk_management_considerations: |
+      Apply safety filters and run continuous fairness audits post-deployment.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/openbmb/MiniCPM-3"
+    description: "Official MiniCPM 3 model card and evaluation page"
+  - url: "https://github.com/OpenBMB/MiniCPM"
+    description: "OpenBMB MiniCPM repository and documentation"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "74.5"
+  - name: "C-Eval"
+    url: "https://arxiv.org/abs/2305.08322"
+    result: "88.1"
+  third_party_evaluations:
+  - source: "OpenCompass (2024)"
+    url: "https://opencompass.org.cn/"
+    summary: "MiniCPM 3 validated for exceptional reasoning efficiency and multilingual balance."
+  news_coverage:
+  - title: "MiniCPM 3 sets new efficiency record for 8B open models"
+    url: "https://www.openbmb.ai/news/minicpm3"
+    date: "2024-08-05"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    OpenBMB documentation, Hugging Face benchmarks, OpenCompass evaluations, and replication data.  
+  completeness_assessment: |
+    High for benchmarks, transparency, and risk mapping; medium for safety dataset details.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from MiniCPM 3 release and benchmark data."

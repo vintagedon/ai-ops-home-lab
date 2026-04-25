@@ -1,0 +1,257 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Yi Edge Vision 70B"
+  vendor: "01.AI"
+  model_family: "Yi Edge Vision"
+  version: "70B"
+  release_date: "2025-10-16"
+  model_type: "Flagship Bilingual Multimodal Model (Sovereign AI & Regulated Industry)"
+  vendor_model_card_url: "https://huggingface.co/01-ai/Yi-Edge-Vision-70B"
+  license: "Apache 2.0"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Multimodal Transformer (Yi Edge 70B + ViT-H/14 visual encoder)"
+    parameter_count: "70 billion"
+    context_window: "64 K text tokens + 2048 visual tokens"
+    training_data_cutoff: "2025-09"
+    architectural_details: |
+      Yi Edge Vision 70B is the enterprise and sovereign-grade bilingual multimodal model in the Yi Edge line.  
+      Built for compliance-critical and air-gapped deployments, it combines the Yi Edge 70B text model
+      with a ViT-H/14 encoder, FP8 precision, and quantization-aware long-context reasoning.  
+      Supports multilingual OCR, scientific diagrams, and regulatory document comprehension with full transparency
+      and zero external dependencies.  
+      Designed to meet sovereign AI standards for privacy, auditability, and reliability.
+
+  modalities:
+    supported_inputs: ["text", "image"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "High (FP8 Optimized for Clusters)"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ~0.10 s per 1K tokens (FP8 H100 node) + ~0.15 s per 224×224 image.  
+      Highly parallelized inference; supports real-time document QA in sovereign data centers.  
+    throughput: |
+      Scales linearly up to 16 GPUs with minimal context loss, enabling 64K bilingual reasoning.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • Multimodal bilingual reasoning for regulated, compliant, and sovereign AI applications.  
+    • 64K context for extended documents, contracts, and multilingual OCR QA.  
+    • Offline-capable, telemetry-free design for government and critical enterprise use.  
+  benchmark_performance: |
+    - VQA v2: 87.6  
+    - DocVQA: 91.2  
+    - ScienceQA (Text+Image): 92.8  
+    - OCRBench: 94.3  
+    - C-Eval (ZH): 83.5  
+    (01.AI internal + EdgeBench Sovereign Track, Oct 2025)
+  special_capabilities:
+    tools_support: true
+    vision_support: true
+    reasoning_support: very_strong
+    image_generation: false
+    additional_capabilities: ["regulatory_document_QA", "sovereign_AI_compliance", "multilingual_OCR", "enterprise_multimodal_RAG"]
+  known_limitations:
+    vendor_disclosed: |
+      Model size unsuitable for single-device edge inference.  
+      Training data predominantly bilingual (EN–ZH); non-Latin OCR weaker.  
+    common_failure_modes: |
+      Overlong captions and hyper-literal translations under 64K context workloads.  
+    unsuitable_use_cases: |
+      Real-time surveillance, low-power IoT, or entertainment content creation.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on ≈7.2T multimodal bilingual tokens covering academic, legal, technical, and OCR datasets.  
+    Core sources: Wukong-Doc++, LAION-COCO, DocVQA, ScienceQA, multilingual government archives, and synthetic RAG datasets.  
+    All corpora license-verified, filtered for factual consistency, and privacy compliance.  
+  training_methodology: |
+    1. Multimodal pretraining using bilingual contrastive alignment.  
+    2. Instruction fine-tuning for document QA and multilingual OCR reasoning.  
+    3. FP8 quantization-aware training for sovereign AI deployment.  
+    4. DPO alignment for factual grounding, safety, and tone neutrality.  
+  data_privacy_considerations: |
+    PII redacted; all data pipeline logs published for traceability and compliance.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Designed for sovereign AI, regulatory compliance, and high-trust enterprise deployments.  
+    Suitable for multilingual document review, compliance reporting, and legal–technical document QA.  
+  suitable_domains: ["sovereign_AI", "enterprise_AI", "document_compliance", "research", "education"]
+  out_of_scope_use: |
+    Biometric analysis, facial recognition, or consumer entertainment systems.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Achieves parity with 70B closed-weight models on bilingual multimodal benchmarks.  
+    public_evidence: |
+      Verified by EdgeBench Sovereign AI Track and third-party compliance testing.  
+    assessment_notes: |
+      Reliable, reproducible, and well-calibrated model for regulated sectors.
+  safe:
+    safety_measures: |
+      Policy-filtered alignment, refusal modeling, and bias-sensitive moderation.  
+    known_safety_issues: |
+      Conservative refusal bias on neutral legal or political text.  
+    assessment_notes: |
+      Safe for deployment in compliance-driven environments.
+  secure_and_resilient:
+    security_features: |
+      Hardware key signing, air-gap compatible, checksum verification.  
+      Supports enclave execution for sovereign workloads.  
+    known_vulnerabilities: |
+      Vulnerable to OCR injection in unfiltered PDFs.  
+    assessment_notes: |
+      Secure under institutional controls and sandboxed RAG integration.
+  accountable_and_transparent:
+    transparency_level: "Very High"
+    auditability: |
+      Full model lineage, dataset disclosures, and compliance audit logs available.  
+    assessment_notes: |
+      Meets sovereign AI transparency and auditability benchmarks.
+  explainable_and_interpretable:
+    explainability_features: |
+      Visual grounding heatmaps, bilingual token explanations, and regulatory trace tagging.  
+    interpretability_limitations: |
+      Slightly reduced visual attribution precision under fp8 compression.  
+    assessment_notes: |
+      Sufficient interpretability for compliance and forensic review.
+  privacy_enhanced:
+    privacy_features: |
+      Full offline inference, encryption-at-rest, and zero telemetry.  
+      All model artifacts compatible with sovereign privacy frameworks.  
+    privacy_concerns: |
+      None detected.  
+    assessment_notes: |
+      Fully compliant with privacy-by-design governance principles.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Bilingual corpus balancing and region-aware fairness tuning.  
+    known_biases: |
+      Limited representation of non-Mandarin East Asian and Indic scripts.  
+    assessment_notes: |
+      High fairness compliance within bilingual and enterprise use scopes.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • Multimodal compliance QA and multilingual OCR accuracy.  
+    • Fairness and safety audits under regulatory test suites.  
+    • FP8 quantization and alignment drift verification.  
+  key_evaluation_questions: |
+    – Does factual accuracy persist at full 64K context length?  
+    – Are multilingual QA outputs semantically consistent and safe?  
+    – Is system performance stable under sovereign deployment constraints?  
+  comparison_considerations: |
+    Outperforms Yi Edge Vision 34B and Qwen-VL 72B in compliance QA;  
+    trails GPT-5V and Gemini 1.5 Pro in open-domain reasoning.  
+    Benchmark leader in open sovereign AI multimodal compliance as of late 2025.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Implements sovereign AI governance, model lineage tracking, and audit-readiness per NIST AI RMF "Govern."  
+  map:
+    context_considerations: |
+      OCR hallucination, quantization drift, and cultural bias risks.  
+    risk_categories: ["bias", "hallucination", "alignment_drift", "quantization_drift"]
+  measure:
+    suggested_metrics: |
+      OCR F1, factual QA, fairness index, energy efficiency, policy refusal accuracy.  
+  manage:
+    risk_management_considerations: |
+      Maintain regular compliance audits, alignment refresh cycles, and safety regression testing.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/01-ai/Yi-Edge-Vision-70B"
+    description: "Official Yi Edge Vision 70B model card"
+  - url: "https://01.ai/news/yi-edge-vision70b-release"
+    description: "01.AI release announcement and sovereign AI whitepaper"
+  benchmarks:
+  - name: "DocVQA"
+    url: "https://rrc.cvc.uab.es/?ch=17"
+    result: "91.2"
+  - name: "OCRBench"
+    url: "https://ocrbench.ai/"
+    result: "94.3"
+  third_party_evaluations:
+  - source: "EdgeBench Sovereign AI Track (2025)"
+    url: "https://edgebench.ai/sovereign"
+    summary: "Yi Edge Vision 70B validated as sovereign-ready multimodal reasoning model."
+  news_coverage:
+  - title: "01.AI releases Yi Edge Vision 70B — sovereign AI model for regulated industries"
+    url: "https://01.ai/news/yi-edge-vision70b-release"
+    date: "2025-10-16"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    01.AI Edge Vision documentation, EdgeBench Sovereign AI reports, Hugging Face leaderboard data.  
+  completeness_assessment: |
+    Very high for compliance and transparency; medium for cross-cultural linguistic diversity metrics.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from Yi Edge Vision 70B release and benchmark data."

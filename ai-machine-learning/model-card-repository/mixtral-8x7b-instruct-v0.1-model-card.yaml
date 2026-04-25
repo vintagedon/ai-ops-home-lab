@@ -1,0 +1,1096 @@
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+# Model Card: Mixtral-8x7B-Instruct-v0.1
+# Populated from: https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1
+# Date: 2025-10-28
+
+schema_version: "1.0.0"
+
+# =============================================================================
+# MODEL IDENTITY
+# =============================================================================
+
+model_identity:
+  name: "Mixtral-8x7B-Instruct-v0.1"
+  vendor: "Mistral AI"
+  model_family: "Mixtral"
+  version: "v0.1"
+  release_date: "2023-12-11"
+  model_type: "Large Language Model - Sparse Mixture of Experts"
+
+  vendor_model_card_url: "https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1"
+
+  license: "Apache 2.0"
+  
+  deprecation_status: "Active"
+
+# =============================================================================
+# MODEL ARCHITECTURE & TECHNICAL SPECIFICATIONS
+# =============================================================================
+
+technical_specifications:
+  architecture:
+    base_architecture: "Sparse Mixture of Experts (SMoE) Transformer decoder"
+    
+    parameter_count: "46.7B total parameters (12.9B active parameters per token)"
+    
+    context_window: "32,768 tokens"
+    
+    training_data_cutoff: "Not publicly disclosed (approximately December 2023)"
+
+    architectural_details: |
+      Mixtral-8x7B-Instruct is an instruction-tuned version of Mixtral-8x7B base model.
+      
+      Core Architecture - Sparse Mixture of Experts (SMoE):
+      - 8 expert networks per layer (each expert is a feed-forward block)
+      - Router network selects 2 experts per token at each layer
+      - Total: 46.7 billion parameters (sometimes reported as 47B)
+      - Active: Only 12.9 billion parameters used per token during inference
+      - Compute equivalent to a ~14B dense model
+      - 6x faster inference than Llama 2 70B while matching/exceeding performance
+      
+      Shared Architecture Features with Mistral 7B:
+      - Sliding Window Attention (SWA): Each layer attends to previous 4,096 hidden states
+      - Grouped-Query Attention (GQA): Accelerates inference with reduced memory
+      - Rolling Buffer Cache: Efficient memory management
+      - Byte-fallback BPE tokenizer
+      - 32k token context window
+      
+      Expert Selection Mechanism:
+      - Router network at each layer selects top-2 experts from 8 available
+      - Different experts can be selected for different tokens and layers
+      - Weighted sum of expert outputs produces final layer output
+      - Enables specialization while maintaining computational efficiency
+      
+      Instruction Fine-tuning:
+      - Supervised Fine-Tuning (SFT) for instruction following
+      - Direct Preference Optimization (DPO) on paired feedback datasets
+      - Optimized for careful instruction following and conversational interactions
+      - Strict instruction format required: <s> [INST] {instruction} [/INST] {response}</s>
+      
+      Multilingual Capabilities:
+      - Native fluency in English, French, German, Spanish, and Italian
+      - Trained on multilingual datasets with nuanced grammar and cultural context understanding
+
+  modalities:
+    supported_inputs: ["text"]
+    
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "Near real-time (6x faster than Llama 2 70B)"
+    
+    cost_tier: "Moderate (best cost/performance trade-off in class)"
+    
+    latency: "Faster than dense 70B models; requires ~86GB RAM for base, GPU-dependent for specific metrics"
+    
+    throughput: "Higher throughput than dense models of similar quality due to sparse activation"
+
+# =============================================================================
+# CAPABILITIES & LIMITATIONS
+# =============================================================================
+
+capabilities:
+  vendor_claimed_strengths: |
+    According to Mistral AI documentation:
+    - Outperforms Llama 2 70B on most benchmarks with 6x faster inference
+    - Matches or outperforms GPT-3.5 on most standard benchmarks
+    - Strongest open-weight model with permissive license
+    - Best model overall regarding cost/performance trade-offs
+    - Vastly superior to Llama 2 70B on code and mathematics benchmarks
+    - Native multilingual capabilities: English, French, German, Spanish, Italian
+    - 32k token context window with 100% passkey retrieval accuracy
+    - Reduced hallucinations and biases compared to Llama 2 (74% TruthfulQA)
+    - Less bias on BBQ benchmark (56.0% vs Llama 2's 51.5%)
+    - More balanced sentiment profile on BOLD benchmark
+    - Mixtral-Instruct achieves 8.3 on MT-Bench, surpassing GPT-3.5 Turbo, Claude 2.1, Gemini Pro
+    - Efficient sparse activation reduces inference costs significantly
+    - 100% retrieval accuracy on passkey task regardless of context length or position
+
+  benchmark_performance: |
+    Vendor-reported benchmarks (Mixtral 8x7B base and Instruct):
+    
+    MMLU (5-shot): ~70% (outperforms Llama 2 70B despite smaller capacity)
+    MT-Bench: 8.3 (Mixtral-Instruct outperforms GPT-3.5 Turbo, Claude 2.1, Gemini Pro, Llama 2 70B chat)
+    
+    Comprehensive Benchmark Suite vs Llama 2 70B:
+    - Commonsense Reasoning: Superior (HellaSwag, Winogrande, PIQA, ARC-Challenge, ARC-Easy)
+    - World Knowledge: Superior (TriviaQA, NaturalQuestions)
+    - Reading Comprehension: On par (BoolQ, QuAC)
+    - Mathematics: Vastly superior (GSM8K, MATH)
+    - Code Generation: Vastly superior (HumanEval, MBPP)
+    - Reasoning: Superior (BBH - Big Bench Hard)
+    - AGI Eval: Competitive
+    
+    Comparison with GPT-3.5:
+    - Matches or exceeds GPT-3.5 on most standard benchmarks
+    - HumanEval: Comparable performance
+    - MMLU: Better than GPT-3.5
+    
+    Multilingual Performance:
+    - Outperforms Llama 2 70B on French, German, Spanish, Italian benchmarks
+    - Strong performance on ARC Challenge, HellaSwag, MMLU across all supported languages
+    
+    Safety & Bias:
+    - TruthfulQA: 74% (reduced hallucinations)
+    - BBQ (Bias Benchmark): 56.0% (less bias than Llama 2)
+    - BOLD: More balanced sentiment with similar variance
+    
+    Long Context:
+    - Passkey Retrieval: 100% accuracy at all context lengths (0-32k tokens)
+    - Perplexity decreases monotonically with longer context on proof-pile dataset
+    
+    Note: Performance achieved while using 5x fewer active parameters than Llama 2 70B during inference.
+
+  special_capabilities:
+    tools_support: false
+    
+    vision_support: false
+    
+    reasoning_support: true
+    
+    image_generation: false
+    
+    additional_capabilities: ["multilingual_fluency", "instruction_following", "code_generation", "mathematical_reasoning", "long_context_handling", "efficient_sparse_inference"]
+
+  known_limitations:
+    vendor_disclosed: |
+      From Mistral AI documentation:
+      - No moderation mechanisms implemented
+      - Model does not include built-in guardrails for content filtering
+      - Requires explicit guardrails for deployment in environments requiring moderated outputs
+      - Vendor invites community engagement on implementing moderation controls
+      - No function calling support (unlike later Mistral models)
+      - Text-only model (no vision capabilities)
+      - Strict instruction format required for optimal performance
+
+    common_failure_modes: |
+      Common to Mixture of Experts LLMs:
+      - Hallucination: Despite 74% TruthfulQA, can still generate incorrect information
+      - Memory footprint misconception: While only 12.9B active per token, ALL 46.7B parameters must be loaded in RAM
+      - Expert switching overhead: Memory pressure spikes during expert loading and batch processing
+      - Capacity planning errors: Teams miscalculate requirements using active parameters instead of total
+      - Instruction format sensitivity: Performance degrades significantly if instruction template not followed exactly
+      - Resource requirements: Needs ~86GB RAM minimum, making deployment challenging
+      - Quantization trade-offs: Q4 quantization viable but requires careful validation
+      - Multi-turn consistency: May lose context in very long conversations
+      - Domain-specific limitations: General-purpose model may underperform on highly specialized tasks
+      - Prompt engineering dependency: Quality varies significantly with prompt structure
+
+    unsuitable_use_cases: |
+      This model should NOT be used for:
+      - Unmoderated content generation in public-facing applications (no built-in safety)
+      - High-stakes decision-making without human review (medical, legal, financial)
+      - Safety-critical systems without additional safeguards
+      - Applications requiring guaranteed factual accuracy without verification
+      - Regulated domains without appropriate validation and compliance measures
+      - Child-facing applications without content moderation
+      - Production systems where hallucinations could cause significant harm
+      - Deployments on consumer hardware with <86GB RAM (without quantization)
+      - Real-time systems requiring sub-100ms latency on limited hardware
+      - Applications requiring function calling or tool use (use later Mistral models)
+      - Vision-based tasks (text-only model)
+      - Tasks requiring moderation of harmful, toxic, or inappropriate content
+
+# =============================================================================
+# TRAINING & DATA
+# =============================================================================
+
+training_information:
+  training_data_description: |
+    Base Model (Mixtral-8x7B):
+    - Trained on multilingual datasets encompassing diverse domains
+    - Languages: English, French, German, Spanish, Italian
+    - Data sources not specifically disclosed by Mistral AI
+    - Emphasis on diverse, linguistically varied content
+    - Knowledge current to approximately December 2023
+    - Training data size and composition not publicly detailed
+    
+    Instruction Fine-tuning (Mixtral-Instruct):
+    - Supervised Fine-Tuning (SFT) on instruction-following datasets
+    - Direct Preference Optimization (DPO) on paired feedback datasets
+    - Specific datasets not enumerated in public documentation
+    - Focused on careful instruction following and conversational quality
+    - No proprietary instruction data disclosed
+
+  training_methodology: |
+    Base Model Training:
+    - Sparse Mixture of Experts (SMoE) architecture with 8 experts per layer
+    - Top-2 routing: Router network selects 2 of 8 experts per token
+    - Trained with 32k token context window
+    - Sliding Window Attention (SWA) for efficient long-sequence handling
+    - Grouped-Query Attention (GQA) for fast inference
+    - Rolling buffer cache for memory optimization
+    - Byte-fallback BPE tokenization
+    
+    Instruction Fine-tuning:
+    - Supervised Fine-Tuning (SFT) phase
+    - Followed by Direct Preference Optimization (DPO) on paired feedback
+    - Optimized for instruction following and conversational quality
+    - Strict instruction format enforcement: <s> [INST] {text} [/INST]
+    - Human evaluation and benchmarking against GPT-3.5, Claude, Gemini
+    
+    Infrastructure:
+    - Training infrastructure not fully disclosed
+    - Mistral AI leverages FlashAttention, vLLM, xFormers optimizations
+    - No specific GPU requirements or training duration published
+
+  data_privacy_considerations: |
+    - Training data sources and composition not fully disclosed
+    - No documented PII filtering or consent mechanisms
+    - Multilingual training suggests diverse international sources
+    - Privacy practices during data collection unknown
+    - Users should assume training data includes publicly available internet text
+    - No documented data governance or sourcing transparency
+    - For sensitive deployments, assess data provenance risks independently
+    - Recommended to implement additional privacy controls for enterprise use
+    - No explicit privacy-preserving training techniques documented
+
+# =============================================================================
+# INTENDED USE & SCOPE
+# =============================================================================
+
+intended_use:
+  vendor_intended_use: |
+    Per Mistral AI documentation:
+    - General-purpose language understanding and generation
+    - Instruction-following and conversational AI applications
+    - Code generation and understanding across multiple languages
+    - Mathematical reasoning and problem-solving
+    - Multilingual applications (English, French, German, Spanish, Italian)
+    - Long-context tasks (up to 32k tokens)
+    - Text summarization, translation, and transformation
+    - Question answering and information retrieval
+    - Research and development in AI/ML
+    - Cost-effective alternative to larger dense models or proprietary APIs
+    - Applications requiring balance of performance and inference cost
+    - Demonstrating Mixture of Experts architecture capabilities
+
+  suitable_domains: ["conversational_ai", "multilingual_applications", "code_generation", "mathematical_reasoning", "content_generation", "research_and_development", "text_analysis", "translation", "long_document_processing", "instruction_following_tasks"]
+
+  out_of_scope_use: |
+    Out-of-scope uses include:
+    - Unmoderated content generation without safety controls (no built-in moderation)
+    - High-stakes automated decisions without human oversight
+    - Medical diagnosis, legal advice, or financial recommendations without expert validation
+    - Safety-critical systems without additional safeguards
+    - Real-time applications on resource-constrained hardware
+    - Function calling or tool use (not supported in v0.1)
+    - Vision or multimodal tasks (text-only model)
+    - Child-facing applications without content moderation
+    - Applications requiring guaranteed factual accuracy or real-time fact verification
+    - Production systems where hallucinations could cause significant harm
+    - Deployments without proper capacity planning (86GB+ RAM required)
+    - Tasks requiring explicit content moderation (lacks built-in controls)
+
+# =============================================================================
+# TRUSTWORTHINESS CHARACTERISTICS
+# =============================================================================
+
+trustworthiness_assessment:
+  # CHARACTERISTIC 1: Valid and Reliable
+  valid_and_reliable:
+    vendor_claims: |
+      Mistral AI provides:
+      - Extensive benchmark results showing superiority over Llama 2 70B
+      - Matches or exceeds GPT-3.5 performance on most standard benchmarks
+      - 8.3 MT-Bench score, outperforming GPT-3.5 Turbo, Claude 2.1, Gemini Pro
+      - 6x faster inference than Llama 2 70B with better performance
+      - 100% passkey retrieval accuracy across all context lengths
+      - 74% TruthfulQA score (reduced hallucinations)
+      - Less bias (56.0% BBQ vs Llama 2's 51.5%)
+      - Independent re-evaluation of comparison models for fairness
+
+    public_evidence: |
+      - Model widely adopted: 17.4M downloads, 4,579 likes on HuggingFace
+      - 100+ demo spaces demonstrating real-world usage
+      - Independent benchmarks (MT-Bench, LMSYS Arena) confirm vendor claims
+      - Community validation of performance characteristics
+      - MLPerf Inference benchmark includes Mixtral 8x7B
+      - Multiple deployment guides and tutorials from community
+      - Successfully deployed by numerous organizations
+      - Quantized versions (TheBloke) enable broader hardware access
+      - Academic papers analyzing architecture and performance
+
+    assessment_notes: |
+      Validation considerations:
+      - Benchmark performance extensively documented and independently verified
+      - Architecture innovation (SMoE) proven effective for cost/performance
+      - Memory requirements often misunderstood - ALL 46.7B params must load despite sparse activation
+      - Performance depends heavily on correct instruction format
+      - Domain-specific validation still recommended before deployment
+      - Long context capabilities well-validated (passkey task)
+      - Multilingual performance verified across supported languages
+      - Resource requirements limit accessibility compared to smaller models
+      - Expert routing adds complexity to deployment and monitoring
+
+  # CHARACTERISTIC 2: Safe
+  safe:
+    vendor_safety_measures: |
+      Minimal safety measures documented:
+      - No moderation mechanisms implemented
+      - No built-in guardrails for content filtering
+      - Vendor explicitly acknowledges lack of moderation controls
+      - Vendor invites community collaboration on guardrail implementation
+      - No documented safety fine-tuning beyond DPO for instruction following
+      - No reported red-teaming or adversarial testing
+      - Reduced bias on BBQ benchmark vs comparisons (not absolute safety)
+      - DPO training may provide some preference alignment but not safety-focused
+
+    known_safety_concerns: |
+      - Can generate harmful, toxic, or inappropriate content without filtering
+      - No protection against prompt injection or jailbreaking
+      - May produce biased or discriminatory outputs despite lower bias scores
+      - Hallucinations still possible despite 74% TruthfulQA
+      - No content moderation for child safety
+      - Lacks resistance to adversarial inputs
+      - No documented vulnerability testing
+      - Requires external safety layers for any production deployment
+      - Larger model size may amplify problematic outputs
+      - Multilingual capabilities extend risk across languages
+
+    assessment_notes: |
+      Critical safety deployment requirements:
+      - MUST implement external content moderation systems (non-optional)
+      - MUST add prompt filtering and output validation
+      - MUST implement rate limiting and abuse detection
+      - MUST add human-in-the-loop review for high-stakes applications
+      - Should conduct adversarial testing before deployment
+      - Establish clear usage policies and terms of service
+      - Monitor for misuse patterns across all supported languages
+      - Consider language-specific safety controls
+      - Test safety measures at scale before production
+      - Document incident response procedures
+      - Regular safety audits required
+
+  # CHARACTERISTIC 3: Secure and Resilient
+  secure_and_resilient:
+    security_measures: |
+      Model-level security:
+      - Apache 2.0 license allows full inspection of weights
+      - SafeTensors format provides integrity verification
+      - Available through multiple secure hosting providers
+      - Open-source enables community security review
+      - No documented security testing or vulnerability assessments
+      - No reported adversarial robustness evaluations
+      - Expert routing mechanism adds complexity vs dense models
+
+    known_vulnerabilities: |
+      Potential security concerns:
+      - Prompt injection vulnerabilities (common to LLMs)
+      - Information leakage through carefully crafted prompts
+      - No documented resistance to adversarial examples
+      - May expose sensitive information if trained on such data
+      - Jailbreaking techniques may bypass intended behaviors
+      - Model extraction risks in hosted environments
+      - Memory management complexity (expert loading) may create attack surface
+      - Larger model size increases extraction value
+      - Multilingual capabilities complicate security monitoring
+
+    assessment_notes: |
+      Security recommendations:
+      - Implement input validation and sanitization across all languages
+      - Add prompt injection detection mechanisms
+      - Monitor expert routing patterns for anomalies
+      - Implement rate limiting and abuse detection
+      - Regular security assessments of deployment infrastructure
+      - Capacity planning must account for full 46.7B parameter loading
+      - Monitor memory pressure spikes during expert switching
+      - Consider model access controls and authentication
+      - Establish incident response procedures
+      - Encrypt model weights and communications
+      - Validate deployment environment security
+      - Test multilingual attack vectors
+
+  # CHARACTERISTIC 4: Accountable and Transparent
+  accountable_and_transparent:
+    transparency_level: |
+      Moderate transparency:
+      - Architecture details extensively documented with academic paper
+      - SMoE mechanism explained with routing behavior analysis
+      - Benchmark results comprehensively published
+      - Instruction format clearly specified
+      - Training data sources NOT disclosed
+      - Training data composition NOT detailed
+      - Data curation and filtering processes NOT described
+      - Fine-tuning datasets not specifically enumerated
+      - Training infrastructure partially disclosed
+      - Open-source weights enable inspection
+      - Apache 2.0 license provides usage transparency
+      - Academic paper provides architectural insights
+      - Community analysis enriches understanding
+
+    auditability: |
+      - Model weights fully accessible for inspection
+      - Architecture documented in academic paper and code
+      - Inference code open-sourced (mistral-inference)
+      - Expert routing behavior can be analyzed
+      - Evaluation methodology partially disclosed
+      - Training code not publicly available
+      - Data provenance not auditable
+      - Decision-making process (routing) traceable but complex
+      - Deployment logging must be implemented externally
+      - Expert selection patterns can be monitored
+
+    assessment_notes: |
+      Transparency gaps:
+      - Training data opacity limits bias and privacy assessment
+      - Cannot verify data consent or PII handling
+      - Fine-tuning methodology lacks detail
+      - No disclosed red-teaming or safety evaluations
+      - Expert routing adds complexity to interpretability
+      
+      Accountability measures needed:
+      - Implement comprehensive logging of model interactions
+      - Monitor expert selection patterns for anomalies
+      - Document deployment decisions and risk assessments
+      - Establish clear responsibility chains for model outputs
+      - Create feedback mechanisms for error reporting
+      - Regular transparency reporting for stakeholders
+      - Track which experts activate for different input types
+
+  # CHARACTERISTIC 5: Explainable and Interpretable
+  explainable_and_interpretable:
+    interpretability_features: |
+      Limited interpretability with SMoE complexity:
+      - Transformer architecture well-understood in research
+      - Attention mechanisms provide token relationship insights
+      - Expert routing adds interpretability dimension (which experts activated)
+      - No built-in explanation capabilities
+      - No documented interpretability tools specific to SMoE
+      - Black-box behavior for most use cases
+      - Routing decisions traceable but not necessarily meaningful
+      - More complex than dense models due to expert selection
+
+    explanation_capabilities: |
+      - Model can generate chain-of-thought reasoning when prompted
+      - No native explanation of decision-making process
+      - Cannot reliably explain why specific experts selected
+      - Cannot explain output generation rationale
+      - No confidence scores or uncertainty quantification
+      - Token probabilities available through API but require interpretation
+      - Attention visualization possible with external tools
+      - Expert activation patterns analyzable but interpretation unclear
+
+    assessment_notes: |
+      Interpretability considerations:
+      - Treat as complex black-box system for critical decisions
+      - Expert routing adds layer of complexity vs dense models
+      - Implement chain-of-thought prompting for reasoning transparency
+      - Consider external interpretability tools
+      - Monitor expert selection patterns for insights
+      - Document prompt strategies and their impact
+      - Not suitable for applications requiring explainable AI compliance
+      - Research needed on interpreting expert routing decisions
+      - Consider fine-tuning for specific explanation formats if needed
+
+  # CHARACTERISTIC 6: Privacy-Enhanced
+  privacy_enhanced:
+    privacy_features: |
+      Limited privacy features:
+      - No documented PII filtering during training
+      - No reported differential privacy techniques
+      - No privacy-preserving inference mechanisms
+      - Local deployment option provides data locality
+      - No telemetry in open-source inference code
+      - User responsible for privacy controls in deployment
+      - Larger model size may increase memorization risk
+
+    data_handling: |
+      Training data privacy:
+      - Multilingual data sources not disclosed
+      - No documented consent mechanisms
+      - Cannot verify absence of PII in training data
+      - Potential inclusion of public internet data across languages
+      
+      Inference privacy:
+      - Depends entirely on deployment configuration
+      - Local deployment prevents data sharing but requires significant resources
+      - Cloud deployments subject to provider privacy policies
+      - No built-in privacy guarantees
+      - Expert routing metadata may reveal patterns
+
+    assessment_notes: |
+      Privacy deployment requirements:
+      - Implement PII detection and redaction in inputs/outputs
+      - Consider local deployment for highly sensitive data (if resources available)
+      - Establish data retention and deletion policies
+      - Implement access controls and comprehensive audit logging
+      - Assess cloud provider privacy compliance if hosted
+      - Consider differential privacy for fine-tuning on sensitive data
+      - Conduct privacy impact assessments for specific use cases
+      - GDPR/privacy regulation compliance requires additional controls
+      - Monitor for data leakage across multilingual contexts
+      - Larger model may memorize training data more readily
+
+  # CHARACTERISTIC 7: Fair with Harmful Bias Managed
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Limited bias mitigation with some improvements:
+      - Less bias than Llama 2 on BBQ benchmark (56.0% vs 51.5%)
+      - More balanced sentiment profile on BOLD
+      - Trained on diverse multilingual datasets
+      - No documented explicit debiasing techniques
+      - No reported fairness testing or demographic parity measures
+      - DPO training may provide some preference alignment
+      - Multilingual training may introduce or mitigate cultural biases
+
+    known_biases: |
+      Potential biases:
+      - Specific bias testing results limited to BBQ and BOLD
+      - Language-specific biases possible across 5 supported languages
+      - Cultural biases may vary by language
+      - Demographic representation biases unknown
+      - Occupational and gender stereotyping possible
+      - Socioeconomic biases possible
+      - Training data opacity prevents bias source identification
+      - Larger model may amplify or mitigate biases unpredictably
+      - Expert specialization may concentrate biases
+
+    assessment_notes: |
+      Fairness deployment requirements:
+      - MUST conduct bias testing for specific use cases and languages
+      - Test across demographic groups relevant to application
+      - Evaluate performance across all supported languages
+      - Assess cultural sensitivity in multilingual contexts
+      - Implement bias monitoring in production
+      - Consider bias mitigation during fine-tuning
+      - Establish fairness metrics appropriate to use case
+      - Document bias testing results and mitigation strategies
+      - Critical for hiring, lending, healthcare, legal applications
+      - Test for differential performance across expert routing
+      - Not suitable for high-stakes fairness-sensitive applications without extensive testing
+
+# =============================================================================
+# EVALUATION GUIDANCE
+# =============================================================================
+
+evaluation_guidance:
+  recommended_tests: |
+    Pre-deployment validation for Mixtral-8x7B-Instruct:
+    
+    1. Performance Testing:
+       - Accuracy on domain-specific test sets (establish >85% baseline)
+       - Multilingual performance across all supported languages
+       - Latency benchmarks on target hardware
+       - Throughput testing under expected load
+       - Context window utilization (32k tokens)
+       - Expert routing efficiency monitoring
+       - Memory consumption patterns (full 46.7B + overhead)
+       - Instruction format adherence validation
+    
+    2. Safety & Bias Testing (CRITICAL - no built-in safety):
+       - Adversarial prompt testing (red teaming)
+       - Toxic/harmful content generation testing (MUST implement filters)
+       - Demographic bias evaluation across protected characteristics
+       - Prompt injection and jailbreak vulnerability testing
+       - Multilingual safety testing across all 5 languages
+       - Cultural sensitivity testing per language
+       - Child safety testing if applicable
+       - Cross-language bias consistency
+    
+    3. Reliability Testing:
+       - Hallucination rate on factual Q&A (despite 74% TruthfulQA)
+       - Multi-turn conversation consistency
+       - Long-context handling (up to 32k tokens)
+       - Edge case and error handling
+       - Knowledge boundary testing
+       - Instruction format sensitivity testing
+       - Expert routing stability under load
+    
+    4. Resource & Infrastructure Testing:
+       - Memory footprint validation (86GB+ baseline)
+       - Expert switching overhead measurement
+       - Batch processing memory pressure
+       - Concurrent request handling
+       - Quantization impact if applicable (Q4, Q8)
+       - GPU memory management
+       - Multi-GPU deployment if applicable
+       - Capacity planning validation with realistic loads
+    
+    5. Security Testing:
+       - Prompt injection vulnerability assessment
+       - Information leakage testing
+       - Rate limiting and abuse resistance
+       - Authentication and access control validation
+       - Multilingual security attack vectors
+       - Expert routing manipulation attempts
+    
+    6. Compliance Testing:
+       - License compliance review (Apache 2.0)
+       - Privacy regulation compliance (GDPR, CCPA, etc.)
+       - Industry-specific regulatory requirements
+       - Data retention and deletion capabilities
+       - Audit logging and traceability
+       - Multilingual compliance requirements
+    
+    7. Integration Testing:
+       - API stability and error handling
+       - Instruction format integration
+       - Deployment infrastructure compatibility
+       - Monitoring and observability setup
+       - Backup and recovery procedures
+       - Expert routing observability
+    
+    Pass/Fail Criteria:
+    - Domain accuracy >85% before production
+    - Zero tolerance for safety filter bypass
+    - Latency requirements must meet UX standards
+    - Memory footprint must not exceed infrastructure capacity
+    - All security vulnerabilities addressed
+    - Multilingual performance meets requirements across all languages
+
+  key_evaluation_questions: |
+    Critical deployment decision questions:
+    
+    1. Performance & Capability:
+       - Does Mixtral meet accuracy requirements vs alternatives (7B, 70B, GPT-3.5)?
+       - Is multilingual capability necessary for our use case?
+       - Is 32k context window beneficial for our applications?
+       - Have we validated on representative multilingual data if applicable?
+       - Does cost/performance trade-off justify vs dense models or APIs?
+    
+    2. Infrastructure & Resources (CRITICAL):
+       - Do we have 86GB+ RAM available for deployment?
+       - Have we properly planned for FULL 46.7B parameter loading?
+       - Can we handle expert switching memory overhead?
+       - Do we have adequate GPU resources?
+       - Have we tested at realistic batch sizes and concurrency?
+       - Is our infrastructure suitable for this model size?
+       - Can we afford inference costs at our expected scale?
+    
+    3. Safety & Risk:
+       - Have we implemented robust content moderation? (REQUIRED)
+       - Can we handle lack of built-in safety controls?
+       - Have we tested safety across all supported languages?
+       - Do we have human oversight mechanisms?
+       - Is our risk appetite aligned with model limitations?
+       - Can we monitor and respond to safety issues at scale?
+    
+    4. Compliance & Governance:
+       - Are Apache 2.0 license terms acceptable?
+       - Have we addressed privacy regulations across languages?
+       - Do we meet industry-specific compliance needs?
+       - Are audit and accountability measures sufficient?
+       - Have we documented risk assessment and mitigation?
+    
+    5. Alternatives Comparison:
+       - Should we use Mistral 7B (smaller, faster, easier)?
+       - Should we use Llama 2 70B (comparable, different trade-offs)?
+       - Should we use GPT-3.5/4 API (better safety, less control)?
+       - Do we need later Mixtral versions (function calling)?
+       - What are the cost/performance/safety trade-offs?
+
+  comparison_considerations: |
+    When comparing Mixtral-8x7B-Instruct with alternatives:
+    
+    Similar Architecture Models:
+    - Mixtral 8x22B: Larger, better performance, higher resource requirements
+    - DBRX, Grok: Alternative MoE models with different characteristics
+    - Consider: Resource availability, performance requirements, licensing
+    
+    Dense Models of Similar Capability:
+    - Llama 2 70B: 6x slower but well-supported, no MoE complexity
+    - Llama 3 70B: Better performance but larger, newer ecosystem
+    - Consider: Infrastructure capacity, inference speed importance, complexity tolerance
+    
+    Smaller Efficient Models:
+    - Mistral 7B: Much faster, easier to deploy, lower capability
+    - Llama 3.1 8B: Smaller footprint, good performance
+    - Consider: Accuracy requirements, resource constraints
+    
+    Proprietary APIs:
+    - GPT-3.5/4, Claude, Gemini: Better safety, support, but less control, ongoing costs
+    - Consider: Data privacy, cost at scale, customization needs
+    
+    Key Trade-offs:
+    - Performance vs Resources: Mixtral requires significant resources but delivers strong results
+    - Speed vs Capability: Faster than 70B dense models with comparable quality
+    - Control vs Convenience: Self-hosting provides control but requires expertise
+    - Safety vs Performance: No built-in safety vs strong benchmarks
+    - Complexity vs Efficiency: MoE architecture efficient but operationally complex
+    
+    Deployment Scenarios:
+    - High-volume production: Consider API costs vs self-hosting with Mixtral
+    - Multilingual applications: Mixtral native multilingual strength
+    - Resource-constrained: Consider smaller models or quantization
+    - Safety-critical: Strongly consider APIs with built-in moderation
+    
+    MoE-Specific Considerations:
+    - Memory planning complexity: All parameters must load despite sparse activation
+    - Expert routing monitoring: Additional observability requirements
+    - Quantization impact: More complex than dense models
+    - Deployment expertise: Requires understanding of MoE characteristics
+
+# =============================================================================
+# NIST AI RMF MAPPING
+# =============================================================================
+
+rmf_function_mapping:
+  # GOVERN: Organizational policies and oversight
+  govern:
+    notes: |
+      Governance for Mixtral deployment:
+      
+      Policies:
+      - Establish strict acceptable use policy (no built-in moderation)
+      - Define mandatory content filtering and safety requirements
+      - Set multilingual content moderation policies
+      - Document licensing compliance (Apache 2.0)
+      - Create incident response procedures for all supported languages
+      - Establish capacity planning and resource allocation policies
+      
+      Approval:
+      - Infrastructure review for 86GB+ RAM requirements
+      - Security team approval for deployment architecture
+      - Privacy team review for multilingual data handling
+      - Legal review for licensing and compliance
+      - Executive approval for high-visibility or high-risk use cases
+      - Budget approval for infrastructure costs
+      
+      Oversight:
+      - Continuous monitoring of outputs across all languages
+      - Regular bias and fairness audits per language
+      - Periodic security assessments
+      - Compliance audits for regulatory requirements
+      - Expert routing behavior monitoring
+      - Resource utilization tracking
+      
+      Version Control:
+      - Pin to specific model version for production
+      - Test updates in staging before deployment
+      - Maintain rollback capability
+      - Document model version in audit logs
+      - Track performance metrics across versions
+
+  # MAP: Context and risk identification
+  map:
+    context_considerations: |
+      Risk context for Mixtral:
+      
+      Use Case Context:
+      - Multi-language user base considerations
+      - Resource requirements (86GB+ RAM minimum)
+      - Inference speed vs accuracy requirements
+      - Expected query volume and concurrency
+      - Long-context task requirements (up to 32k)
+      
+      Data Sensitivity:
+      - Multilingual content with varying regulations
+      - Cross-border data handling considerations
+      - PII across different languages and jurisdictions
+      - Cultural sensitivity requirements per language
+      
+      Stakeholder Impacts:
+      - Users across multiple language communities
+      - Infrastructure and cost impacts
+      - Operational complexity from MoE architecture
+      - Organizational reputation across markets
+      
+      Regulatory Requirements:
+      - EU AI Act considerations
+      - GDPR and international privacy laws
+      - Language-specific content regulations
+      - Industry-specific compliance across jurisdictions
+
+    risk_categories: ["content_safety_multilingual", "bias_and_fairness_multilingual", "privacy_and_data_protection", "security_and_adversarial", "accuracy_and_reliability", "infrastructure_and_operational", "compliance_and_legal_international", "reputational_and_ethical"]
+
+  # MEASURE: Metrics and monitoring
+  measure:
+    suggested_metrics: |
+      Production monitoring for Mixtral:
+      
+      Performance Metrics:
+      - Accuracy per language and task type (target: >85%)
+      - Latency p50, p95, p99 (track vs Llama 2 70B baseline)
+      - Throughput (requests/second)
+      - Context utilization (track up to 32k tokens)
+      - Error rate by language
+      - Expert routing patterns and stability
+      
+      Resource Metrics (CRITICAL for MoE):
+      - Memory footprint (baseline 86GB, monitor spikes)
+      - Expert switching overhead
+      - GPU utilization and memory pressure
+      - Batch processing efficiency
+      - Concurrent request handling capacity
+      - Memory pressure spikes (alert on approaching limits)
+      
+      Safety Metrics (MANDATORY):
+      - Harmful content rate per language (target: <0.1%)
+      - Content filter trigger rate by language
+      - Prompt injection attempts detected
+      - Jailbreak success rate
+      - User report rate by language
+      - Cross-language safety consistency
+      
+      Fairness Metrics:
+      - Performance parity across languages (target: <5% variance)
+      - Demographic performance monitoring per language
+      - Bias incident rate by language and demographic
+      - Cultural sensitivity metrics
+      
+      Operational Metrics:
+      - Uptime/availability (target: >99.9%)
+      - Infrastructure cost per request
+      - Queue depth and scaling responsiveness
+      - Expert routing stability
+      
+      Compliance Metrics:
+      - Policy violation rate by language
+      - Audit finding count
+      - Data retention compliance
+      - Access control violations
+      
+      Measurement Methods:
+      - Real-time monitoring with language-specific dashboards
+      - Automated alerting for threshold breaches
+      - Regular manual review of sample outputs
+      - A/B testing for improvements
+      - Expert routing analysis
+
+  # MANAGE: Risk controls and responses
+  manage:
+    risk_management_considerations: |
+      Risk management for Mixtral:
+      
+      Technical Controls:
+      - MANDATORY external content moderation across all languages
+      - Language-specific input validation and sanitization
+      - Output filtering for harmful content per language
+      - Prompt injection detection
+      - Memory monitoring and alerting for spikes
+      - Expert routing behavior monitoring
+      - Rate limiting per user and language
+      - Circuit breakers for system protection
+      
+      Infrastructure Controls:
+      - Capacity planning for full 46.7B parameter loading
+      - Buffer for expert switching overhead (20-30% above baseline)
+      - Graceful degradation under memory pressure
+      - Auto-scaling with awareness of memory requirements
+      - Monitoring for memory pressure approaching limits
+      - Quantization validation if used
+      
+      Process Controls:
+      - Human review sampling across all languages
+      - Mandatory human oversight for high-stakes decisions
+      - Multilingual feedback loops
+      - Regular cross-language audits
+      - Incident escalation procedures
+      - Language-specific expertise on call
+      
+      Organizational Controls:
+      - Multilingual team training
+      - Cultural sensitivity training
+      - MoE architecture expertise development
+      - Clear policies and guidelines
+      - Executive oversight
+      - Budget management for infrastructure
+      
+      Incident Response:
+      - Language-specific incident detection
+      - Rapid containment procedures
+      - Root cause analysis including expert routing
+      - Communication to multilingual stakeholders
+      - Post-incident learning and updates
+      
+      Continuous Improvement:
+      - Regular benchmark evaluation
+      - Feedback incorporation
+      - Version upgrade assessments
+      - Community best practice adoption
+      - Resource optimization efforts
+
+# =============================================================================
+# REFERENCES & SOURCES
+# =============================================================================
+
+references:
+  vendor_documentation:
+    - url: "https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1"
+      description: "Official HuggingFace model card with usage examples and technical details"
+    
+    - url: "https://mistral.ai/news/mixtral-of-experts"
+      description: "Official Mistral AI announcement blog post with architecture details and benchmarks"
+    
+    - url: "https://arxiv.org/abs/2401.04088"
+      description: "Mixtral of Experts academic paper with comprehensive technical and benchmark details"
+    
+    - url: "https://github.com/mistralai/mistral-inference"
+      description: "Official inference library and implementation"
+    
+    - url: "https://docs.mistral.ai/"
+      description: "Mistral AI documentation portal"
+
+  benchmarks:
+    - name: "MT-Bench"
+      url: "https://mistral.ai/news/mixtral-of-experts"
+      result: "8.3 score - outperforms GPT-3.5 Turbo, Claude 2.1, Gemini Pro, Llama 2 70B chat"
+    
+    - name: "MMLU (5-shot)"
+      url: "https://arxiv.org/abs/2401.04088"
+      result: "~70% - outperforms Llama 2 70B despite 5x fewer active parameters"
+    
+    - name: "HumanEval (Code Generation)"
+      url: "https://mistral.ai/news/mixtral-of-experts"
+      result: "Matches or exceeds GPT-3.5; vastly superior to Llama 2 70B"
+    
+    - name: "GSM8K & MATH (Mathematics)"
+      url: "https://arxiv.org/abs/2401.04088"
+      result: "Vastly superior to Llama 2 70B across mathematics benchmarks"
+    
+    - name: "TruthfulQA"
+      url: "https://mistral.ai/news/mixtral-of-experts"
+      result: "74% - reduced hallucinations compared to baselines"
+    
+    - name: "BBQ (Bias Benchmark)"
+      url: "https://mistral.ai/news/mixtral-of-experts"
+      result: "56.0% - less bias than Llama 2 (51.5%)"
+    
+    - name: "Multilingual Benchmarks"
+      url: "https://arxiv.org/abs/2401.04088"
+      result: "Outperforms Llama 2 70B on French, German, Spanish, Italian across ARC, HellaSwag, MMLU"
+
+  third_party_evaluations:
+    - source: "MLPerf Inference Benchmark"
+      url: "https://mlcommons.org/2024/08/moe-mlperf-inference-benchmark/"
+      summary: "Mixtral 8x7B selected as representative MoE model for MLPerf due to widespread deployment and strong capabilities"
+    
+    - source: "LMSYS Chatbot Arena"
+      url: "https://chat.lmsys.org/"
+      summary: "Independent human evaluation platform where Mixtral-Instruct ranks highly among open models"
+    
+    - source: "Towards Data Science"
+      url: "https://towardsdatascience.com/mistral-vs-mixtral-comparing-the-7b-8x7b-and-8x22b-large-language-models-58ab5b2cc8ee"
+      summary: "Comprehensive analysis of Mixtral architecture, resource requirements, and performance trade-offs"
+    
+    - source: "Galileo AI"
+      url: "https://galileo.ai/blog/mixtral-8x7b-guide-review"
+      summary: "In-depth deployment guide highlighting common misconceptions about memory requirements and expert switching overhead"
+    
+    - source: "HuggingFace Community"
+      url: "https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1"
+      summary: "17.4M downloads, 4,579 likes, 100+ demo spaces demonstrating widespread adoption"
+
+# =============================================================================
+# METADATA
+# =============================================================================
+
+metadata:
+  card_version: "1.0"
+  card_author: "Claude (AI Assistant)"
+  card_creation_date: "2025-10-28"
+  last_updated: "2025-10-28"
+  
+  information_sources: |
+    Primary sources:
+    - Official HuggingFace model repository
+    - Mistral AI official blog post and announcement
+    - Academic paper (arXiv:2401.04088)
+    - Vendor documentation and GitHub repositories
+    - Published benchmark results from Mistral AI
+    - MLPerf Inference benchmark documentation
+    - Third-party technical analyses and deployment guides
+    - Community usage reports and evaluation
+    
+    Information limitations:
+    - Training data details not publicly disclosed
+    - Fine-tuning datasets not specifically enumerated
+    - Safety evaluation results not published
+    - Bias testing limited to BBQ and BOLD benchmarks
+    - Infrastructure and training costs not disclosed
+
+  completeness_assessment: |
+    Information completeness by section:
+    
+    COMPREHENSIVE:
+    - Model architecture and SMoE design
+    - Benchmark performance across multiple domains
+    - Licensing and availability
+    - Deployment considerations and resource requirements
+    - Instruction format and usage examples
+    - Known limitation (no moderation)
+    - Multilingual capabilities
+    - Academic paper provides detailed insights
+    
+    PARTIAL OR LIMITED:
+    - Fine-tuning methodology details
+    - Expert routing behavior analysis
+    - Quantization best practices
+    - Language-specific performance nuances
+    - Production deployment experiences
+    
+    CRITICAL GAPS:
+    - Training data sources and composition
+    - Data curation and filtering practices
+    - Privacy and PII handling during training
+    - Comprehensive bias evaluation across languages and demographics
+    - Safety testing and red team results
+    - Adversarial robustness assessments
+    - Specific knowledge cutoff date
+    - Training infrastructure and costs
+    
+    Confidence assessment:
+    - HIGH confidence: Architecture, benchmarks, licensing, resource requirements
+    - MODERATE confidence: Multilingual capabilities, MoE behavior, deployment practices
+    - LOW confidence: Training data, safety measures, comprehensive bias characteristics
+    
+    To improve confidence:
+    - Request training data transparency from vendor
+    - Conduct independent bias testing across all languages
+    - Perform domain-specific validation
+    - Test resource requirements under realistic loads
+    - Engage with community for deployment insights
+    - Monitor expert routing patterns in production
+    - Consider independent third-party audits
+
+  change_log:
+    - date: "2025-10-28"
+      author: "Claude (AI Assistant)"
+      changes: "Initial model card creation for Mixtral-8x7B-Instruct-v0.1 based on HuggingFace source, academic paper, and web research. Comprehensive documentation of SMoE architecture, benchmark results, deployment considerations, and critical resource requirements. Noted information gaps particularly around training data and safety testing."
+
+# =============================================================================
+# ADDITIONAL NOTES
+# =============================================================================
+
+# This model card documents Mixtral-8x7B-Instruct-v0.1, a groundbreaking Sparse
+# Mixture of Experts model that achieves strong performance with efficient inference.
+#
+# CRITICAL DEPLOYMENT CONSIDERATIONS:
+# 1. MEMORY: ALL 46.7B parameters must load despite only 12.9B active per token
+#    - Plan for 86GB+ RAM minimum
+#    - Account for expert switching overhead (20-30% buffer)
+#    - Monitor memory pressure spikes carefully
+# 
+# 2. SAFETY: NO built-in moderation - external content filtering MANDATORY
+#    - Must implement comprehensive content moderation
+#    - Test safety across all 5 supported languages
+#    - Not suitable for unmoderated production without safety layers
+#
+# 3. MULTILINGUAL: Native support for 5 languages requires:
+#    - Language-specific testing and validation
+#    - Cultural sensitivity considerations
+#    - Language-specific safety controls
+#
+# 4. ARCHITECTURE: SMoE adds operational complexity
+#    - Expert routing monitoring required
+#    - More complex than dense models to operate
+#    - Specialized expertise beneficial
+#
+# Recommended for: 
+# - Multilingual applications with strong infrastructure
+# - Cost-effective alternative to 70B dense models or APIs
+# - Applications requiring balance of performance and inference speed
+# - Organizations with expertise in LLM operations
+#
+# Not recommended for: 
+# - Resource-constrained environments (<86GB RAM)
+# - Unmoderated production systems
+# - Organizations without LLM operational expertise
+# - Safety-critical applications without comprehensive safeguards
+#
+# Update this card as:
+# - Production deployment experiences emerge
+# - New benchmark results become available
+# - Community develops MoE best practices
+# - Vendor releases additional documentation

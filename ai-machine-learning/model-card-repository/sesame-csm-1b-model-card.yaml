@@ -1,0 +1,223 @@
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# =============================================================================
+# MODEL IDENTITY
+# =============================================================================
+model_identity:
+  name: "CSM 1B"
+  vendor: "Sesame AILabs"
+  model_family: "CSM (Conversational Speech Model)"
+  version: "1B"
+  release_date: "2025-03-13"  # release date listed in README. :contentReference[oaicite:2]{index=2}
+  model_type: "Text-and-audio-to-speech generation model"
+
+  vendor_model_card_url: "https://huggingface.co/sesame/csm-1b"  :contentReference[oaicite:3]{index=3}
+
+  license: "Apache 2.0"  :contentReference[oaicite:4]{index=4}
+  deprecation_status: "Active"
+
+# =============================================================================
+# MODEL ARCHITECTURE & TECHNICAL SPECIFICATIONS
+# =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "LLM backbone (a variant of Llama) plus a smaller audio decoder that produces Mimi audio codes"  :contentReference[oaicite:5]{index=5}
+    parameter_count: "≈ 1 billion parameters (1B variant)"  :contentReference[oaicite:6]{index=6}
+    context_window: "Not explicitly disclosed"
+    training_data_cutoff: "Not publicly disclosed"
+
+    architectural_details: |
+      - The model accepts text and optional audio context inputs, and generates speech output via RVQ (Residual Vector Quantization) audio codes. :contentReference[oaicite:7]{index=7}
+      - Designed for conversational speech generation: given speaker roles, previous utterances (text + audio), it can generate the next audio utterance. :contentReference[oaicite:8]{index=8}
+
+  modalities:
+    supported_inputs: ["text prompt", "audio context (previous utterance)"]
+    supported_outputs: ["audio speech waveform"]
+
+  performance_characteristics:
+    speed_tier: "High compute for speech generation model; hardware requirements non-trivial"
+    cost_tier: "Significant compute/VRAM required for full usage (1B backbone + decoder + audio decoding)"
+    latency: "Not publicly specified"
+    throughput: "Not publicly specified"
+
+# =============================================================================
+# CAPABILITIES & LIMITATIONS
+# =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    - Can generate speech given text (and optionally audio context) with high fidelity. :contentReference[oaicite:9]{index=9}
+    - Supports conversational style: using audio + text context improves output consistency. :contentReference[oaicite:10]{index=10}
+  benchmark_performance: |
+    No standard published benchmark scores (e.g., MOS) provided in the model card.
+  special_capabilities:
+    tools_support: false
+    vision_support: false
+    reasoning_support: false
+    image_generation: false
+    additional_capabilities: ["contextual speech generation (text + audio)"]
+  known_limitations:
+    vendor_disclosed: |
+      - “CSM is trained to be an audio generation model and not a general-purpose multimodal LLM. It cannot generate text.” :contentReference[oaicite:11]{index=11}
+      - “The model has some capacity for non-English languages … but it likely won’t do well.” :contentReference[oaicite:12]{index=12}
+    common_failure_modes: |
+      - May under-perform or produce less accurate results for non-English languages and accents.
+      - Generation may require good hardware; performance/latency may suffer on constrained hardware. :contentReference[oaicite:13]{index=13}
+    unsuitable_use_cases: |
+      - Real-time voice generation on very constrained hardware without adaptation.
+      - Use in regulated domains (e.g., forensic voice generation) requiring full training data audit and provenance.
+
+# =============================================================================
+# TRAINING & DATA
+# =============================================================================
+training_information:
+  training_data_description: |
+    - Model card and repository indicate use of datasets: conversational prompts from EdAcc dataset; “read speech” prompts from LibriTTS-R dataset. :contentReference[oaicite:14]{index=14}
+    - Specific dataset sizes, speaker diversity, audio hours, preprocessing details are not publicly disclosed.
+  training_methodology: |
+    - Model architecture leverages Llama backbone + audio decoder; training with text-audio pairs; includes support for context inputs (audio/text) in generation. :contentReference[oaicite:15]{index=15}
+  data_privacy_considerations: |
+    - Not fully detailed; users should assume standard risks for generative audio models with speaker/voice cloning potential.
+
+# =============================================================================
+# INTENDED USE & SCOPE
+# =============================================================================
+intended_use:
+  vendor_intended_use: |
+    For research and educational use in speech generation and conversational audio synthesis systems. :contentReference[oaicite:16]{index=16}
+  suitable_domains: ["voice assistants", "narrative voice generation", "interactive conversational agents (text-to-speech)"]
+  out_of_scope_use: |
+    - Use as a stand-alone text generator or general LLM (model cannot generate text).
+    - Use requiring robust multilingual or low-resource-language voice generation without additional tuning.
+    - Deployments requiring certified traceability of training data or extremely low latency without hardware adaptation.
+
+# =============================================================================
+# TRUSTWORTHINESS CHARACTERISTICS
+# =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Architecture, usage examples, restrictions are documented in README. :contentReference[oaicite:17]{index=17}
+    public_evidence: |
+      Model repository on Hugging Face and GitHub code are publicly available. :contentReference[oaicite:18]{index=18}
+    assessment_notes: |
+      Good for research and prototyping; for production/high-stakes voice generation further evaluation recommended.
+  safe:
+    safety_measures: |
+      Model explicitly prohibits impersonation/fraud and illegal/malicious use. :contentReference[oaicite:19]{index=19}
+    known_safety_issues: |
+      Voice generation models carry risk of impersonation, deep-fake voice, misuse.
+    assessment_notes: |
+      Deployers should incorporate consent, watermarking, monitoring.
+  secure_and_resilient:
+    security_features: |
+      Open source code and weights support local deployment, increasing auditability.
+    known_vulnerabilities: |
+      High compute/hardware demand increases resource risk; voice data pipelines require secure handling.
+    assessment_notes: |
+      Ensure infrastructure controls and monitoring for audio generation workloads.
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Code and architecture open; detailed training logs/dataset provenance are limited.
+    assessment_notes: |
+      For regulated use, supplement with documentation of dataset and process.
+  explainable_and_interpretable:
+    explainability_features: |
+      Outputs (audio) are inspectable; usage examples provided.
+    interpretability_limitations: |
+      Internal audio decoder and expert decisions not fully accessible.
+    assessment_notes: |
+      Acceptable for many uses; if interpretability is critical, additional instrumentation may be required.
+  privacy_enhanced:
+    privacy_features: |
+      On-premise deployment possible; supports local inference.
+    privacy_concerns: |
+      Voice generation may misuse voices; training data provenance unclear, PII risk.
+    assessment_notes: |
+      If using personal voice or sensitive speech, ensure protections.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Some dataset diversity (EdAcc, LibriTTS-R) but multilingual voice coverage weaker.
+    known_biases: |
+      Likely lower performance for non-English languages or less-represented accents. :contentReference[oaicite:20]{index=20}
+    assessment_notes: |
+      Perform bias/fairness testing especially for voices/accents in your target user base.
+
+# =============================================================================
+# EVALUATION GUIDANCE
+# =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Generate test audio for your target voices/languages/accents; evaluate naturalness, consistency, speaker identity/cloning fidelity.
+    - Benchmark latency/throughput on your target hardware; examine real-time viability.
+    - Test audio generation in context: provide prior audio + text context and verify coherence.
+    - Run abuse/hallucination tests: e.g., generate audio with missing context, adversarial prompts, impersonation risk.
+    - Monitor audio quality over time, verify consistency across speakers, voices.
+  key_evaluation_questions: |
+    - Does the model output voice quality, expressiveness, latency, and fidelity meet your target use case?
+    - Can your hardware support the parameter size and audio decoding workload?
+    - Are voice consent, watermarking, moderation and fallback mechanisms in place for your deployment?
+    - Do the voices and accents you need perform at acceptable quality levels?
+  comparison_considerations: |
+    - Compare to other open-source TTS / conversational speech generation models (e.g., Orpheus, etc) in terms of model size, latency, hardware cost and voice quality.
+    - Consider trade-off between using the 1B variant vs waiting for larger/finer-tuned variants if available.
+    - Consider whether you need real-time generation or batch-mode, and choose model accordingly.
+
+# =============================================================================
+# NIST AI RMF MAPPING
+# =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Voice generation systems require governance: version control, voice-consent logs, moderation, ethic/human in-loop.
+  map:
+    context_considerations: |
+      Text-to-speech pipelines, voice-assistant systems, conversational audio generation, cloning risk.
+    risk_categories: ["voice_deepfake","impersonation","latency_failure","voice_accent_bias","hardware_resource_exhaustion"]
+  measure:
+    suggested_metrics: |
+      - Impersonation attempt rate per 1k generated audios.
+      - Latency exceeding threshold (ms) per 1k sessions.
+      - Audio naturalness drop-off per 100 speakers/voices.
+      - Accent/voice-style error rate per 100 sessions.
+  manage:
+    risk_management_considerations: |
+      Apply voice consent, watermarking, logging of model version and voice/cloning usage, human-in-loop review for high-risk outputs, infrastructure monitoring for audio generation pipelines.
+
+# =============================================================================
+# REFERENCES & SOURCES
+# =============================================================================
+references:
+  vendor_documentation:
+    - url: "https://huggingface.co/sesame/csm-1b"
+      description: "Hugging Face model page"
+    - url: "https://github.com/SesameAILabs/csm"
+      description: "GitHub repository for CSM"
+    - url: "https://huggingface.co/spaces/sesame/csm-1b"
+      description: "Interactive demo space"
+  benchmarks:
+    - name: "Community commentary on Reddit regarding release and hardware/voice quality"
+      url: "https://www.reddit.com/r/SesameAI/comments/1jalsow"
+      result: > “Only the 1B variant released so far… voices more robotic than expected.”  :contentReference[oaicite:21]{index=21}
+  third_party_evaluations:
+    - source: "Toolify model overview"
+      url: "https://www.toolify.ai/ai-model/sesame-csm-1b"
+      summary: “speech generation model, parameter ~1B, Llama backbone + audio decoder.”  :contentReference[oaicite:22]{index=22}
+
+# =============================================================================
+# METADATA
+# =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "Generated-by-Assistant"
+  card_creation_date: "2025-10-24"
+  last_updated: "2025-10-24"
+  information_sources: |
+    Hugging Face repository, GitHub repo, community commentary.
+  completeness_assessment: |
+    Good for architecture, intended use, capabilities/limitations; moderate for training dataset details (size/quality) and benchmark metrics (e.g., MOS, hardware latency) which are limited.
+  change_log:
+    - date: "2025-10-24"
+      author: "Generated-by-Assistant"
+      changes: "Initial synthesis of CSM 1B model card."

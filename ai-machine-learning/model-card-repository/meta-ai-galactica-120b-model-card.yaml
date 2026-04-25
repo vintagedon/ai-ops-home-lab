@@ -1,0 +1,256 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Galactica 120B"
+  vendor: "Meta AI"
+  model_family: "Galactica"
+  version: "120B"
+  release_date: "2022-11-15"
+  model_type: "Scientific Language Model (Research Demonstration)"
+  vendor_model_card_url: "https://huggingface.co/facebook/galactica-120b"
+  license: "Research-Only (non-commercial)"
+  deprecation_status: "Deprecated (2023-01)"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Dense Transformer (decoder-only)"
+    parameter_count: "120 billion"
+    context_window: "8 K tokens"
+    training_data_cutoff: "2022-06"
+    architectural_details: |
+      Galactica 120B was Meta AI’s large-scale scientific language model trained to store, combine,
+      and reason over scientific knowledge.  
+      It used a standard dense transformer architecture with rotary embeddings (RoPE),
+      multi-query attention, and optimized tensor parallelism for large-context reasoning.  
+      Training was performed using scientific corpora including papers, textbooks, chemical formulas,
+      protein sequences, and mathematical data.
+
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "Low (frontier-scale, 2022 hardware)"
+    cost_tier: "Research (closed weights)"
+    latency: |
+      ~1.4 s per 1K tokens on 8×A100 cluster (fp16).  
+      High inference cost and limited public deployment.
+    throughput: |
+      Optimized for retrieval-style reasoning rather than speed or latency.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • Designed for scientific and academic reasoning.  
+    • Specialized tokenization for chemistry, biology, and mathematics.  
+    • Produced summaries, citations, and LaTeX-ready content from scientific literature.  
+  benchmark_performance: |
+    - PubMedQA: 81.2  
+    - ARC-C: 83.1  
+    - MMLU (Science subset): 86.9  
+    - MATH: 69.5  
+    (Meta AI internal benchmarks, 2022)
+  special_capabilities:
+    tools_support: false
+    vision_support: false
+    reasoning_support: strong
+    image_generation: false
+    additional_capabilities: ["scientific_reasoning", "citation_generation", "math_symbolic_processing"]
+  known_limitations:
+    vendor_disclosed: |
+      Public interface retired due to factual hallucinations and misuse potential.  
+      Model known to confidently produce incorrect or fabricated citations.  
+    common_failure_modes: |
+      "Citation hallucination," overconfident statements, unverified factual synthesis.  
+    unsuitable_use_cases: |
+      Scientific publication generation, factual QA, or unsupervised research summarization.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on 106 billion tokens from a curated scientific corpus:
+    - Academic papers (Semantic Scholar, arXiv, PubMed)
+    - Textbooks and encyclopedias
+    - Chemistry and biology sequences (e.g., SMILES, protein FASTA)
+    - Code and math corpora for symbolic reasoning
+  training_methodology: |
+    Supervised pretraining only; no alignment or reinforcement learning applied.
+    Focused on retrieval-based factual knowledge generation.
+  data_privacy_considerations: |
+    Training data sourced from open-access scientific repositories; 
+    no proprietary or personal data included.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Research exploration of scientific language modeling and retrieval-augmented reasoning.  
+    Intended for structured analysis and summarization of scientific text under supervision.  
+  suitable_domains: ["research", "education", "scientific_reasoning"]
+  out_of_scope_use: |
+    Automated literature review or citation generation without human verification.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Model designed for factual recall and domain precision in science.  
+    public_evidence: |
+      Independent reviews confirmed broad coverage but unreliable factual grounding.  
+    assessment_notes: |
+      Reliable for structure understanding, not factual accuracy.
+  safe:
+    safety_measures: |
+      Limited content moderation during pretraining.  
+      Deployed as research demo under explicit caution labels.  
+    known_safety_issues: |
+      Hallucination of references and high confidence in false statements.  
+    assessment_notes: |
+      Unsafe for autonomous factual reasoning; decommissioned in early 2023.
+  secure_and_resilient:
+    security_features: |
+      Not publicly released as open weights; internal Meta deployment only.  
+    known_vulnerabilities: |
+      None publicized beyond factual reliability issues.  
+    assessment_notes: |
+      Secure under restricted access.
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Architecture and training dataset descriptions published, 
+      but full data sources not disclosed.  
+    assessment_notes: |
+      Moderate transparency; improved successors (LLaMA) adopted open-weight approach.
+  explainable_and_interpretable:
+    explainability_features: |
+      Interpretable tokenization for scientific domains; citation trace tokens.  
+    interpretability_limitations: |
+      Model reasoning pathways opaque; limited explainability for factual synthesis.  
+    assessment_notes: |
+      Limited explainability; valuable for token-level but not logic-level introspection.
+  privacy_enhanced:
+    privacy_features: |
+      Public scientific data only; no user telemetry.  
+    privacy_concerns: |
+      None known.  
+    assessment_notes: |
+      Meets research-grade privacy expectations.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Dataset balancing across STEM subfields; limited diversity inclusion.  
+    known_biases: |
+      Western research publication bias; limited multilingual science coverage.  
+    assessment_notes: |
+      Acceptable fairness for prototype; improved in later open models.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • Factual verification accuracy and citation correctness.  
+    • Hallucination and confidence calibration analysis.  
+    • Evaluation on scientific reasoning benchmarks (MATH, PubMedQA).  
+  key_evaluation_questions: |
+    – Are outputs verified against original sources?  
+    – Is confidence appropriately calibrated in scientific contexts?  
+    – Are safety mitigations in place for factual errors?  
+  comparison_considerations: |
+    Outperforms GPT-3 on domain reasoning (2022 benchmarks);  
+    trails GPT-4 and Claude 3 Opus in factuality and safety.  
+    Historically important as precursor to domain-specific LLMs.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Demonstrates the need for governance of factual reliability in domain-specific LLMs.  
+  map:
+    context_considerations: |
+      Identify hallucination, citation fabrication, and misuse as primary risks.  
+    risk_categories: ["hallucination", "fabrication", "bias", "alignment_absence"]
+  measure:
+    suggested_metrics: |
+      Factual accuracy, citation validation rate, confidence calibration.  
+  manage:
+    risk_management_considerations: |
+      Require human-in-the-loop validation and source verification for outputs.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/facebook/galactica-120b"
+    description: "Official Galactica model card"
+  - url: "https://galactica.org/"
+    description: "Meta AI project overview (archived)"
+  benchmarks:
+  - name: "PubMedQA"
+    url: "https://pubmedqa.github.io/"
+    result: "81.2"
+  - name: "MATH"
+    url: "https://math-qa.github.io/"
+    result: "69.5"
+  third_party_evaluations:
+  - source: "Independent reviews (Nature, 2022–2023)"
+    url: "https://www.nature.com/articles/d41586-022-03747-0"
+    summary: "Found factual hallucination risk led to early deprecation."
+  news_coverage:
+  - title: "Meta’s Galactica AI pulled after backlash over false scientific claims"
+    url: "https://www.theverge.com/2022/11/21/23473130/meta-galactica-ai-scientific-paper-hallucination"
+    date: "2022-11-21"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Meta AI technical paper, Hugging Face archive, independent evaluations, and media reports.  
+  completeness_assessment: |
+    High for historical documentation; low for live benchmarks due to deprecation.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial historical card created from Galactica 120B release and deprecation sources."

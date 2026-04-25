@@ -1,0 +1,146 @@
+# Role-Based AI Stack: Why This Mix, and Where Each Model Fits
+
+## Premise
+
+We’re an **AI-native** organization: every workflow is AI-assisted or AI-automated. Our stack is intentionally simple, enforceable, and cost-disciplined, designed to keep us **inside the CIS v8.1 IG1 fence** while operating as a **voluntary high-risk deployer**.
+
+## First Principles
+
+1. **One “base” model for everyone** to eliminate tool sprawl and enable ubiquitous automation.
+2. **Clear data boundaries** tied to our AUP:
+
+   * **Secrets** → never touch AI.
+   * **Protected** → local models or CTO-isolated use only.
+   * **Public-Internal** → enterprise models with training opt-out.
+   * **Public-External** → specialized public code workflows.
+3. **Role separation** beats model roulette: each model has a job, and only that job.
+
+---
+
+## The Stack (and the Why)
+
+### 1) Gemini Pro 2.5 (Everyone) — “The Work Fabric”
+
+**Why:** It’s embedded where we live—Google Workspace, Drive, Docs, Gmail, Meet, and AI Studio—so the default way to work is automatically AI-assisted. With enterprise SSO, MFA, auditability, and training opt-out, it satisfies the baseline control story.
+
+**What it does:**
+
+* Day-to-day chat, drafting, research, and analysis.
+* Workspace-native tasks (summaries, meeting notes, doc linting, inbox triage) with **organizational audit**.
+* Code assistance for **internal** work (Docs/Sheets/Colab/Drive context) without exposing Protected data.
+
+**Compliance lens:**
+CIS IG1 friendly: identity, audit logs, and centralized admin; no personal accounts; training opt-out protects our Public-Internal outputs.
+
+---
+
+### 2) Gemini CLI (Automation Agent) — “Compliant Autonomy”
+
+**Why:** It converts our governance into action. At high throughput (120 req/min), we can **operate the cluster**, generate reports, and maintain knowledge artifacts—**all under enterprise identity and logging**.
+
+**What it does:**
+
+* Scheduled research briefs and ops reports dropped to Drive.
+* Repo hygiene, document linting, and evidence packaging.
+* GCP control via **RBAC service accounts** (least privilege) and scripted runbooks.
+
+**Where it runs:** in CI, cron, or N8N/Ansible orchestration.
+**Why it’s compliant:** enterprise authN/Z, auditable calls, and scoped service accounts keep us squarely in CIS IG1 territory for automation.
+
+---
+
+### 3) Claude (CTO Only) — “Editor-in-Chief”
+
+**Why:** When a deliverable sets direction or will be cited (policies, standards, board-facing docs), we use the model that consistently produces **governance-grade prose** and handles long, nuanced iterations.
+
+**What it does:**
+
+* Final polish and synthesis on governance artifacts.
+* Complex reasoning where clarity and restraint matter.
+* Protected data only via **isolated workspace** (CTO) when necessary.
+
+**Governance function:** Quality gate and orchestration; limited access maintains cost discipline and reduces risk surface.
+
+---
+
+### 4) Z.ai (Engineer Role) — “Public Code Workhorse”
+
+**Why:** It **trains on submitted data**, which is unacceptable for our internal code—but perfect for **Public-External** work (community OSS, forks, public data prototypes). It accelerates citizen-science coding without risking our IP.
+
+**What it does:**
+
+* Reviews PRs on external repos we don’t control.
+* Rapid prototyping on public datasets bound for publication.
+* Generates tests and scaffolds for upstream contributions.
+
+**Guardrail:** Engineer-role only; **strictly Public-External**. Our repos (Public-Internal) and any Protected content stay with Gemini/Claude/local.
+
+---
+
+### 5) Local Models (e.g., Llama-3-7B on A4000) — “Privacy & Edge”
+
+**Why:** When data cannot leave the enclave—astronomy workloads, Protected drafts, or offline analysis—local models provide **architectural certainty** (air-gap, zero egress) at minimal cost.
+
+**What they do:**
+
+* Sensitive linting and refactoring on configs/datasets.
+* Air-gapped experiments and tooling where latency and privacy trump raw model power.
+* Fallback path during vendor outages or policy shifts.
+
+**Compliance lens:** Physical/network isolation + least-privilege access == clean story for Protected data processing.
+
+---
+
+## Decision Path (the Only Three Questions That Matter)
+
+1. **What’s the data class?**
+
+* **Secrets** → never use AI.
+* **Protected** → **Local** (or CTO-isolated Claude).
+* **Public-Internal** → **Gemini** (everyone) / **Claude** (CTO for high-stakes).
+* **Public-External** → **Z.ai** allowed (Engineer-role).
+
+2. **Is this autonomous ops or batch synthesis?**
+
+* If yes → **Gemini CLI** with RBAC service accounts, logged to Workspace/GCP.
+
+3. **Is the output governance-grade?**
+
+* If yes → pass through **Claude (CTO)** as the editorial/quality gate.
+
+*(This keeps people fast and compliant without thinking about vendors—only about data class and consequence.)*
+
+---
+
+## How This Meets the Fence (Plain-English Compliance)
+
+* **CIS v8.1 IG1:**
+
+  * Centralized identity, MFA, and admin (Workspace).
+  * Audit logging (Workspace/GCP + run logs for CLI).
+  * Data protection discipline: inventory, access control, and strict Secrets policy.
+  * Change control via Git + evidence packaging in Drive.
+
+* **Voluntary High-Risk Deployer Posture:**
+
+  * Impactful public datasets → we operate as if in scope.
+  * Impact assessments and transparency live in the **Unified Dossier**.
+  * Explanations and correction workflows present where decisions affect people.
+
+* **AUP/Data Boundaries Enforced by Design:**
+
+  * Z.ai can’t reach internal code by role and policy.
+  * Protected data never leaves the enclave (local models or CTO isolation).
+  * Public-Internal work stays with training-opt-out models.
+
+---
+
+## Why This Mix Works
+
+* **One fabric to rule the day-to-day (Gemini)** keeps everyone productive and auditable.
+* **One compliant automation lane (Gemini CLI)** turns governance into buttons, not binders.
+* **One editorial control (Claude/CTO)** preserves quality where it matters most.
+* **One public workhorse (Z.ai/Engineer)** accelerates open contributions without risking our IP.
+* **One privacy island (Local)** protects what must never egress.
+
+**Result:** A small, role-separated stack that is fast for builders, comfortable for auditors, and safe for the public we impact.

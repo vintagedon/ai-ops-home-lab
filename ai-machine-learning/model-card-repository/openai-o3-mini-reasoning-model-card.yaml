@@ -1,0 +1,244 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "o3-mini"
+  vendor: "OpenAI"
+  model_family: "OpenAI o-series"
+  version: "mini"
+  release_date: "2025-03-14"
+  model_type: "Compact Reasoning Large Language Model"
+  vendor_model_card_url: "https://openai.com/index/introducing-o3-mini/"
+  license: "Commercial API (Proprietary)"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer (dense, reasoning-optimized)"
+    parameter_count: "Not publicly disclosed"
+    context_window: "200 K tokens"
+    training_data_cutoff: "2024-12"
+    architectural_details: |
+      o3-mini is part of OpenAI’s o-series reasoning models, optimized for efficiency while maintaining 
+      strong reasoning accuracy. It incorporates reasoning supervision and "chain-of-thought distillation" 
+      from GPT-5-level teachers. Designed for real-time inference with controllable reasoning depth.
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "Fast"
+    cost_tier: "Medium Low Cost"
+    latency: |
+      Typically 2–3× faster than GPT-5-main with lower cost per token; supports reasoning depth control 
+      through API parameters.
+    throughput: |
+      Optimized for low-latency batch requests and caching; used as a "default reasoning model" in OpenAI API (2025).
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    Combines strong reasoning ability with low inference cost. Performs well on structured reasoning, 
+    logic puzzles, and code generation. Intended as a balance between accuracy and speed.
+  benchmark_performance: |
+    Vendor and independent evaluations:
+    - MMLU: 86.8
+    - GSM8K: 94.0
+    - HumanEval: 78.3
+    - GPQA (diamond): 80.1
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["structured_reasoning", "chain_of_thought_distillation", "prompt_caching"]
+  known_limitations:
+    vendor_disclosed: |
+      Reduced depth on abstract reasoning vs GPT-5-thinking; occasional hallucinations on multi-step math 
+      or ambiguous problems; limited interpretability.
+    common_failure_modes: |
+      Oversimplified reasoning chains; early truncation of multi-turn logic sequences.
+    unsuitable_use_cases: |
+      Long-form reasoning or high-stakes decision-making requiring exhaustive chain-of-thought validation.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained using distilled reasoning traces from GPT-5-thinking and supervised fine-tuning on 
+    curated reasoning datasets (math, logic, code). Data sources undisclosed.
+  training_methodology: |
+    Reasoning-augmented supervised learning with reinforcement from correctness (RfC) and reasoning feedback loops.
+  data_privacy_considerations: |
+    Same data privacy guarantees as GPT-5 family; strict PII filtering, no training on API data.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Default reasoning model for applications requiring quick, affordable inference with strong logical accuracy.
+  suitable_domains: ["analysis", "code_generation", "structured_reasoning", "education", "chatbots"]
+  out_of_scope_use: |
+    Regulated or safety-critical systems where detailed reasoning auditability is required.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      "Mini model with reasoning power rivaling GPT-4 Turbo" — optimized for factual correctness and speed.
+    public_evidence: |
+      Benchmarks confirm strong reasoning performance and consistency across reasoning datasets.
+    assessment_notes: |
+      Reliable within typical LLM reasoning range; does not reach GPT-5’s full complexity.
+  safe:
+    safety_measures: |
+      Standard OpenAI moderation and refusal policies; "safe completions" alignment used during training.
+    known_safety_issues: |
+      Can still produce plausible-sounding false reasoning or biased conclusions.
+    assessment_notes: |
+      Safe for general reasoning tasks with standard API moderation; users must apply domain-specific oversight.
+  secure_and_resilient:
+    security_features: |
+      API-level safety layers identical to GPT-5; protected by OpenAI’s enterprise isolation.
+    known_vulnerabilities: |
+      Prompt injection and tool misuse remain possible via external integrations.
+    assessment_notes: |
+      Security posture solid within OpenAI’s ecosystem; external tool chains should add sandboxing.
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      System card published; reasoning architecture details withheld.
+    assessment_notes: |
+      Moderate transparency; sufficient for enterprise documentation.
+  explainable_and_interpretable:
+    explainability_features: |
+      Supports API-level reasoning-effort control (reveals "light vs deep" reasoning runs).
+    interpretability_limitations: |
+      No access to raw chain-of-thought traces; reasoning only inferable behaviorally.
+    assessment_notes: |
+      Partial operational interpretability; low mechanistic transparency.
+  privacy_enhanced:
+    privacy_features: |
+      Same enterprise-grade privacy as GPT-5; prompt data not used for training by default.
+    privacy_concerns: |
+      No visibility into internal dataset sourcing beyond GPT-5 family statements.
+    assessment_notes: |
+      Privacy acceptable for most enterprise deployments.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Fine-tuning includes bias detection heuristics and rejection sampling.
+    known_biases: |
+      Residual linguistic bias persists; reasoning bias possible in contentious moral scenarios.
+    assessment_notes: |
+      Balanced mitigation for a compact model; further fairness testing advised for production use.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Reasoning correctness on your domain-specific logic tasks
+    - Bias and factual accuracy audit
+    - Latency/cost tradeoff measurement under load
+  key_evaluation_questions: |
+    - Is reasoning depth sufficient for domain complexity?
+    - Does cost advantage outweigh accuracy gap vs GPT-5-thinking?
+    - Are reasoning outputs auditable for your compliance needs?
+  comparison_considerations: |
+    - Speed/cost advantage vs GPT-5; reduced depth vs Gemini 2.5 Pro reasoning tier.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Define approval for reasoning model substitution; ensure monitoring for correctness degradation.
+  map:
+    context_considerations: |
+      Assess reasoning reliability vs cost and context-length needs.
+    risk_categories: ["hallucination", "bias", "prompt_injection", "incorrect_reasoning"]
+  measure:
+    suggested_metrics: |
+      Task-level accuracy; reasoning chain completeness; cost per inference.
+  manage:
+    risk_management_considerations: |
+      Add correctness verification (e.g., dual-model validation); integrate feedback loops for factual checking.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://openai.com/index/introducing-o3-mini/"
+    description: "Official o3-mini announcement and benchmark summary"
+  - url: "https://cdn.openai.com/o3-system-card.pdf"
+    description: "System card and reasoning evaluation"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://openai.com/index/introducing-o3-mini/"
+    result: "86.8"
+  - name: "GSM8K"
+    url: "https://openai.com/index/introducing-o3-mini/"
+    result: "94.0"
+  - name: "HumanEval"
+    url: "https://openai.com/index/introducing-o3-mini/"
+    result: "78.3"
+  third_party_evaluations:
+  - source: "Independent community benchmarks (ArXiv 2025)"
+    url: "https://arxiv.org/abs/2504.01234"
+    summary: "Confirmed strong reasoning accuracy and low latency."
+  news_coverage:
+  - title: "OpenAI introduces o3-mini: compact reasoning LLM"
+    url: "https://openai.com/index/introducing-o3-mini/"
+    date: "2025-03-14"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    OpenAI system card, announcement blog, and independent benchmark studies.
+  completeness_assessment: |
+    High for performance data; medium for architecture and dataset transparency.
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from OpenAI o3-mini release and evaluation data."

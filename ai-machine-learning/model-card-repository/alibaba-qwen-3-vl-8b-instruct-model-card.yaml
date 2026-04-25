@@ -1,0 +1,207 @@
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+model_identity:
+  name: "Qwen3-VL-8B-Instruct"
+  vendor: "Alibaba Qwen AI Team"
+  model_family: "Qwen3-VL"
+  version: "8B-Instruct"
+  release_date: "2025-10-15"  # approximate based on press/releases. :contentReference[oaicite:2]{index=2}
+  model_type: "Vision-Language Model (multimodal: image/video + text → text output)"
+
+  vendor_model_card_url: "https://huggingface.co/Qwen/Qwen3-VL-8B-Instruct"  :contentReference[oaicite:3]{index=3}
+
+  license: "Apache 2.0"  :contentReference[oaicite:4]{index=4}
+  deprecation_status: "Active"
+
+technical_specifications:
+  architecture:
+    base_architecture: "Dense transformer-style vision-language model with large context and multi-modal perception"  :contentReference[oaicite:5]{index=5}
+    parameter_count: "≈ 8.8 B parameters"  # reported ~8.77B for 8B variant. :contentReference[oaicite:6]{index=6}
+    context_window: "Native 256K tokens, expandable to 1 M tokens"  :contentReference[oaicite:7]{index=7}
+    training_data_cutoff: "Not publicly disclosed"
+
+    architectural_details: |
+      - Introduces “Interleaved-MRoPE” positional embeddings for spatio-temporal modelling. :contentReference[oaicite:8]{index=8}
+      - Uses “DeepStack” fusion of multi-level ViT features for fine-grained image–text alignment. :contentReference[oaicite:9]{index=9}
+      - Supports advanced OCR (32 languages), extended visual-coding generation (HTML/CSS/JS from image/video). :contentReference[oaicite:10]{index=10}
+
+  modalities:
+    supported_inputs: ["text", "image", "video"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "Moderate-to-high (8B model with multimodal capability)"
+    cost_tier: "Higher than smaller models but more efficient than top-tier 70B+ variants"
+    latency: "Depends on hardware; large context/video use increases cost"
+    throughput: "Not publicly disclosed"
+
+capabilities:
+  vendor_claimed_strengths: |
+    - Visual agent capability: recognize GUI elements, perform tool-invocations from image/video+text. :contentReference[oaicite:11]{index=11}
+    - Spatial reasoning: judgments of object positions, viewpoints, occlusions, support 3D grounding. :contentReference[oaicite:12]{index=12}
+    - Long-context & video understanding: handle books, hours-long video with full recall via large context window. :contentReference[oaicite:13]{index=13}
+    - Enhanced OCR: Recognises text in 32 languages, including rare/ancient characters and challenging conditions (blur/tilt). :contentReference[oaicite:14]{index=14}
+    - Text understanding comparable to pure-text LLMs with vision fused seamlessly. :contentReference[oaicite:15]{index=15}
+
+  benchmark_performance: |
+    While precise public benchmark values are limited, third-party summary reports highlight strong reliability and high performance across multimodal tasks. :contentReference[oaicite:16]{index=16}
+
+  special_capabilities:
+    tools_support: true (via visual agent/tool invocation)
+    vision_support: true
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["image + video understanding", "tool invocation from visuals", "long-document & long-video reasoning"]
+
+  known_limitations:
+    vendor_disclosed: |
+      Training data detailed breakdown not public; inference cost remains significant for large context/video.
+    common_failure_modes: |
+      - In extremely long or complex video/document chains, performance may degrade.
+      - Hardware/VRAM constraints may limit throughput or real-time responsiveness.
+    unsuitable_use_cases: |
+      - Real-time systems with tight latency requirements on low-end hardware without adaptation.
+      - Regulated domains requiring full transparency of training/data provenance unless further audit is done.
+
+training_information:
+  training_data_description: |
+    The model card describes “broader, higher-quality pre-training” but does not detail dataset size, sources, or filtering pipelines. :contentReference[oaicite:17]{index=17}
+  training_methodology: |
+    Likely large-scale multimodal pre-training (text/images/videos) followed by instruction-tuning for the Instruct variant.
+  data_privacy_considerations: |
+    No explicit statement on PII filtering or dataset provenance; users should conduct risk assessments for sensitive use-cases.
+
+intended_use:
+  vendor_intended_use: |
+    Unified vision-language assistant tasks: reading images/videos+text, reasoning, tool invocation, interactive multimodal workflows.
+  suitable_domains: ["multimodal assistant", "document & video analysis", "vision-based agent workflows", "OCR + long-document processing"]
+  out_of_scope_use: |
+    - Single-modality generation-only tasks where simpler models suffice.
+    - Low-end hardware deployments without adaptation/fine-tuning.
+    - Uses requiring full training provenance and audit trail unless supplemented.
+
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Descriptions of architecture and capabilities publicly available.
+    public_evidence: |
+      Model card page and press articles present features; independent benchmark detail still limited.
+    assessment_notes: |
+      Strong candidate for multimodal tasks; still advisable to validate in-domain especially for long-context/video workflows.
+
+  safe:
+    safety_measures: |
+      Apache 2.0 license; open release signals broader transparency.
+    known_safety_issues: |
+      Hallucinations possible especially in complex multimodal reasoning; large context windows may amplify drift.
+    assessment_notes: |
+      Deploy with human-in-loop review, especially for high-stakes applications.
+
+  secure_and_resilient:
+    security_features: |
+      Open weights support on-premise deployment, improving auditability and control.
+    known_vulnerabilities: |
+      Large compute/memory requirements may surface resource exhaustion risks if mis-deployed.
+    assessment_notes: |
+      Ensure infrastructure controls, quotas, monitoring of usage.
+
+  accountable_and_transparent:
+    transparency_level: "Medium-High"
+    auditability: |
+      Model weights and code are public; dataset provenance still limited.
+    assessment_notes: |
+      For regulated use where audit is critical, complement with dataset disclosure or additional evaluation.
+
+  explainable_and_interpretable:
+    explainability_features: |
+      Outputs (text) are inspectable; architecture details partially exposed.
+    interpretability_limitations: |
+      Internal reasoning and multi-modal fusion steps remain opaque.
+    assessment_notes: |
+      Suitable for many tasks; for interpretability-heavy domains consider layering logging/trace.
+
+  privacy_enhanced:
+    privacy_features: |
+      On-premise deployment possible; multimodal fusion supports controlled contexts.
+    privacy_concerns: |
+      Unknown training data provenance may include PII; large context windows may cause unintended memorisation.
+    assessment_notes: |
+      For sensitive data use, apply sanitisation, access controls and output logging.
+
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Model supports 32-language OCR and broad pre-training; no detailed bias audit published.
+    known_biases: |
+      May under-perform on extremely niche languages, rare scripts, or specific video domains not well covered.
+    assessment_notes: |
+      Conduct bias/fairness assessment for under-represented languages and modalities in your domain.
+
+evaluation_guidance:
+  recommended_tests: |
+    - Evaluate model on your multimodal tasks: image + text, video + text, long-document, long-video inputs.
+    - Measure accuracy of visual perception (object detection, spatial reasoning), OCR (32 languages), and tool invocation performance.
+    - Benchmark long‐context behaviour: test with large documents (256K+ tokens) or long video chains.
+    - Test latency and resource usage on your hardware for target use-case.
+    - Safety/red-teaming: test for hallucination, mis-tool-invocations, bad behavioural outputs especially in edge cases.
+    - Check prompt design: ensure system/purpose alignment, multi-modal input formatting correct.
+
+  key_evaluation_questions: |
+    - Does the model meet your accuracy/fidelity requirements for image/video understanding and reasoning tasks?
+    - Is your hardware and infrastructure capable of supporting required memory, compute and context length?
+    - Do you have human-in-the-loop review for outputs especially if used in decision workflows?
+    - Are your licensing, deployment and governance controls aligned with open-source Apache 2.0 and your internal policy?
+
+  comparison_considerations: |
+    - Compare with other vision‐language models (e.g., Qwen2.5-VL, other open multimodal models) in terms of parameter size vs lost performance vs context length vs modalities.
+    - Assess whether you need full 1 M token context/video support or a lighter model would suffice.
+    - Evaluate cost/benefit: 8B parameters with multimodal support vs larger or smaller models depending on throughput/latency.
+
+rmf_function_mapping:
+  govern:
+    notes: |
+      Versioning, prompt usage logging, multi-modal input review, downstream tool-invocation audit.
+  map:
+    context_considerations: |
+      Multimodal workflows (image + text, video + text), long‐context document/video processing, tool invocation from visuals, agent integration.
+    risk_categories: ["hallucination","mis‐tool-invocation","long-context drift","video mis‐understanding","bias_language/script"]
+  measure:
+    suggested_metrics: |
+      - Hallucination/error rate per 1k multimodal tasks.
+      - Latency/throughput (ms or seconds) per task at your scale.
+      - Long‐context failure rate (document length) per 100 tasks.
+      - Bias/outcome disparity rate across languages/modalities per 1k tasks.
+  manage:
+    risk_management_considerations: |
+      Implement human review, versioning of model/prompt/config, monitoring of multi‐modal usage, fallback strategies for high‐risk prompts, prompt sanitation and policy enforcement.
+
+references:
+  vendor_documentation:
+    - url: "https://huggingface.co/Qwen/Qwen3-VL-8B-Instruct"
+      description: "Hugging Face model page" :contentReference[oaicite:18]{index=18}
+    - url: "https://arxiv.org/abs/2505.09388"
+      description: "Qwen3 Technical Report" :contentReference[oaicite:19]{index=19}
+    - url: "https://kiadev.net/news/2025-10-15-qwen3-vl-4b-8b-fp8-compact-release/"
+      description: "Press article summarising 4B/8B release and FP8 checkpoint" :contentReference[oaicite:20]{index=20}
+  benchmarks:
+    - name: "Benchable.ai model summary for Qwen3-VL-8B-Instruct"
+      url: "https://benchable.ai/models/qwen/qwen3-vl-8b-instruct"
+      result: "multimodal capability, strong reliability, some weakness in hallucinations" :contentReference[oaicite:21]{index=21}
+  third_party_evaluations:
+    - source: "Reddit commentary on Qwen3-VL small-variant release"
+      url: "https://www.reddit.com/r/LocalLLaMA/comments/1o6kchzvuu"
+      summary: > “Qwen released compact dense Qwen3-VL 4B & 8B Instruct/Thinking with full capability surface.” :contentReference[oaicite:22]{index=22}
+
+metadata:
+  card_version: "1.0"
+  card_author: "Generated-by-Assistant"
+  card_creation_date: "2025-10-24"
+  last_updated: "2025-10-24"
+  information_sources: |
+    HuggingFace model page, arXiv technical report, press release article, community commentary.
+  completeness_assessment: |
+    Good for architecture, capabilities, context length and modalities; moderate for detailed dataset/training breakdown, benchmark numeric values and latency/throughput at scale; some uncertainty remains regarding deployment cost and behaviour in edge cases.
+  change_log:
+    - date: "2025-10-24"
+      author: "Generated-by-Assistant"
+      changes: "Initial synthesis of Qwen3-VL-8B-Instruct model card."

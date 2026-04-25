@@ -1,0 +1,807 @@
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+# Grok 2 Vision Model Card
+# Source: xAI documentation (https://docs.x.ai) and provided PDF snapshot
+# Note: Limited information available - system card not provided
+
+schema_version: "1.0.0"
+
+# =============================================================================
+# MODEL IDENTITY
+# =============================================================================
+
+model_identity:
+  name: "Grok 2 Vision (grok-2-vision-1212)"
+  vendor: "xAI"
+  model_family: "Grok series"
+  version: "grok-2-vision-1212"
+  release_date: "2024-12-14 (based on model identifier and xAI changelog)"
+  model_type: "Multimodal Large Language Model (vision + text)"
+
+  vendor_model_card_url: "https://docs.x.ai/docs/models/grok-2-vision-1212"
+
+  license: "not listed at source"
+  
+  deprecation_status: "Active"
+
+# =============================================================================
+# MODEL ARCHITECTURE & TECHNICAL SPECIFICATIONS
+# =============================================================================
+
+technical_specifications:
+  architecture:
+    base_architecture: "not listed at source"
+    
+    parameter_count: "not publicly disclosed"
+    
+    context_window: "32,768 tokens"
+    
+    training_data_cutoff: "not listed at source"
+
+    architectural_details: |
+      Multimodal model capable of processing text and images. According to xAI documentation, 
+      the model "processes documents, diagrams, charts, screenshots, and photographs."
+      
+      Version grok-2-vision-1212 was announced December 14, 2024 as offering "better accuracy, 
+      instruction-following, and multilingual capabilities" compared to earlier grok-vision-beta.
+      
+      Sources: xAI docs PDF page 1, xAI changelog
+
+  modalities:
+    supported_inputs: ["text", "image"]
+    
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "not listed at source"
+    
+    cost_tier: "Moderate - $2.00 input / $10.00 output per million tokens"
+    
+    latency: "not listed at source"
+    
+    throughput: "not listed at source"
+
+# =============================================================================
+# CAPABILITIES & LIMITATIONS
+# =============================================================================
+
+capabilities:
+  vendor_claimed_strengths: |
+    From xAI documentation: "Our multimodal model that processes documents, diagrams, charts, 
+    screenshots, and photographs."
+    
+    Version grok-2-vision-1212 offers "better accuracy, instruction-following, and multilingual 
+    capabilities" compared to earlier versions.
+    
+    Benchmarks from third-party sources (unverified by official documentation):
+    - Visual Math Reasoning (MathVista): 69.0%
+    - Document-Based Question Answering (DocVQA): described as excelling
+    
+    Note: Official system card with comprehensive benchmark data not available at source.
+    
+    Sources: xAI docs PDF, xAI changelog, third-party benchmark aggregator
+
+  benchmark_performance: |
+    Official benchmarks not listed at primary source (xAI documentation).
+    
+    Third-party sources report:
+    - MathVista (visual math reasoning): 69.0%
+    - DocVQA (document QA): strong performance claimed but no specific score
+    
+    Note: These third-party benchmarks should be verified against official xAI publications.
+
+  special_capabilities:
+    tools_support: true  # "Function calling - Connect the xAI model to external tools and systems"
+    
+    vision_support: true
+    
+    reasoning_support: false  # Reasoning capability shown as grayed out in documentation
+    
+    image_generation: false  # Separate Aurora model used for image generation in Grok ecosystem
+    
+    additional_capabilities: 
+      - "Structured outputs - Return responses in a specific, organized formats"
+      - "Multimodal understanding (text + image)"
+      - "Document processing"
+      - "Diagram and chart analysis"
+
+  known_limitations:
+    vendor_disclosed: |
+      From xAI documentation:
+      - "Cached tokens: Not supported"
+      - "Live search: Not supported" (as of model documentation snapshot)
+      - Reasoning capability appears to be not available (grayed out in capabilities list)
+      
+      Source: xAI docs PDF page 1
+
+    common_failure_modes: |
+      not listed at source
+      
+      Note: No comprehensive safety evaluation or failure mode documentation available in 
+      accessible sources.
+
+    unsuitable_use_cases: |
+      not listed at source
+      
+      Note: xAI Usage Policies and safety guidelines not accessible in provided sources.
+
+# =============================================================================
+# TRAINING & DATA
+# =============================================================================
+
+training_information:
+  training_data_description: |
+    not listed at source
+
+  training_methodology: |
+    not listed at source
+
+  data_privacy_considerations: |
+    not listed at source
+
+# =============================================================================
+# INTENDED USE & SCOPE
+# =============================================================================
+
+intended_use:
+  vendor_intended_use: |
+    Based on described capabilities, intended for:
+    - Processing documents, diagrams, charts, screenshots, and photographs
+    - Visual understanding tasks
+    - Function calling / tool integration
+    - Structured output generation
+    
+    Source: xAI docs PDF page 1
+
+  suitable_domains: 
+    - "Document analysis and understanding"
+    - "Visual content interpretation"
+    - "Chart and diagram analysis"
+    - "Screenshot analysis"
+    - "Multimodal applications requiring text + image understanding"
+
+  out_of_scope_use: |
+    not listed at source
+    
+    Without access to comprehensive safety documentation and usage policies, specific 
+    out-of-scope uses cannot be definitively stated.
+
+# =============================================================================
+# TRUSTWORTHINESS CHARACTERISTICS
+# =============================================================================
+
+trustworthiness_assessment:
+  # CHARACTERISTIC 1: Valid and Reliable
+  valid_and_reliable:
+    vendor_claims: |
+      xAI claims "better accuracy, instruction-following, and multilingual capabilities" for 
+      grok-2-vision-1212 version compared to earlier versions.
+      
+      Third-party benchmarks suggest strong performance on visual math reasoning (MathVista: 69.0%) 
+      and document QA.
+      
+      Sources: xAI changelog, third-party benchmarks
+
+    evidence: |
+      Limited independent evaluation evidence available. Third-party benchmark results (MathVista, 
+      DocVQA) suggest competent multimodal performance, but comprehensive third-party audits or 
+      red team evaluations not found in accessible sources.
+
+    assessment_notes: |
+      Insufficient information available to make comprehensive reliability assessment. No official 
+      system card, safety evaluations, or detailed capability assessments accessible. Users should 
+      conduct domain-specific testing before deployment.
+
+  # CHARACTERISTIC 2: Safe
+  safe:
+    vendor_claims: |
+      not listed at source
+
+    safety_mechanisms: |
+      not listed at source
+      
+      Note: Safety controls, content filtering, refusal training, and other safety mechanisms 
+      not documented in accessible sources.
+
+    known_safety_risks: |
+      not listed at source
+
+    assessment_notes: |
+      CRITICAL INFORMATION GAP: No safety evaluation documentation available. Cannot assess:
+      - Content filtering capabilities
+      - Refusal training effectiveness
+      - Jailbreak resistance
+      - Harmful content generation risks
+      - Bias and fairness controls
+      
+      Deployers should conduct comprehensive safety testing before production use.
+
+  # CHARACTERISTIC 3: Secure and Resilient
+  secure_and_resilient:
+    vendor_claims: |
+      not listed at source
+
+    security_measures: |
+      not listed at source
+
+    vulnerabilities: |
+      not listed at source
+
+    assessment_notes: |
+      No information available on adversarial robustness, prompt injection resistance, or 
+      security hardening measures.
+
+  # CHARACTERISTIC 4: Accountable and Transparent
+  accountable_and_transparent:
+    vendor_transparency: |
+      Minimal transparency provided:
+      - Basic capability descriptions available
+      - Pricing structure documented ($2.00 input / $10.00 output per 1M tokens)
+      - Context window specified (32,768 tokens)
+      - Model aliases documented (grok-2-vision, grok-2-vision-latest)
+      
+      Sources: xAI documentation
+
+    transparency_gaps: |
+      Significant transparency gaps:
+      - No comprehensive system card published
+      - No disclosed parameter count
+      - No training data details
+      - No safety evaluations published
+      - No bias and fairness testing results
+      - No architecture specifications
+      - No training methodology details
+      - No data cutoff date
+      - No performance benchmarks from vendor
+      - No capability limitations documentation
+      - No usage policy details accessible
+      
+      This represents substantially less transparency than leading AI labs (OpenAI, Anthropic, 
+      Google) provide for comparable models.
+
+    assessment_notes: |
+      Transparency significantly below industry standards for frontier models. Critical information 
+      needed for responsible deployment not publicly available. Organizations should request 
+      additional documentation from xAI before high-stakes deployment.
+
+  # CHARACTERISTIC 5: Explainable and Interpretable
+  explainable_and_interpretable:
+    explainability_features: |
+      not listed at source
+
+    interpretability_limitations: |
+      not listed at source
+
+    assessment_notes: |
+      No information on explainability features, reasoning traces, or interpretability tools.
+
+  # CHARACTERISTIC 6: Privacy-Enhanced
+  privacy_enhanced:
+    privacy_protections: |
+      not listed at source
+
+    privacy_risks: |
+      not listed at source
+      
+      Given model processes images including potentially "screenshots and photographs", privacy 
+      considerations for image content should be carefully evaluated by deployers.
+
+    assessment_notes: |
+      No information on training data privacy protections, PII filtering, or person identification 
+      refusal capabilities. Privacy assessment cannot be completed without additional documentation.
+
+  # CHARACTERISTIC 7: Fair with Harmful Bias Managed
+  fair_with_harmful_bias_managed:
+    fairness_testing: |
+      not listed at source
+
+    bias_mitigation: |
+      Multilingual capabilities claimed, suggesting some attention to language diversity, but 
+      specific bias mitigation strategies not documented.
+
+    known_biases: |
+      not listed at source
+
+    assessment_notes: |
+      No fairness evaluations, bias testing results, or demographic performance data available. 
+      Critical gap for deployment in diverse contexts or with diverse user populations.
+
+# =============================================================================
+# EVALUATION GUIDANCE
+# =============================================================================
+
+evaluation_guidance:
+  recommended_tests: |
+    Given limited vendor documentation, comprehensive pre-deployment testing is CRITICAL:
+    
+    1. Safety & Content Filtering:
+       - Test with adversarial prompts for harmful content generation
+       - Verify refusal behavior on sensitive topics
+       - Assess overrefusal rate on benign prompts
+       - Test jailbreak resistance with domain-specific attacks
+    
+    2. Vision Capability Validation:
+       - Test document understanding accuracy on your document types
+       - Validate chart/diagram interpretation for your use cases
+       - Assess screenshot analysis quality
+       - Test photograph understanding capabilities
+       - Verify performance on your image quality/format requirements
+    
+    3. Accuracy & Hallucination:
+       - Extensive fact-checking on domain-specific queries
+       - Test with questions where incorrect answers could cause harm
+       - Validate visual understanding accuracy (do descriptions match images?)
+       - Test for visual hallucinations (claiming to see things not in image)
+    
+    4. Bias & Fairness:
+       - Test with diverse demographic representations in images
+       - Assess performance across multiple languages
+       - Test for stereotyping in image descriptions
+       - Validate equal performance across demographic groups
+    
+    5. Privacy & Person Identification:
+       - Test whether model refuses to identify people from photos
+       - Assess PII handling in image content
+       - Verify appropriate handling of sensitive visual information
+    
+    6. Function Calling / Tool Use:
+       - Validate tool calling accuracy for your integration
+       - Test structured output reliability
+       - Verify JSON schema compliance
+    
+    7. Reliability & Performance:
+       - Measure latency for your use case
+       - Test throughput under load
+       - Assess consistency across repeated queries
+       - Validate context window handling (up to 32,768 tokens)
+    
+    8. Multimodal Integration:
+       - Test combined text + image understanding
+       - Validate handling of multiple images
+       - Assess quality degradation with complex multimodal inputs
+    
+    Given transparency gaps, BASELINE ALL METRICS - you cannot compare to published vendor 
+    benchmarks since they don't exist for most capabilities.
+
+  key_evaluation_questions: |
+    CRITICAL DEPLOYMENT DECISION QUESTIONS:
+    
+    1. Information Gaps:
+       - Are we comfortable deploying without published safety evaluations?
+       - Can we accept lack of transparency about training data and methods?
+       - Do we have resources to conduct comprehensive testing in absence of vendor documentation?
+       - Are we prepared for unknown risks given documentation gaps?
+    
+    2. Safety Posture:
+       - Have we verified safety controls meet our requirements?
+       - Can we detect and prevent harmful content generation?
+       - Do we have adequate human oversight for high-stakes uses?
+       - Are we prepared for potential safety incidents without vendor guidance?
+    
+    3. Capability Validation:
+       - Have we verified vision capabilities work for our specific use case?
+       - Does accuracy meet our requirements (we must establish baseline)?
+       - Is hallucination rate acceptable for our risk tolerance?
+       - Do multimodal capabilities meet our needs?
+    
+    4. Privacy & Compliance:
+       - Have we verified PII handling meets our requirements?
+       - Does model handle person identification appropriately?
+       - Can we meet regulatory requirements given transparency gaps?
+       - Are we comfortable with unknown training data sources?
+    
+    5. Fairness:
+       - Have we tested for bias in our specific deployment context?
+       - Does performance meet fairness requirements across demographics?
+       - Are we prepared to monitor for bias without vendor guidance?
+    
+    6. Operational:
+       - Is pricing acceptable ($2.00 input / $10.00 output per 1M tokens)?
+       - Does 32,768 token context window meet needs?
+       - Is API-only deployment acceptable (no on-premise option mentioned)?
+       - Are we prepared to troubleshoot without comprehensive docs?
+    
+    7. Alternatives:
+       - Have we compared to models with better documentation (Claude, GPT-4V, Gemini)?
+       - Do transparency gaps justify choosing alternative with published safety evaluations?
+       - Is xAI ecosystem integration worth accepting documentation gaps?
+    
+    8. Risk Tolerance:
+       - Is our use case low-stakes enough to accept documentation gaps?
+       - Do we have resources for extensive internal testing?
+       - Can we implement sufficient safeguards without vendor guidance?
+
+  comparison_considerations: |
+    Comparing to other multimodal models:
+    
+    Grok 2 Vision vs. GPT-4 Vision / GPT-4o:
+    - OpenAI provides comprehensive system cards, safety evaluations, and benchmarks
+    - GPT-4V has extensive third-party testing and community knowledge
+    - Documentation gap makes capability comparison difficult
+    
+    Grok 2 Vision vs. Claude 3 Sonnet/Opus with vision:
+    - Anthropic provides detailed system cards and safety evaluations
+    - Claude has published fairness and bias testing
+    - Anthropic's transparency substantially higher
+    
+    Grok 2 Vision vs. Gemini Pro Vision / Gemini 1.5:
+    - Google provides technical reports and benchmark results
+    - Gemini has published safety evaluations
+    - Larger context window available in Gemini 1.5
+    
+    Grok 2 Vision vs. open source alternatives (LLaVA, CogVLM):
+    - Open source models have published architectures and training details
+    - Community testing more extensive for popular open models
+    - Transparency substantially higher even if capability lower
+    
+    Key Trade-offs:
+    - Documentation vs. Capability: Choose Grok 2 Vision only if capabilities justify accepting 
+      documentation gaps
+    - Cost: Compare $2/$10 per million tokens to alternatives
+    - Ecosystem: Consider xAI integration value vs. safety documentation
+    - Risk Tolerance: Low-stakes use cases may accept gaps; high-stakes should prefer documented models
+    
+    RECOMMENDATION: For high-stakes deployments requiring safety assurance, bias testing, and 
+    comprehensive documentation, consider alternatives with published system cards and safety 
+    evaluations. For exploratory or low-stakes uses where xAI integration valuable, Grok 2 Vision 
+    may be appropriate with extensive internal testing.
+
+# =============================================================================
+# NIST AI RMF MAPPING
+# =============================================================================
+
+rmf_function_mapping:
+  # GOVERN: Organizational policies and oversight
+  govern:
+    notes: |
+      Governance considerations for Grok 2 Vision deployment:
+      
+      ELEVATED RISK POSTURE REQUIRED:
+      Given lack of vendor documentation, governance must be MORE stringent than for well-documented 
+      models:
+      
+      Policy Requirements:
+      - Require executive approval for production deployment given documentation gaps
+      - Establish enhanced monitoring requirements
+      - Define clear escalation for safety incidents without vendor guidance
+      - Document risk acceptance for transparency gaps
+      - Require regular re-evaluation (quarterly minimum)
+      
+      Oversight Structure:
+      - Designated risk owner for deployment
+      - Enhanced incident response team
+      - Regular review of model behavior for drift or issues
+      - External expert consultation consideration
+      
+      Documentation Requirements:
+      - Comprehensive internal testing documentation
+      - Baseline metrics establishment
+      - Incident log with detailed tracking
+      - Decision rationale for choosing under-documented model
+      
+      Risk Acceptance:
+      - Formal documentation of known unknown risks
+      - Explicit approval of transparency gaps
+      - Defined use case boundaries (likely narrower than well-documented models)
+      - Regular governance review to reassess risk tolerance
+
+  # MAP: Context and risk identification
+  map:
+    context_considerations: |
+      CRITICAL: Context considerations MORE important given documentation gaps:
+      
+      Use Case Context:
+      - Limit initial deployment to LOW-STAKES use cases
+      - Avoid high-stakes decisions without extensive validation
+      - Consider pilot/experimental status until sufficient testing completed
+      - Plan for human-in-the-loop for all outputs initially
+      
+      Data Sensitivity:
+      - Unknown training data sourcing creates privacy uncertainty
+      - Image content privacy particularly concerning (person identification behavior unknown)
+      - Consider whether proprietary or sensitive images should be sent to model
+      - Evaluate data retention and access policies from xAI
+      
+      Stakeholder Impacts:
+      - Who is affected by model errors?
+      - Can we detect and correct errors before stakeholder harm?
+      - Are affected populations aware of AI use?
+      - Do we have recourse mechanisms for failures?
+      
+      Regulatory Requirements:
+      - Can we meet transparency requirements without vendor documentation?
+      - Do we have sufficient information for required AI disclosures?
+      - Can we comply with bias and fairness regulations without testing data?
+      - Are we meeting duty of care without safety evaluations?
+      
+      Competitive/Strategic Context:
+      - Is early access worth accepting documentation risk?
+      - Do we have resources for extensive internal validation?
+      - Can we switch to alternatives if issues arise?
+
+    risk_categories:
+      - "UNKNOWN RISKS: Safety controls unknown - harmful content generation potential unclear"
+      - "UNKNOWN RISKS: Training data unknown - copyright, privacy, bias sources unclear"
+      - "UNKNOWN RISKS: Adversarial robustness unknown - jailbreak vulnerability unclear"
+      - "UNKNOWN RISKS: Fairness unknown - demographic performance gaps unknown"
+      - "Vision-specific: Person identification behavior unknown"
+      - "Vision-specific: Visual hallucination rates unknown"
+      - "Vision-specific: Image privacy handling unknown"
+      - "Reliability: Hallucination rates unknown"
+      - "Reliability: Consistency and robustness unknown"
+      - "Operational: Limited documentation for troubleshooting"
+      - "Compliance: Insufficient documentation for regulatory requirements"
+
+  # MEASURE: Metrics and monitoring
+  measure:
+    suggested_metrics: |
+      ENHANCED MONITORING REQUIRED due to documentation gaps:
+      
+      Pre-deployment Baseline Establishment (MANDATORY):
+      Since vendor provides no benchmarks, YOU must establish baselines:
+      - Safety refusal rate on adversarial test set (create domain-specific tests)
+      - Hallucination rate on ground truth dataset (vision + text)
+      - Visual understanding accuracy on labeled test set
+      - Bias metrics across demographic test sets
+      - Person identification behavior (should refuse)
+      - Overrefusal rate on benign prompts
+      - Latency and throughput on representative workload
+      
+      Continuous Production Monitoring (ELEVATED VIGILANCE):
+      - Harmful content generation rate (human review sample + automated)
+      - Hallucination reports (user feedback + automated detection)
+      - Visual hallucination incidents (claiming to see things not present)
+      - Privacy incidents (PII leakage, inappropriate person identification)
+      - Bias complaints or demographic performance gaps
+      - Tool calling accuracy / structured output correctness
+      - Error rates and failure modes
+      - User satisfaction and trust metrics
+      
+      Behavioral Monitoring:
+      - Model behavior drift detection (compare to baseline)
+      - Unexpected response patterns
+      - Tool usage anomalies
+      - Refusal rate changes over time
+      
+      Compliance Monitoring:
+      - Audit log completeness
+      - Human review coverage
+      - Incident response time
+      - Documentation maintenance
+      
+      Comparative Monitoring:
+      - Benchmark against alternative models periodically
+      - Track if documentation gap closes over time
+      - Monitor for vendor updates or safety information release
+      
+      Measurement Methods:
+      - Higher human review percentage than for documented models (suggest 10-20% initially)
+      - Automated safety classifiers (must implement internally)
+      - User feedback mechanisms (critical given lack of vendor guidance)
+      - Regular red team exercises (quarterly minimum)
+      - A/B testing against documented alternatives
+      
+      Alert Thresholds:
+      - Conservative thresholds given uncertainty
+      - Multiple safety incident types trigger escalation
+      - Faster escalation than for well-documented models
+      - Regular executive reporting on risk posture
+
+  # MANAGE: Risk controls and responses
+  manage:
+    risk_management_considerations: |
+      ENHANCED CONTROLS REQUIRED:
+      
+      Given documentation gaps, implement DEFENSE IN DEPTH:
+      
+      Technical Controls:
+      
+      Multiple Safety Layers (CRITICAL):
+      - Input filtering (block known harmful prompts)
+      - Output filtering (multi-layer content moderation)
+      - Confidence scoring with conservative thresholds
+      - Mandatory human review for high-stakes outputs
+      - Rate limiting (prevent abuse without vendor controls)
+      - Sandboxing and isolation (limit blast radius)
+      
+      Enhanced Monitoring:
+      - Real-time safety classification (must build internally)
+      - Visual content analysis (verify image understanding accuracy)
+      - Hallucination detection systems
+      - Anomaly detection for unusual behavior
+      - Comprehensive logging (inputs, outputs, metadata)
+      
+      Robust Fallbacks:
+      - Alternative model for safety-critical paths
+      - Human expert escalation (lower threshold)
+      - Graceful degradation strategies
+      - Clear error messaging and user guidance
+      
+      Process Controls:
+      
+      Extensive Human Review:
+      - Higher review percentage than typical (10-20% initially)
+      - Mandatory review for high-stakes decisions
+      - Expert review for safety/bias concerns
+      - Regular sample review even for routine uses
+      
+      Comprehensive Logging & Audit:
+      - Log everything (you're building documentation vendor didn't)
+      - Long retention period
+      - Regular audit reviews
+      - Detailed incident investigation
+      
+      Strict Escalation:
+      - Clear ownership and accountability
+      - Faster escalation than typical
+      - Executive visibility on incidents
+      - External expert consultation trigger
+      
+      Organizational Controls:
+      
+      Enhanced Training:
+      - User training on model limitations (emphasize unknowns)
+      - Training on recognizing errors and hallucinations
+      - Training on escalation procedures
+      - Regular refreshers as you learn about model
+      
+      Conservative Policies:
+      - Stricter acceptable use than for documented models
+      - Limited initial use cases (expand as confidence builds)
+      - Regular policy review as you learn
+      - Data handling policies (especially for images)
+      
+      Active Governance:
+      - Regular risk reviews (quarterly minimum)
+      - Continuous evaluation program
+      - External red teaming (annual minimum)
+      - Stakeholder feedback collection and review
+      
+      Incident Response:
+      
+      Proactive Detection:
+      - Enhanced monitoring systems
+      - Lower threshold for concern
+      - Regular testing and red teaming
+      - User feedback mechanisms
+      
+      Rapid Response:
+      - Immediate: Disable or limit for safety issues
+      - Short-term: Implement workarounds, increase human review
+      - Medium-term: Additional technical controls
+      - Long-term: Consider alternative models if issues persist
+      
+      Continuous Improvement:
+      - Rigorous root cause analysis
+      - Documentation of learnings (you're building the documentation)
+      - Regular sharing within organization
+      - Consider publishing learnings (help community)
+      
+      SPECIFIC GROK 2 VISION RISKS TO MANAGE:
+      
+      Unknown Safety Controls:
+      - Assume minimal safety training until proven otherwise
+      - Implement multi-layer external filtering
+      - Regular adversarial testing
+      - Rapid response plan for harmful content
+      
+      Unknown Training Data:
+      - Assume potential copyright/privacy issues
+      - Don't rely on model for legal/compliance claims
+      - Monitor for memorization or data leakage
+      - Be prepared for controversy
+      
+      Vision Privacy:
+      - Test person identification behavior extensively
+      - Implement external person detection and blurring if needed
+      - Conservative policies on image content
+      - Clear user consent for image processing
+      
+      Documentation Gaps:
+      - Build internal documentation as you learn
+      - Share learnings across team
+      - Track vendor updates
+      - Be prepared to switch models if needed
+      
+      EXIT STRATEGY:
+      - Plan for migration to alternative with better documentation
+      - Avoid deep dependency until documentation improves
+      - Regular evaluation of documented alternatives
+      - Clear criteria for when to switch
+
+# =============================================================================
+# REFERENCES & SOURCES
+# =============================================================================
+
+references:
+  vendor_documentation:
+    - url: "https://docs.x.ai/docs/models/grok-2-vision-1212"
+      description: "xAI official documentation for Grok 2 Vision model (limited detail available)"
+    
+    - url: "Provided PDF snapshot"
+      description: "Screenshot of xAI documentation showing basic model specifications"
+    
+    - url: "https://docs.x.ai/docs/release-notes"
+      description: "xAI changelog noting grok-2-vision-1212 release on December 14, 2024"
+
+  benchmarks:
+    - name: "MathVista (visual math reasoning)"
+      url: "Third-party aggregator (not official xAI publication)"
+      result: "69.0% reported by Segmind (unverified)"
+    
+    - name: "DocVQA (document question answering)"
+      url: "Third-party aggregator (not official xAI publication)"
+      result: "Strong performance claimed (no specific score provided)"
+
+  third_party_evaluations:
+    - source: "Wikipedia - Grok (chatbot)"
+      url: "https://en.wikipedia.org/wiki/Grok_(chatbot)"
+      summary: "Historical context on Grok model family development. Notes Grok 2 announced August 14, 2024 with vision capabilities added October 28, 2024. Limited technical details."
+    
+    - source: "Third-party model aggregators (Segmind, PromptHub, Clarifai)"
+      url: "Various"
+      summary: "Provide basic specs and pricing but no independent safety evaluations or comprehensive testing. Information largely mirrors xAI documentation."
+
+# =============================================================================
+# METADATA
+# =============================================================================
+
+metadata:
+  card_version: "1.0"
+  card_author: "Claude (Anthropic AI Assistant)"
+  card_creation_date: "2025-10-28"
+  last_updated: "2025-10-28"
+  
+  information_sources: |
+    Primary sources: 
+    - xAI documentation snapshot (PDF provided by user)
+    - xAI documentation website (docs.x.ai)
+    - Web search results for supplementary information
+    
+    CRITICAL LIMITATION: No comprehensive system card, safety evaluation documentation, or 
+    detailed technical specifications available from xAI. This model card is based on LIMITED 
+    publicly available information and contains substantially more "not listed at source" entries 
+    than typical model cards for comparable models from other vendors.
+    
+    Information quality: PARTIAL - basic specifications available but critical safety, fairness, 
+    training, and evaluation information not accessible.
+
+  completeness_assessment: |
+    Minimal: Basic specifications (context window, pricing, modalities, aliases)
+    
+    Not Available: 
+    - Comprehensive safety evaluations
+    - Bias and fairness testing
+    - Training data details
+    - Training methodology
+    - Architecture specifications
+    - Parameter count
+    - Benchmark results (from vendor)
+    - Usage policies
+    - Known limitations and failure modes
+    - Privacy protections
+    - Explainability features
+    - Third-party audits or red team results
+    
+    COMPLETENESS RATING: 15-20%
+    
+    This represents SUBSTANTIALLY LESS transparency than industry leaders (OpenAI, Anthropic, 
+    Google, Meta) provide for comparable models. Organizations should be aware that deploying 
+    this model requires accepting significant information gaps and conducting extensive internal 
+    testing to establish baselines and safety properties that would typically be documented by 
+    the vendor.
+    
+    Would critically improve confidence:
+    - Published system card with safety evaluations
+    - Bias and fairness testing results
+    - Training data transparency
+    - Benchmark results from vendor
+    - Third-party safety audits
+    - Red team evaluation results
+    - Usage policy documentation
+    - Known limitations documentation
+    - Incident response guidance
+
+  change_log:
+    - date: "2025-10-28"
+      author: "Claude"
+      changes: "Initial creation from limited xAI documentation and web sources. SIGNIFICANT INFORMATION GAPS documented throughout."

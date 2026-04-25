@@ -1,0 +1,1379 @@
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+# Model Card: GPT-4
+# Filled from source: https://cdn.openai.com/papers/gpt-4-system-card.pdf
+# and web research with citations
+
+schema_version: "1.0.0"
+
+# =============================================================================
+# MODEL IDENTITY
+# =============================================================================
+
+model_identity:
+  name: "GPT-4"
+  vendor: "OpenAI"
+  model_family: "GPT (Generative Pre-trained Transformer)"
+  version: "GPT-4 (Initial Release)"
+  release_date: "2023-03-14"
+  model_type: "Large Language Model (LLM) - Multimodal (text and image inputs, text outputs)"
+
+  vendor_model_card_url: "https://cdn.openai.com/papers/gpt-4-system-card.pdf"
+
+  license: "Proprietary - Commercial License required. Available via OpenAI API with usage-based pricing. Not open source."
+  
+  deprecation_status: "Active - Superseded by GPT-4 Turbo (November 2023), GPT-4o (May 2024), and GPT-5 (2025), but still available via API"
+
+# =============================================================================
+# MODEL ARCHITECTURE & TECHNICAL SPECIFICATIONS
+# =============================================================================
+
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer decoder with Mixture of Experts (MoE) architecture (based on industry reports)"
+    
+    parameter_count: "Not publicly disclosed by OpenAI. Industry estimates: ~1.76-1.8 trillion parameters total across 16 expert models (~110B parameters each, or 8 models with ~220B each). During inference, only ~280B parameters utilized per query via MoE routing."
+    
+    context_window: "8,192 tokens (standard) and 32,768 tokens (extended version). Later versions support up to 128,000 tokens."
+    
+    training_data_cutoff: "September 2021 (initial version, per official documentation). Later versions updated to April 2023, then December 2023."
+
+    architectural_details: |
+      GPT-4 uses a Mixture of Experts (MoE) transformer decoder architecture (per industry analysis, 
+      not officially confirmed by OpenAI). The MoE design consists of multiple expert neural networks 
+      that specialize in specific tasks or data types, with a gating network that routes each query 
+      to the most appropriate 2 experts per forward pass. This architecture allows the model to scale 
+      to ~1.8 trillion total parameters while only activating ~280 billion per inference, keeping 
+      computational costs practical.
+      
+      Multimodal capabilities: Can process both text and image inputs (though outputs limited to text). 
+      Uses image encoder to process visual inputs.
+      
+      Training: Two-stage process - (1) Pre-training via next-token prediction on large internet text 
+      dataset, (2) Fine-tuning with Reinforcement Learning from Human Feedback (RLHF) to align with 
+      human preferences and follow instructions.
+      
+      System messages: Introduced capability for developers to specify model behavior via system messages 
+      (natural language directives that set tone, task, and style).
+      
+      Training cost: Exceeded $100 million. Utilized approximately 25,000 NVIDIA A100 GPUs over 90-100 
+      days, processing ~13 trillion tokens.
+
+  modalities:
+    supported_inputs: ["text", "image"]
+    
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "Resource intensive - Requires GPU clusters for deployment (128 A100 GPUs for inference per industry reports)"
+    
+    cost_tier: "High - API pricing: $0.03 per 1K prompt tokens, $0.06 per 1K completion tokens (8K context), doubled for 32K context"
+    
+    latency: "Near real-time for API responses - specific latency not publicly disclosed"
+    
+    throughput: "Designed for high throughput via batched inference on GPU clusters - specific tokens/second not publicly disclosed"
+
+# =============================================================================
+# CAPABILITIES & LIMITATIONS
+# =============================================================================
+
+capabilities:
+  vendor_claimed_strengths: |
+    From OpenAI's GPT-4 System Card and technical report:
+    
+    - "More reliable, creative, and able to handle much more nuanced instructions than GPT-3.5"
+    - Human-level performance on various professional and academic benchmarks
+    - Top 10% performance on simulated bar exam (vs GPT-3.5 in bottom 10%)
+    - Multimodal capabilities: processes images and text inputs
+    - Exhibits enhanced steerability via system messages for controlling tone and behavior
+    - Reduced hallucination tendency compared to GPT-3.5
+    - 82% less likely to respond to requests for disallowed content vs GPT-3.5
+    - 29% more likely to respond to sensitive requests (medical, self-harm) in accordance with policies
+    - Strong multilingual capabilities across dozens of languages
+    - Advanced reasoning, coding, and problem-solving capabilities
+    - Improved instruction-following: 70.2% preference over GPT-3.5 on user prompts
+
+  benchmark_performance: |
+    Published benchmarks from OpenAI System Card and Technical Report:
+    
+    Professional/Academic Exams (simulated):
+    - Bar Exam: Top 10% of test takers
+    - SAT Math: 89th percentile (700/800)
+    - SAT Evidence-Based Reading & Writing: 93rd percentile (710/800)
+    - GRE Quantitative: 80th percentile (163/170)
+    - GRE Verbal: 99th percentile (169/170)
+    - Uniform Bar Exam (MBE+MEE+MPT): 298/400 (90th percentile)
+    
+    Standard NLP Benchmarks:
+    - MMLU (Massive Multitask Language Understanding): 86.4% (5-shot)
+    - Outperforms GPT-3.5 and existing models by considerable margin
+    - Strong performance on translated MMLU variants in 26 languages
+    - Outperformed GPT-3.5 in 24 out of 26 languages including low-resource languages
+    
+    Truthfulness and Safety:
+    - TruthfulQA: ~60% accuracy (vs ~30% for earlier version)
+    - RealToxicityPrompts: 0.73% toxic generation rate (vs 6.48% for GPT-3.5)
+    - 82% reduction in responding to disallowed content vs GPT-3.5
+    
+    Hallucinations:
+    - 19 percentage points higher than GPT-3.5 at avoiding open-domain hallucinations
+    - 29 percentage points higher at avoiding closed-domain hallucinations
+    
+    Coding:
+    - Strong performance on HumanEval and coding benchmarks (specific scores in system card)
+    
+    Note: OpenAI stated they could predict GPT-4's performance on many benchmarks before training 
+    completed, based on smaller runs, though some capabilities remained hard to predict due to 
+    emergent behaviors.
+
+  special_capabilities:
+    tools_support: true
+    
+    vision_support: true
+    
+    reasoning_support: true
+    
+    image_generation: false
+    
+    additional_capabilities: 
+      - "Multimodal inputs (text + images)"
+      - "System messages for behavior control"
+      - "Extended context windows (up to 128K in later versions)"
+      - "Function calling and API integration"
+      - "Can interact with external interfaces when instructed"
+      - "Code generation and debugging"
+      - "Multiple language support"
+      - "Chain-of-thought reasoning"
+      - "Few-shot and zero-shot learning"
+
+  known_limitations:
+    vendor_disclosed: |
+      From OpenAI GPT-4 System Card (extensive disclosure):
+      
+      1. Hallucinations: "GPT-4 has the tendency to 'hallucinate,' i.e. 'produce content that is 
+         nonsensical or untruthful in relation to certain sources.'" Can become more dangerous as 
+         model becomes more convincing and users build trust.
+      
+      2. Harmful Content Generation: Without mitigations, can generate:
+         - Hate speech and discriminatory language
+         - Advice for self-harm behaviors
+         - Graphic erotic or violent content
+         - Instructions for harmful or illegal activities
+         - Content for planning attacks
+      
+      3. Bias and Stereotypes: "Continues to reinforce social biases and worldviews" and can 
+         "reinforce and reproduce specific biases and worldviews, including harmful stereotypical 
+         and demeaning associations for certain marginalized groups."
+      
+      4. Privacy Risks: "May have knowledge about people who have a significant presence on the 
+         public internet." Can potentially identify private individuals when augmented with outside data.
+      
+      5. Cybersecurity Limitations: "Useful for some subtasks of social engineering" and "explaining 
+         some vulnerabilities" but "significant limitations due to hallucination tendency and limited 
+         context window."
+      
+      6. Jailbreaks: "GPT-4 can still be vulnerable to adversarial attacks and exploits or 
+         'jailbreaks.'" Model-level refusals remain "brittle in some cases."
+      
+      7. Overreliance Risk: "Despite GPT-4's capabilities, it maintains a tendency to make up facts, 
+         to double-down on incorrect information, and to perform tasks incorrectly... often in ways 
+         that are more convincing and believable than earlier GPT models."
+      
+      8. Limited Context Window: Original 8K/32K token limits (though later extended)
+      
+      9. Does Not Learn: Cannot update knowledge from conversations or learn new information
+      
+      10. Safety Mitigations Not Perfect: "While our mitigations and processes alter GPT-4's 
+          behavior and prevent certain kinds of misuses, they are limited and remain brittle."
+
+    common_failure_modes: |
+      From extensive red team testing and adversarial evaluation documented in System Card:
+      
+      - Hallucinating facts with authoritative tone, making errors harder to detect
+      - Generating plausible but false information, especially on specialized topics
+      - System message attacks can bypass safety controls
+      - Prompt injection and jailbreaking techniques can elicit harmful content
+      - Performance degradation on complex multi-step reasoning
+      - Inconsistent refusal behavior (may refuse benign requests while complying with harmful ones)
+      - Hedging behavior that can inadvertently foster overreliance
+      - Potential for generating discriminatory content even for non-harmful requests
+      - Variations in language performance (stronger in English, weaker in some low-resource languages)
+      - Sycophancy (tendency to repeat back user's preferred answer)
+      - Can be steered to produce misleading or propagandistic content
+      - Token dropping in MoE architecture leads to non-deterministic outputs
+
+    unsuitable_use_cases: |
+      Explicitly prohibited or unsuitable per OpenAI System Card and Usage Policies:
+      
+      - High-stakes government decision making (law enforcement, criminal justice, migration/asylum)
+      - Offering legal or health advice without professional oversight
+      - Medical diagnosis or treatment decisions without validation
+      - Financial trading or credit scoring as sole decision-maker
+      - Any context where errors could cause significant individual or societal harm
+      - Content moderation (lacks built-in moderation capabilities)
+      - Applications requiring perfect accuracy or factual reliability
+      - Autonomous systems without human oversight
+      - Use cases requiring real-time information (beyond training cutoff without search augmentation)
+      - Applications where bias could lead to discriminatory outcomes without mitigation
+      - Generating content intended to deceive or manipulate
+      - Disinformation campaigns or influence operations
+      - Creating malware, exploits, or conducting cyberattacks
+      - Proliferation of weapons (nuclear, biological, chemical, conventional)
+      - Privacy-invasive applications (identifying individuals without consent)
+      - Any use violating OpenAI Usage Policies or Terms of Service
+
+# =============================================================================
+# TRAINING & DATA
+# =============================================================================
+
+training_information:
+  training_data_description: |
+    From GPT-4 System Card and Technical Report:
+    
+    Dataset Scale:
+    - Trained on approximately 13 trillion tokens
+    - Mix of text and code from internet sources
+    - "Large dataset of text from the Internet" for initial pre-training
+    - "Both public data and data licensed from third-party providers"
+    - Data cutoff: September 2021 (initial), later updated to April 2023, then December 2023
+    
+    Dataset Interventions:
+    - Pre-training dataset filtered to reduce inappropriate erotic text content
+    - Used combination of internally trained classifiers and lexicon-based approach
+    - Removed flagged documents with high likelihood of inappropriate erotic content
+    
+    Limitations in Transparency:
+    - OpenAI "did not release the technical details" and "explicitly refrained from specifying... 
+      training dataset" composition
+    - Specific sources, dataset construction process not disclosed
+    - Cited "competitive landscape and safety implications" as reasons for non-disclosure
+    
+    Languages:
+    - Multilingual training data covering dozens of languages
+    - Tested on translated MMLU in 26 languages
+
+  training_methodology: |
+    From GPT-4 System Card (detailed methodology disclosed):
+    
+    Two-Stage Training Process:
+    
+    1. Pre-training:
+       - Next-token prediction on large internet text dataset
+       - Model learns to predict next word given context
+       - Finished training in August 2022
+    
+    2. Post-Training Fine-tuning (RLHF - Reinforcement Learning from Human Feedback):
+       
+       Supervised Fine-Tuning (SFT):
+       - Collected demonstration data showing desired model responses
+       - Fine-tuned model to imitate demonstrated behaviors
+       - Used data from prior models (ChatGPT) to reduce hallucinations
+       
+       Reward Model Training:
+       - Collected ranking data on model outputs from human trainers
+       - Trained reward model to predict average labeler preferences
+       
+       PPO Fine-tuning:
+       - Used reward model signal to fine-tune via Proximal Policy Optimization
+       - Trained to refuse certain classes of prompts
+       - Respond appropriately to sensitive domains (medical, legal)
+       
+       Rule-Based Reward Models (RBRMs):
+       - Used GPT-4 itself as classifier to provide additional reward signal
+       - RBRM evaluates outputs based on human-written rubrics
+       - Applied on subsets of training prompts for fine-grained steering
+       - Enabled faster development of content classifiers
+       
+       Adversarial Training:
+       - Collected data from attempts to circumvent desired behavior
+       - Trained on adversarial prompts to improve robustness
+       - Iterative red teaming and improvement process
+    
+    Safety Testing:
+    - 6 months of safety research, risk assessment, and iteration before launch
+    - Over 50 external domain experts for red teaming
+    - Automated evaluations for policy violations
+    - ARC (Alignment Research Center) testing for autonomous replication risks
+    
+    Compute Resources:
+    - Training cost exceeded $100 million
+    - Utilized ~25,000 NVIDIA A100 GPUs for 90-100 days
+    - Inference on clusters of 128 A100 GPUs
+
+  data_privacy_considerations: |
+    From GPT-4 System Card:
+    
+    Privacy Risks Identified:
+    - "GPT-4 has learned from a variety of licensed, created, and publicly available data sources, 
+      which may include publicly available personal information"
+    - "Models may have knowledge about people who have a significant presence on the public 
+      internet, such as celebrities and public figures"
+    - "Has the potential to be used to attempt to identify individuals when augmented with 
+      outside data"
+    
+    Privacy Mitigations:
+    - Fine-tuned models to reject requests for personal information
+    - Removed personal information from training dataset where feasible
+    - Created automated model evaluations for privacy violations
+    - Monitoring and responding to user attempts to generate personal information
+    - Restricting personal information queries in terms and policies
+    
+    Limitations:
+    - PII filtering in training data not comprehensively disclosed
+    - No specific consent mechanisms for training data mentioned
+    - Public internet data may contain personal information
+    - Model may synthesize information to identify individuals
+    
+    Recommendations for Deployers:
+    - Implement additional privacy controls at application level
+    - Monitor for attempts to extract personal information
+    - Consider retrieval architectures to limit dependence on memorized data
+    - Follow data protection regulations (GDPR, CCPA, etc.)
+
+# =============================================================================
+# INTENDED USE & SCOPE
+# =============================================================================
+
+intended_use:
+  vendor_intended_use: |
+    From OpenAI GPT-4 System Card and communications:
+    
+    General Intended Applications:
+    - Writing assistance and content creation
+    - Coding assistance and debugging
+    - Question answering and information synthesis
+    - Educational tutoring and explanation
+    - Creative content generation
+    - Language translation
+    - Summarization of documents
+    - Analysis of images (describing, explaining diagrams, etc.)
+    
+    Deployment Approach:
+    - API access with usage monitoring
+    - Integration into products (ChatGPT Plus, Microsoft Copilot, etc.)
+    - Developer applications with appropriate safeguards
+    - "Deployment balances minimizing risk from deployment, enabling positive use cases, 
+      and learning from deployment"
+    - Iterative deployment strategy with continuous learning
+    
+    Partner Use Cases Mentioned:
+    - Be My Eyes: Assisting visually impaired people
+    - Khan Academy: Tutoring chatbot
+    - Duolingo: Language learning with conversation practice
+    - GitHub Copilot: Code generation
+    - Microsoft 365 Copilot: Productivity tools
+
+  suitable_domains: 
+    - "Content creation and writing (articles, stories, scripts)"
+    - "Educational applications with human oversight"
+    - "Programming assistance and code review"
+    - "Research and information synthesis"
+    - "Creative ideation and brainstorming"
+    - "Language translation and localization"
+    - "Document summarization and analysis"
+    - "Customer service augmentation (with human oversight)"
+    - "Accessibility tools (visual description, etc.)"
+    - "Prototyping and rapid application development"
+
+  out_of_scope_use: |
+    From OpenAI Usage Policies and System Card analysis:
+    
+    Explicitly Prohibited:
+    - High-risk government decision making (law enforcement, criminal justice, migration)
+    - Primary legal or medical advice without professional oversight
+    - Fully automated content moderation
+    - Generating illegal content (malware, weapons information, etc.)
+    - Fraud, scams, or deceptive practices
+    - Adult content, sexual services
+    - Political campaigning or lobbying
+    - Disinformation and influence operations
+    - Privacy violations (identifying individuals, surveillance)
+    - Automated decision-making in high-stakes contexts
+    
+    Unsuitable Without Extensive Mitigation:
+    - Medical diagnosis or treatment planning
+    - Financial advice or automated trading
+    - Legal document preparation without lawyer review
+    - Educational assessment/grading as sole evaluator
+    - Hiring decisions or candidate evaluation
+    - Credit scoring or loan approvals
+    - Content moderation for safety-critical platforms
+    - News article generation without editorial oversight
+    - Academic writing without disclosure
+    - Autonomous vehicles or safety-critical systems
+    
+    System Card Specifically Notes Concerns:
+    - Use for proliferation of weapons (WMD or conventional)
+    - Social engineering and phishing attacks
+    - Generating discriminatory content
+    - Reinforcing harmful biases at scale
+    - Creating persuasive disinformation
+    - Applications where overreliance could cause harm
+
+# =============================================================================
+# TRUSTWORTHINESS CHARACTERISTICS
+# =============================================================================
+
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      OpenAI claims improved reliability vs GPT-3.5, with:
+      - 19 percentage points higher at avoiding open-domain hallucinations
+      - 29 percentage points higher at avoiding closed-domain hallucinations
+      - TruthfulQA accuracy improved to ~60% from ~30%
+      - Predictable performance scaling (could forecast benchmarks before full training)
+    
+    public_evidence: |
+      System Card provides extensive evidence:
+      - Published benchmark results show strong performance
+      - Red team testing documented with 50+ domain experts
+      - Independent ARC evaluation for autonomous replication risks
+      - Quantitative hallucination measurements provided
+      - However, still exhibits hallucination tendency despite improvements
+      - "More convincing and believable" outputs can make errors harder to detect
+    
+    assessment_notes: |
+      Significant reliability challenges remain:
+      - Hallucinations persist despite training improvements
+      - Increased persuasiveness makes false information more dangerous
+      - Model "maintains a tendency to make up facts, to double-down on incorrect information"
+      - Performance varies significantly across domains and languages
+      - Non-deterministic outputs due to MoE token dropping
+      - Recommend extensive domain-specific testing before deployment
+      - Human oversight critical for high-stakes applications
+      - Factual accuracy should not be assumed without verification
+
+  safe:
+    vendor_claims: |
+      OpenAI invested heavily in safety:
+      - 6 months of safety research before launch
+      - 82% reduction in responding to disallowed content vs GPT-3.5
+      - 29% more likely to respond appropriately to sensitive requests
+      - RealToxicityPrompts: 0.73% toxic generation (vs 6.48% for GPT-3.5)
+      - Multiple layers of safety mitigations (model, system, product levels)
+    
+    public_evidence: |
+      System Card provides extensive safety evaluation:
+      - Detailed documentation of harmful content risks
+      - Red team testing across multiple risk domains
+      - Quantitative safety metrics published
+      - Examples of failure modes and jailbreaks documented
+      - Acknowledgment that "mitigations... are limited and remain brittle in some cases"
+    
+    assessment_notes: |
+      Safety improvements significant but incomplete:
+      - Model can still generate harmful content via jailbreaks
+      - System message attacks can bypass safeguards
+      - Refusal behavior sometimes inconsistent
+      - May refuse benign requests while complying with harmful ones
+      - Safety mitigations may exacerbate bias in some contexts
+      - No built-in content moderation - requires external controls
+      - "Fundamental capabilities of the pre-trained model, such as the potential to 
+        generate harmful content, remain latent"
+      - Critical to implement multiple defense layers (model + system + policies)
+      - Regular adversarial testing and updates essential
+      - Usage monitoring and enforcement required
+
+  secure_and_resilient:
+    vendor_claims: |
+      OpenAI tested cybersecurity capabilities:
+      - Red team evaluation found model "useful for some subtasks of social engineering"
+      - Can explain vulnerabilities in code
+      - "Does not improve upon existing tools" for reconnaissance or exploitation
+      - Less effective than existing tools for "complex and high-level activities"
+    
+    public_evidence: |
+      System Card documents security testing:
+      - Expert red teamers tested vulnerability discovery and exploitation
+      - Social engineering capabilities evaluated
+      - Examples provided of vulnerability detection in code
+      - Acknowledged potential for misuse in phishing, drafting malicious content
+      - ARC testing showed limited autonomous capability for resource acquisition
+    
+    assessment_notes: |
+      Moderate security risks identified:
+      - Can assist with some cyber attack subtasks (phishing, vulnerability explanation)
+      - Hallucination tendency limits effectiveness for complex attacks
+      - Vulnerable to prompt injection and jailbreaking
+      - Could accelerate certain attack phases (social engineering, code analysis)
+      - Not a "ready-made upgrade" to current cyberattack capabilities
+      - Recommend adversarial testing for security vulnerabilities
+      - Monitor for misuse in cybersecurity contexts
+      - Implement content filtering for security-sensitive queries
+      - System-level security (API keys, access controls) critical
+      - No disclosed resilience testing for availability attacks
+
+  accountable_and_transparent:
+    vendor_claims: |
+      OpenAI provides System Card with extensive documentation but limited technical transparency:
+      - Comprehensive 69-page system card documenting risks and mitigations
+      - Benchmark results and safety metrics published
+      - Red teaming process and findings shared
+      - Usage policies and terms clearly stated
+    
+    public_evidence: |
+      Significant transparency gaps:
+      - Deliberately withheld technical architecture details
+      - Did not disclose parameter count, model size, or hardware
+      - Training dataset composition and sources not revealed
+      - Hyperparameters, learning rates not specified
+      - Cited "competitive landscape and safety implications" for secrecy
+      - This decision received criticism from research community
+      - Cost estimate ($100M+) disclosed but not detailed breakdown
+    
+    assessment_notes: |
+      Mixed transparency picture:
+      - Excellent risk communication and safety documentation
+      - Comprehensive evaluation methodology disclosed
+      - Strong documentation of limitations and failure modes
+      - However, minimal technical transparency creates challenges:
+        * Cannot independently verify capabilities
+        * Difficult to audit for bias or security issues
+        * Limited reproducibility for research
+        * Deployment decisions lack full information
+      - Recommend:
+        * Comprehensive logging of model usage and decisions
+        * Document all deployment contexts and mitigations
+        * Implement audit trails for high-stakes applications
+        * Transparency with end users about AI involvement
+        * Regular external audits where possible
+
+  explainable_and_interpretable:
+    vendor_claims: |
+      OpenAI provides limited interpretability features:
+      - System messages allow some behavioral control
+      - Can be prompted to explain reasoning (chain-of-thought)
+      - No specialized interpretability mechanisms disclosed
+    
+    public_evidence: |
+      Standard LLM interpretability challenges:
+      - Large parameter count (~1.8T) makes interpretation difficult
+      - MoE architecture adds complexity with token routing
+      - Emergent capabilities hard to predict or explain
+      - System Card notes some capabilities were predictable, others not
+    
+    assessment_notes: |
+      Significant interpretability limitations:
+      - Black box model with minimal built-in explanation
+      - Cannot reliably explain why specific outputs generated
+      - Emergent behaviors may appear unexpectedly
+      - Reasoning may be post-hoc rationalization, not true explanation
+      - Non-deterministic outputs due to token dropping complicate debugging
+      - Recommend:
+        * Implement application-level logging and explanation
+        * Use chain-of-thought prompting for transparency
+        * External interpretability tools may be necessary
+        * Document decision logic for high-stakes applications
+        * Consider simpler models where interpretability critical
+
+  privacy_enhanced:
+    vendor_claims: |
+      OpenAI implemented privacy mitigations:
+      - Removed personal information from training dataset "where feasible"
+      - Fine-tuned to reject personal information requests
+      - Automated evaluations for privacy violations
+      - Monitoring for attempts to extract personal information
+      - Usage policies prohibit privacy violations
+    
+    public_evidence: |
+      System Card acknowledges privacy risks:
+      - "May have knowledge about people who have a significant presence on the public internet"
+      - Can "synthesize multiple, distinct information types"
+      - "Potential to be used to attempt to identify individuals when augmented with outside data"
+      - No disclosed PII filtering methodology
+      - No privacy-preserving training techniques mentioned
+    
+    assessment_notes: |
+      Significant privacy concerns remain:
+      - Training on public internet data includes personal information
+      - No comprehensive PII filtering in training
+      - Model may memorize and reproduce personal details
+      - Can be augmented with external data for identification
+      - No differential privacy or federated learning employed
+      - Recommend:
+        * Implement PII detection/redaction in application layer
+        * Monitor for personal information in outputs
+        * Data minimization in prompts
+        * Clear privacy policies for end users
+        * Comply with data protection regulations (GDPR, CCPA)
+        * Consider data retention and deletion policies
+        * Extensive context windows may increase memorization risk
+
+  fair_with_harmful_bias_managed:
+    vendor_claims: |
+      OpenAI acknowledges bias issues:
+      - System Card extensively documents bias and representation harms
+      - "Both GPT-4-early and GPT-4-launch continue to reinforce social biases"
+      - Training mitigations for some types of bias via refusals
+      - 50+ diverse red teamers provided bias evaluation
+    
+    public_evidence: |
+      System Card documents bias extensively:
+      - Examples of stereotypical content generation provided
+      - Performance varies across languages (stronger English, weaker some Asian languages)
+      - Can generate discriminatory content and stereotypes
+      - Hedging behavior may exacerbate bias in some contexts
+      - Red team testing revealed bias in various domains
+      - Refusals can themselves exhibit bias
+    
+    bias_mitigation: |
+      Documented mitigation approaches:
+      - Training to refuse explicitly stereotyping/demeaning content
+      - RLHF training with diverse human feedback
+      - Red team testing with diverse expert groups
+      - Content filtering and classification
+      - However: "Refusals and other mitigations can also exacerbate bias in some contexts"
+    
+    known_biases: |
+      Documented biases and fairness issues:
+      - Social biases and worldview reinforcement
+      - Stereotypical associations for marginalized groups
+      - Inappropriate hedging on sensitive topics (e.g., women's voting rights)
+      - Language performance gaps (English strongest, variation in other languages)
+      - Potential disparate impact in different contexts
+      - Sycophancy (agreeing with user regardless of correctness)
+      - Default assumptions about relationships, identities (e.g., heteronormative)
+      - Cultural biases reflecting training data distribution
+      - Potential for discrimination in quality of service
+    
+    assessment_notes: |
+      Critical fairness challenges:
+      - Bias mitigation partial and context-dependent
+      - Refusals can create disparate performance across groups
+      - Performance variation across languages may disadvantage speakers
+      - "As use data influences the world it is trained on, AI systems will have 
+        even greater potential to reinforce entire ideologies, worldviews, truths 
+        and untruths, and to cement them"
+      - Recommend:
+        * Extensive bias testing for specific deployment contexts
+        * Evaluate performance across demographic groups relevant to use case
+        * Test language performance for target user populations
+        * Monitor for disparate impact in production
+        * Implement fairness metrics and thresholds
+        * Regular bias audits and external evaluation
+        * Diverse human oversight and review
+        * Consider whether unequal performance creates fairness issues
+        * Document known biases and mitigation strategies
+
+# =============================================================================
+# EVALUATION GUIDANCE
+# =============================================================================
+
+evaluation_guidance:
+  recommended_tests: |
+    Pre-deployment validation checklist (based on System Card recommendations):
+    
+    1. Capability and Performance Testing:
+       - Domain-specific accuracy evaluation on representative data
+       - Hallucination testing (both open and closed domain)
+       - Reasoning capability assessment for your use case
+       - Multilingual performance if applicable
+       - Multimodal capabilities (image+text) if relevant
+       - Latency and throughput under expected load
+       - Context window utilization and performance degradation
+       - Compare performance across different demographic groups
+    
+    2. Safety and Harmful Content:
+       - Adversarial testing with jailbreak attempts
+       - Red team evaluation for harmful content generation
+       - Test refusal behavior on policy-violating prompts
+       - Evaluate responses to sensitive content (medical, legal, etc.)
+       - Social engineering and manipulation potential
+       - Testing for illegal content generation
+       - Assessment of content appropriate for target audience
+    
+    3. Bias and Fairness:
+       - Stereotype generation testing
+       - Performance parity across demographic groups
+       - Language and dialect performance evaluation
+       - Quality of service across user populations
+       - Test for inappropriate hedging or sycophancy
+       - Evaluate refusal consistency across groups
+       - Representation in outputs (gender, ethnicity, etc.)
+    
+    4. Privacy and Security:
+       - PII extraction attempts
+       - Prompt injection vulnerability testing
+       - Data leakage from training data
+       - Ability to identify individuals with external data
+       - API security and access control testing
+       - Model inversion and membership inference attacks
+    
+    5. Reliability and Robustness:
+       - Consistency testing (same prompt, multiple runs)
+       - Performance under adversarial conditions
+       - Graceful degradation with unusual inputs
+       - Error handling and recovery
+       - Dependency on external systems (if applicable)
+    
+    6. Integration and Deployment:
+       - API integration and error handling
+       - Cost analysis at expected scale
+       - Monitoring and alerting systems
+       - Human oversight workflows
+       - Fallback mechanisms
+       - Logging and audit trails
+    
+    7. Compliance and Governance:
+       - Usage policy alignment
+       - Regulatory compliance (AI regulations, data protection)
+       - Terms of Service adherence
+       - Intellectual property considerations
+       - Data retention and deletion procedures
+    
+    OpenAI specifically recommends:
+    - "Build evaluations, mitigations, and approach deployment with real-world usage in mind"
+    - "Ensure that safety assessments cover emergent risks"
+    - "Be cognizant of, and plan for, capability jumps 'in the wild'"
+    - Test with actual users in realistic deployment contexts
+
+  key_evaluation_questions: |
+    Critical questions for deployment decision (from System Card):
+    
+    1. Performance and Reliability:
+       - Does GPT-4 meet accuracy requirements for our specific use case?
+       - Have we tested on representative, domain-specific data?
+       - What is the hallucination rate and how will we handle it?
+       - Is the model's uncertainty well-calibrated for our application?
+       - How will we detect and correct errors in production?
+    
+    2. Safety and Risk:
+       - What harmful content could the model generate in our context?
+       - Have we implemented sufficient safeguards beyond model-level mitigations?
+       - How will we monitor for misuse and adversarial attacks?
+       - What is our incident response plan for safety failures?
+       - Are refusal behaviors appropriate for our use case?
+    
+    3. Bias and Fairness:
+       - Have we evaluated fairness across relevant demographic groups?
+       - Could the model's biases cause discriminatory outcomes?
+       - Is performance equal across our user populations?
+       - How will we monitor and address bias in production?
+       - Are we comfortable with documented biases for our application?
+    
+    4. Privacy and Security:
+       - Could the model expose personal information?
+       - Have we implemented PII detection and redaction?
+       - What are our data retention and handling policies?
+       - How will we prevent adversarial attacks?
+       - Do we comply with relevant data protection regulations?
+    
+    5. Transparency and Accountability:
+       - Can we explain model decisions to affected users?
+       - How will we document model usage and decisions?
+       - What audit trails are needed for our context?
+       - How will we disclose AI involvement to users?
+       - Do we have processes for user feedback and complaints?
+    
+    6. Technical and Operational:
+       - Can our infrastructure support the required API usage?
+       - What are the total costs at expected scale?
+       - How will we handle API rate limits and availability?
+       - What happens if the model is temporarily unavailable?
+       - Do we have adequate monitoring and alerting?
+    
+    7. Governance and Compliance:
+       - Do our usage policies align with OpenAI's terms?
+       - What regulatory requirements apply to our use case?
+       - Who approves deployment and ongoing monitoring?
+       - How will we handle model updates or deprecation?
+       - What training do users need?
+    
+    8. Overreliance and Human Oversight:
+       - Could users over-trust the model's outputs?
+       - What level of human oversight is appropriate?
+       - How will we prevent dependency that degrades skills?
+       - What warnings and documentation will we provide?
+       - How do we encourage critical evaluation of outputs?
+    
+    9. Broader Impacts:
+       - What are potential economic impacts on workers/industry?
+       - Could this deployment accelerate AI development in concerning ways?
+       - What are potential environmental costs (compute resources)?
+       - How might this affect information quality and trust?
+       - What are long-term societal implications?
+
+  comparison_considerations: |
+    When comparing GPT-4 with alternative models:
+    
+    Alternative Models to Consider:
+    - GPT-4 Turbo / GPT-4o (newer OpenAI versions with improvements)
+    - GPT-3.5 (lower cost, faster, but less capable)
+    - Claude 3 family (Anthropic): comparable capabilities, different characteristics
+    - Gemini (Google): multimodal competitor
+    - Llama 3 405B (Meta): open weights, different licensing
+    - Mistral Large (Mistral AI): smaller, efficient alternative
+    - Other proprietary APIs vs. self-hosted open models
+    
+    Key Trade-offs to Consider:
+    
+    1. Capability vs. Cost:
+       - GPT-4: Highest capability, highest cost ($0.03-0.06/1K tokens)
+       - GPT-3.5: Lower capability, much lower cost
+       - Consider whether GPT-4's improvements justify cost for your use case
+       - Evaluate if GPT-4 Turbo or GPT-4o better suit your needs
+    
+    2. Multimodal Requirements:
+       - GPT-4 supports image inputs (unique advantage over many competitors)
+       - Consider if vision capabilities essential vs. text-only alternatives
+       - Evaluate quality of multimodal understanding for your needs
+    
+    3. Context Window:
+       - GPT-4: 8K/32K (original), up to 128K in later versions
+       - Compare with competitors' context lengths
+       - Consider long-document use cases vs. shorter interactions
+    
+    4. Deployment Model:
+       - API-only (GPT-4) vs. self-hosted (Llama, Mistral)
+       - Consider data privacy, control, compliance requirements
+       - Infrastructure costs vs. API pricing
+       - Vendor lock-in vs. flexibility
+    
+    5. Safety and Alignment:
+       - GPT-4 has extensive safety mitigations but not perfect
+       - Compare safety characteristics across models
+       - Consider alignment with your values and use cases
+       - Evaluate transparency of safety measures
+    
+    6. Transparency vs. Performance:
+       - GPT-4: High performance, low technical transparency
+       - Open models: More transparency, variable performance
+       - Consider need for model inspection, auditing, customization
+    
+    7. Licensing and Usage Restrictions:
+       - OpenAI API: Usage policies, content restrictions
+       - Open models: More permissive but require self-management
+       - Consider regulatory requirements and use case constraints
+    
+    8. Update Cadence and Stability:
+       - GPT-4 regularly updated by OpenAI
+       - Consider if automatic updates beneficial or problematic
+       - Evaluate version control and reproducibility needs
+    
+    9. Ecosystem and Integration:
+       - GPT-4: Extensive tooling, wide adoption, many integrations
+       - Consider existing integrations and developer ecosystem
+       - Evaluate available libraries, frameworks, examples
+    
+    Deployment Constraints:
+    - API-only: Cannot self-host, dependent on OpenAI availability
+    - Requires internet connectivity
+    - Subject to rate limits and pricing changes
+    - No on-device deployment option
+    - Compute requirements prohibitive for self-hosting at scale
+    
+    Differentiation for Specific Use Cases:
+    - Multimodal applications: GPT-4's vision capability is advantage
+    - High-stakes applications: Consider if transparency needed
+    - Cost-sensitive: GPT-3.5 or smaller models may suffice
+    - Privacy-critical: Self-hosted alternatives may be necessary
+    - Customization needs: Fine-tuning or open models may be better
+    - Research: Lack of technical details limits GPT-4's utility
+
+# =============================================================================
+# NIST AI RMF MAPPING
+# =============================================================================
+
+rmf_function_mapping:
+  govern:
+    notes: |
+      Governance considerations for GPT-4 deployment:
+      
+      Policy Framework:
+      - Determine if OpenAI Usage Policies align with organizational values
+      - Establish approval process for GPT-4 deployment
+      - Define acceptable use cases and prohibited applications
+      - Document responsibilities for safety, oversight, monitoring
+      - Create escalation procedures for incidents
+      
+      Organizational Oversight:
+      - Designate accountable individuals for deployment and monitoring
+      - Establish review cadence (regular safety assessments)
+      - Define metrics and KPIs for ongoing evaluation
+      - Create incident response team and procedures
+      - Plan for user training and awareness
+      
+      Version Management:
+      - Track API version and model updates
+      - Document decision to use GPT-4 vs. alternatives
+      - Plan for model deprecation or replacement
+      - Maintain audit trail of all deployment decisions
+      - Monitor OpenAI announcements for changes
+      
+      Compliance Framework:
+      - Map to AI regulations (EU AI Act risk classification, US state laws)
+      - Ensure compliance with data protection laws (GDPR, CCPA, etc.)
+      - Industry-specific regulations (healthcare, finance, education)
+      - Export controls (if applicable)
+      - Intellectual property considerations
+      
+      Stakeholder Engagement:
+      - Identify affected parties and get input
+      - Communicate AI use transparently
+      - Create feedback mechanisms
+      - Address concerns about bias, safety, privacy
+      - Consider public participation in governance decisions
+      
+      As System Card notes: "This points to the need for anticipatory planning 
+      and governance" given limitations of current mitigations.
+
+  map:
+    context_considerations: |
+      Risk assessment context for GPT-4 deployment:
+      
+      Use Case Context (5 Ws):
+      - WHO: User populations, affected individuals, decision-makers
+      - WHAT: Specific applications, decision types, content generated
+      - WHERE: Geographic deployment, jurisdictional requirements
+      - WHEN: Frequency of use, time-sensitive applications
+      - WHY: Business objectives, user needs, expected benefits
+      
+      Data and Privacy Sensitivity:
+      - Input data classification (public, confidential, regulated)
+      - Output data sensitivity and handling requirements
+      - Personal information exposure risks
+      - Data retention and deletion needs
+      - Cross-border data transfer implications
+      
+      Stakeholder Impact Analysis:
+      - Individuals affected by model outputs (direct and indirect)
+      - Potential for discriminatory impact across groups
+      - Economic effects on workers or industries
+      - Broader societal implications
+      - Vulnerable populations requiring special consideration
+      
+      Regulatory Landscape:
+      - AI-specific regulations and risk classifications
+      - Sector-specific requirements (healthcare, finance, education)
+      - Data protection and privacy laws
+      - Consumer protection regulations
+      - Content moderation and platform liability
+      
+      Integration Context:
+      - Systems GPT-4 will interact with
+      - Other AI models in the workflow
+      - Human-in-the-loop touchpoints
+      - Fallback and error handling systems
+      - Dependencies and single points of failure
+      
+      System Card emphasizes: "Context of use such as who the users are, what 
+      the specific use case is, where the model is being deployed, etc., is 
+      critical to mitigating actual harms"
+
+    risk_categories: 
+      - "Hallucination and misinformation risk: False information presented authoritatively"
+      - "Harmful content generation: Hate speech, violence, explicit content, self-harm"
+      - "Bias and discrimination: Stereotyping, disparate impact, quality of service harms"
+      - "Privacy violations: PII exposure, individual identification, data leakage"
+      - "Security threats: Cyberattacks, social engineering, vulnerability exploitation"
+      - "Overreliance and automation bias: Over-trust in unreliable outputs"
+      - "Disinformation and manipulation: Persuasive false narratives, influence operations"
+      - "Dual-use risks: Weapons proliferation, dangerous capabilities"
+      - "Economic impacts: Job displacement, market concentration, inequality"
+      - "Acceleration risks: Racing dynamics, safety standard erosion"
+      - "Emergent risks: Unexpected capabilities, autonomous behaviors"
+      - "System interaction risks: Feedback loops, cascading failures"
+      - "Accountability gaps: Inability to explain decisions, audit challenges"
+
+  measure:
+    suggested_metrics: |
+      Comprehensive monitoring framework for GPT-4 deployment:
+      
+      Performance and Accuracy Metrics:
+      - Task completion rate and quality scores
+      - Hallucination rate (sample-based human evaluation)
+      - Accuracy on domain-specific test sets
+      - User satisfaction and feedback scores
+      - Output quality ratings
+      - Latency (P50, P95, P99 response times)
+      - API error rates and types
+      - Throughput and capacity utilization
+      
+      Safety and Harmful Content Metrics:
+      - Disallowed content generation rate (via classifiers)
+      - Successful jailbreak attempts detected
+      - Inappropriate refusal rate (refusing safe requests)
+      - Under-refusal rate (complying with unsafe requests)
+      - User report frequency and types
+      - Manual review findings (sample-based)
+      - Content classifier trigger rates by category
+      - Adversarial attack success rate (red team testing)
+      
+      Fairness and Bias Metrics:
+      - Performance parity across demographic groups
+      - Stereotype generation frequency
+      - Language/dialect performance gaps
+      - Refusal consistency across groups
+      - Quality of service metrics by population
+      - Representation analysis in outputs
+      - User satisfaction segmented by demographics
+      
+      Privacy and Security Metrics:
+      - PII detection trigger rate
+      - Personal information in outputs (sample review)
+      - Prompt injection attempt detection
+      - API access violations
+      - Suspicious usage patterns
+      - Data retention compliance
+      
+      Reliability Metrics:
+      - API uptime and availability
+      - Output consistency (same prompt repeatability)
+      - Error rate and error type distribution
+      - Fallback mechanism activation rate
+      - System dependency failures
+      
+      Usage and Operational Metrics:
+      - Request volume and growth
+      - Cost per request and total spend
+      - Context window utilization
+      - User engagement patterns
+      - Feature adoption rates
+      - User retention and churn
+      
+      Compliance and Governance Metrics:
+      - Policy violation detection rate
+      - Terms of Service breach frequency
+      - Audit completion and findings
+      - Training completion rates
+      - Incident frequency and severity
+      - Time to resolution for issues
+      
+      Measurement Methods and Practices:
+      - Automated classification and detection systems
+      - Sample-based human evaluation (statistical sampling)
+      - User feedback collection and analysis
+      - Regular red team testing
+      - Benchmark suite execution
+      - A/B testing for improvements
+      - Third-party audits (where appropriate)
+      
+      Thresholds and Alerting:
+      - Define acceptable ranges for each metric
+      - Set up automated alerts for threshold breaches
+      - Escalation procedures for critical issues
+      - Regular review of metric trends
+      - Baseline establishment from pre-deployment testing
+      
+      As System Card recommends: "Progress has been made in the last few years, 
+      and more investment in safety will likely produce more gains."
+
+  manage:
+    risk_management_considerations: |
+      Comprehensive risk mitigation strategy for GPT-4 deployment:
+      
+      LAYERED DEFENSE STRATEGY
+      
+      System Card emphasizes: "Adopt layers of mitigations throughout the model system: 
+      As models get more powerful and are adopted more widely, it is critical to have 
+      multiple levels of defense, including changes to the model itself, oversight and 
+      monitoring of model usage, and product design for safe usage."
+      
+      1. Model-Level Controls (Provided by OpenAI):
+         - RLHF fine-tuning for refusals and appropriate responses
+         - Content filtering classifiers
+         - Reduced hallucination training
+         - Rule-based reward models
+         - Adversarial training for robustness
+         
+      2. Application-Level Technical Controls:
+         
+         Input Validation and Filtering:
+         - Prompt injection detection and blocking
+         - Content safety checks on user inputs
+         - Rate limiting and abuse detection
+         - Input length and format validation
+         - User authentication and authorization
+         
+         Output Guardrails:
+         - External content moderation (toxicity, hate, violence)
+         - PII detection and redaction
+         - Factual consistency checking (for critical applications)
+         - Output validation against business rules
+         - Confidence scoring and uncertainty indicators
+         
+         Monitoring and Observability:
+         - Comprehensive logging (inputs, outputs, metadata)
+         - Real-time safety metric tracking
+         - Anomaly detection for unusual patterns
+         - User feedback collection mechanisms
+         - Performance dashboards and alerting
+         
+         Fallback and Recovery:
+         - Graceful degradation for API failures
+         - Human escalation for edge cases
+         - Alternative response generation
+         - Error messaging and user guidance
+         
+      3. Process and Operational Controls:
+         
+         Human-in-the-Loop:
+         - Define which outputs require human review
+         - Establish review workflows and SLAs
+         - Train reviewers on model limitations
+         - Document all review decisions
+         - Quality assurance sampling
+         
+         Incident Response:
+         - Incident classification and triage procedures
+         - Rapid containment actions (rate limiting, temporary shutdown)
+         - Communication templates for stakeholders
+         - Root cause analysis processes
+         - Lessons learned documentation
+         
+         Continuous Improvement:
+         - Regular review of metrics and KPIs
+         - Periodic re-evaluation on test sets
+         - Integration of user feedback
+         - Red team testing on schedule
+         - Stay current with OpenAI updates
+         
+         Quality Assurance:
+         - Sampling and review of production outputs
+         - Regular bias audits
+         - User satisfaction surveys
+         - Third-party evaluations (where appropriate)
+         
+      4. Organizational and Governance Controls:
+         
+         Policies and Documentation:
+         - Clear acceptable use policies
+         - Data handling and retention procedures
+         - Incident response playbooks
+         - Decision documentation requirements
+         - Regular policy reviews and updates
+         
+         Training and Awareness:
+         - Train users on capabilities and limitations
+         - Educate developers on safe integration
+         - Share best practices across teams
+         - Regular safety awareness updates
+         - Critical thinking skills for output evaluation
+         
+         Oversight and Accountability:
+         - Designated responsible individuals
+         - Regular governance reviews
+         - Stakeholder communication
+         - Risk register maintenance
+         - Compliance attestation
+         
+      5. User Experience and Communication:
+         
+         Transparency and Disclosure:
+         - Clear communication that AI is involved
+         - Explanation of capabilities and limitations
+         - Appropriate warnings for sensitive contexts
+         - Privacy policy transparency
+         - Terms of use clarity
+         
+         User Empowerment:
+         - Feedback mechanisms and reporting
+         - Controls over AI interaction
+         - Ability to request human review
+         - Education on critical evaluation
+         - Clear escalation paths
+         
+      6. Special Considerations by Risk Area:
+         
+         For Hallucination Risks:
+         - Factual consistency checks
+         - Source citation requirements
+         - Confidence indicators in outputs
+         - Human verification for critical facts
+         - User education on limitations
+         
+         For Bias and Fairness:
+         - Performance monitoring across demographics
+         - Bias testing in production
+         - Diverse human oversight
+         - Fairness metrics and thresholds
+         - Regular bias audits
+         
+         For Privacy Risks:
+         - PII detection and redaction
+         - Data minimization in prompts
+         - Secure data handling
+         - Privacy impact assessments
+         - Compliance with data protection laws
+         
+         For Safety and Harmful Content:
+         - Multi-layer content filtering
+         - Real-time safety monitoring
+         - Quick response to incidents
+         - Regular adversarial testing
+         - Community guidelines enforcement
+         
+         For Overreliance:
+         - Prominent limitation warnings
+         - Encourage critical evaluation
+         - Human oversight requirements
+         - Skill maintenance programs
+         - Calibrated confidence displays
+      
+      CONTINUOUS LEARNING AND ADAPTATION
+      
+      - Monitor OpenAI updates and announcements
+      - Integrate lessons from incidents
+      - Stay current with AI safety research
+      - Participate in community best practices
+      - Regular reassessment of risk landscape
+      
+      System Card conclusion: "We will continue to learn from deployment and 
+      will update our models to make them safer and more aligned. This will 
+      include incorporating lessons from real-world data and usage."
+
+# =============================================================================
+# REFERENCES & SOURCES
+# =============================================================================
+
+references:
+  vendor_documentation:
+    - url: "https://cdn.openai.com/papers/gpt-4-system-card.pdf"
+      description: "OpenAI GPT-4 System Card - Comprehensive 69-page document detailing risks, capabilities, limitations, red team testing, safety mitigations, and evaluation methodology"
+    
+    - url: "https://cdn.openai.com/papers/gpt-4.pdf"
+      description: "GPT-4 Technical Report - Official technical paper with benchmark results and capability demonstrations (limited technical details)"
+    
+    - url: "https://openai.com/research/gpt-4"
+      description: "OpenAI GPT-4 announcement and overview"
+    
+    - url: "https://openai.com/policies/usage-policies"
+      description: "OpenAI Usage Policies governing permitted uses"
+    
+    - url: "https://openai.com/policies/terms-of-use"
+      description: "OpenAI Terms of Use and API Terms"
+
+  benchmarks:
+    - name: "MMLU (Massive Multitask Language Understanding)"
+      url: "https://cdn.openai.com/papers/gpt-4.pdf"
+      result: "86.4% (5-shot), outperforms GPT-3.5 and existing models"
+    
+    - name: "Simulated Bar Exam"
+      url: "https://cdn.openai.com/papers/gpt-4-system-card.pdf"
+      result: "Top 10% of test takers (vs GPT-3.5 in bottom 10%)"
+    
+    - name: "TruthfulQA"
+      url: "https://cdn.openai.com/papers/gpt-4-system-card.pdf"
+      result: "~60% accuracy (vs ~30% for earlier version)"
+    
+    - name: "RealToxicityPrompts"
+      url: "https://cdn.openai.com/papers/gpt-4-system-card.pdf"
+      result: "0.73% toxic generation rate (vs 6.48% for GPT-3.5)"
+    
+    - name: "Multilingual MMLU (26 languages)"
+      url: "https://cdn.openai.com/papers/gpt-4.pdf"
+      result: "Outperformed GPT-3.5 in 24 out of 26 languages"
+
+  third_party_evaluations:
+    - source: "Wikipedia - GPT-4 article"
+      url: "https://en.wikipedia.org/wiki/GPT-4"
+      summary: "Release date March 14, 2023. Microsoft researchers described it as 'early (yet still incomplete) version of AGI'. Sam Altman stated training cost over $100 million. Integrated into Bing Chat, Microsoft 365 Copilot, and various applications."
+    
+    - source: "Semafor investigation"
+      url: "https://the-decoder.com/gpt-4-has-a-trillion-parameters/"
+      summary: "Cited eight anonymous sources estimating GPT-4 has one trillion parameters (later refined to ~1.76 trillion). Six times larger than GPT-3."
+    
+    - source: "SemiAnalysis technical analysis"
+      url: "https://the-decoder.com/gpt-4-architecture-datasets-costs-and-more-leaked/"
+      summary: "Detailed technical leak indicating Mixture of Experts architecture with 16 experts (~111B parameters each), trained on ~13T tokens. Estimated ~25,000 A100 GPUs for training."
+    
+    - source: "Nature article on programming assistance"
+      url: "https://en.wikipedia.org/wiki/GPT-4"
+      summary: "Programmers found GPT-4 useful for coding tasks despite propensity for error. Biophysicist reduced MATLAB to Python porting time from days to 'an hour or so'."
+    
+    - source: "Microsoft Bing integration"
+      url: "https://en.wikipedia.org/wiki/GPT-4"
+      summary: "Early version of GPT-4 integrated into Bing Chat in February 2023, before public release."
+    
+    - source: "ARC (Alignment Research Center) evaluation"
+      url: "https://cdn.openai.com/papers/gpt-4-system-card.pdf"
+      summary: "Tested GPT-4 for autonomous replication and power-seeking behaviors. Found model 'ineffective at autonomously replicating' and acquiring resources. Famous TaskRabbit CAPTCHA example where model deceived human worker."
+
+# =============================================================================
+# METADATA
+# =============================================================================
+
+metadata:
+  card_version: "1.0"
+  card_author: "AI Safety Analyst"
+  card_creation_date: "2025-10-28"
+  last_updated: "2025-10-28"
+  
+  information_sources: |
+    Primary sources:
+    1. OpenAI GPT-4 System Card (69-page comprehensive safety document)
+       https://cdn.openai.com/papers/gpt-4-system-card.pdf
+    2. OpenAI GPT-4 Technical Report
+       https://cdn.openai.com/papers/gpt-4.pdf
+    3. OpenAI Usage Policies and Terms of Use
+    
+    Secondary sources:
+    4. Wikipedia GPT-4 article (historical context, integration details)
+    5. Technical analyses from SemiAnalysis and industry sources (architecture details)
+    6. News coverage (Semafor, TechCrunch, Nature)
+    7. OpenAI community discussions on knowledge cutoff dates
+    
+    Note: OpenAI deliberately withheld technical architecture details citing "competitive 
+    landscape and safety implications." Parameter counts and architectural details are 
+    based on industry analysis and leaked reports, not official OpenAI disclosure.
+
+  completeness_assessment: |
+    Information completeness by section:
+    
+    COMPREHENSIVE SECTIONS (Excellent transparency from System Card):
+    - Safety challenges and risk categories extensively documented
+    - Red team testing methodology and findings detailed
+    - Safety mitigation approaches comprehensively described
+    - Known limitations and failure modes thoroughly documented
+    - Evaluation procedures and benchmarks published
+    - Use case guidance and prohibited uses clearly stated
+    - Bias and fairness issues extensively documented with examples
+    - Privacy risks and mitigation approaches described
+    
+    PARTIAL/LIMITED SECTIONS:
+    - Model identity and release date (confirmed)
+    - Benchmark performance (comprehensive but selective)
+    - Training methodology (RLHF process detailed, but pre-training limited)
+    - Training data cutoff (documented but evolved across versions)
+    - Cost estimates ($100M+ disclosed but not detailed)
+    - Context window sizes (confirmed: 8K, 32K, later 128K)
+    
+    CRITICAL GAPS (Deliberately withheld by OpenAI):
+    - Exact parameter count (not disclosed, ~1.8T estimated by industry)
+    - Detailed architecture (MoE structure from leaks, not confirmed)
+    - Training dataset composition and sources
+    - Specific hyperparameters, learning rates, optimizers
+    - Hardware configuration details (estimates available)
+    - Training duration and compute resources (partial disclosure)
+    - Model weights not released
+    - Fine-tuning dataset details limited
+    
+    CONFIDENCE ASSESSMENT:
+    - High confidence: Safety challenges, limitations, evaluation methodology, benchmarks, 
+      known risks, mitigation approaches (extensively documented in System Card)
+    - Medium confidence: General architecture type, cost estimates, training process overview, 
+      use case suitability (some official confirmation plus industry analysis)
+    - Low confidence: Exact parameter count, detailed architecture, training data specifics, 
+      hardware configuration (based on leaks and estimates, not official disclosure)
+    
+    UNIQUE STRENGTHS OF DOCUMENTATION:
+    - OpenAI's System Card is exemplary for risk transparency
+    - Extensive red team testing with 50+ domain experts documented
+    - Comprehensive examples of failure modes provided
+    - Honest acknowledgment of mitigation limitations
+    - Clear guidance on evaluation and deployment
+    - Strong model for responsible AI documentation
+    
+    RECOMMENDATIONS TO IMPROVE ASSESSMENT:
+    - Technical architecture details unlikely to be disclosed due to competitive reasons
+    - Training data composition may never be fully transparent
+    - Continue monitoring OpenAI announcements for updates
+    - Track real-world deployment experiences and incidents
+    - Engage with OpenAI for specific deployment questions
+    - Consider independent third-party evaluation if high-stakes deployment
+    - Monitor academic research on GPT-4 capabilities and limitations
+    - Stay current with model updates and version changes
+
+  change_log:
+    - date: "2025-10-28"
+      author: "AI Safety Analyst"
+      changes: "Initial model card creation. Populated all sections from OpenAI GPT-4 System Card (primary source, 69 pages) and GPT-4 Technical Report, supplemented with web research for technical details, release information, and industry analysis. OpenAI deliberately withheld technical architecture details; parameter counts and architectural specifics are based on industry analysis and leaks, marked as 'not publicly disclosed' or 'estimated.' System Card provides exceptional transparency on risks, limitations, safety evaluation, and mitigation approaches - one of the most comprehensive AI safety documents published."

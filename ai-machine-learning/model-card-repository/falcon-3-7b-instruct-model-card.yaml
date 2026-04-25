@@ -1,0 +1,265 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Falcon3-7B-Instruct"
+  vendor: "Technology Innovation Institute (TII) / supported on NVIDIA platform"
+  model_family: "Falcon 3"
+  version: "7B-Instruct"
+  release_date: "2024-12-XX"   # December 2024 release per documentation :contentReference[oaicite:1]{index=1}
+  model_type: "Large Language Model (causal decoder, instruction-tuned)"
+
+  vendor_model_card_url: "https://docs.api.nvidia.com/nim/reference/tiiuae-falcon3-7b-instruct"
+    # (NVIDIA-hosted doc summarising model) # :contentReference[oaicite:2]{index=2}
+
+  license: "TII Falcon-LLM License 2.0" # :contentReference[oaicite:3]{index=3}
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer decoder-only (causal) with Grouped Query Attention (GQA)" # :contentReference[oaicite:4]{index=4}
+    parameter_count: "7 B (activated parameters)" # :contentReference[oaicite:5]{index=5}
+    context_window: "32,000 tokens" # :contentReference[oaicite:6]{index=6}
+    architectural_details: |
+      - 28 decoder blocks. # :contentReference[oaicite:7]{index=7}  
+      - GQA: 12 query heads and 4 key-value heads. # :contentReference[oaicite:8]{index=8}  
+      - Wider head dimension of 256. # :contentReference[oaicite:9]{index=9}  
+      - High RoPE value of 1,000,042 to support long-context. # :contentReference[oaicite:10]{index=10}  
+      - Activation functions: SwiGLU; norm: RMSNorm. # :contentReference[oaicite:11]{index=11}
+
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "Moderate for 7B size with long context support"
+    cost_tier: "Mid-tier"
+    latency: "Not publicly disclosed"
+    throughput: "Not publicly disclosed"
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    - Strong performance in reasoning, language understanding, instruction-following, code generation and mathematics tasks. # :contentReference[oaicite:12]{index=12}  
+    - Multilingual support including English, French, Spanish and Portuguese. # :contentReference[oaicite:13]{index=13}  
+    - Large context length enabling extended input sequences (up to 32K tokens). 
+
+  benchmark_performance: |
+    Some benchmark scores reported by third-party summarizers: e.g.,  
+    - MATH (level-5, 4-shot): ~31.87. # :contentReference[oaicite:14]{index=14}  
+    - BBH (3-shot): ~37.92. # :contentReference[oaicite:15]{index=15}  
+    (Note: not all scores officially published by vendor.)
+
+  special_capabilities:
+    tools_support: false
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["long-context processing", "multilingual instruction"]
+
+  known_limitations:
+    vendor_disclosed: |
+      Standard LLM risks apply: mis- or disinformation, bias, hallucination; developer/user responsibility emphasised. # :contentReference[oaicite:16]{index=16}  
+    common_failure_modes: |
+      - Performance may degrade in less-represented languages or dialects.  
+      - Very long or complex reasoning chains may degrade coherence.  
+    unsuitable_use_cases: |
+      - High-stakes decision-making systems without human oversight.  
+      - Applications requiring full transparency of training data/weights.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    - Pre-training on ~14 tera-tokens of web, code, STEM, and curated multilingual data. # :contentReference[oaicite:17]{index=17}  
+    - Post-training/instruction-tuning on ~1.2 million samples of STEM, conversations, code, safety and function-call data. # :contentReference[oaicite:18]{index=18}  
+  training_methodology: |
+    Causal language modelling followed by instruction-finetuning. Specific optimizer/hyperparameters not publicly disclosed.  
+  data_privacy_considerations: |
+    Limited public disclosure on dataset provenance and filtering; deployers should assess for sensitive/PII-related concerns.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Research and development and production use for language generation, instruction-following, multilingual tasks and code/ mathematics reasoning. (research-only mention in NVIDIA doc) # :contentReference[oaicite:19]{index=19}  
+  suitable_domains: ["instruction_following", "multilingual_chatbots", "code_generation", "long_context_tasks"]
+  out_of_scope_use: |
+    Use cases without oversight, untested languages, or regulated domains where certification/traceability is required.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Performance across multiple tasks and large context length.  
+    public_evidence: |
+      Some third-party summarised benchmark values; full independent evaluations limited.  
+    assessment_notes: |
+      Good foundation model candidate; deployers should validate in-domain.
+
+  safe:
+    safety_measures: |
+      Licence and AUP restrictions; model safety/instruction tuning aims to align outputs but details sparse.  
+    known_safety_issues: |
+      Traditional LLM risks: misinformation, harmful content, bias.  
+    assessment_notes: |
+      Additional moderation or fine-tuning recommended for production.
+
+  secure_and_resilient:
+    security_features: |
+      Built for high performance platforms (e.g., NVIDIA Ampere/Hopper) – inference ecosystem maturity high. # :contentReference[oaicite:20]{index=20}  
+    known_vulnerabilities: |
+      Prompt injection, adversarial input space, novel misuse cases typical of large models.  
+    assessment_notes: |
+      Deploy with hardened infrastructure and monitoring.
+
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Model card reveals architecture, data scale, context length; but training dataset specifics, fine-tuning logs, weights not fully disclosed.  
+    assessment_notes: |
+      Satisfies many transparency goals but not full white-box.
+
+  explainable_and_interpretable:
+    explainability_features: |
+      Architecture summary provided; model behaviour can be traced via inputs/outputs.  
+    interpretability_limitations: |
+      Internal gating, expert routing (if any) not disclosed; no mechanistic interpretability.  
+    assessment_notes: |
+      Treat as black-box with documented high-level behaviour.
+
+  privacy_enhanced:
+    privacy_features: |
+      No direct claims of private‐data filtering or PII avoidance beyond standard disclaimers.  
+    privacy_concerns: |
+      Possible inclusion of product/service/web data with unknown provenance; deployers in sensitive settings should assess.  
+    assessment_notes: |
+      Additional due-diligence recommended for regulated or privacy-sensitive domains.
+
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      No detailed public statement of bias mitigation techniques in this model card.  
+    known_biases: |
+      As with any large web-trained model, risk of embedded societal biases.  
+    assessment_notes: |
+      Run bias/harm audits relevant to your deployment language/region.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Run instruction-following prompts across supported languages (EN, FR, ES, PT) and measure correctness/coherence.  
+    - Test long-context (>8 K tokens) generation for drift/hallucination.  
+    - Perform code generation and mathematics benchmarks if relevant (e.g., MATH, BBH, GPQA).  
+    - Evaluate multilingual behaviour for less-frequent languages/dialects.  
+    - Implement safety red-teaming: prompt injection, disallowed content, bias/harm scenario.  
+    - Perform latency/throughput benchmarking on your infrastructure (context length 32K).  
+
+  key_evaluation_questions: |
+    - Is the model behaviour acceptable on your domain-specific prompts and languages?  
+    - Do you have moderation, provenance, and audit mechanisms in place for outputs?  
+    - Can your infrastructure support the context length and model size efficiently?  
+    - Are you comfortable with the license and redistribution/derivative constraints?
+
+  comparison_considerations: |
+    - Compare with other open/instruction models in the ~7B size class for your domain.  
+    - Check trade-offs of large context length vs model latency/compute cost.  
+    - Assess alternate architectures (MoE vs dense) and language coverage for your target region.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Enforce licence/AUP compliance; specify human-in-loop for high-stakes usage; ensure attribution and usage logging.  
+  map:
+    context_considerations: |
+      Language coverage, instruction use-cases, long-context reasoning, domain risk (misinformation, harmful content).  
+    risk_categories: ["hallucination", "bias", "privacy_leakage", "prompt_injection", "long-context_degradation"]
+  measure:
+    suggested_metrics: |
+      - Hallucination/error rate per 1K prompts.  
+      - Correct-completion rate in reasoning tasks.  
+      - Latency/throughput at 32K context.  
+      - Moderation override rates and false positive/negative rates.  
+  manage:
+    risk_management_considerations: |
+      Deploy layered controls (moderation, logging, human-review); monitor for drift and misuse; validate long-context behaviour; maintain rollback capability.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://docs.api.nvidia.com/nim/reference/tiiuae-falcon3-7b-instruct"
+    description: "NVIDIA/NIM documentation page summarising Falcon3-7B-Instruct"   # :contentReference[oaicite:21]{index=21}  
+  - url: "https://huggingface.co/tiiuae/Falcon3-7B-Instruct-GGUF"
+    description: "Hugging Face repository summarising architecture/data/training for Falcon3-7B-Instruct"   # :contentReference[oaicite:22]{index=22}  
+  benchmarks:
+  - name: "Third-party benchmark summaries (MATH, BBH etc.)"
+    url: "https://aiot.aidlux.com/en/models/detail/236"
+    result: "MATH ~31.87; BBH ~37.92 for Falcon3-7B-Instruct"   # :contentReference[oaicite:23]{index=23}  
+  third_party_evaluations:
+  - source: ""
+    url: ""
+    summary: ""
+  news_coverage:
+  - title: ""
+    url: ""
+    date: ""
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "Don Fountain"
+  card_creation_date: "2025-10-24"
+  last_updated: "2025-10-24"
+  information_sources: |
+    Model documentation pages and summarised third-party data for Falcon3-7B-Instruct.
+
+  completeness_assessment: |
+    Strong for architecture and context length; moderate for training/data transparency and benchmark coverage; limited for throughput/latency and real-world production case studies.
+
+  change_log:
+  - date: "2025-10-24"
+    author: "Don Fountain"
+    changes: "Initial synthesis of Falcon3-7B-Instruct model card."
+

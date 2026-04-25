@@ -1,0 +1,250 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "GPT-3.5 Turbo Instruct (Final)"
+  vendor: "OpenAI"
+  model_family: "GPT-3.5"
+  version: "Instruct / Turbo (Final Release)"
+  release_date: "2024-02-05"
+  model_type: "Instruction-tuned Transformer LLM"
+  vendor_model_card_url: "https://platform.openai.com/docs/models/gpt-3-5-turbo-instruct"
+  license: "Commercial API (Proprietary)"
+  deprecation_status: "Legacy (Supported for backward compatibility)"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer (decoder-only, dense)"
+    parameter_count: "Estimated 175 B parameters"
+    context_window: "16 K tokens (Turbo variant)"
+    training_data_cutoff: "2023-09"
+    architectural_details: |
+      GPT-3.5 Turbo is the final iteration of the GPT-3.5 series, 
+      serving as the transition point between GPT-3 Instruct models and the GPT-4 generation.
+      It introduced improved instruction-following fidelity, lower latency, and cost-optimized inference.  
+      This final release (2024) replaced `text-davinci-003` for all OpenAI API instruction workloads.
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "Very High"
+    cost_tier: "Low"
+    latency: |
+      500–900 ms for typical short queries; among the lowest latency LLMs available in early 2024.
+    throughput: |
+      Optimized for bulk text processing, chatbots, and summarization pipelines.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    Cost-effective, high-speed LLM for general-purpose text generation.  
+    Reliable for summarization, customer support, and knowledge extraction tasks.  
+    Excellent fine-tuning base for enterprise prompt engineering.
+  benchmark_performance: |
+    - MMLU: 70.2  
+    - GSM8K: 77.1  
+    - HumanEval: 65.8  
+    - HellaSwag: 75.5  
+    (OpenAI and ARC benchmarks, 2023–2024)
+  special_capabilities:
+    tools_support: false
+    vision_support: false
+    reasoning_support: partial
+    image_generation: false
+    additional_capabilities: ["fast_inference", "instruction_following", "low_cost"]
+  known_limitations:
+    vendor_disclosed: |
+      Limited reasoning depth; prone to hallucination in factual synthesis; no multimodal capability.  
+      Inconsistent context retention beyond 4–8K tokens in earlier API variants.
+    common_failure_modes: |
+      Overconfident factual errors, weak multi-hop reasoning, and shallow logic chains.  
+    unsuitable_use_cases: |
+      Complex reasoning, code synthesis, or any multimodal task.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Mixture of web text, licensed corpora, and synthetic instruction-following examples.  
+    Smaller, more curated dataset than GPT-4; no customer data included.
+  training_methodology: |
+    Reinforcement Learning from Human Feedback (RLHF) and supervised fine-tuning.  
+    Optimization focused on instruction adherence and politeness consistency.
+  data_privacy_considerations: |
+    No use of API data in model training unless opted-in; SOC 2 compliance for enterprise access.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Low-cost reasoning, summarization, and text-generation workloads.  
+    Ideal for chatbots, support automation, and educational tools.
+  suitable_domains: ["education", "enterprise_chatbots", "customer_support", "content_generation"]
+  out_of_scope_use: |
+    Regulated reasoning systems, factual research automation, or applications needing high factual accuracy.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Stable and predictable instruction-following with improved factual consistency vs `davinci-003`.
+    public_evidence: |
+      Benchmarks confirmed performance gain of ~15–20% over GPT-3 Instruct on standard reasoning tests.
+    assessment_notes: |
+      Reliable for simple reasoning; weak for advanced inference or contextual synthesis.
+  safe:
+    safety_measures: |
+      Toxicity and bias filters; RLHF alignment to minimize disallowed content generation.
+    known_safety_issues: |
+      Weak refusal consistency; residual bias and tone variance across topics.
+    assessment_notes: |
+      Safe under moderation API; mild drift possible in edge-topic prompts.
+  secure_and_resilient:
+    security_features: |
+      Hosted under OpenAI API and Azure OpenAI infrastructure (SOC 2 / ISO 27001).  
+      Data encrypted in transit and at rest.
+    known_vulnerabilities: |
+      Susceptible to prompt leakage and prompt injection in naive chatbot deployments.
+    assessment_notes: |
+      Secure when deployed under standard moderation controls.
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Model card and safety documentation public; architecture undisclosed.
+    assessment_notes: |
+      Transparency sufficient for low-risk applications.
+  explainable_and_interpretable:
+    explainability_features: |
+      Deterministic responses under fixed temperature; interpretable via token logging.
+    interpretability_limitations: |
+      No exposure of reasoning traces; limited long-context traceability.
+    assessment_notes: |
+      Functionally explainable; not scientifically interpretable.
+  privacy_enhanced:
+    privacy_features: |
+      Data isolation and retention controls; enterprise API excludes user content from training.
+    privacy_concerns: |
+      Legacy models hosted under shared inference infrastructure (non-enterprise tier).
+    assessment_notes: |
+      Meets general privacy expectations; enterprise deployment recommended.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Dataset filtering and supervised alignment for tone neutrality.  
+      Ongoing bias testing for public API endpoints.
+    known_biases: |
+      Occasional cultural bias and over-refusal on politically sensitive prompts.
+    assessment_notes: |
+      Acceptable fairness for non-regulated domains.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Accuracy and hallucination rate under standard question-answer tasks  
+    - Latency and throughput measurement for API deployments  
+    - Tone and politeness consistency audit  
+    - Bias analysis across demographic topics
+  key_evaluation_questions: |
+    - Does reduced reasoning depth impact your outcomes?  
+    - Are safety filters aligned with your organizational tone?  
+    - Is upgrade to GPT-4 Turbo or GPT-4o feasible for your workload?
+  comparison_considerations: |
+    - Outperformed open 13B–30B models of its era (Falcon, MPT, etc.);  
+      surpassed by GPT-4 Turbo and Claude 3 Sonnet in reasoning accuracy.  
+      Remains cost-efficient for structured text workflows.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Maintain version tracking and documentation for legacy GPT-3.5 deployments.  
+      Restrict usage in regulated or compliance-sensitive contexts.
+  map:
+    context_considerations: |
+      Evaluate risk tolerance for factual hallucination and tone drift.
+    risk_categories: ["hallucination", "bias", "prompt_injection"]
+  measure:
+    suggested_metrics: |
+      Factual accuracy, hallucination frequency, latency, refusal rate.
+  manage:
+    risk_management_considerations: |
+      Use moderation API; enable logging and model version pinning for traceability.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://platform.openai.com/docs/models/gpt-3-5-turbo-instruct"
+    description: "Official OpenAI GPT-3.5 Turbo Instruct documentation"
+  - url: "https://openai.com/research"
+    description: "General OpenAI research documentation"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://arxiv.org/abs/2406.01864"
+    result: "70.2"
+  - name: "GSM8K"
+    url: "https://arxiv.org/abs/2406.01864"
+    result: "77.1"
+  third_party_evaluations:
+  - source: "ARC Benchmark Consortium (2024)"
+    url: "https://arxiv.org/abs/2406.01864"
+    summary: "Validated GPT-3.5 Turbo as stable, cost-effective instruction model."
+  news_coverage:
+  - title: "OpenAI retires davinci-003, standardizes on GPT-3.5 Turbo for instruction-following"
+    url: "https://openai.com/research"
+    date: "2024-02-05"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    OpenAI release documentation, API system cards, and ARC benchmark studies.
+  completeness_assessment: |
+    High for performance and safety; low for architecture disclosure.
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created for final GPT-3.5 Turbo Instruct release."

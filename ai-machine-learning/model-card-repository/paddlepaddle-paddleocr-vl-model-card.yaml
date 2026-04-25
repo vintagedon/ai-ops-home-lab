@@ -1,0 +1,288 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# =============================================================================
+# MODEL IDENTITY
+# =============================================================================
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "PaddleOCR-VL"
+  vendor: "PaddlePaddle (Baidu / PaddleOCR Team)"
+  model_family: "PaddleOCR"
+  version: "VL (≈0.9 B activated)"
+  release_date: "2025-10-16"  # release date from model page. # :contentReference[oaicite:2]{index=2}
+  model_type: "Vision-Language Model (document parsing: image+text → structured output)"
+
+  vendor_model_card_url: "https://huggingface.co/PaddlePaddle/PaddleOCR-VL"  # :contentReference[oaicite:3]{index=3}
+
+  license: "Apache 2.0"  # :contentReference[oaicite:4]{index=4}
+  deprecation_status: "Active"
+
+# =============================================================================
+# MODEL ARCHITECTURE & TECHNICAL SPECIFICATIONS
+# =============================================================================
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Compact vision-language model integrating a NaViT-style dynamic-resolution visual encoder with a lightweight ERNIE-4.5-0.3B language model"  # :contentReference[oaicite:5]{index=5}
+    parameter_count: "≈ 0.9 B activated parameters"  # :contentReference[oaicite:6]{index=6}
+    context_window: "Not explicitly stated"  # typical for VLMs image+text
+    training_data_cutoff: "Not publicly disclosed"
+
+    architectural_details: |
+      According to the model page, the visual encoder is designed for dynamic-resolution (NaViT style) to handle document images (text, tables, formulas, charts) and the language backbone is ERNIE-4.5-0.3B.  # :contentReference[oaicite:7]{index=7}
+
+  modalities:
+    supported_inputs: ["image", "text"] # image + prompt/instruction
+    supported_outputs: ["text", "structured output"] # extraction / document parsing
+
+  performance_characteristics:
+    speed_tier: "Efficient/inference-optimized (small size ~0.9 B) for document parsing"
+    cost_tier: "Moderate"
+    latency: "Not publicly disclosed"
+    throughput: "Not publicly disclosed"
+
+# =============================================================================
+# CAPABILITIES & LIMITATIONS
+# =============================================================================
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    - State-of-the-art performance in multilingual document parsing (text, tables, formulas, charts) using a compact model.  # :contentReference[oaicite:8]{index=8}  
+    - Supports recognition of 109 languages (text, mixed scripts) for document parsing tasks.  # :contentReference[oaicite:9]{index=9}  
+    - Designed for element-level recognition (text, table, formula, chart) and page-level document structure parsing.  # :contentReference[oaicite:10]{index=10}
+
+  benchmark_performance: |
+    From model page:  
+    - Achieves SOTA on OmniDocBench v1.5 for multiple metrics (overall, text, formula, tables, reading order) for document parsing tasks.  # :contentReference[oaicite:11]{index=11}  
+    - Example news article: reports score ~92.6 on OmniDocBench v1.5 with 0.9 B param version.  # :contentReference[oaicite:12]{index=12}
+
+  special_capabilities:
+    tools_support: false  # not explicitly tool-call model  
+    vision_support: true
+    reasoning_support: true (in domain of document parsing)
+    image_generation: false
+    additional_capabilities: ["multilingual document parsing", "element recognition (tables/formulas)", "efficient inference"]
+
+  known_limitations:
+    vendor_disclosed: |
+      While very efficient, dataset details, full training data and domain generalisation outside document parsing may be limited.  # :contentReference[oaicite:13]{index=13}  
+    common_failure_modes: |
+      - Performance may degrade outside the tasks of document parsing (e.g., untested domains/scripts)  
+      - May require domain-specific fine-tuning for specialized documents  
+    unsuitable_use_cases: |
+      - High-stakes decision systems where full explainability/traceability required  
+      - Tasks outside of image+text document parsing (e.g., text-generation dialogue, vision-only generation)
+
+# =============================================================================
+# TRAINING & DATA
+# =============================================================================
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    The model page describes a mix of multilingual document images (text, tables, formulas, charts) across 109 languages, but does not provide full dataset size or provenance.  # :contentReference[oaicite:14]{index=14}  
+  training_methodology: |
+    Pre-trained visual and language components, then integrated into a vision-language model trained for document parsing tasks.  (Details not fully disclosed)  
+  data_privacy_considerations: |
+    No detailed breakdown of PII filtering or data-source provenance; implementers should evaluate for regulated-data use.
+
+# =============================================================================
+# INTENDED USE & SCOPE
+# =============================================================================
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Multilingual document parsing: extract/analyze text, tables, formulas and charts from document images, across 109 languages, in inference-efficient settings.  # :contentReference[oaicite:15]{index=15}  
+  suitable_domains: ["multilingual_document_parsing", "image+text OCR", "table/formula/chart recognition in documents"]
+  out_of_scope_use: |
+    Use as general large-language model for free-form dialogue; use in regulated/high-risk decision-making without oversight; image-generation tasks.
+
+# =============================================================================
+# TRUSTWORTHINESS CHARACTERISTICS
+# =============================================================================
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Detailed model card with performance metrics and multilingual coverage.  
+    public_evidence: |
+      Benchmark results and usage instructions publicly available.  # :contentReference[oaicite:16]{index=16}  
+    assessment_notes: |
+      Strong candidate for document-parsing tasks; still requires domain-specific validation for your use case.
+
+  safe:
+    safety_measures: |
+      Released under Apache 2.0 license; open weights/inference pipeline available.  
+    known_safety_issues: |
+      Hallucination or mis-recognition of documents, biased language/script coverage, mis-structured output.  
+    assessment_notes: |
+      Deployers should layer error-checking, human review especially for regulated content.
+
+  secure_and_resilient:
+    security_features: |
+      Implementation supports efficient server inference; local hosting possible (PaddleOCR).  
+    known_vulnerabilities: |
+      Prompt/image injection, adversarial document images, OCR failures in degraded image quality.  
+    assessment_notes: |
+      Infrastructure must include input-validation, output-monitoring, and fallback logic.
+
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Model card provides architecture and benchmark info; training dataset not fully disclosed.  
+    assessment_notes: |
+      Acceptable for many document analytics uses; for highly regulated uses may require further audit/audit logs.
+
+  explainable_and_interpretable:
+    explainability_features: |
+      Outputs tend to be structured (tables, formulas) which improve traceability; architecture described at high level.  
+    interpretability_limitations: |
+      Internal internal encoder/decoder weights and routing not exposed; reasoning steps not enumerated.  
+    assessment_notes: |
+      Consider adding output-logging and provenance tracking for downstream workflows.
+
+  privacy_enhanced:
+    privacy_features: |
+      Local deployment possible reducing data-exfiltration risk.  
+    privacy_concerns: |
+      Unknown detailed provenance of training images/documents; potential for unintended memorised content.  
+    assessment_notes: |
+      For regulated document processing (PII, protected data) conduct additional provenance review and filter solutions.
+
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Multilingual support (109 languages) reduces single-language bias; but detailed bias mitigation not publicly described.  # :contentReference[oaicite:17]{index=17}  
+    known_biases: |
+      Representation for less-common scripts/languages may still lag; tables/formulas from less-represented languages may be harder.  
+    assessment_notes: |
+      Run your own bias/harm audits across target languages, scripts, user-populations.
+
+# =============================================================================
+# EVALUATION GUIDANCE
+# =============================================================================
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Test the model on your document types: text, tables, formulas, charts, multi-language (109 languages) and evaluate accuracy/structure.  
+    - Benchmark latency/throughput on your infrastructure for given input volumes and image resolutions.  
+    - Test multilingual/script coverage in your domain (e.g., Arabic, Devanagari, Cyrillic).  
+    - Conduct edge-case tests: distorted images, low-quality scans, handwritten text, mixed scripts.  
+    - Safety red-teaming: adversarial document images (blurred, manipulated), mis-labelling in automated pipelines.  
+    - Implementation correctness: ensure output structure (JSON/Markdown) meets downstream application requirements.
+
+  key_evaluation_questions: |
+    - Does recognition accuracy meet your domain threshold for text, table, formula, chart extraction for your languages/scripts?  
+    - Are your downstream workflows robust to OCR errors or mis-structured output?  
+    - Is your infrastructure capable of serving at required throughput and latency?  
+    - Are you confident about data provenance, licensing (Apache 2.0) and compliance with your organisation’s governance policies?
+
+  comparison_considerations: |
+    - Compare with other open/document-parsing specialised models (e.g., DeepSeek-OCR, OmniDocBench leaders) for performance vs cost trade-off.  
+    - Evaluate cost/compute vs model size (~0.9B) vs larger alternatives for your document-processing volume.  
+    - Assess if you need fine-tuning or custom dataset adaptation vs off-the-shelf results.
+
+# =============================================================================
+# NIST AI RMF MAPPING
+# =============================================================================
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Ensure human-in-the-loop checks for document parsing errors; log model version/inputs/outputs; enforce compliance with licence/AUP.  
+  map:
+    context_considerations: |
+      Multilingual document parsing (109 languages), image-text input, structured output risk (tables/formulas), downstream decision impact.  
+    risk_categories: ["mis-recognition/hallucination", "structured-output-error", "privacy_leakage", "bias-script_under-represented", "adversarial_image"]
+  measure:
+    suggested_metrics: |
+      - Error/hallucination rate per 1k documents.  
+      - Table/formula recognition failure rate per 1k charts.  
+      - Latency/throughput on your target infra.  
+      - Language/script-specific error/harm incident rate per 1k docs.  
+  manage:
+    risk_management_considerations: |
+      Deploy output validation, fallback systems, human review for high-risk cases (e.g., legal/financial docs); monitor drift in document types over time; maintain versioning and rollback strategy.
+
+# =============================================================================
+# REFERENCES & SOURCES
+# =============================================================================
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/PaddlePaddle/PaddleOCR-VL"
+    description: "Official Hugging Face model page"    # :contentReference[oaicite:18]{index=18}  
+  - url: "https://huggingface.co/papers/2510.14528"
+    description: "ArXiv technical report: ‘PaddleOCR-VL: Boosting Multilingual Document Parsing via a 0.9B Ultra-Compact Vision-Language Model’"    # :contentReference[oaicite:19]{index=19}  
+  benchmarks:
+  - name: "AIbase News article – points and trending ranking"
+    url: "https://news.aibase.com/news/22233"
+    result: "Report of 92.56/score and trending ranking for PaddleOCR-VL"    # :contentReference[oaicite:20]{index=20}  
+  third_party_evaluations:
+  - source: ""
+    url: ""
+    summary: ""
+  news_coverage:
+  - title: "文心4.5衍生模型PaddleOCR-VL登顶HF Trending全球榜首"
+    url: "https://www.dtm.com.cn/news/202510/133743.html"
+    date: "2025-10-17"    # :contentReference[oaicite:21]{index=21}
+
+# =============================================================================
+# METADATA
+# =============================================================================
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "Don Fountain"
+  card_creation_date: "2025-10-24"
+  last_updated: "2025-10-24"
+  information_sources: |
+    Hugging Face model page, technical report (arXiv), vendor announcements and news-articles.  
+  completeness_assessment: |
+    High for architecture description, multilingual coverage, benchmark claims; medium for full dataset/training detail and latency/throughput figures; low for large-scale production eval data.  
+  change_log:
+  - date: "2025-10-24"
+    author: "Don Fountain"
+    changes: "Initial synthesis of PaddleOCR-VL model card."
+

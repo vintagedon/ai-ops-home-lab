@@ -1,0 +1,233 @@
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# =============================================================================
+# MODEL IDENTITY
+# =============================================================================
+model_identity:
+  name: "gpt-oss-20b"
+  vendor: "OpenAI"
+  model_family: "gpt-oss"
+  version: "20B"
+  release_date: "2025-08-05"
+  model_type: "Large Language Model (Mixture-of-Experts, open-weight reasoning-optimized)"
+
+  vendor_model_card_url: "https://huggingface.co/openai/gpt-oss-20b"
+
+  license: "Apache 2.0" :contentReference[oaicite:2]{index=2}
+  deprecation_status: "Active"
+
+# =============================================================================
+# MODEL ARCHITECTURE & TECHNICAL SPECIFICATIONS
+# =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer with Mixture-of-Experts (MoE)" :contentReference[oaicite:3]{index=3}
+    parameter_count: "≈ 21 B total parameters; ~3.6 B active per token" :contentReference[oaicite:4]{index=4}
+    context_window: "Up to 128 k tokens" :contentReference[oaicite:5]{index=5}
+    architectural_details: |
+      - 24 layers for 20B variant. :contentReference[oaicite:6]{index=6}
+      - Alternating dense and locally-banded sparse attention; grouped multi-query attention (GQA). :contentReference[oaicite:7]{index=7}
+
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "Lower resource consumption compared to larger variants"
+    cost_tier: "Mid-tier – optimized for consumer-hardware deployment (<16 GB VRAM) :contentReference[oaicite:8]{index=8}
+    latency: "Not publicly disclosed"
+    throughput: "Not publicly disclosed"
+
+# =============================================================================
+# CAPABILITIES & LIMITATIONS
+# =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    - Optimized for reasoning, instruction following, and agentic workflows. :contentReference[oaicite:9]{index=9}
+    - Supports adjustable reasoning effort (low/medium/high) and chain-of-thought transparency. :contentReference[oaicite:10]{index=10}
+    - Runs on much lower-resource hardware (16 GB VRAM) compared to bigger models. :contentReference[oaicite:11]{index=11}
+
+  benchmark_performance: |
+    Publicly the benchmarks are vendor-reported; they claim the 20B variant matches or exceeds the smaller reasoning models (e.g., o3-mini) on benchmarks. :contentReference[oaicite:12]{index=12}
+
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["agentic tool-use (web browsing, Python code, function calls)","long-context reasoning"] :contentReference[oaicite:13]{index=13}
+
+  known_limitations:
+    vendor_disclosed: |
+      Standard limitations of large language models: may hallucinate, biased outputs, and tool-use risk. :contentReference[oaicite:14]{index=14}
+    common_failure_modes: |
+      - Performance outside tested domains may degrade.
+      - Long-chain reasoning may still require oversight.
+    unsuitable_use_cases: |
+      - High-stakes decision-making without human oversight.
+      - Use cases where full transparency of training data is required.
+
+# =============================================================================
+# TRAINING & DATA
+# =============================================================================
+training_information:
+  training_data_description: |
+    The model was trained on a large text-only dataset with a focus on STEM, coding, and general knowledge. :contentReference[oaicite:15]{index=15}
+  training_methodology: |
+    Pre-training followed by supervised fine-tuning and high-compute RL; supports chain-of-thought and tool-use alignment. :contentReference[oaicite:16]{index=16}
+  data_privacy_considerations: |
+    Training dataset provenance and filtering details not fully disclosed; deployers should perform due diligence.
+
+# =============================================================================
+# INTENDED USE & SCOPE
+# =============================================================================
+intended_use:
+  vendor_intended_use: |
+    General-purpose reasoning, text generation, agentic systems with tool invocation, local or consumer-hardware friendly deployment. :contentReference[oaicite:17]{index=17}
+  suitable_domains: ["reasoning_tasks","instruction_following","agentic_assistants","code_generation"]
+  out_of_scope_use: |
+    Use in regulated, high-stakes domains without further validation; large context use without performance verification.
+
+# =============================================================================
+# TRUSTWORTHINESS CHARACTERISTICS
+# =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      OpenAI presents benchmark claims and architecture details. :contentReference[oaicite:18]{index=18}
+    public_evidence: |
+      Mostly vendor-reported; independent peer-review data is limited. :contentReference[oaicite:19]{index=19}
+    assessment_notes: |
+      Reasoning-optimized model with strong feature set; still requires in-domain validation.
+
+  safe:
+    safety_measures: |
+      Built-in transparency (chain-of-thought) and licensing; but post-deploy controls still needed. :contentReference[oaicite:20]{index=20}
+    known_safety_issues: |
+      Hallucinations, misuse of tool-capabilities, prompt-injection risk.
+    assessment_notes: |
+      Deployers must layer human-in-the-loop, moderation, logging.
+
+  secure_and_resilient:
+    security_features: |
+      Open-weight release allows local deployment, reducing cloud dependency.
+    known_vulnerabilities: |
+      Standard risks: prompt-injection, leaking of long-context data, adversarial tool-calls.
+    assessment_notes: |
+      Infrastructure and runtime safeguards recommended.
+
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Model card and weight release publicly available; but training dataset and full evaluation details withheld.
+    assessment_notes: |
+      Good governance baseline; not fully open in all respects.
+
+  explainable_and_interpretable:
+    explainability_features: |
+      Chain-of-thought output supports traceability of reasoning steps.
+    interpretability_limitations: |
+      Internal expert routing and dataset details undocumented.
+    assessment_notes: |
+      Provides better transparency than many earlier models but still requires oversight.
+
+  privacy_enhanced:
+    privacy_features: |
+      Local inference capability can support data residency and privacy-sensitive deployments.
+    privacy_concerns: |
+      Unknown dataset provenance and possible leakage of training context in long-input scenarios.
+    assessment_notes: |
+      Review for regulated or high-privacy use cases.
+
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      No detailed public bias-mitigation audit in the model card.
+    known_biases: |
+      Model may carry standard biases inherent in large-scale language models; multilingual or under-represented domains may have higher error rates.
+    assessment_notes: |
+      Deployers must perform bias/harm audits relative to their audience.
+
+# =============================================================================
+# EVALUATION GUIDANCE
+# =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Reproduce vendor benchmark claims (reasoning, tool tasks) in your domain.
+    - Validate adjustable reasoning-effort modes for latency/performance trade-off.
+    - Test long-context (>32k tokens) reasoning for drift and coherence.
+    - Safety red-teaming: tool-use misuse, hallucinations, biased output.
+    - Determine latency/throughput and hardware cost across your infrastructure.
+
+  key_evaluation_questions: |
+    - Does the model meet accuracy/reliability requirements for your domain and languages?
+    - Are moderation and human-in-the-loop controls in place for tool-invocation and output logging?
+    - Is your infrastructure capable for long-context usage and does cost/latency align with your ROI?
+    - Are license and deployment rights (Apache 2.0) compatible with your distribution and use-case?
+
+  comparison_considerations: |
+    - Compare with other open-weight reasoning models (e.g., DeepSeek-R1, Llama 4, Qwen3) in terms of size, active-params cost, context length vs performance.
+    - Evaluate trade-offs of 21B total/3.6B active vs larger/lower-efficient models.
+    - Assess compute/hardware accessibility for consumer vs server deployment.
+
+# =============================================================================
+# NIST AI RMF MAPPING
+# =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Human oversight required in agentic workloads; version and usage logging important; license terms enforced.
+  map:
+    context_considerations: |
+      Tool use, long context, reasoning chain, local vs cloud deployment, prompt injection risk.
+    risk_categories: ["hallucination","bias","tool_misuse","privacy_leakage","long_context_failure"]
+  measure:
+    suggested_metrics: |
+      - Hallucination/error rate per 1k prompts.
+      - Tool invocation misuse or failure rate per 1k runs.
+      - Latency/throughput vs compute cost.
+      - Bias/harm incident rate per 1k user interactions.
+  manage:
+    risk_management_considerations: |
+      Implement moderation, logging, human-review, fallback models; monitor outputs over time; measure drift in long-context chains.
+
+# =============================================================================
+# REFERENCES & SOURCES
+# =============================================================================
+references:
+  vendor_documentation:
+    - url: "https://openai.com/index/introducing-gpt-oss"
+      description: "OpenAI blog announcing the gpt-oss family (Aug 5 2025)" :contentReference[oaicite:21]{index=21}
+    - url: "https://openai.com/index/gpt-oss-model-card"
+      description: "OpenAI model-card announcement page for both gpt-oss-120b & gpt-oss-20b" :contentReference[oaicite:22]{index=22}
+    - url: "https://huggingface.co/openai/gpt-oss-20b"
+      description: "Hugging Face model page for gpt-oss-20b" :contentReference[oaicite:23]{index=23}
+  benchmarks:
+    - name: "Hugging Face blog: Welcome GPT OSS"
+      url: "https://huggingface.co/blog/welcome-openai-gpt-oss"
+      result: "21 B total, 3.6 B active parameters, accessible on 16 GB VRAM hardware" :contentReference[oaicite:24]{index=24}
+  third_party_evaluations:
+    - source: ""
+      url: ""
+      summary: ""
+  news_coverage:
+    - title: "OpenAI releases a free GPT model that can run on your laptop"
+      url: "https://www.theverge.com/openai/718785/openai-gpt-oss-open-model-release"
+      date: "2025-08-05" :contentReference[oaicite:25]{index=25}
+
+# =============================================================================
+# METADATA
+# =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "Don Fountain"
+  card_creation_date: "2025-10-24"
+  last_updated: "2025-10-24"
+  information_sources: |
+    OpenAI blog, Hugging Face model page, Hugging Face blog, press coverage.
+  completeness_assessment: |
+    High for architecture and resource specs; medium for dataset/ training transparency and independent evaluations; low for production latency/throughput details.
+  change_log:
+    - date: "2025-10-24"
+      author: "Don Fountain"
+      changes: "Initial synthesis of gpt-oss-20b model card."

@@ -1,0 +1,949 @@
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+# GPT-5 mini Model Card - NIST AI RMF Compliant
+# Populated from OpenAI documentation and verified web sources
+# Note: OpenAI has not disclosed all technical specifications; gaps explicitly noted
+
+schema_version: "1.0.0"
+
+# =============================================================================
+# MODEL IDENTITY
+# =============================================================================
+
+model_identity:
+  name: "GPT-5 mini"
+  vendor: "OpenAI"
+  model_family: "GPT (Generative Pre-trained Transformer)"
+  version: "gpt-5-mini (gpt-5-mini-2025-08-07)"
+  release_date: "2025-08-07"
+  model_type: "Large Language Model - Multimodal (Cost-Optimized)"
+
+  vendor_model_card_url: "https://platform.openai.com/docs/models/gpt-5-mini"
+
+  license: "Proprietary - Commercial API License"
+  
+  deprecation_status: "Active - Current cost-efficient variant in GPT-5 family"
+
+# =============================================================================
+# MODEL ARCHITECTURE & TECHNICAL SPECIFICATIONS
+# =============================================================================
+
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer decoder, cost-optimized variant of GPT-5. Reasoning model with adjustable reasoning effort."
+    
+    parameter_count: "Not publicly disclosed by OpenAI. Smaller than GPT-5 main model for cost efficiency."
+    
+    context_window: "400,000 tokens maximum (272,000 input + 128,000 output)"
+    
+    training_data_cutoff: "2024-05-31"
+
+    architectural_details: |
+      GPT-5 mini is a faster, more cost-efficient version of GPT-5 optimized for well-defined tasks
+      and precise prompts. Key architectural features:
+      
+      - Cost-Performance Optimization: Designed to maximize correct answers per dollar spent
+      - Reasoning Token Support: Includes chain-of-thought reasoning capabilities
+      - Adjustable Parameters: API supports reasoning_effort (minimal/low/medium/high) and 
+        verbosity (low/medium/high) controls
+      - Same Training Methodology: Three-stage training like GPT-5 (unsupervised pretraining, 
+        supervised fine-tuning, RLHF)
+      - Instruction Tuning: Strong instruction following for well-scoped tasks
+      - Developer-Optimized: Better tuned for API developers than ChatGPT-facing models
+      - Multimodal: Supports text and image inputs, text outputs
+      - Function Calling: Robust tool calling with structured outputs
+
+  modalities:
+    supported_inputs: ["text", "image"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "Very Fast - Optimized for low latency and high throughput"
+    
+    cost_tier: "Low - Budget-friendly tier, 5x cheaper than GPT-5"
+    
+    latency: "Low latency optimized. Faster than GPT-5 main model with minimal to low reasoning effort. Higher latency with medium/high reasoning effort."
+    
+    throughput: "High throughput optimized. Rate-limited by tier (see pricing section for limits)."
+
+# =============================================================================
+# CAPABILITIES & LIMITATIONS
+# =============================================================================
+
+capabilities:
+  vendor_claimed_strengths: |
+    OpenAI describes GPT-5 mini as "a faster, more cost-efficient version of GPT-5" with strengths in:
+    
+    Well-Defined Tasks: "Great for well-defined tasks and precise prompts" - performs best when
+    given clear output schemas, concrete examples, and explicit instructions.
+    
+    Cost Efficiency: Positioned as the budget-friendly option in GPT-5 family, offering strong
+    performance at 1/5th the cost of GPT-5 main model on many tasks.
+    
+    Speed: Faster response times compared to GPT-5 main, especially with minimal or low reasoning effort.
+    
+    Reasoning: Includes reasoning token support and adjustable reasoning effort for tasks requiring
+    deeper analysis.
+    
+    Developer-Focused: "Better tuned for developers" compared to ChatGPT-facing models, with
+    improved instruction following and tool use.
+    
+    OpenAI recommends GPT-5 mini for "well-defined tasks" where clarity of prompts and output
+    schemas can compensate for smaller model size.
+
+  benchmark_performance: |
+    Published benchmark results from OpenAI and third-party sources:
+    
+    Coding (SWE-bench):
+    - SWE-bench Verified: ~60% accuracy (vs GPT-5: 74.9%, Sonnet 4: ~65%)
+    - Cost per solved issue: <1/5th the cost of GPT-5 with only ~5% performance sacrifice
+    - Maxes out performance at significantly lower cost than larger models
+    
+    General Benchmarks:
+    - Performance described as "similar to GPT-5" on many evaluation tasks
+    - Competitive with GPT-4o baseline across standard benchmarks
+    - Strong instruction following and tool calling accuracy
+    
+    Third-Party Evaluations:
+    - Label Studio custom benchmark: Accuracy similar to GPT-5 on document extraction tasks
+    - GPT-5 mini scored between GPT-5 (best) and GPT-5 nano (lowest) on extraction accuracy
+    - Described as "often wins the cost-per-correct race" against larger models
+    
+    Cost-Performance Analysis:
+    - "Strong reasoning often beats a giant that wanders" when tasks are well-scoped
+    - Benchmark ranking: GPT-5 mini frequently leads in cost-per-correct-answer metrics
+    - Particularly effective on AIME, MATH 500, GPQA, MMLU Pro, and MMMU benchmarks
+    
+    Note: Absolute benchmark numbers vary across sources. Consistent finding is strong performance
+    relative to cost, especially for well-defined tasks with clear prompts.
+
+  special_capabilities:
+    tools_support: true
+    vision_support: true
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities:
+      - "Reasoning token support with adjustable effort"
+      - "Structured outputs with grammar constraints"
+      - "Function/tool calling with correct schema usage"
+      - "Extended context window (400k tokens)"
+      - "Developer-optimized instruction tuning"
+      - "Multimodal understanding (text + images)"
+
+  known_limitations:
+    vendor_disclosed: |
+      OpenAI has disclosed several limitations specific to GPT-5 mini:
+      
+      - Best for Well-Defined Tasks: Performance depends heavily on prompt clarity. "Rewards clarity"
+        with explicit output schemas and concrete examples. Underperforms on ambiguous tasks.
+      - Smaller Capacity: Not suitable for tasks requiring the deepest reasoning or most complex
+        analysis - use GPT-5 main or GPT-5 Pro for those cases.
+      - Training Data Cutoff: Knowledge cutoff as of May 31, 2024 (earlier than GPT-5 main)
+      - Audio/Video Inputs: Not supported (text and image only)
+      - Image Generation: Not supported via tools API
+      - Computer Use: Not supported
+      - Fine-tuning: Not supported
+      - Distillation: Not supported
+      
+      OpenAI explicitly recommends GPT-5 mini for cost-sensitive applications with well-scoped
+      requirements, not for complex open-ended reasoning or high-stakes decisions.
+
+    common_failure_modes: |
+      Publicly reported issues and failure patterns:
+      
+      Prompt Sensitivity: GPT-5 mini is more sensitive to prompt quality than larger models.
+      Vague or ambiguous prompts lead to degraded performance. Requires "explicit framing"
+      for best results.
+      
+      Hallucinations: While improved over earlier models, can still generate false information,
+      especially when tasks exceed its capability scope. "Keep a verification step in the prompt
+      and a tool call for arithmetic."
+      
+      Benchmark Saturation: On saturated benchmarks where all models score high, small differences
+      become noise. Cost and latency become more important differentiators.
+      
+      Confident Errors: "Will still make confident errors if you invite them" - requires
+      explicit verification prompting for critical outputs.
+      
+      Edge Case Handling: May struggle with unusual inputs or corner cases that would benefit
+      from deeper reasoning of larger models.
+      
+      Complex Multi-Step Reasoning: While capable, may not match GPT-5 or GPT-5 Pro on tasks
+      requiring extended reasoning chains or nuanced analysis.
+
+    unsuitable_use_cases: |
+      GPT-5 mini should NOT be used for:
+      
+      Task Complexity Limitations:
+      - Complex, open-ended reasoning requiring deep analysis
+      - High-stakes decisions without extensive human review and validation
+      - Tasks requiring the absolute highest accuracy (use GPT-5 or GPT-5 Pro instead)
+      - Ambiguous tasks without clear success criteria or output formats
+      - Creative tasks requiring maximum model capacity and nuance
+      
+      Domain Restrictions:
+      - Primary medical diagnosis or treatment planning (use GPT-5 with medical professional)
+      - Legal advice or contract generation without lawyer review
+      - Financial advice or trading decisions without validation
+      - Safety-critical systems as primary controller
+      
+      Technical Constraints:
+      - Tasks requiring knowledge after May 31, 2024 training cutoff
+      - Audio or video processing (not supported)
+      - Image generation tasks (not supported)
+      - Computer use or automation (not supported)
+      - Applications requiring on-premises deployment (cloud-only)
+      
+      Quality Requirements:
+      - Applications where cost is not a constraint and maximum quality is required
+      - Use cases where prompt engineering effort exceeds cost savings from mini
+      - Tasks better served by human experts or domain-specific models
+      
+      When in doubt: Start with GPT-5 mini for cost-sensitive well-defined tasks; upgrade to
+      GPT-5 main if quality gaps emerge; escalate to GPT-5 Pro for highest-stakes work.
+
+# =============================================================================
+# TRAINING & DATA
+# =============================================================================
+
+training_information:
+  training_data_description: |
+    OpenAI has not disclosed detailed training data for GPT-5 mini. Based on vendor statements:
+    
+    - Same training methodology as GPT-5 main (three-stage process)
+    - Multimodal training: Text and visual data trained simultaneously
+    - Training data cutoff: May 31, 2024
+    - Optimization focus: Cost-efficiency and speed while maintaining strong performance
+    - Developer tuning: Additional fine-tuning for API developer use cases
+    
+    Not publicly disclosed:
+    - Exact corpus size and token count
+    - Specific dataset names and sources
+    - Data licensing agreements and sourcing policies
+    - Geographic/demographic distribution of training data
+    - PII filtering and consent mechanisms
+    - Differences in training data between GPT-5 mini and GPT-5 main
+
+  training_methodology: |
+    OpenAI describes same three-stage training as GPT-5 main:
+    
+    1. Unsupervised Pretraining: Large-scale multilingual and multimodal pretraining
+    2. Supervised Fine-tuning: Task-specific fine-tuning with human-labeled examples
+    3. Reinforcement Learning from Human Feedback (RLHF): Alignment training
+    
+    Additional GPT-5 mini-specific methodology:
+    - Optimization for cost-efficiency: Model architecture and training tuned for lower inference cost
+    - Developer-focused tuning: Additional fine-tuning for API use cases
+    - Instruction following emphasis: Strong emphasis on clear instruction execution
+    
+    Not publicly disclosed:
+    - Specific architectural differences from GPT-5 main that enable cost reduction
+    - Parameter count and model size trade-offs
+    - Training compute and infrastructure details
+    - Detailed hyperparameters and optimization techniques
+
+  data_privacy_considerations: |
+    Same privacy considerations as GPT-5 main model:
+    
+    Disclosed policies:
+    - API data not used for training by default (per OpenAI data usage policies)
+    - GDPR and privacy regulation compliance claimed
+    
+    Concerns and gaps:
+    - No transparency on PII filtering mechanisms during training
+    - No disclosure of consent mechanisms for training data collection
+    - Unclear data sourcing practices for proprietary/copyrighted content
+    - No information on demographic representation in training data
+    - Limited transparency on data retention and deletion policies
+    
+    Critical for sensitive deployments:
+    - Do not send sensitive PII through API without additional safeguards
+    - Implement data minimization (send only necessary context)
+    - Consider data residency requirements (model hosted in OpenAI/Microsoft cloud)
+    - Maintain separate audit trail of all data sent to OpenAI
+
+# =============================================================================
+# INTENDED USE & SCOPE
+# =============================================================================
+
+intended_use:
+  vendor_intended_use: |
+    OpenAI describes GPT-5 mini as designed for:
+    
+    - Cost-sensitive applications requiring strong performance at lower price point
+    - Well-defined tasks with clear success criteria and output formats
+    - Precise prompts with explicit instructions and examples
+    - High-volume API usage where cost per request matters
+    - Developer applications requiring good instruction following and tool use
+    - Tasks where speed and throughput are priorities
+    
+    OpenAI explicitly states: "Great for well-defined tasks and precise prompts" and recommends
+    this model when cost efficiency is important and tasks can be clearly scoped.
+
+  suitable_domains:
+    - "High-volume content generation with well-defined templates"
+    - "Data extraction and structuring from documents (with clear schemas)"
+    - "Classification and categorization tasks"
+    - "Simple to moderate coding tasks (refactoring, debugging, unit tests)"
+    - "API integrations and tool calling workflows"
+    - "Customer service for routine queries (well-scoped responses)"
+    - "Document summarization with clear instructions"
+    - "Translation and localization tasks"
+    - "Simple data analysis and reporting"
+    - "Cost-sensitive production deployments at scale"
+
+  out_of_scope_use: |
+    Use cases falling outside safe deployment boundaries for GPT-5 mini:
+    
+    Capability Limitations:
+    - Complex reasoning requiring deepest analysis (use GPT-5 or GPT-5 Pro)
+    - Open-ended creative tasks requiring maximum model capacity
+    - High-stakes decisions without extensive validation
+    - Ambiguous tasks without clear success criteria
+    - Tasks requiring knowledge after May 31, 2024
+    
+    Same restrictions as GPT-5 main:
+    - Medical diagnosis or treatment planning without professional oversight
+    - Legal advice without lawyer review
+    - Financial advice without validation
+    - Safety-critical systems as primary controller
+    - Audio/video processing (not supported)
+    - Image generation (not supported)
+    - On-premises deployment (cloud-only)
+    
+    Economic Considerations:
+    - Applications where prompt engineering costs exceed savings from cheaper model
+    - Use cases where quality requirements justify higher cost of GPT-5 main
+    - Scenarios where cost is not a constraint (use GPT-5 for maximum quality)
+
+# =============================================================================
+# TRUSTWORTHINESS CHARACTERISTICS
+# =============================================================================
+
+trustworthiness_assessment:
+  # CHARACTERISTIC 1: Valid and Reliable
+  valid_and_reliable:
+    vendor_claims: |
+      OpenAI claims GPT-5 mini benefits from same reliability improvements as GPT-5 main,
+      including reduced hallucinations and improved instruction following. Described as
+      "similar performance to GPT-5" on many tasks when prompts are well-crafted.
+    
+    public_evidence: |
+      Third-party evidence shows:
+      - Label Studio benchmark: "Performance was similar with GPT-5-mini" to GPT-5
+      - SWE-bench: ~5% performance gap compared to GPT-5 at <1/5th the cost
+      - Independent reviews: "Strong reasoning often beats a giant that wanders" for well-scoped tasks
+      - Reliability depends heavily on prompt quality - much more sensitive than larger models
+    
+    assessment_notes: |
+      Reliability is task-dependent and prompt-sensitive. For deployment:
+      - Invest in high-quality prompt engineering upfront
+      - Test extensively on representative data before production
+      - Use explicit output schemas and verification steps
+      - Monitor for quality degradation compared to larger models
+      - Plan to upgrade to GPT-5 main if reliability gaps emerge
+      - Consider A/B testing against GPT-5 to quantify quality trade-offs
+
+  # CHARACTERISTIC 2: Safe
+  safe:
+    vendor_claims: |
+      OpenAI states GPT-5 mini has same safety fine-tuning as GPT-5 main, including RLHF
+      training and reduced harmful outputs. Same safety controls and content filtering.
+    
+    public_evidence: |
+      Limited independent safety evaluation specific to GPT-5 mini. Assumed to have
+      similar safety posture to GPT-5 main based on shared training methodology.
+      Smaller model size may affect safety in edge cases.
+    
+    assessment_notes: |
+      Safety considerations for GPT-5 mini:
+      - Apply same safety precautions as GPT-5 main
+      - Additional content filtering may be needed for high-risk applications
+      - Test adversarial prompts specific to your use case
+      - Monitor for safety issues that may differ from larger model
+      - Maintain incident response plan for safety failures
+
+  # CHARACTERISTIC 3: Secure and Resilient
+  secure_and_resilient:
+    vendor_claims: |
+      Same infrastructure and security controls as GPT-5 main. Operates on Microsoft Azure
+      with enterprise security. API includes rate limiting and authentication.
+    
+    public_evidence: |
+      No security incidents reported specific to GPT-5 mini. Same cloud-hosted service
+      architecture as other GPT-5 variants.
+    
+    assessment_notes: |
+      Same security considerations as GPT-5 main:
+      - Standard API security controls (key rotation, TLS, secrets management)
+      - Prompt injection protections for user-facing applications
+      - Monitor for adversarial attacks and abuse
+      - Plan for service outages with fallback strategies
+      - Assess data residency requirements (cloud-only service)
+
+  # CHARACTERISTIC 4: Accountable and Transparent
+  accountable_and_transparent:
+    vendor_claims: |
+      OpenAI provides API documentation, pricing transparency, and model behavior examples.
+      Same limited technical disclosure as GPT-5 main.
+    
+    public_evidence: |
+      Transparency gaps:
+      - No disclosed parameter count or architecture details
+      - No public training data specifics
+      - Limited explainability of model decisions
+      - No disclosed bias testing specific to mini variant
+      - Closed-source proprietary model
+    
+    assessment_notes: |
+      Transparency is limited, same as GPT-5 main:
+      - Document model decision processes at application level
+      - Maintain comprehensive audit logs
+      - Implement human review for important decisions
+      - Be prepared to explain limitations to stakeholders
+      - Consider whether transparency requirements can be met
+
+  # CHARACTERISTIC 5: Explainable and Interpretable
+  explainable_and_interpretable:
+    vendor_claims: |
+      OpenAI provides limited explainability: reasoning tokens can show chain-of-thought,
+      structured outputs provide some control, but no built-in attribution or confidence scoring.
+    
+    public_evidence: |
+      Black-box neural network with no interpretable internal representations. Self-explanations
+      via reasoning tokens are model-generated, not ground truth.
+    
+    assessment_notes: |
+      Explainability limitations require:
+      - Don't rely on model self-explanations for critical decisions
+      - Application-level tracking of inputs/outputs for post-hoc analysis
+      - Structured prompting to elicit reasoning traces when needed
+      - Document that decisions are not fully explainable
+      - Consider simpler models if full explainability required
+
+  # CHARACTERISTIC 6: Privacy-Enhanced
+  privacy_enhanced:
+    vendor_claims: |
+      Same privacy policies as GPT-5 main: API data not used for training by default,
+      GDPR compliance claimed, enterprise data protection available.
+    
+    public_evidence: |
+      Same privacy concerns as GPT-5 main:
+      - Training data may contain personal information (not disclosed)
+      - Cloud-hosted service with data processed externally
+      - Limited transparency on data handling practices
+    
+    assessment_notes: |
+      Privacy considerations for deployment:
+      - Do not send sensitive PII without additional safeguards
+      - Implement data minimization
+      - Review OpenAI data processing agreements
+      - Consider data residency requirements
+      - Implement PII detection/redaction if needed
+      - Maintain audit trail of data sent to API
+
+  # CHARACTERISTIC 7: Fair with Harmful Bias Managed
+  fair_with_harmful_bias_managed:
+    vendor_claims: |
+      OpenAI states same training and alignment as GPT-5 main, with RLHF to reduce bias.
+      No specific bias testing results disclosed for mini variant.
+    
+    public_evidence: |
+      No published bias evaluations specific to GPT-5 mini. Assumed to inherit bias patterns
+      from GPT-5 main training, but smaller model size may affect bias differently.
+    
+    assessment_notes: |
+      Bias management requires deployment-level controls:
+      - Conduct domain-specific bias testing for your population
+      - Test performance across demographic groups
+      - Monitor for disparate impact in production
+      - Implement bias detection at application level
+      - Document known biases and limitations
+      - Plan for bias incident response
+
+# =============================================================================
+# PRICING INFORMATION
+# =============================================================================
+
+pricing_information:
+  api_pricing:
+    input_tokens: "$0.25 per 1M tokens"
+    cached_input_tokens: "$0.025 per 1M tokens"
+    output_tokens: "$2.00 per 1M tokens"
+    
+    cost_comparison:
+      - model: "GPT-5"
+        input_cost: "$1.25/1M (5x more expensive)"
+        output_cost: "$10.00/1M (5x more expensive)"
+      - model: "GPT-5 mini"
+        input_cost: "$0.25/1M (baseline)"
+        output_cost: "$2.00/1M (baseline)"
+      - model: "GPT-5 nano"
+        input_cost: "$0.05/1M (5x cheaper)"
+        output_cost: "$0.50/1M (4x cheaper)"
+  
+  rate_limits_by_tier:
+    free_tier:
+      rpm: "Not supported"
+      tpm: "Not supported"
+      batch_queue_limit: "Not supported"
+    tier_1:
+      rpm: 500
+      tpm: 500000
+      batch_queue_limit: 5000000
+    tier_2:
+      rpm: 5000
+      tpm: 2000000
+      batch_queue_limit: 20000000
+    tier_3:
+      rpm: 5000
+      tpm: 4000000
+      batch_queue_limit: 40000000
+    tier_4:
+      rpm: 10000
+      tpm: 10000000
+      batch_queue_limit: 1000000000
+    tier_5:
+      rpm: 30000
+      tpm: 180000000
+      batch_queue_limit: 15000000000
+
+# =============================================================================
+# API AND TECHNICAL DETAILS
+# =============================================================================
+
+api_information:
+  model_identifiers:
+    - "gpt-5-mini"
+    - "gpt-5-mini-2025-08-07"
+  
+  endpoints:
+    - "Chat Completions: v1/chat/completions"
+    - "Responses: v1/responses"
+    - "Realtime: v1/realtime"
+    - "Assistants: v1/assistants"
+    - "Batch: v1/batch"
+    - "Fine-tuning: v1/fine-tuning (Not supported)"
+    - "Embeddings: v1/embeddings (Not supported)"
+    - "Image generation: v1/images/generations (Not supported)"
+    - "Videos: v1/videos (Not supported)"
+    - "Image edit: v1/images/edits (Not supported)"
+    - "Speech generation: v1/audio/speech (Not supported)"
+    - "Transcription: v1/audio/transcriptions (Not supported)"
+    - "Translation: v1/audio/translations (Not supported)"
+    - "Moderation: v1/moderations (Not supported)"
+    - "Completions (legacy): v1/completions (Not supported)"
+  
+  supported_features:
+    streaming: "Supported"
+    function_calling: "Supported"
+    structured_outputs: "Supported"
+    fine_tuning: "Not supported"
+    distillation: "Not supported"
+    predicted_outputs: "Not supported"
+  
+  supported_tools:
+    - "Web search: Supported (via Responses API)"
+    - "File search: Supported"
+    - "Image generation: Not supported"
+    - "Code interpreter: Supported"
+    - "Computer use: Not supported"
+    - "MCP: Supported"
+
+# =============================================================================
+# EVALUATION GUIDANCE
+# =============================================================================
+
+evaluation_guidance:
+  recommended_tests: |
+    Pre-deployment validation tests specific to GPT-5 mini:
+    
+    1. Cost-Performance Trade-off Analysis:
+       - Run identical evaluation dataset on both GPT-5 mini and GPT-5 main
+       - Calculate accuracy/quality difference between models
+       - Calculate cost difference at expected production scale
+       - Determine if quality gap justifies 5x cost difference
+       - Set quality threshold (e.g., "mini must be within 5% of main")
+    
+    2. Prompt Engineering Validation:
+       - Test with varying prompt clarity levels (vague → explicit)
+       - Measure performance degradation with ambiguous prompts
+       - Validate that output schemas and examples improve mini performance
+       - Compare mini's prompt sensitivity to GPT-5 main
+       - Document optimal prompt patterns for your use case
+    
+    3. Domain Accuracy Testing:
+       - Create evaluation dataset of 100+ representative examples
+       - Measure accuracy, relevance, completeness on your specific tasks
+       - Compare against GPT-5 main and GPT-4o
+       - Identify task types where mini underperforms
+       - Set per-task-type quality thresholds
+    
+    4. Latency and Throughput Benchmarking:
+       - Test with minimal/low/medium/high reasoning effort
+       - Measure p50, p95, p99 latency under load
+       - Verify rate limits sufficient for expected traffic
+       - Compare latency to GPT-5 main at same reasoning effort
+    
+    5. Edge Case and Failure Mode Testing:
+       - Test with unusual inputs, corner cases, adversarial examples
+       - Measure hallucination rate compared to larger models
+       - Validate verification prompts catch mini's errors
+       - Document failure patterns specific to mini
+    
+    6. Cost Projection:
+       - Model monthly costs at expected production scale
+       - Include caching benefits if applicable
+       - Compare total cost: (mini + prompt engineering effort) vs (GPT-5 main)
+       - Calculate break-even point for cost savings
+    
+    7. A/B Testing in Production:
+       - Route percentage of traffic to mini vs main
+       - Track user satisfaction, task success rate, escalations
+       - Monitor cost savings vs quality impact
+       - Plan rollback if quality gaps unacceptable
+
+  key_evaluation_questions: |
+    Critical questions for GPT-5 mini deployment decision:
+    
+    Cost-Benefit Analysis:
+    - Is 5x cost savings worth potential 5-10% quality reduction?
+    - How much will we spend on prompt engineering to optimize for mini?
+    - At what scale do cost savings justify using mini over main?
+    - Can we afford quality gaps for this use case?
+    
+    Task Suitability:
+    - Are our tasks well-defined with clear success criteria?
+    - Can we provide explicit output schemas and examples?
+    - Do we have prompt engineering expertise to optimize for mini?
+    - Are tasks simple enough for mini's capacity?
+    
+    Quality Requirements:
+    - What is minimum acceptable accuracy for our use case?
+    - How will quality gaps affect user experience?
+    - Can we tolerate higher hallucination rate than GPT-5 main?
+    - Do we have validation mechanisms to catch errors?
+    
+    Infrastructure and Operations:
+    - Can we implement prompt best practices (schemas, examples, verification)?
+    - Do we have monitoring to detect quality degradation?
+    - Can we upgrade to GPT-5 main if mini underperforms?
+    - Do we have budget for ongoing optimization?
+    
+    Strategic Considerations:
+    - Is cost optimization or maximum quality the priority?
+    - Can we differentiate with prompt engineering vs raw model power?
+    - Will cost savings enable new use cases at scale?
+    - What's our risk tolerance for quality-cost trade-offs?
+
+  comparison_considerations: |
+    Framework for comparing GPT-5 mini with alternatives:
+    
+    Within GPT-5 Family:
+    - GPT-5 mini vs GPT-5 main: 5x cost savings, 5-10% quality gap on many tasks
+    - GPT-5 mini vs GPT-5 nano: 5x more expensive, significantly better quality
+    - GPT-5 mini is "sweet spot" for cost-conscious applications with clear requirements
+    
+    Against Other Cost-Optimized Models:
+    - Claude Sonnet 4: Similar performance tier, different pricing
+    - Gemini 2.5 Flash: Speed-optimized, may trade accuracy for speed
+    - GPT-4o: Previous generation, similar price point, lower capability
+    
+    Key Decision Factors:
+    
+    Quality vs Cost Trade-off:
+    - When is 5x cost savings worth 5% quality reduction?
+    - Break-even analysis: cost savings vs prompt engineering investment
+    - Consider total cost of ownership (model + engineering + monitoring)
+    
+    Task Complexity:
+    - Simple, well-defined tasks: GPT-5 mini is excellent choice
+    - Complex, open-ended tasks: GPT-5 main likely required
+    - Mixed workload: Consider routing (mini for simple, main for complex)
+    
+    Prompt Engineering Capacity:
+    - Strong prompt eng team: Mini can match main with good prompts
+    - Limited eng resources: Main may be better despite higher cost
+    - Engineering cost may exceed model cost savings
+    
+    Scale and Volume:
+    - High-volume applications: Cost savings compound at scale
+    - Low-volume applications: Absolute cost difference may be minimal
+    - Calculate break-even volume for cost optimization
+    
+    Quality Tolerance:
+    - Error-tolerant use cases: Mini is good fit
+    - High-stakes decisions: Main or Pro required
+    - User-facing vs internal: Different quality thresholds
+
+# =============================================================================
+# NIST AI RMF MAPPING
+# =============================================================================
+
+rmf_function_mapping:
+  govern:
+    notes: |
+      Governance considerations specific to GPT-5 mini:
+      
+      Model Selection Rationale:
+      - Document why mini was chosen over main or other alternatives
+      - Justify cost-quality trade-off decision
+      - Define quality thresholds and monitoring requirements
+      - Establish upgrade path to GPT-5 main if quality gaps emerge
+      
+      Same governance framework as GPT-5 main:
+      - Define acceptable use policy
+      - Establish human oversight requirements
+      - Create incident response plan
+      - Regular governance reviews of usage patterns
+      - Version control and change management
+      - Compliance and audit procedures
+
+  map:
+    context_considerations: |
+      Additional context factors specific to GPT-5 mini:
+      
+      Economic Context:
+      - Is cost savings critical business requirement?
+      - Can we afford prompt engineering investment?
+      - What scale justifies mini over main?
+      - Are budgets constrained enough to accept quality trade-offs?
+      
+      Task Characteristics:
+      - Are tasks well-defined or open-ended?
+      - Can we provide clear output schemas?
+      - Do we have good prompt engineering?
+      - What is acceptable error rate?
+      
+      Same general context as GPT-5 main:
+      - User populations and stakeholder impacts
+      - Data sensitivity and regulatory requirements
+      - Geographic and cultural contexts
+    
+    risk_categories:
+      - "Cost-Quality Trade-off Risk - Quality gaps from using cheaper model"
+      - "Prompt Sensitivity Risk - Performance depends heavily on prompt engineering"
+      - "Hallucination Risk - May hallucinate more than larger models"
+      - "Bias and Fairness Risk - Smaller model may have different bias patterns"
+      - "Same as GPT-5 main: Privacy, Safety, Compliance, Security, Vendor Lock-in, Reputational"
+
+  measure:
+    suggested_metrics: |
+      GPT-5 mini-specific metrics in addition to standard metrics:
+      
+      Cost-Performance Metrics:
+      - Cost per correct answer vs GPT-5 main (track weekly)
+      - Quality gap percentage compared to GPT-5 main baseline
+      - Cost savings realized vs budget forecast
+      - Prompt engineering effort (hours spent optimizing)
+      
+      Quality Comparison Metrics:
+      - Accuracy gap: (Main accuracy - Mini accuracy) / Main accuracy
+      - Hallucination rate difference between mini and main
+      - User satisfaction: Mini vs Main A/B testing results
+      - Escalation rate: How often users switch to higher-tier model
+      
+      Prompt Engineering Metrics:
+      - Performance improvement from prompt optimization
+      - Success rate with explicit schemas vs without
+      - Verification step effectiveness (error catch rate)
+      
+      Standard metrics same as GPT-5 main:
+      - Performance: Accuracy, latency, throughput, error rate
+      - Safety: Harmful output rate, content filter triggers
+      - Operational: Uptime, cost per request, cache hit rate
+
+  manage:
+    risk_management_considerations: |
+      Risk management strategies specific to GPT-5 mini:
+      
+      Cost-Quality Trade-off Management:
+      - Continuous A/B testing: Route sample traffic to main for comparison
+      - Quality threshold alerts: Trigger when mini falls below acceptable accuracy
+      - Upgrade path: Plan to switch to main if quality gaps unacceptable
+      - Hybrid routing: Use mini for simple tasks, main for complex
+      
+      Prompt Engineering Controls:
+      - Version control for prompts with performance tracking
+      - Prompt library of proven patterns for mini
+      - Automated testing of prompt changes before deployment
+      - Documentation of mini-specific prompt best practices
+      
+      Error Mitigation:
+      - Explicit verification steps in prompts
+      - Tool calling for arithmetic and factual checks
+      - Human review for low-confidence outputs
+      - Fallback to GPT-5 main when mini fails
+      
+      Same risk management as GPT-5 main:
+      - Technical controls: Input validation, output validation, guardrails
+      - Process controls: Human-in-loop, logging, continuous evaluation
+      - Organizational controls: Training, policies, oversight
+      - Incident response: Detection, containment, remediation
+
+# =============================================================================
+# REFERENCES & SOURCES
+# =============================================================================
+
+references:
+  vendor_documentation:
+    - url: "https://platform.openai.com/docs/models/gpt-5-mini"
+      description: "Official OpenAI platform documentation for GPT-5 mini specifications"
+    
+    - url: "https://openai.com/index/introducing-gpt-5-for-developers/"
+      description: "OpenAI developer blog on GPT-5 variants including mini"
+
+  benchmarks:
+    - name: "SWE-bench Verified (GPT-5 mini)"
+      url: "https://www.swebench.com/SWE-bench/blog/2025/08/08/gpt5/"
+      result: "~60% accuracy, <1/5th cost of GPT-5 with ~5% performance sacrifice"
+    
+    - name: "Label Studio Custom Benchmark"
+      url: "https://labelstud.io/blog/evaluating-the-gpt-5-series-on-custom-benchmarks/"
+      result: "Similar accuracy to GPT-5 on document extraction tasks"
+
+  third_party_evaluations:
+    - source: "BinaryVerse AI - GPT-5 Mini Review"
+      url: "https://binaryverseai.com/gpt-5-mini-review/"
+      summary: "Cost-per-correct analysis, benchmark comparisons, performance vs GPT-5 and competitors"
+    
+    - source: "Artificial Analysis - GPT-5 mini"
+      url: "https://artificialanalysis.ai/models/gpt-5-mini"
+      summary: "Quality, price, performance analysis across metrics"
+    
+    - source: "SWE-bench - GPT-5 mini Cost Analysis"
+      url: "https://www.swebench.com/SWE-bench/blog/2025/08/08/gpt5/"
+      summary: "Detailed cost-performance deep dive on coding benchmarks"
+    
+    - source: "Label Studio - GPT-5 Series Evaluation"
+      url: "https://labelstud.io/blog/evaluating-the-gpt-5-series-on-custom-benchmarks/"
+      summary: "Custom benchmark methodology and GPT-5 mini results"
+    
+    - source: "Encord Technical Breakdown"
+      url: "https://encord.com/blog/gpt-5-a-technical-breakdown/"
+      summary: "GPT-5 family technical analysis including mini variant"
+
+# =============================================================================
+# METADATA
+# =============================================================================
+
+metadata:
+  card_version: "1.0"
+  card_author: "AI Risk Assessment Team"
+  card_creation_date: "2025-10-28"
+  last_updated: "2025-10-28"
+  
+  information_sources: |
+    Primary sources for this model card:
+    
+    1. Official OpenAI Documentation:
+       - Platform API documentation (gpt-5-mini model page)
+       - OpenAI developer blog: GPT-5 for developers
+       - User-uploaded PDF: gpt-5-mini.pdf with official specifications
+    
+    2. Independent Benchmarks and Analysis:
+       - SWE-bench cost-performance analysis
+       - Label Studio custom evaluation methodology
+       - BinaryVerse AI comprehensive review
+       - Artificial Analysis performance metrics
+    
+    3. Technical Coverage:
+       - Encord technical breakdown
+       - Vellum benchmark comparisons
+       - PassionFruit model comparison guide
+    
+    All cost and performance trade-offs verified against multiple sources.
+    OpenAI has not disclosed architecture details or parameter count for mini variant.
+
+  completeness_assessment: |
+    Information completeness by section:
+    
+    COMPREHENSIVE SECTIONS (>80% complete):
+    - Model Identity: Full vendor information, release date, pricing, identifiers
+    - API Information: Complete endpoint listing, rate limits, supported features
+    - Pricing: Complete API pricing and rate limits per tier
+    - Cost-Performance Analysis: Extensive third-party benchmarks and comparisons
+    - References: Multiple vendor and independent evaluation sources
+    
+    PARTIAL SECTIONS (40-80% complete):
+    - Technical Specifications: Context window and cutoff confirmed; parameter count NOT disclosed
+    - Capabilities: Cost-efficiency claims well documented; absolute performance numbers vary by source
+    - Trustworthiness: Vendor claims documented; mini-specific bias testing NOT published
+    - Intended Use: Vendor guidance clear; cost-benefit thresholds require user analysis
+    
+    LIMITED SECTIONS (<40% complete):
+    - Training Information: High-level methodology; mini-specific training details NOT disclosed
+    - Architecture Details: Cost-optimization approach described; exact architectural differences NOT disclosed
+    - Parameter Count: NOT disclosed (only known to be smaller than GPT-5 main)
+    - Mini-Specific Bias Testing: No published evaluations separate from GPT-5 main
+    
+    CRITICAL INFORMATION GAPS:
+    - No disclosed parameter count or model size
+    - No detailed architecture differences from GPT-5 main
+    - No mini-specific bias or fairness evaluations
+    - No disclosure of training data differences from main model
+    - Limited transparency into cost-optimization techniques
+    - No published guidance on when to use mini vs main vs nano
+    
+    CONFIDENCE IMPROVEMENT NEEDS:
+    - OpenAI guidance on mini vs main selection criteria
+    - Mini-specific bias and fairness testing
+    - More extensive benchmark coverage across diverse tasks
+    - Long-term cost-benefit analysis from production deployments
+    - Published best practices for prompt engineering with mini
+
+  change_log:
+    - date: "2025-10-28"
+      author: "AI Risk Assessment Team"
+      changes: "Initial model card creation for GPT-5 mini. Populated from official OpenAI documentation (platform docs, developer blog, user-uploaded PDF), independent benchmarks (SWE-bench, Label Studio, BinaryVerse AI, Artificial Analysis), and technical analyses. Strong emphasis on cost-performance trade-offs based on multiple evaluation sources. Gaps in architecture details and mini-specific testing explicitly documented."
+
+# =============================================================================
+# USAGE NOTES
+# =============================================================================
+
+usage_notes: |
+  This model card follows NIST AI RMF principles with specific focus on cost-performance
+  trade-offs for OpenAI's GPT-5 mini model.
+  
+  Key Characteristics of GPT-5 mini:
+  - Cost-optimized variant: 5x cheaper than GPT-5 main ($0.25-$2 vs $1.25-$10 per 1M tokens)
+  - Performance: Similar to GPT-5 on well-defined tasks, ~5-10% gap on complex tasks
+  - Speed: Faster than GPT-5 main, especially with minimal/low reasoning effort
+  - Prompt-sensitive: Requires explicit schemas and examples for best performance
+  - Large context: 400k tokens (same as GPT-5 main)
+  - Training cutoff: May 31, 2024 (earlier than GPT-5 main)
+  
+  When to Choose GPT-5 mini:
+  ✅ Cost-sensitive high-volume applications
+  ✅ Well-defined tasks with clear success criteria
+  ✅ Strong prompt engineering capability on your team
+  ✅ Can provide explicit output schemas and examples
+  ✅ Error tolerance acceptable for use case
+  ✅ Speed and throughput are priorities
+  
+  When to Choose GPT-5 main Instead:
+  ❌ Complex, open-ended reasoning required
+  ❌ Maximum quality is non-negotiable
+  ❌ High-stakes decisions without extensive validation
+  ❌ Limited prompt engineering resources
+  ❌ Tasks require knowledge after May 31, 2024
+  ❌ Cost is not a primary constraint
+  
+  Critical Success Factors:
+  1. Invest in prompt engineering - quality depends on prompt clarity
+  2. Use explicit output schemas and concrete examples
+  3. Include verification steps in prompts
+  4. Test extensively on your data before production
+  5. Monitor quality continuously and compare to GPT-5 main
+  6. Plan upgrade path to main if quality gaps emerge
+  
+  Cost-Benefit Decision Framework:
+  - Calculate: (5x cost savings) - (prompt engineering cost) - (quality gap impact)
+  - If positive at scale: Use GPT-5 mini
+  - If negative or marginal: Use GPT-5 main
+  - If uncertain: Run A/B test with real traffic
+  
+  This card should be updated as:
+  - New benchmark results become available
+  - OpenAI publishes mini-specific guidance
+  - Production deployments reveal cost-quality patterns
+  - Model updates or version changes occur

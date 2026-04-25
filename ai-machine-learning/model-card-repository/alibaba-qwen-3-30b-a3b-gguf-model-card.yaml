@@ -1,0 +1,189 @@
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+model_identity:
+  name: "Qwen3-30B-A3B-GGUF"
+  vendor: "Unsloth"
+  model_family: "Qwen3"
+  version: "30B-A3B (GGUF quantised family)"
+  release_date: "2025-?-??"  # release date not clearly specified in model page.
+  model_type: "Large-scale MoE language model (approx 30B parameters, quantised GGUF format)"
+
+  vendor_model_card_url: "https://huggingface.co/unsloth/Qwen3-30B-A3B-GGUF"  :contentReference[oaicite:3]{index=3}
+
+  license: "Apache 2.0"  :contentReference[oaicite:4]{index=4}
+  deprecation_status: "Active"
+
+technical_specifications:
+  architecture:
+    base_architecture: "Qwen3 MoE (Mixture of Experts) architecture with 128 experts, 48 layers, 32 K native context length, quantised to GGUF formats."  :contentReference[oaicite:5]{index=5}
+    parameter_count: "≈ 30.5 billion total parameters, ~3.3 billion activated experts in inference variant."  :contentReference[oaicite:6]{index=6}
+    context_window: "Native 32,768 tokens, extendable to 131,072 tokens via YaRN in this variant."  :contentReference[oaicite:7]{index=7}
+    training_data_cutoff: "Not publicly disclosed"
+
+    architectural_details: |
+      - MoE architecture: 128 experts, of which 8 are activated in inference for this variant.  :contentReference[oaicite:8]{index=8}
+      - Native support for a “thinking” mode and “non-thinking” mode with logic blocks and `<think> … </think>` tags for reasoning; this variant supports switching between modes.  :contentReference[oaicite:9]{index=9}
+      - Quantised GGUF weights tuned by Unsloth and calibration dataset (“Unsloth Dynamic 2.0 GGUF + Quants”).  :contentReference[oaicite:10]{index=10}
+
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "High compute (requiring large memory/VRAM especially for full precision or large context) but optimised quantised versions available."  :contentReference[oaicite:11]{index=11}
+    cost_tier: "Significant hardware cost for large context / full precision; quantised GGUF versions reduce memory footprint substantially."  :contentReference[oaicite:12]{index=12}
+    latency: "Depends strongly on quantisation, hardware and context length; for 4-bit quantised models ~16–18 GB memory indicated.  :contentReference[oaicite:13]{index=13}
+    throughput: "Not publicly specified in detail"
+
+capabilities:
+  vendor_claimed_strengths: |
+    - Enhanced reasoning capability via MoE architecture and dedicated “thinking mode”.  :contentReference[oaicite:14]{index=14}
+    - Large context window support for long-document comprehension (32K native, up to 131K tokens).  :contentReference[oaicite:15]{index=15}
+    - Quantised GGUF variants suitable for local deployment with reduced memory.  :contentReference[oaicite:16]{index=16}
+  benchmark_performance: |
+    The model page lists parameters and usage guide but does *not* clearly list standard benchmark scores (e.g., MMLU) for this specific GGUF variant.
+  special_capabilities:
+    tools_support: true (supports “agentic use” / tool-calling via templates)  :contentReference[oaicite:17]{index=17}
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["thinking/non-thinking mode switch", "long context document understanding"]
+  known_limitations:
+    vendor_disclosed: |
+      - Requires substantial hardware for full-capacity use; quantised models help but may reduce fidelity.  :contentReference[oaicite:18]{index=18}
+    common_failure_modes: |
+      - Potential performance drop when using extremely long contexts without sufficient hardware or when using inference on heavily quantised model.
+      - Switching between thinking modes may require prompt engineering to achieve intended behaviour.  :contentReference[oaicite:19]{index=19}
+    unsuitable_use_cases: |
+      - Regulated domains demanding full training-data provenance or certification.
+      - Real-time low-latency user-interactive use on very constrained hardware if full precision variant is used without optimisation.
+
+training_information:
+  training_data_description: |
+    Training data details and dataset makeup are *not publicly disclosed* on the model card; users should assume large general-purpose LLM corpora.
+  training_methodology: |
+    - Pretraining of MoE architecture followed by fine-tuning/instruction tuning and then quantisation/calibration by Unsloth.
+  data_privacy_considerations: |
+    - Unknown specifics of dataset filtering, PII handling, or domain annotations; implementers should validate in context of sensitive use.
+
+intended_use:
+  vendor_intended_use: |
+    Flexible language model for instruction-following, long-document understanding, reasoning tasks, and local deployment (via quantised GGUF format).  :contentReference[oaicite:20]{index=20}
+  suitable_domains: ["research systems", "LLM local deployment", "agent frameworks", "long-document comprehension"]
+  out_of_scope_use: |
+    - Real-time conversational systems on constrained hardware without quantisation/optimisation.
+    - Scenarios requiring full transparency of training corpus or regulatory compliance unless additional audit is conducted.
+    - Domains requiring vision or multi-modal input (model is text-only in this variant).
+
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Detailed usage instructions, modes, quantisation info provided on model page.  :contentReference[oaicite:21]{index=21}
+    public_evidence: |
+      Model page, community quantisation reports, Reddit commentary.  :contentReference[oaicite:22]{index=22}
+    assessment_notes: |
+      Good for exploratory/local deployment use; for production/high-risk use conduct in-domain evaluation and hardware suitability testing.
+  safe:
+    safety_measures: |
+      Open license (Apache 2.0) allows transparency; model supports local hosting.
+    known_safety_issues: |
+      As with large-scale LLMs: risk of hallucination, misuse, bias; quantisation may introduce additional errors.
+    assessment_notes: |
+      Deploy with human-in-the-loop, monitor output, especially in critical domains.
+  secure_and_resilient:
+    security_features: |
+      Local deployment possible; quantised versions reduce resource cost thus potentially reduce attack surface from cloud dependency.
+    known_vulnerabilities: |
+      Large memory/VRAM footprint if full precision used; quantised models may behave differently or degrade under certain prompts.
+    assessment_notes: |
+      Infrastructure monitoring and fallback paths recommended.
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Model architecture and usage modes disclosed; training data provenance not fully disclosed.
+    assessment_notes: |
+      For regulated use, include version logging, usage tracking and human oversight.
+  explainable_and_interpretable:
+    explainability_features: |
+      Generated text is inspectable; “thinking mode” block gives insight into reasoning.
+    interpretability_limitations: |
+      Internal decision-making and expert activation details are not fully exposed.
+    assessment_notes: |
+      Suitable for general reasoning tasks; not ideal where full interpretability is required.
+  privacy_enhanced:
+    privacy_features: |
+      On-prem deployment of weights possible; quantised versions reduce resource/cloud dependency.
+    privacy_concerns: |
+      Unknown training data may include PII, and long context ability increases risk of memorised content; quantised versions may make it harder to trace internal behaviour.
+    assessment_notes: |
+      For sensitive data domains, ensure prompt sanitisation, secure handling, and output filtering.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Community-built quantised versions may undergo calibration; some improvement noted by users.  :contentReference[oaicite:23]{index=23}
+    known_biases: |
+      Likely performance degradation for highly domain-specific or out-of-distribution prompts; quantised models may exhibit additional artefacts.
+    assessment_notes: |
+      Perform bias/fairness audit on your deployment data, monitor for hallucination, especially when using quantised versions.
+
+evaluation_guidance:
+  recommended_tests: |
+    - Benchmark the model on your target prompt domain using representative inputs, monitor accuracy, coherence and reasoning quality.
+    - Test with long-document inputs (e.g., >32K tokens) if using long-context variant and measure performance degradation, memory/latency.
+    - Evaluate quantised variant behaviour (4-bit, 8-bit, GGUF) on your hardware: check output fidelity compared to baseline.
+    - Safety/red-teaming: test for hallucination, over-confidence, bias across languages/domains; test how model handles “thinking” mode vs non-thinking mode.
+    - Infrastructure test: measure VRAM/latency/throughput for your deployment hardware and ensure stability in quantised mode.
+  key_evaluation_questions: |
+    - Does the model meet your domain accuracy and reasoning fidelity requirements?
+    - Is your hardware infrastructure capable of supporting the model (memory, tokens, quantised variant) at your expected throughput?
+    - Are you using quantised weights correctly and monitoring for any artefacts or degradation?
+    - Are human-in-the-loop, monitoring, version logging, and fallback strategies in place when deploying this model?
+  comparison_considerations: |
+    - Compare quantised version vs full-precision or other open models (e.g., Qwen3-14B, Qwen3-16B) for quality vs cost trade-offs.
+    - Evaluate whether full long-context requirement justifies the increased hardware cost compared to smaller models.
+    - Consider whether “thinking mode” behaviour adds value for your use-case or if non-thinking simpler model suffices.
+
+rmf_function_mapping:
+  govern:
+    notes: |
+      Version control, usage logging, human oversight especially when deploying large MoE models with quantisation.
+  map:
+    context_considerations: |
+      Large context LLM, text-only, reasoning/agentic tasks, local deployment of quantised weights, “thinking” mode toggle.
+    risk_categories: ["hallucination","overconfidence","mode_switch_misuse","quantisation_degradation","memory_exhaustion"]
+  measure:
+    suggested_metrics: |
+      - Error/hallucination rate per 1k prompts in your domain.
+      - Latency/throughput per 1k prompts.
+      - Token length failure rate (e.g., long context failure) per 100 prompts.
+      - Bias/outcome disparity incidents per 1k uses.
+  manage:
+    risk_management_considerations: |
+      Human-in-the-loop review, prompt governance, monitoring of model version/weights, fallback to smaller model if quantised version degrades, secure deployment of weights and quantised formats.
+
+references:
+  vendor_documentation:
+    - url: "https://huggingface.co/unsloth/Qwen3-30B-A3B-GGUF"
+      description: "Hugging Face model page"  :contentReference[oaicite:24]{index=24}
+    - url: "https://mygguf.com/models/unsloth_Qwen3-30B-A3B-GGUF"
+      description: "GGUF variant details (downloads/quantisation)  :contentReference[oaicite:25]{index=25}
+    - url: "https://www.reddit.com/r/LocalLLaMA/comments/1kju1y1"
+      description: "Community commentary on Unsloth GGUF calibration improvements"  :contentReference[oaicite:26]{index=26}
+  benchmarks:
+    - name: "Model page highlights & quickstart configuration"  :contentReference[oaicite:27]{index=27}
+  third_party_evaluations:
+    - source: "Community forums and quantisation observations"  :contentReference[oaicite:28]{index=28}
+
+metadata:
+  card_version: "1.0"
+  card_author: "AutomatedModelCardGenerator"
+  card_creation_date: "2025-10-24"
+  last_updated: "2025-10-24"
+  information_sources: |
+    Hugging Face model page, MyGGUF statistics, Reddit community commentary.
+  completeness_assessment: |
+    Good for architecture, features, quantisation context; moderate for detailed training dataset and benchmark metrics; limited for in-domain production evaluation data.
+  change_log:
+    - date: "2025-10-24"
+      author: "AutomatedModelCardGenerator"
+      changes: "Initial synthesis of Qwen3-30B-A3B-GGUF model card."

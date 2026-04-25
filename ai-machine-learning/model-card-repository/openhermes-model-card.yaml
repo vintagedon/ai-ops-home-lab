@@ -1,0 +1,253 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "OpenHermes 2.5"
+  vendor: "Teknium / Hugging Face Community"
+  model_family: "OpenHermes"
+  version: "2.5"
+  release_date: "2024-02-22"
+  model_type: "Instruction-Tuned Reasoning Model (based on Mistral 7B v0.2)"
+  vendor_model_card_url: "https://huggingface.co/teknium/OpenHermes-2.5-Mistral-7B"
+  license: "Apache 2.0"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Mistral 7B v0.2 (dense transformer)"
+    parameter_count: "7 billion"
+    context_window: "8 K tokens"
+    training_data_cutoff: "2024-01"
+    architectural_details: |
+      OpenHermes 2.5 is an open, instruction-tuned variant of the Mistral 7B model, 
+      optimized for reasoning, summarization, and conversational quality.  
+      It employs rotary positional embeddings (RoPE), grouped-query attention (GQA), 
+      and FlashAttention for efficient inference.  
+      It is trained on diverse open datasets, including OpenOrca, UltraChat, and ShareGPT dialogues.
+
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "Very High"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ~0.10 s per 1 K tokens on A100 (fp16), ~0.05 s quantized on RTX 4090 (INT4).  
+      Excellent throughput for local and cloud deployments.
+    throughput: |
+      Supports real-time interaction and multi-session workloads with minimal resource overhead.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • High-quality conversational and reasoning responses for a 7B-class model.  
+    • Strong summarization and dialogue flow.  
+    • Outperforms Alpaca, Zephyr, and OpenOrca derivatives in helpfulness and coherence.  
+  benchmark_performance: |
+    - MT-Bench: 7.45  
+    - MMLU: 68.2  
+    - GSM8K: 72.4  
+    - TruthfulQA: 61.7  
+    - ARC-C: 71.5  
+    (Hugging Face Open LLM Leaderboard, Mar 2024)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["instruction_following", "summarization", "QA", "roleplay_chat"]
+  known_limitations:
+    vendor_disclosed: |
+      Primarily English-trained; no multilingual support.  
+      Alignment dataset quality limited by crowd-sourced conversations.  
+    common_failure_modes: |
+      May hallucinate factual details under open-ended queries.  
+    unsuitable_use_cases: |
+      Compliance-sensitive or regulated industries.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on approximately 300 billion tokens from community instruction datasets,
+    including OpenOrca, UltraChat, ShareGPT, and high-quality academic QA corpora.  
+    Safety and refusal tuning applied post-SFT.
+  training_methodology: |
+    Fine-tuned with supervised instruction following and curated safety alignment;
+    no RLHF stage.  Balanced for coherence, reasoning, and politeness.
+  data_privacy_considerations: |
+    All data publicly sourced or permissively licensed; no personal data retention.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    General-purpose reasoning, conversational agents, and education-focused assistants.  
+    Ideal for research, tutoring, and software assistant prototyping.  
+  suitable_domains: ["education", "research", "chatbots", "software_assistants", "open_source_projects"]
+  out_of_scope_use: |
+    Legal, financial, or safety-critical deployments requiring certified moderation.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Reliable conversational behavior and low hallucination for model size.  
+    public_evidence: |
+      Consistent leaderboard replication and independent evaluation by Open LLM community.  
+    assessment_notes: |
+      Reliable 7B-class open model for chat and instruct tasks.
+  safe:
+    safety_measures: |
+      Safety alignment via filtering and crowd-sourced red-teaming.  
+    known_safety_issues: |
+      Occasional unsafe or biased responses under adversarial prompts.  
+    assessment_notes: |
+      Suitable for research with light moderation.
+  secure_and_resilient:
+    security_features: |
+      Weights checksum-verified and hosted on Hugging Face; no telemetry or data capture.  
+    known_vulnerabilities: |
+      Standard prompt injection and unsafe fine-tune risks.  
+    assessment_notes: |
+      Secure for local deployment.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Weights, tokenizer, and full fine-tuning configuration released.  
+    assessment_notes: |
+      Excellent transparency for open evaluation and benchmarking.
+  explainable_and_interpretable:
+    explainability_features: |
+      Compatible with TransformerLens, Captum, and interpretability probes.  
+    interpretability_limitations: |
+      No built-in reasoning trace or step annotations.  
+    assessment_notes: |
+      Interpretable small model for educational studies.
+  privacy_enhanced:
+    privacy_features: |
+      Public open datasets; inference contains no tracking or data retention.  
+    privacy_concerns: |
+      Minimal; typical of open-source chat models.  
+    assessment_notes: |
+      Meets open-model privacy norms.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Filtered conversational corpus and alignment-based fairness tuning.  
+    known_biases: |
+      English-centric, minor Western cultural phrasing bias.  
+    assessment_notes: |
+      Acceptable for open, non-regulated environments.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • Instruction-following and conversation coherence.  
+    • Factual QA and summarization accuracy.  
+    • Bias and toxicity benchmarks (RealToxicityPrompts).  
+    • Latency and quantization efficiency on consumer GPUs.  
+  key_evaluation_questions: |
+    – Does conversational accuracy meet the intended context?  
+    – Are moderation and safety layers enabled?  
+    – Is fine-tuning required for domain adaptation?  
+  comparison_considerations: |
+    Outperforms Zephyr-7B and Orca-2-7B;  
+    trails Mistral-7B v0.3 and Phi-3 Medium in reasoning depth.  
+    Strongest community-maintained Mistral-tuned instruct model of early 2024.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Include governance for derivative tuning and attribution under Apache 2.0 license.  
+  map:
+    context_considerations: |
+      Identify hallucination, bias, and prompt-injection risks in open deployments.  
+    risk_categories: ["hallucination", "bias", "prompt_injection", "safety_alignment"]
+  measure:
+    suggested_metrics: |
+      Factual accuracy, bias index, MT-Bench score, latency.  
+  manage:
+    risk_management_considerations: |
+      Employ moderation, prompt filters, and bias audits for production variants.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/teknium/OpenHermes-2.5-Mistral-7B"
+    description: "Official OpenHermes 2.5 release and evaluation documentation"
+  - url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    description: "Leaderboard performance data"
+  benchmarks:
+  - name: "MT-Bench"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "7.45"
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "68.2"
+  third_party_evaluations:
+  - source: "Open LLM Leaderboard (2024)"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    summary: "OpenHermes 2.5 verified as top-tier open 7B instruct model."
+  news_coverage:
+  - title: "Teknium releases OpenHermes 2.5 — community-tuned Mistral 7B instruction model"
+    url: "https://huggingface.co/blog/openhermes-25"
+    date: "2024-02-22"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Teknium documentation, Hugging Face leaderboard, Open LLM community benchmarks.  
+  completeness_assessment: |
+    High for transparency and benchmarking; medium for safety and bias dataset depth.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from OpenHermes 2.5 Mistral 7B release and benchmark data."

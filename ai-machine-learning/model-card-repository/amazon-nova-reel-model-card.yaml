@@ -1,0 +1,483 @@
+# Amazon Nova Reel Model Card
+# Following general model card template structure
+
+model_name: Amazon Nova Reel
+model_version: "1.0"
+model_date: "2024-12"
+model_type: Latent Diffusion Model for Video Generation
+model_description: |
+  Amazon Nova Reel is a state-of-the-art video generation model offering high-quality outputs, 
+  extensive customization, and precise motion control. It is a latent diffusion model that accepts 
+  text prompts and optional reference images as input, generating 6-second videos at 720p resolution 
+  (24 frames per second). Reel provides advanced camera motion control with support for 20+ camera 
+  movements (zoom, dolly, pan, etc.) specified through natural language prompts, enabling precise 
+  cinematic control over generated videos.
+
+# Organization Information
+developer: Amazon Artificial General Intelligence (AGI)
+organization_name: Amazon
+organization_contact: nova-technical-report@amazon.com
+organization_website: https://aws.amazon.com/bedrock/nova/
+
+# Model Characteristics
+architecture: Latent Diffusion Model with Variational AutoEncoder (VAE) for video frames and text encoder
+parameters: Not listed in source
+video_specifications:
+  duration: 6 seconds
+  resolution: 720p (1280x720 pixels)
+  frame_rate: 24 fps (frames per second)
+  total_frames: 144 frames per video
+input_modalities:
+  - text (prompts including camera motion directives)
+  - image (optional reference image to guide video generation)
+output_modalities:
+  - video
+languages_supported:
+  - English
+  - Multiple languages supported for text prompts (specific list not provided)
+camera_motions_supported: 20+ camera motions including zoom, dolly forward/backward, pan, tilt, orbit, and more
+
+# Intended Use
+intended_use:
+  primary_applications:
+    - Professional video content creation for advertising and marketing
+    - Entertainment industry video generation and concept visualization
+    - Product demonstration videos
+    - Social media content creation
+    - Cinematic sequence generation with camera control
+    - Storyboarding and pre-visualization
+    - Animated product showcases
+    - Video content for presentations
+    - Image-to-video animation
+  
+  intended_users:
+    - Video content creators and editors
+    - Marketing and advertising professionals
+    - Entertainment industry professionals (filmmakers, animators)
+    - Social media managers and influencers
+    - E-commerce businesses for product videos
+    - Creative agencies
+    - Educators creating educational content
+    - Game developers for concept videos
+  
+  use_case_examples:
+    - Creating product demo videos from text descriptions
+    - Animating still product images for e-commerce
+    - Generating marketing videos with specific camera movements
+    - Producing social media video content at scale
+    - Creating concept videos for film pre-visualization
+    - Generating animated presentations and explainer videos
+    - Bringing static artwork to life with motion
+    - Creating cinematic sequences with controlled camera work
+
+  key_features:
+    text_to_video:
+      - Generate 6-second videos from text prompts
+      - 720p resolution at 24 fps
+      - High-quality motion and temporal coherence
+    
+    image_to_video:
+      - Animate reference images with text-guided motion
+      - Bring static images to life
+      - Combine image structure with text-specified actions
+    
+    camera_motion_control:
+      - 20+ camera motions via natural language
+      - Movements include: zoom in/out, dolly forward/backward, pan left/right, tilt up/down, orbit, crane, truck, pedestal, and more
+      - Precise cinematic control through text prompts
+      - See prompting guide for full list of supported motions
+
+out_of_scope_use:
+  prohibited_uses:
+    - Generation of content intended to harm, deceive, or exploit individuals
+    - Creating non-consensual intimate imagery or deepfakes
+    - Content that sexualizes, grooms, abuses, or otherwise harms minors
+    - Generating hate speech or content promoting violent extremism
+    - Creating misleading or deceptive content for fraud or misinformation
+    - Political manipulation or election interference videos
+    - Generating content that violates copyright or intellectual property rights
+    - Creating realistic fake news or propaganda videos
+  
+  limitations:
+    - Limited to 6-second duration videos
+    - Fixed resolution of 720p
+    - Fixed frame rate of 24 fps
+    - No audio generation capability
+    - Cannot generate text overlays or captions within video
+    - Limited to single-shot sequences (no multi-shot editing)
+    - May struggle with complex multi-character interactions
+    - Cannot guarantee photorealistic human motion in all scenarios
+    - Limited control over fine-grained frame-by-frame details
+    - May have difficulty with very specific or unusual motion requests
+
+# Training Data
+training_data:
+  data_sources:
+    - Licensed commercial data
+    - Proprietary Amazon data
+    - Open source datasets
+    - Publicly available data (where appropriate)
+  
+  data_composition:
+    modalities:
+      - Video clips with text descriptions
+      - Various motion patterns and camera movements
+      - Diverse subjects, scenes, and actions
+    content_types: Not fully specified in source
+  
+  data_preprocessing:
+    - Highly scalable filtering and deduplication pipelines
+    - Data enrichment processes
+    - Content filtering based on Responsible AI objectives
+    - Pipelines built using AWS EMR and AWS Batch
+  
+  data_volume: Not listed in source
+  data_collection_period: Not listed in source
+  
+  data_labeling:
+    - Text-video pairing refinement
+    - Human preference data for video quality and motion
+    - Camera motion and action labeling
+    - Safety and appropriateness labeling
+
+# Training Procedure
+training_procedure:
+  training_stages:
+    - stage: Pretraining
+      description: |
+        Training latent diffusion model on large-scale text-video paired data. VAE learns 
+        to encode video frames to latent representations and decode back to video frames. 
+        Text encoder processes prompts into conditioning signals.
+    
+    - stage: Fine-tuning
+      description: |
+        Refinement on curated datasets for quality, temporal coherence, motion control, 
+        camera movement accuracy, and safety alignment.
+  
+  architecture_components:
+    vae: Variational AutoEncoder maps video frames to/from latent space
+    text_encoder: Tokenizes and encodes text prompts (including camera motions) for conditioning
+    diffusion_model: Iteratively denoises latent variables conditioned on text and optional image
+  
+  inference_process: |
+    At inference, latent variable initialized with Gaussian noise, then iteratively denoised 
+    by trained diffusion model conditioned on text prompt and optional reference image. Clean 
+    latent decoded by VAE to produce final video frames.
+  
+  training_infrastructure:
+    storage:
+      - AWS EMR for data pipelines
+      - AWS Batch for processing
+      - Other AWS services for scalable infrastructure
+    notes: Specific hardware details not provided for Reel
+  
+  training_duration: Not listed in source
+  training_compute: Not listed in source
+
+# Customization
+customization:
+  fine_tuning_supported: Not explicitly stated in source
+  customization_options:
+    - Reference image to guide video generation and structure
+    - Camera motion specification via natural language
+    - Action and motion description via text prompts
+
+# Performance
+performance:
+  evaluation_methodology: |
+    Evaluated using human evaluation via single-blind pairwise comparison. Conducted by 
+    third-party vendor with trained annotators following detailed guidelines. Evaluated on 
+    ~700 diverse prompts covering: human activities, animals, natural scenery, indoor scenes, 
+    object interactions, and creative scenes. Prompts designed to test camera motions, dynamic 
+    attributes, motion binding, and general video generation quality. Consensus voting (3 
+    evaluators per comparison, majority vote) ensures reliability.
+  
+  human_evaluation:
+    evaluation_dimensions:
+      video_quality:
+        components:
+          - Image quality (resolution, sharpness, clarity, composition)
+          - Motion quality (fluidity, consistency, smooth transitions)
+          - Image-text alignment (static visual elements match prompt)
+          - Motion-text alignment (dynamic elements and camera movements match prompt)
+        notes: Also includes motion degree, entity size, creative composition, and general likability
+      
+      video_consistency:
+        components:
+          - Subject consistency (entity size, shape, appearance maintained)
+          - Background stability (no unexpected morphing or changes)
+          - Spatial relationship coherence (foreground/background relationships)
+        notes: Temporal coherence across entire 6-second duration
+    
+    versus_runway_gen3_alpha:
+      video_quality:
+        win_rate: 56.4%
+        tie_rate: 9.9%
+        loss_rate: 33.7%
+      
+      video_consistency:
+        win_rate: 67.0%
+        tie_rate: 9.1%
+        loss_rate: 23.9%
+    
+    versus_luma_1_6:
+      video_quality:
+        win_rate: 51.1%
+        tie_rate: 3.4%
+        loss_rate: 45.5%
+      
+      video_consistency:
+        win_rate: 74.7%
+        tie_rate: 5.1%
+        loss_rate: 20.2%
+  
+  key_strengths:
+    - Superior video consistency (67.0% win rate vs Gen3 Alpha, 74.7% vs Luma 1.6)
+    - Strong video quality (56.4% win rate vs Gen3 Alpha, 51.1% vs Luma 1.6)
+    - Excellent subject and background temporal coherence
+    - Precise camera motion control with 20+ movements
+    - High-quality motion and smooth transitions
+    - Strong performance on diverse content types
+
+# Limitations and Biases
+limitations:
+  technical_limitations:
+    - Fixed 6-second duration - no longer or shorter videos
+    - Fixed 720p resolution - no higher or lower resolutions
+    - Fixed 24 fps frame rate
+    - No audio generation or soundtrack capability
+    - Cannot generate text overlays or captions within video
+    - Single-shot sequences only - no multi-shot editing or scene transitions
+    - No frame-by-frame manual control after generation
+    - Cannot modify generated videos (must regenerate from scratch)
+    - Limited to visual and temporal information - no audio processing
+  
+  domain_limitations:
+    - May struggle with complex multi-character choreography
+    - Cannot guarantee scientifically accurate specialized motion
+    - May have difficulty with highly technical or unusual motions
+    - Limited ability to generate specific copyrighted visual styles
+    - May not accurately represent all cultures and activities equally
+    - May struggle with uncommon or rare action combinations
+  
+  known_failure_modes:
+    - May generate anatomically incorrect human motion in complex actions
+    - Temporal coherence may degrade with very complex scenes
+    - Camera motion may not perfectly match request in ambiguous scenarios
+    - Subject appearance may drift slightly over 6-second duration
+    - Background elements may exhibit minor inconsistencies
+    - May misinterpret ambiguous motion descriptions
+    - May generate unexpected results with contradictory prompt elements
+    - Physics simulation may not be perfectly realistic
+
+biases:
+  bias_evaluation:
+    approach: |
+      Evaluated through Responsible AI framework including content filtering, human review, 
+      and adherence to safety objectives across fairness, safety, and representation dimensions. 
+      Diverse prompt set covering multiple content categories, motion types, and scenarios.
+    
+    evaluation_process:
+      - Human preference data collection for quality and motion accuracy
+      - Safety evaluations during fine-tuning
+      - Diverse prompt set (~700 prompts) across 6 major categories
+      - Third-party vendor evaluation with trained annotators
+      - Consensus voting to ensure reliability (3 annotators per comparison)
+      - 5-10% spot-checking by expert annotators
+  
+  identified_biases:
+    - Training data may reflect biases present in web-sourced videos
+    - May exhibit Western-centric bias in default representations of activities (inference)
+    - Potential underrepresentation of certain demographics, cultures, or activities
+    - Motion patterns may reflect biases in training video distribution
+    - Specific bias metrics not fully disclosed in source
+  
+  mitigation_strategies:
+    - Extensive data filtering during training
+    - RAI alignment during fine-tuning
+    - Input and output moderation systems
+    - Content policy enforcement
+    - Human review and quality control
+    - Diverse evaluation datasets across multiple content categories
+    - Continuous monitoring and improvement
+
+# Responsible AI
+responsible_ai:
+  framework:
+    approach: |
+      Reel follows Amazon's 8-dimensional Responsible AI framework covering Fairness, 
+      Explainability, Privacy and Security, Safety, Controllability, Veracity and Robustness, 
+      Governance, and Transparency.
+  
+  safety_measures:
+    input_moderation: |
+      Detects and blocks prompts requesting prohibited content including harmful, 
+      illegal, or inappropriate video content.
+    
+    output_moderation: |
+      Scans generated videos for policy violations before delivery to users.
+    
+    watermarking: |
+      Invisible watermark embedded in each frame during generation. Robust to alterations 
+      and H264 compression. Watermark detection API available. Confidence score-based 
+      detection reflects extent of video editing.
+    
+    c2pa_metadata: |
+      C2PA (Coalition for Content Provenance and Authenticity) metadata added to all 
+      generated videos for content authenticity and provenance tracking.
+  
+  content_policies:
+    prohibited_content:
+      - Sexual content or nudity
+      - Child safety violations
+      - Hate speech or discriminatory content
+      - Violence or gore
+      - Self-harm content
+      - Illegal activities
+      - Misinformation or deceptive content
+      - Harassment or bullying
+      - Copyright or IP violations
+      - Realistic deepfakes of real individuals
+  
+  transparency_features:
+    - Invisible watermarking on all frames of generated videos
+    - Watermarking robust to H264 compression
+    - C2PA metadata for provenance tracking
+    - Watermark detection API for verification
+    - Clear model card documentation
+  
+  commitments:
+    - US White House voluntary commitments on safe AI development
+    - G7 AI Hiroshima Process Code of Conduct
+    - Participation in AI Safety Summits
+    - Frontier Model Forum membership
+    - Partnership on AI membership
+
+# Ethical Considerations
+ethical_considerations:
+  dual_use: |
+    Video generation models have significant potential for both beneficial creative purposes 
+    and serious misuse (deepfakes, misinformation, manipulation). Mitigated through robust 
+    moderation, frame-by-frame watermarking, C2PA metadata, and strict usage policies.
+  
+  environmental_impact: Not listed in source
+  
+  labor_practices: |
+    Uses third-party vendors for human evaluation with rigorous quality standards, 
+    comprehensive training, and spot-checking (5-10% of annotations reviewed by experts).
+  
+  copyright_and_ip: |
+    Training data includes licensed, proprietary, and appropriately sourced public data. 
+    Output moderation prevents generation of content violating copyright. Users responsible 
+    for ensuring their use complies with applicable laws.
+  
+  deepfakes_and_misinformation: |
+    Critical concern for video generation. Per-frame watermarking and C2PA metadata help 
+    identify AI-generated content. Input/output moderation prevents generation of realistic 
+    deepfakes of real individuals and deceptive content. Cannot generate videos of 
+    identifiable real people without consent.
+
+# Licensing and Access
+license: Not listed in source
+access:
+  availability: Available via Amazon Bedrock
+  api_access: Yes, through Amazon Bedrock APIs
+  restrictions: Subject to Amazon Bedrock terms of service and acceptable use policies
+  pricing: Not listed in source
+  watermark_detection: API will be available soon after launch
+
+# Model Card Contact
+model_card_authors:
+  - Amazon Artificial General Intelligence (AGI) Team
+model_card_contact: nova-technical-report@amazon.com
+model_card_version: "1.0"
+model_card_date: "2024-12"
+
+# Citation
+citation: |
+  @misc{novatechreport,
+    author = {Amazon AGI},
+    title = {The Amazon Nova Family of Models: Technical Report and Model Card},
+    year = {2024},
+    url = {https://www.amazon.science/publications/the-amazon-nova-family-of-models-technical-report-and-model-card}
+  }
+
+# Additional Resources
+additional_resources:
+  technical_report: https://www.amazon.science/publications/the-amazon-nova-family-of-models-technical-report-and-model-card
+  documentation: https://docs.aws.amazon.com/nova/latest/userguide
+  prompting_guide: https://docs.aws.amazon.com/nova/latest/userguide (for camera motion details)
+  reel_examples: https://www.amazon.science/blog/amazon-nova-reel-examples
+  huggingface_materials: https://huggingface.co/amazon-agi
+  bedrock_console: https://aws.amazon.com/bedrock/nova/
+
+# Reel-Specific Technical Details
+reel_capabilities:
+  text_to_video:
+    duration: 6 seconds
+    resolution: 720p (1280x720)
+    frame_rate: 24 fps
+    total_frames: 144
+    description: Generate high-quality videos from text descriptions
+  
+  image_to_video:
+    description: Bring images to motion with text-guided animation
+    method: Provide reference image and text prompt describing desired motion
+    notes: Generated video guided by both image structure and text prompt
+  
+  camera_motion_control:
+    description: Guide camera motion with natural language text prompts
+    supported_motions:
+      - Zoom (in/out)
+      - Dolly (forward/backward)
+      - Pan (left/right)
+      - Tilt (up/down)
+      - Orbit
+      - Crane
+      - Truck
+      - Pedestal
+      - Roll
+      - Push in/Pull out
+      - Track
+      - "20+ total camera motions"
+    method: Include camera motion keywords in text prompt
+    reference: See prompting guide at https://docs.aws.amazon.com/nova/latest/userguide for complete list
+  
+  motion_control_features:
+    dynamic_attributes:
+      description: Entities or backgrounds undergo state or shape changes over time
+      example: Object transforming, weather changing, state transitions
+    
+    motion_binding:
+      description: Specific compositions of movements and actions
+      example: Coordinated multi-entity actions, complex choreography
+    
+    temporal_coherence:
+      description: Maintains consistency across entire 6-second duration
+      strength: Strong performance on EgoSchema-style temporal reasoning
+
+# Evaluation Dataset Details
+evaluation_dataset:
+  prompt_count: ~700 prompts
+  categories:
+    - Human activities and actions
+    - Animals and creatures
+    - Natural scenery and landscapes
+    - Indoor scenes
+    - Object interactions
+    - Creative scenes and activities
+  
+  prompt_design_focus:
+    - Camera motion variety
+    - Dynamic attributes (state changes over time)
+    - Motion binding (complex coordinated actions)
+    - General video generation quality
+    - Diverse content types and scenarios
+  
+  evaluation_quality_control:
+    - Third-party vendor with trained annotators
+    - Detailed evaluation guidelines and examples
+    - Training with expert-provided examples
+    - Spot-checking: 5-10% of annotations randomly reviewed
+    - Consensus voting: 3 evaluators per comparison, majority vote
+    - Continuous refinement based on expert feedback

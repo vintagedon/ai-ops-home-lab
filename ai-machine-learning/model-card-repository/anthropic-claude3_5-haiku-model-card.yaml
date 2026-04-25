@@ -1,0 +1,127 @@
+schema_version: Not Listed in Source
+model_identity:
+  name: Claude 3.5 Haiku
+  vendor: Anthropic
+  model_family: Claude 3.5
+  version: Not Listed in Source
+  release_date: Not Listed in Source
+  model_type: Not Listed in Source
+  vendor_model_card_url: Not Listed in Source
+  license: Not Listed in Source
+  deprecation_status: Not Listed in Source
+technical_specifications:
+  architecture:
+    base_architecture: Not Listed in Source
+    parameter_count: Not Listed in Source
+    context_window: Not Listed in Source
+    training_data_cutoff: Not Listed in Source
+    architectural_details: Addendum model noted in the PDF (Oct 22, 2024 upgrade).
+  modalities:
+    supported_inputs:
+    - Not Listed in Source
+    - Not Listed in Source
+    - Not Listed in Source
+    - Not Listed in Source
+    - Not Listed in Source
+    supported_outputs:
+    - Not Listed in Source
+    - Not Listed in Source
+    - Not Listed in Source
+    - Not Listed in Source
+    - Not Listed in Source
+    - Not Listed in Source
+  performance_characteristics:
+    speed_tier: Not Listed in Source
+    cost_tier: Not Listed in Source
+    latency: Not Listed in Source
+    throughput: Not Listed in Source
+capabilities:
+  vendor_claimed_strengths:
+  - Model addendum referenced in the PDF with an upgrade date (Oct 22, 2024).
+  benchmark_performance: Not Listed in Source
+  special_capabilities: Multimodal (text+image) per document family statements; no
+    additional modes asserted.
+  known_limitations:
+    vendor_disclosed: Not Listed in Source
+    common_failure_modes: Not Listed in Source
+    unsuitable_use_cases: Not Listed in Source
+training_information:
+  training_data_description: Not Listed in Source
+  training_methodology: Not Listed in Source
+  data_privacy_considerations: Not Listed in Source
+intended_use:
+  vendor_intended_use: Not Listed in Source
+  suitable_domains:
+  - Not Listed in Source
+  - Not Listed in Source
+  - Not Listed in Source
+  out_of_scope_use: Not Listed in Source
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: Not Listed in Source
+    public_evidence: Not Listed in Source
+    assessment_notes: Not Listed in Source
+  safe: Report discusses safety & societal impacts and catastrophic risk assessments
+    per Responsible Scaling Policy.
+  secure_and_resilient:
+    security_features: Not Listed in Source
+    known_vulnerabilities: Not Listed in Source
+    assessment_notes: Not Listed in Source
+  accountable_and_transparent:
+    transparency_level: Not Listed in Source
+    auditability: Not Listed in Source
+    assessment_notes: Not Listed in Source
+  explainable_and_interpretable:
+    explainability_features: Not Listed in Source
+    interpretability_limitations: Not Listed in Source
+    assessment_notes: Not Listed in Source
+  privacy_enhanced:
+    privacy_features: Not Listed in Source
+    privacy_concerns: Not Listed in Source
+    assessment_notes: Not Listed in Source
+  fair_with_harmful_bias_managed:
+    bias_mitigation: Not Listed in Source
+    known_biases: Not Listed in Source
+    assessment_notes: Not Listed in Source
+evaluation_guidance:
+  recommended_tests: Not Listed in Source
+  key_evaluation_questions: Validate Claude 3.5 Haiku on your domain tasks; compare
+    against Claude 3 Haiku and 3.5 Sonnet for speed/cost/capability trade-offs.
+  comparison_considerations: Not Listed in Source
+rmf_function_mapping:
+  govern:
+    notes: Not Listed in Source
+  map:
+    context_considerations: Not Listed in Source
+    risk_categories:
+    - Not Listed in Source
+    - Not Listed in Source
+    - Not Listed in Source
+  measure:
+    suggested_metrics: Not Listed in Source
+  manage:
+    risk_management_considerations: Not Listed in Source
+references:
+  vendor_documentation:
+  - 'Local file: Claude 3 Model Card.pdf'
+  benchmarks:
+  - Not Listed in Source
+  third_party_evaluations:
+  - source: Not Listed in Source
+    url: Not Listed in Source
+    summary: Not Listed in Source
+metadata:
+  card_version: 0.3-claude3_5-haiku-from-pdf
+  card_author: Governance Assistant
+  card_creation_date: '2025-10-28'
+  last_updated: Not Listed in Source
+  information_sources:
+  - 'Local file: Claude 3 Model Card.pdf'
+  completeness_assessment: Populated strictly from the Anthropic PDF; numeric benchmarks
+    are only included if explicitly tied to 'Claude 3.5 Haiku' in text windows.
+  change_log:
+  - date: '2025-10-28'
+    author: Governance Assistant
+    changes: Created Claude 3.5 Haiku card from PDF addendum; conservative modality
+      and benchmarks.
+  review_cycle: Quarterly

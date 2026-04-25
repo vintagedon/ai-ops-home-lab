@@ -1,0 +1,190 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Gemini 2.5 Pro"
+  vendor: "Google"
+  model_family: "Gemini 2.5"
+  version: "2.5 Pro (June 2025)"
+  release_date: "2025-06-17"
+  model_type: "Large Multimodal Model"
+  vendor_model_card_url: "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/models/gemini/2-5-pro"
+  license: "Commercial API (Proprietary)"
+  deprecation_status: "Active (Discontinuation: 2026-06-17)"
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer-based multimodal architecture"
+    parameter_count: "Not publicly disclosed"
+    context_window: "1,048,576 tokens (input)"
+    training_data_cutoff: "2025-01"
+    architectural_details: |
+      Gemini 2.5 Pro is Google's most advanced reasoning model, capable of comprehending vast datasets and solving complex problems from text, audio, images, video, and code repositories. It is designed for deep reasoning and multimodal understanding.
+  modalities:
+    supported_inputs:
+    - "text"
+    - "code"
+    - "image"
+    - "audio"
+    - "video"
+    - "PDF"
+    supported_outputs:
+    - "text"
+  performance_characteristics:
+    speed_tier: "High"
+    cost_tier: "Premium"
+    latency: "Not publicly specified; optimized for complex tasks over low latency."
+    throughput: "Supports batch prediction and provisioned throughput for high-volume use."
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    Deep reasoning and multimodal understanding across text, image, audio, and video. Excels at long-context reasoning, complex problem solving, and comprehending large datasets. World-leading model across WebDev Arena and LMArena leaderboards as of May 2025. [12]
+  benchmark_performance: |
+    - WebDev Arena ELO Score: 1415 [12]
+    - Leading across all LMArena leaderboards [12]
+    - Outperforms top models on principles of learning science after incorporating LearnLM [12]
+    - Vendor technical report provides additional benchmarks. [1]
+  special_capabilities:
+    tools_support: true
+    vision_support: true
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities:
+    - "code_execution"
+    - "grounding_with_google_search"
+    - "structured_output"
+    - "thinking"
+    - "vertex_ai_rag_engine"
+    - "tuning"
+  known_limitations:
+    vendor_disclosed: |
+      Subject to general limitations of large language models, including potential for hallucinations and biases.
+    common_failure_modes: |
+      May produce factually incorrect information or struggle with highly complex, multi-hop reasoning without sufficient context.
+    unsuitable_use_cases: |
+      Safety-critical or regulated applications without human oversight; autonomous decision systems without risk controls.
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on a large-scale, multimodal and multilingual corpus. Specific composition and volume are not publicly disclosed.
+  training_methodology: |
+    Not publicly disclosed.
+  data_privacy_considerations: |
+    Data processed via Vertex AI is subject to Google Cloud's data processing terms. Customer data is not used for training without explicit consent.
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    General-purpose multimodal assistant and developer model for reasoning, coding, creative work, and data analysis. Suitable for solving complex problems and comprehending vast datasets. [1]
+  suitable_domains:
+  - "general_purpose"
+  - "multimodal_reasoning"
+  - "code_generation"
+  - "data_analysis"
+  - "research"
+  out_of_scope_use: |
+    High-risk autonomous decision-making without human oversight; applications requiring guaranteed factual correctness without verification.
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      "Our most advanced reasoning Gemini model, capable of solving complex problems." [1]
+    public_evidence: |
+      Top rankings on public leaderboards like WebDev Arena and LMArena provide third-party validation of its capabilities. [12]
+    assessment_notes: |
+      Strong evidence of high performance in benchmarked domains. Enterprise deployments should conduct in-domain validation.
+  safe:
+    safety_measures: |
+      Integrated safety filters and adherence to Google's Responsible AI policies. Security controls available through Vertex AI.
+    known_safety_issues: |
+      Residual bias and hallucination risks common to all large-scale models.
+    assessment_notes: |
+      Enterprise-grade safety controls are available via the platform, but application-level guardrails are the responsibility of the deployer.
+  secure_and_resilient:
+    security_features: |
+      Vertex AI provides data residency controls, CMEK, VPC Service Controls, and Access Transparency for online prediction. [13]
+    known_vulnerabilities: |
+      Susceptible to prompt injection and other adversarial attacks common to LLMs.
+    assessment_notes: |
+      Robust platform security, but requires careful implementation of application-level security best practices.
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Technical reports and documentation are available. Audit logging is supported through Vertex AI.
+    assessment_notes: |
+      Good documentation for capabilities and API usage, but limited transparency into training data and architecture.
+  explainable_and_interpretable:
+    explainability_features: |
+      Supports "thinking" mode, which can provide more insight into the model's reasoning process. [12]
+    interpretability_limitations: |
+      Internal reasoning processes remain opaque, a common characteristic of large transformer models.
+    assessment_notes: |
+      "Thinking" feature improves operational transparency, but mechanistic interpretability is limited.
+  privacy_enhanced:
+    privacy_features: |
+      Enterprise privacy commitments through Google Cloud, including data residency and encryption. [1]
+    privacy_concerns: |
+      Full provenance of training data is not disclosed.
+    assessment_notes: |
+      Meets enterprise privacy standards when deployed within Vertex AI under appropriate contractual terms.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Subject to Google's internal bias mitigation processes during training.
+    known_biases: |
+      May reflect societal biases present in the training data.
+    assessment_notes: |
+      Deployers must conduct bias testing specific to their use case and target demographics.
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Long-context reasoning accuracy on domain-specific documents (>500k tokens).
+    - Multimodal task performance using a combination of text, image, and audio inputs.
+    - Factual accuracy and grounding performance for RAG applications.
+    - Cost-benefit analysis of using "thinking" mode for specific tasks.
+  key_evaluation_questions: |
+    - Does the model's reasoning depth justify its premium cost for our use case?
+    - Are the multimodal capabilities robust for our specific data formats?
+    - How does latency scale with context length and task complexity?
+  comparison_considerations: |
+    Compare against other flagship models on multimodal reasoning, long-context performance, and cost-per-task. Evaluate against specialized models for specific domains (e.g., coding, legal analysis).
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/models/gemini/2-5-pro"
+    description: "Official Vertex AI documentation for Gemini 2.5 Pro."
+  - url: "https://blog.google/technology/google-deepmind/google-gemini-updates-io-2025/"
+    description: "Blog post detailing updates and benchmark performance."

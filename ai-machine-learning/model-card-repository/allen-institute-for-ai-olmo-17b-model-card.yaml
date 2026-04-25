@@ -1,0 +1,249 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "OLMo 1.7B"
+  vendor: "Allen Institute for AI (AI2)"
+  model_family: "OLMo"
+  version: "1.7B"
+  release_date: "2024-01-30"
+  model_type: "Fully Transparent Open Foundation Model"
+  vendor_model_card_url: "https://huggingface.co/allenai/OLMo-1.7B"
+  license: "Apache 2.0"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Decoder-only Transformer"
+    parameter_count: "1.7 billion"
+    context_window: "4 K tokens"
+    training_data_cutoff: "2023-12"
+    architectural_details: |
+      OLMo (Open Language Model) is AI2’s open foundation model family designed to maximize 
+      transparency, reproducibility, and open science accessibility.  
+      The 1.7B variant serves as a compact, research-grade model emphasizing data openness, 
+      training reproducibility, and low compute requirements.
+      Uses standard rotary positional embeddings (RoPE) and fused attention kernels optimized for PyTorch.
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "Very High"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ~0.04 s per 1K tokens on A100 (fp16), ~0.02 s INT4 on RTX 4090.  
+      Extremely efficient for education and interpretability studies.
+    throughput: |
+      Ideal for fine-tuning, educational workloads, and transparency research.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • Fully reproducible training recipe and open dataset transparency.  
+    • Designed for scientific evaluation, interpretability, and AI governance research.  
+    • Serves as a reference for open-model reproducibility.  
+  benchmark_performance: |
+    - MMLU: 54.3  
+    - GSM8K: 61.2  
+    - ARC-C: 60.8  
+    - HellaSwag: 67.5  
+    (AI2 internal + Hugging Face Leaderboard, Feb 2024)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: moderate
+    image_generation: false
+    additional_capabilities: ["interpretability", "education", "foundation_research"]
+  known_limitations:
+    vendor_disclosed: |
+      Small-scale model not suitable for production tasks.  
+      Lacks reasoning depth compared to 7B+ models.  
+    common_failure_modes: |
+      Hallucination in long-form reasoning; limited context retention.  
+    unsuitable_use_cases: |
+      Customer-facing applications or factual QA requiring precision.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on the Dolma dataset — 3 trillion tokens of fully open, deduplicated, 
+    PII-filtered text sourced from academic, web, and code data.
+  training_methodology: |
+    Pretrained from scratch using the open Dolma pipeline, with full configuration,
+    optimizer parameters, and hyperparameters released for reproducibility.
+  data_privacy_considerations: |
+    No private data used. All data publicly documented and PII-scrubbed.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Research, interpretability, AI governance testing, and educational use.  
+    Serves as a transparent benchmark for open science and reproducibility.  
+  suitable_domains: ["education", "research", "interpretability", "AI_governance"]
+  out_of_scope_use: |
+    Production chatbots, regulated decision systems, or factual QA automation.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Transparent, reproducible, and verifiable open training.  
+    public_evidence: |
+      Training configurations, dataset, and checkpoints fully released and peer-reviewed.  
+    assessment_notes: |
+      Gold standard for open model reproducibility.
+  safe:
+    safety_measures: |
+      Public dataset filtering for PII and toxicity.  
+    known_safety_issues: |
+      No alignment phase; unfiltered completions possible.  
+    assessment_notes: |
+      Safe for research; requires moderation for public interaction.
+  secure_and_resilient:
+    security_features: |
+      Fully offline; checksum-verified weights and deterministic reproducibility.  
+    known_vulnerabilities: |
+      None beyond typical open LLM risks.  
+    assessment_notes: |
+      Secure for controlled academic environments.
+  accountable_and_transparent:
+    transparency_level: "Very High"
+    auditability: |
+      Full release of dataset, code, weights, and training logs.  
+    assessment_notes: |
+      Highest transparency level among 2024 open foundation models.
+  explainable_and_interpretable:
+    explainability_features: |
+      Training and architecture designed for interpretability benchmarking.  
+    interpretability_limitations: |
+      Limited capacity for deep reasoning explanations due to small size.  
+    assessment_notes: |
+      Best small-model candidate for AI interpretability studies.
+  privacy_enhanced:
+    privacy_features: |
+      PII-filtered Dolma dataset; telemetry-free inference.  
+    privacy_concerns: |
+      None identified.  
+    assessment_notes: |
+      Exemplary privacy compliance for research use.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Filtered dataset and governance evaluation of bias patterns.  
+    known_biases: |
+      English and Western cultural corpus bias.  
+    assessment_notes: |
+      Acceptable fairness baseline for transparency benchmarking.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • Interpretability and explainability studies.  
+    • Training reproducibility and fine-tune repeatability.  
+    • Bias and transparency audits.  
+    • Small-model reasoning evaluation.  
+  key_evaluation_questions: |
+    – Does training reproducibility meet AI governance standards?  
+    – Are bias and safety controls adequate for teaching use?  
+    – Does the open data approach meet compliance transparency needs?  
+  comparison_considerations: |
+    Outperforms GPT-NeoX 1.3B in reasoning;  
+    trails Phi-3 Mini and MPT 7B in overall accuracy.  
+    Remains the most transparent small-scale model available as of early 2024.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Include open science governance and reproducibility documentation under NIST AI RMF "Govern."  
+  map:
+    context_considerations: |
+      Identify interpretability, bias, and governance-related risks.  
+    risk_categories: ["bias", "hallucination", "alignment_absence", "open_data_reuse"]
+  measure:
+    suggested_metrics: |
+      Transparency index, reproducibility score, and interpretability fidelity.  
+  manage:
+    risk_management_considerations: |
+      Track dataset lineage and training reproducibility audits.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/allenai/OLMo-1.7B"
+    description: "Official OLMo 1.7B model card and documentation"
+  - url: "https://ai2-olmo.allenai.org/"
+    description: "AI2 OLMo project homepage"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "54.3"
+  - name: "ARC-C"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "60.8"
+  third_party_evaluations:
+  - source: "Hugging Face Leaderboard (2024)"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    summary: "OLMo validated for transparency and reproducibility across open model community."
+  news_coverage:
+  - title: "Allen AI launches OLMo — the most transparent open language model"
+    url: "https://allenai.org/news/olmo-launch"
+    date: "2024-01-30"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Allen Institute for AI OLMo documentation, Dolma dataset reports, and Hugging Face benchmarks.  
+  completeness_assessment: |
+    Very high for transparency, privacy, and documentation completeness.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from OLMo 1.7B release and open science data."

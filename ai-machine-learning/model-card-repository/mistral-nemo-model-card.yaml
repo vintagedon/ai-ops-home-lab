@@ -1,0 +1,248 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Mistral Nemo"
+  vendor: "Mistral AI"
+  model_family: "Mistral Open Models"
+  version: "1.0"
+  release_date: "2025-02-05"
+  model_type: "Open-weight Large Language Model (text-only)"
+  vendor_model_card_url: "https://mistral.ai/news/mistral-nemo/"
+  license: "Apache 2.0 (Open-weight)"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer (Decoder-only, dense)"
+    parameter_count: "12 B parameters"
+    context_window: "32 K tokens"
+    training_data_cutoff: "2024-09"
+    architectural_details: |
+      Mistral Nemo is a fully open-weight model released in collaboration with NVIDIA and Hugging Face.
+      It serves as an open research foundation optimized for inference on GPUs (A100, H100) and
+      supports quantization down to 4-bit. It targets code, reasoning, and multilingual use cases with
+      transparent training pipeline documentation.
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "High"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ≈20–30 ms/token on A100 using vLLM or TensorRT-LLM inference; excellent GPU scaling.
+    throughput: |
+      High throughput under open-source frameworks with tensor parallelism support.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    Open, high-performance model for research and fine-tuning.  
+    Competitive with closed 12B models on reasoning and coding tasks while remaining fully transparent.  
+    Ideal for RAG and on-prem inference workloads.
+  benchmark_performance: |
+    - MMLU: 76.2  
+    - GSM8K: 84.9  
+    - HumanEval: 72.7  
+    - HellaSwag: 80.3  
+    (Vendor and Hugging Face evaluation data)
+  special_capabilities:
+    tools_support: false
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["open_weights", "fine_tuning", "quantization", "code_generation"]
+  known_limitations:
+    vendor_disclosed: |
+      No moderation layer; requires user-supplied safety tooling.  
+      Weaker long-context coherence and factual consistency vs larger models.
+    common_failure_modes: |
+      Hallucination under high ambiguity; poor multi-hop reasoning; verbosity drift.
+    unsuitable_use_cases: |
+      Direct consumer deployments or unmoderated production environments.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on a curated open mixture of multilingual text and code datasets, including open web, 
+    academic sources, and permissively licensed corpora.  
+    Toxicity and PII filters applied; detailed dataset recipe publicly available.
+  training_methodology: |
+    Supervised next-token prediction with instruction fine-tuning;  
+    open training pipeline reproducible via Mistral-NVIDIA collaboration scripts.
+  data_privacy_considerations: |
+    No private or user data used; fully compliant with open-data ethics standards.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Open research, education, fine-tuning experiments, and enterprise prototyping.  
+    Suitable for transparent AI development and reproducibility.
+  suitable_domains: ["research", "education", "enterprise_prototyping", "fine_tuning", "RAG_pipelines"]
+  out_of_scope_use: |
+    Safety-critical automation or applications lacking moderation and monitoring.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Reliable open-weight reasoning base with competitive accuracy for its size.  
+      Benchmarks confirm alignment with proprietary models in same parameter class.
+    public_evidence: |
+      Hugging Face leaderboard confirms strong accuracy for a 12B open model.
+    assessment_notes: |
+      Reliable baseline; ideal for transparent research rather than production.
+  safe:
+    safety_measures: |
+      Dataset filtering; responsibility guidance provided in official documentation.
+    known_safety_issues: |
+      No built-in content moderation; outputs may include unfiltered web language.
+    assessment_notes: |
+      Safety depends on downstream deployment practices.
+  secure_and_resilient:
+    security_features: |
+      Fully open model allows on-prem secure deployment; no API dependency.
+    known_vulnerabilities: |
+      None intrinsic; security is user-managed.
+    assessment_notes: |
+      Excellent for secure research; governance must be applied locally.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Full training recipe, hyperparameters, and evaluation data public.
+    assessment_notes: |
+      High transparency—benchmark for open model documentation.
+  explainable_and_interpretable:
+    explainability_features: |
+      Weights fully open for interpretability analysis and visualization.
+    interpretability_limitations: |
+      No built-in interpretability interface; dependent on external tooling.
+    assessment_notes: |
+      Ideal for explainability research.
+  privacy_enhanced:
+    privacy_features: |
+      Trained only on open datasets; no personal data retention.
+    privacy_concerns: |
+      Minimal; possible legacy web content exposure.
+    assessment_notes: |
+      Satisfies open-data privacy standards.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Bias analysis documented in model card; dataset balancing applied.
+    known_biases: |
+      Typical large-language-model demographic and cultural bias; no embedded moderation.
+    assessment_notes: |
+      Acceptable for research; requires additional bias mitigation for production use.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Reasoning and factual accuracy evaluation on domain-specific datasets  
+    - Bias and toxicity audits before deployment  
+    - Latency profiling on target GPUs  
+    - Quantization accuracy loss tests
+  key_evaluation_questions: |
+    - Does your deployment environment provide adequate safety layers?  
+    - Are quantized weights performing as expected for your use case?  
+    - Is Nemo sufficient for reasoning complexity of your workloads?
+  comparison_considerations: |
+    - Similar performance to Llama 3.1 8B and Gemma 2 9B;  
+      outperforms older 7B models; fully transparent and open-weight.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Include open-model governance procedures; document local safety controls and retraining provenance.
+  map:
+    context_considerations: |
+      Identify intended use cases and exposure risks before fine-tuning.
+    risk_categories: ["hallucination", "bias", "privacy_leakage", "prompt_injection"]
+  measure:
+    suggested_metrics: |
+      Accuracy, hallucination rate, bias index, quantization efficiency.
+  manage:
+    risk_management_considerations: |
+      Apply safety middleware; red-team before public release; track downstream fine-tunes.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://mistral.ai/news/mistral-nemo/"
+    description: "Official Mistral Nemo release and technical overview"
+  - url: "https://huggingface.co/mistralai/Mistral-Nemo-12B"
+    description: "Hugging Face repository and evaluation data"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "76.2"
+  - name: "GSM8K"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "84.9"
+  third_party_evaluations:
+  - source: "Hugging Face Open LLM Leaderboard"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    summary: "Verified strong reasoning and coding performance for 12B parameter class."
+  news_coverage:
+  - title: "Mistral and NVIDIA partner on open-weight Nemo model"
+    url: "https://mistral.ai/news/mistral-nemo/"
+    date: "2025-02-05"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Mistral AI and NVIDIA documentation, Hugging Face evaluations, and open-model benchmark data.
+  completeness_assessment: |
+    High for transparency and reproducibility; medium for dataset composition granularity.
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from Mistral Nemo open-weight release materials."

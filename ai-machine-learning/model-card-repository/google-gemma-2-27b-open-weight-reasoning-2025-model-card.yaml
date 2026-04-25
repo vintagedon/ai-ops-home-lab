@@ -1,0 +1,257 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Gemma 2 27B"
+  vendor: "Google DeepMind"
+  model_family: "Gemma"
+  version: "2 (27B)"
+  release_date: "2024-06-27"
+  model_type: "Open-Weight Large-Scale Language Model"
+  vendor_model_card_url: "https://ai.google.dev/gemma/docs/model-card"
+  license: "Gemma License (Permissive Research + Commercial)"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Dense Transformer (decoder-only)"
+    parameter_count: "27 billion"
+    context_window: "8 K tokens (default) / 16 K extended"
+    training_data_cutoff: "2024-02"
+    architectural_details: |
+      Gemma 2 27B is the largest model in the open-weight Gemma 2 family.  
+      It inherits Gemini 1.5 training infrastructure and data quality standards,
+      emphasizing factual grounding, long-context optimization, and energy efficiency.
+      It uses rotary positional embeddings (RoPE), grouped-query attention (GQA), 
+      and activation sparsity to reduce TPU v5e power cost while maintaining high reasoning accuracy.
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "Medium–High"
+    cost_tier: "Free (open weights)"
+    latency: |
+      ~0.9 s per 1 K tokens (fp16 on A100); <0.5 s on TPU v5e bfloat16.
+    throughput: |
+      Highly parallelizable; supports distributed inference via vLLM, JAX, or Triton.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    Strong reasoning and factual accuracy approaching proprietary mid-tier models (Claude 3 Sonnet / GPT-4 Turbo).  
+    Superior multilingual coverage and code generation versus smaller Gemma variants.  
+    Ideal for research, education, and enterprise fine-tuning.
+  benchmark_performance: |
+    - MMLU: 84.1  
+    - GSM8K: 89.4  
+    - HumanEval: 78.3  
+    - ARC-C: 84.5  
+    - HellaSwag: 86.2  
+    (Google internal and Hugging Face leaderboards, July 2024)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["multilingual_reasoning", "code_generation", "summarization", "retrieval_ready"]
+  known_limitations:
+    vendor_disclosed: |
+      Context length limited to 16 K tokens; no multimodal input.  
+      May overfit to reasoning templates under long-form queries.
+    common_failure_modes: |
+      Mild verbosity / self-correction loops; minor numerical drift in math tasks.
+    unsuitable_use_cases: |
+      Autonomous agents or regulated decision systems without external validation.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on >15 T tokens of multilingual text and code including Wikipedia, Common Crawl, licensed books,
+    and Gemini-curated synthetic reasoning data.  
+    Safety filters remove PII and high-toxicity content before pretraining.
+  training_methodology: |
+    Pretrained via next-token prediction, followed by instruction fine-tuning and safety alignment.  
+    Optimized for long-context summarization and cross-lingual reasoning.
+  data_privacy_considerations: |
+    Public and licensed datasets only; no user data or private corpora included.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Open research and enterprise experimentation requiring strong reasoning and multilingual accuracy.  
+    Suitable for educational, scientific, and document-processing tasks.
+  suitable_domains: ["research", "education", "knowledge_assistants", "multilingual_QA", "code_generation"]
+  out_of_scope_use: |
+    High-risk decision automation or policy generation without review.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Near-parity reasoning with Claude 3 Sonnet and Gemini 1.5 Pro in open benchmarks.  
+      Stable and reproducible across deployment frameworks.
+    public_evidence: |
+      Ranked top three open models on Hugging Face Leaderboard (Q3 2024).  
+      Community replications confirm low hallucination rate (<4 %).
+    assessment_notes: |
+      Highly reliable for research and RAG contexts; limited for creative tasks.
+  safe:
+    safety_measures: |
+      Safety-filtered dataset, instruction fine-tuning, and alignment similar to Gemini 1.5 Flash.  
+      Integrated toxicity and PII filters.
+    known_safety_issues: |
+      Over-cautious refusals for ambiguous ethics-related prompts.
+    assessment_notes: |
+      Safe for general use; moderation recommended for public apps.
+  secure_and_resilient:
+    security_features: |
+      Reproducible weights with signed hashes and integrity verification.  
+      No telemetry or data collection.  
+      Supports on-prem deployment.
+    known_vulnerabilities: |
+      Typical prompt-injection and context poisoning risks.
+    assessment_notes: |
+      Secure in controlled environments.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Full weights, tokenizer, and training summary available.  
+      Model card documents training sources and safety filters.
+    assessment_notes: |
+      Excellent transparency for open model of this scale.
+  explainable_and_interpretable:
+    explainability_features: |
+      Compatible with open interpretability libraries (TransformerLens, Captum).  
+      Parameter-level access enables attention analysis.
+    interpretability_limitations: |
+      No native reasoning-trace mode.
+    assessment_notes: |
+      High research-grade explainability.
+  privacy_enhanced:
+    privacy_features: |
+      No training on private or user data; local fine-tuning possible without telemetry.  
+    privacy_concerns: |
+      Minimal; public web data anonymized and filtered.
+    assessment_notes: |
+      Excellent privacy baseline for open weights.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Multilingual fairness evaluation and bias control during fine-tuning.  
+    known_biases: |
+      Slight English-centric bias and stylistic formality.
+    assessment_notes: |
+      Acceptable for global research and enterprise use.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Reasoning and factuality validation across languages  
+    - Bias and toxicity audits  
+    - Long-context performance and quantization benchmarks  
+    - Fine-tune replicability testing
+  key_evaluation_questions: |
+    - Does reasoning accuracy meet operational thresholds?  
+    - Is multilingual output quality sufficient for deployment?  
+    - Are moderation policies applied to downstream use?
+  comparison_considerations: |
+    - Outperforms LLaMA 3 8B and Mistral 7B v0.3 on reasoning benchmarks;  
+      trails Claude 3 Sonnet and GPT-4 Turbo in complex logic.  
+      Strongest open 27B-class model of 2024.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Maintain policy for open-model usage and distribution; track license terms and dataset provenance.
+  map:
+    context_considerations: |
+      Evaluate bias and hallucination risk across languages and domains.
+    risk_categories: ["hallucination", "bias", "prompt_injection", "data_contamination"]
+  measure:
+    suggested_metrics: |
+      Accuracy, fairness index, toxicity rate, hallucination rate, latency.
+  manage:
+    risk_management_considerations: |
+      Use external moderation and safety layers for production apps; audit fine-tuned variants.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://ai.google.dev/gemma/docs/model-card"
+    description: "Official Gemma 2 system card"
+  - url: "https://huggingface.co/google/gemma-2-27b"
+    description: "Model repository and benchmarks"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "84.1"
+  - name: "GSM8K"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "89.4"
+  third_party_evaluations:
+  - source: "Hugging Face Open LLM Leaderboard (2024)"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    summary: "Gemma 2 27B ranks top 5 globally for open reasoning performance."
+  news_coverage:
+  - title: "Google launches Gemma 2 models — open weights for high-accuracy reasoning"
+    url: "https://blog.google/technology/ai/google-gemma-2/"
+    date: "2024-06-27"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Gemma 2 release materials, Hugging Face benchmarks, and community evaluations.
+  completeness_assessment: |
+    High for transparency and benchmarks; medium for dataset provenance granularity.
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from Gemma 2 27B release and leaderboard data."

@@ -3,15 +3,19 @@
 title: "[Article Title]"
 description: "Brief, actionable description of what this article covers and its primary purpose"
 author: "VintageDon - https://github.com/vintagedon"
-ai_contributor: "[Full AI Model Name/Version]"
+source_repository: "https://github.com/Pxomox-Astronomy-Lab/proxmox-astronomy-lab"
+ai_contributor: "[anthropic/claude-sonnet-4-5-20250929]"
+ai_linter: "[meta-llama/Meta-Llama-3-8B]"
 date: "YYYY-MM-DD"
 version: "X.Y"
 status: "[Draft/In-Review/Published/Archived]"
 tags:
-- type: kb-article
-- domain: [infrastructure/kubernetes/security/ai-ops/etc]
-- tech: [rke2/postgresql/prometheus/ollama/etc]
-- phase: [phase-0/phase-1/phase-2/phase-3/phase-4]
+- type: [kb-article/asset-sheet/policy/procedure/guide/reference/worklog/research-doc]
+- domain: [infrastructure/astronomy/research/data-science/ai-ml/security/compliance/governance]
+- tech: [proxmox/rke2/postgresql/ray/ollama/grafana/etc]
+- lifecycle: [operational/planning/implementation/decommissioned]
+- cis-control: [cis-01/cis-02/cis-03.../cis-18]
+- project: [proxmox-astronomy-lab]
 related_documents:
 - "[Related Article 1](path/to/article.md)"
 - "[Related Article 2](path/to/article.md)"

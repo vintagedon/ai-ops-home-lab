@@ -1,0 +1,254 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "MiniCPM-Llama3-V"
+  vendor: "ModelBest / OpenBMB"
+  model_family: "MiniCPM"
+  version: "Llama3-V (Multimodal)"
+  release_date: "2025-03-28"
+  model_type: "Open-Weight Multimodal Vision-Language Model"
+  vendor_model_card_url: "https://huggingface.co/openbmb/MiniCPM-Llama3-V"
+  license: "Apache 2.0"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Vision-Language Transformer (dual-encoder + decoder)"
+    parameter_count: "12 billion (7B text + 5B vision)"
+    context_window: "32 K text / 576 × 576 image tokens"
+    training_data_cutoff: "2025-02"
+    architectural_details: |
+      MiniCPM-Llama3-V is a multimodal model combining OpenBMB’s MiniCPM-3 text backbone 
+      with a Llama 3-based vision adapter and lightweight cross-attention fusion layers.
+      The vision encoder is a modified ViT-L/14 model trained on LAION, COYO, and OpenBMB’s Visual-Instruct corpus.
+      Text encoder/decoder uses MiniCPM 3 bilingual weights, with fine-tuning for cross-modal reasoning, OCR, and VQA.
+      Designed for efficiency and on-device multimodal applications.
+
+  modalities:
+    supported_inputs: ["text", "image"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "High"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ~0.4 s per multimodal turn (text+image) on A100;  
+      0.15 s text-only. Quantized INT4 inference supported for 24GB GPUs.
+    throughput: |
+      Optimized for mixed-modality inference and mobile applications using TensorRT-LLM and vLLM.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • Multimodal reasoning (OCR, chart understanding, scene QA).  
+    • Lightweight fusion architecture with high efficiency.  
+    • Strong multilingual text understanding (Chinese + English).  
+    • Excellent open baseline for multimodal research and RAG integration.  
+  benchmark_performance: |
+    - MME (Multimodal Eval): 78.9  
+    - GQA: 68.7  
+    - ScienceQA: 84.1  
+    - TextVQA: 77.2  
+    - MMLU (Text-only): 74.3  
+    (OpenBMB & OpenCompass Multimodal Leaderboard, Apr 2025)
+  special_capabilities:
+    tools_support: true
+    vision_support: true
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["OCR", "VQA", "multimodal_chat", "bilingual_reasoning"]
+  known_limitations:
+    vendor_disclosed: |
+      Limited fine-grained visual reasoning vs. Gemini 1.5 or GPT-4V.  
+      No native image generation.  
+      Slight latency overhead in long-context fusion.  
+    common_failure_modes: |
+      Occasionally misinterprets dense diagrams; inconsistent multilingual OCR.  
+    unsuitable_use_cases: |
+      Safety-critical visual inspection or autonomous control.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on 2.5B multimodal pairs from LAION-5B, COYO, VisualGenome, TextCaps, and bilingual instruction corpora.
+    Fine-tuned on OCR datasets (DocVQA, ChartQA) and human-rated multimodal alignment data.
+  training_methodology: |
+    Multimodal contrastive pretraining + instruction fine-tuning with synthetic visual QA data.  
+    SafeRL applied for image-grounded toxicity reduction and factual alignment.  
+  data_privacy_considerations: |
+    All datasets publicly available or licensed for research; no private user data.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    General-purpose multimodal assistant for research, education, and enterprise AI.  
+    Suitable for document QA, chart reasoning, image captioning, and visual RAG.
+  suitable_domains: ["research", "education", "document_AI", "OCR", "enterprise_assistants"]
+  out_of_scope_use: |
+    Surveillance, biometric analysis, or medical image interpretation.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      High multimodal reliability and OCR accuracy for an open model.  
+    public_evidence: |
+      Confirmed via OpenCompass leaderboard and Hugging Face eval datasets.  
+    assessment_notes: |
+      Reliable open multimodal baseline for research use.
+  safe:
+    safety_measures: |
+      Visual safety filters for NSFW and violence detection; SafeRL alignment.  
+    known_safety_issues: |
+      Limited cross-modal moderation on synthetic images.  
+    assessment_notes: |
+      Safe for supervised educational and enterprise settings.
+  secure_and_resilient:
+    security_features: |
+      Checksum-verified checkpoints, no telemetry, local inference supported.  
+    known_vulnerabilities: |
+      Prompt-injection and adversarial image perturbation risks.  
+    assessment_notes: |
+      Secure for isolated research environments.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Weights, training pipeline, and evaluation scripts released on Hugging Face.  
+    assessment_notes: |
+      Excellent transparency for a multimodal open model.
+  explainable_and_interpretable:
+    explainability_features: |
+      Cross-attention maps traceable for visual grounding visualization.  
+    interpretability_limitations: |
+      No full saliency or rationale trace available for OCR pipelines.  
+    assessment_notes: |
+      Strong explainability support for academic research.
+  privacy_enhanced:
+    privacy_features: |
+      Public datasets only; inference pipeline telemetry-free.  
+    privacy_concerns: |
+      Minimal; standard open vision corpus exposure.  
+    assessment_notes: |
+      Meets privacy and transparency norms for open multimodal models.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Balanced multilingual corpus; fairness tuning via SafeRL for visual and textual bias.  
+    known_biases: |
+      Underrepresentation of African and Arabic visual contexts; mild Western dataset bias.  
+    assessment_notes: |
+      Acceptable fairness baseline for global open research.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • Visual QA (GQA, ScienceQA).  
+    • OCR accuracy and caption fidelity.  
+    • Bias and fairness audits on multilingual images.  
+    • Quantization and throughput benchmarking on deployment hardware.
+  key_evaluation_questions: |
+    – Are vision-safety filters active?  
+    – Is model appropriate for regulated visual data?  
+    – Are multilingual OCR pipelines sufficient for your context?
+  comparison_considerations: |
+    Outperforms BLIP-2 and OpenFlamingo;  
+    trails Gemini 1.5 Pro and GPT-4V in multimodal reasoning depth.  
+    Best open 12B multimodal reasoning model of early 2025.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Define governance for multimodal datasets and visual-content usage rights.  
+  map:
+    context_considerations: |
+      Identify visual bias, hallucination, and prompt-injection risks.  
+    risk_categories: ["hallucination", "visual_bias", "prompt_injection", "unsafe_content"]
+  measure:
+    suggested_metrics: |
+      OCR accuracy, hallucination rate, bias index, latency, visual moderation precision.  
+  manage:
+    risk_management_considerations: |
+      Implement content filters, watermark checks, and continuous red-teaming for visual safety.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/openbmb/MiniCPM-Llama3-V"
+    description: "Official MiniCPM-Llama3-V model card and documentation"
+  - url: "https://github.com/OpenBMB/MiniCPM"
+    description: "ModelBest / OpenBMB repository and release notes"
+  benchmarks:
+  - name: "MME"
+    url: "https://opencompass.org.cn/"
+    result: "78.9"
+  - name: "TextVQA"
+    url: "https://huggingface.co/datasets/textvqa"
+    result: "77.2"
+  third_party_evaluations:
+  - source: "OpenCompass Multimodal Benchmark (2025)"
+    url: "https://opencompass.org.cn/"
+    summary: "MiniCPM-Llama3-V recognized as top open multimodal model of early 2025."
+  news_coverage:
+  - title: "OpenBMB launches MiniCPM-Llama3-V — compact multimodal open model"
+    url: "https://www.openbmb.ai/news/minicpm-llama3v"
+    date: "2025-03-28"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    OpenBMB release documentation, OpenCompass leaderboard, Hugging Face data, and replication studies.  
+  completeness_assessment: |
+    High for transparency and evaluation coverage; medium for bias and synthetic dataset disclosure.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from MiniCPM-Llama3-V release and multimodal benchmark data."

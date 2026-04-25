@@ -1,0 +1,251 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Phi-3 Mini"
+  vendor: "Microsoft Research"
+  model_family: "Phi"
+  version: "3 (Mini 3.8B)"
+  release_date: "2024-04-23"
+  model_type: "Lightweight Reasoning and Educational Model"
+  vendor_model_card_url: "https://huggingface.co/microsoft/phi-3-mini-3.8b"
+  license: "MIT License"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Dense Transformer (decoder-only)"
+    parameter_count: "3.8 billion"
+    context_window: "128 K tokens"
+    training_data_cutoff: "2024-03"
+    architectural_details: |
+      Phi-3 Mini is a compact, reasoning-optimized model derived from the Phi-2 line.
+      It emphasizes knowledge density, synthetic data quality, and strong instruction tuning.
+      It employs rotary positional embeddings (RoPE), grouped-query attention (GQA),
+      and quantization-friendly architecture for deployment on consumer GPUs and mobile hardware.
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "Very High"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ~0.05 s per 1 K tokens (fp16 RTX 4090);  
+      ~0.02 s per 1 K tokens quantized (INT4 laptop GPU).  
+    throughput: |
+      Extremely efficient model for reasoning and summarization on low-cost hardware.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • Exceptional reasoning-to-parameter ratio.  
+    • Trained primarily on synthetic high-quality educational data.  
+    • Performs near 7B–13B-class models on standard benchmarks.  
+  benchmark_performance: |
+    - MMLU: 73.7  
+    - GSM8K: 83.2  
+    - ARC-C: 78.0  
+    - HellaSwag: 79.3  
+    - TruthfulQA: 68.9  
+    (Microsoft Research internal + Hugging Face Leaderboard, May 2024)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["educational_assistance", "summarization", "light_reasoning", "embedded_AI"]
+  known_limitations:
+    vendor_disclosed: |
+      English-only training; lacks multilingual support.  
+      Limited contextual reasoning beyond 128K tokens.  
+    common_failure_modes: |
+      Overconfidence in long reasoning chains; verbosity in summaries.  
+    unsuitable_use_cases: |
+      Legal, financial, or safety-critical decision workflows.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    ~1.5 trillion tokens consisting of synthetic educational datasets, coding tasks, reasoning prompts, 
+    curated public text, and filtered web data.  
+    Focus on reasoning and factual QA through synthetic data generation pipelines.  
+  training_methodology: |
+    Pretrained on synthetic instruction data generated from curated models.  
+    Supervised fine-tuning (SFT) with educational, logical, and mathematical reasoning datasets.  
+    Alignment applied via reinforcement learning from AI feedback (RLAIF).
+  data_privacy_considerations: |
+    Fully synthetic and public datasets only; no user or personal data used.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Education, lightweight assistants, and embedded reasoning systems.  
+    Designed for resource-constrained hardware (edge, mobile, research environments).  
+  suitable_domains: ["education", "research", "edge_AI", "RAG_systems", "knowledge_assistants"]
+  out_of_scope_use: |
+    Regulated environments, critical infrastructure, or unmoderated social deployment.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Strong reasoning accuracy for sub-4B parameter model.  
+    public_evidence: |
+      Confirmed by Open LLM Leaderboard and Microsoft Research evaluation.  
+    assessment_notes: |
+      Reliable small model for reasoning, summarization, and instruction following.
+  safe:
+    safety_measures: |
+      Filtered datasets; alignment against offensive and harmful content.  
+    known_safety_issues: |
+      May over-refuse harmless prompts; occasional verbosity in moderation responses.  
+    assessment_notes: |
+      Safe for educational and embedded contexts.
+  secure_and_resilient:
+    security_features: |
+      Telemetry-free, reproducible weights, and MIT license for modification.  
+    known_vulnerabilities: |
+      Generic LLM prompt-injection susceptibility.  
+    assessment_notes: |
+      Secure for local deployment and controlled integration.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Full weights, tokenizer, and evaluation scripts released; open synthetic data methodology published.  
+    assessment_notes: |
+      Excellent transparency and reproducibility.
+  explainable_and_interpretable:
+    explainability_features: |
+      Small architecture makes neuron-level analysis feasible with TransformerLens.  
+    interpretability_limitations: |
+      Synthetic data alignment logic abstracted from training pipeline.  
+    assessment_notes: |
+      Highly interpretable small model for research and transparency.
+  privacy_enhanced:
+    privacy_features: |
+      No real-world personal data; full synthetic corpus.  
+    privacy_concerns: |
+      Minimal to none.  
+    assessment_notes: |
+      Fully privacy-preserving model suitable for open deployment.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Synthetic dataset curation and fairness balancing in generation pipeline.  
+    known_biases: |
+      English educational bias; lacks cross-cultural representation.  
+    assessment_notes: |
+      Acceptable for global research use within English domain.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • Logical reasoning and educational QA (GSM8K, ARC-C).  
+    • Performance validation on edge devices.  
+    • Bias and safety audit for educational deployment.  
+    • Quantization efficiency and latency benchmarking.  
+  key_evaluation_questions: |
+    – Does it meet reasoning needs within compute limits?  
+    – Are moderation policies sufficient for use environment?  
+    – Does synthetic data quality support factuality goals?  
+  comparison_considerations: |
+    Outperforms Phi-2, Zephyr 7B, and OpenHermes 2.5 in efficiency;  
+    trails Phi-3 Medium and Gemma 2 9B in accuracy.  
+    Benchmark small-model reasoning leader for early 2024.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Document synthetic data generation, usage rights, and attribution under MIT license.  
+  map:
+    context_considerations: |
+      Identify hallucination and bias risks under educational deployment.  
+    risk_categories: ["hallucination", "bias", "alignment_drift"]
+  measure:
+    suggested_metrics: |
+      Accuracy, bias index, latency, power efficiency.  
+  manage:
+    risk_management_considerations: |
+      Apply periodic evaluation for hallucination and safety regression.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/microsoft/phi-3-mini-3.8b"
+    description: "Official Microsoft Research model card and evaluation"
+  - url: "https://www.microsoft.com/en-us/research/blog/phi-3-small-language-models-that-think/"
+    description: "Microsoft Research blog announcement for Phi-3 series"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "73.7"
+  - name: "GSM8K"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "83.2"
+  third_party_evaluations:
+  - source: "Hugging Face Open LLM Leaderboard (2024)"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    summary: "Phi-3 Mini confirmed as top small-scale reasoning model in mid-2024."
+  news_coverage:
+  - title: "Microsoft releases Phi-3 Mini — small language models that reason"
+    url: "https://www.microsoft.com/en-us/research/blog/phi-3-small-language-models-that-think/"
+    date: "2024-04-23"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Microsoft Research publications, Hugging Face Leaderboard, and benchmark evaluations.  
+  completeness_assessment: |
+    High for transparency, privacy, and reproducibility; medium for dataset disclosure granularity.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from Phi-3 Mini release and benchmark data."

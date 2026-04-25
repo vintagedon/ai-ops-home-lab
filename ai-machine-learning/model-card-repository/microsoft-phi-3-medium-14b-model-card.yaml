@@ -1,0 +1,203 @@
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+model_identity:
+  name: "Phi-3 Medium (14B)"
+  vendor: "Microsoft Research"
+  model_family: "Phi"
+  version: "3 (Medium 14B)"
+  release_date: "2024-04-23"
+  model_type: "Reasoning and Coding Model (Compact Frontier-Class)"
+  vendor_model_card_url: "https://huggingface.co/microsoft/phi-3-medium-14b"
+  license: "MIT License"
+  deprecation_status: "Active"
+
+technical_specifications:
+  architecture:
+    base_architecture: "Dense Transformer (decoder-only)"
+    parameter_count: "14 billion"
+    context_window: "128 K tokens"
+    training_data_cutoff: "2024-03"
+    architectural_details: |
+      Phi-3 Medium extends the Phi-3 Mini architecture to a 14 B parameter scale,
+      improving reasoning, math, and code synthesis while maintaining deployment efficiency.
+      It uses grouped-query attention (GQA), rotary embeddings (RoPE),
+      and quantization-aware training for flexible 8-bit and 4-bit inference.
+      Optimized for educational, enterprise, and RAG applications requiring lightweight but
+      high-accuracy reasoning.
+
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "High"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ~0.12 s per 1 K tokens (fp16 A100);
+      ~0.05 s INT4 RTX 4090 quantized.
+    throughput: |
+      Linear scaling across multi-GPU inference up to 32 GPUs.
+
+capabilities:
+  vendor_claimed_strengths: |
+    • Frontier-level reasoning in compact form (<15 B parameters).
+    • High performance in math and coding benchmarks.
+    • Low VRAM footprint for enterprise and research deployment.
+  benchmark_performance: |
+    - MMLU: 80.4
+    - GSM8K: 88.5
+    - ARC-C: 83.7
+    - HumanEval: 84.9
+    - HellaSwag: 82.1
+    (Microsoft Research & Hugging Face Leaderboard, May 2024)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["reasoning","summarization","code_generation","RAG_integration"]
+  known_limitations:
+    vendor_disclosed: |
+      English-only; no multilingual training.
+      Occasional verbosity in multi-step chain-of-thought responses.
+    common_failure_modes: |
+      Over-elaboration or redundancy under long-context dialogues.
+    unsuitable_use_cases: |
+      Safety-critical applications or policy decision automation.
+
+training_information:
+  training_data_description: |
+    ~3 trillion tokens of synthetic and curated public data,
+    including educational reasoning sets, programming tasks, and mathematical corpora.
+    Strong emphasis on synthetic logical and code reasoning generation for factuality.
+  training_methodology: |
+    Synthetic data generation via teacher models, followed by supervised fine-tuning (SFT)
+    and reinforcement learning from AI feedback (RLAIF).
+    Quantization-aware training and context expansion used to maximize efficiency.
+  data_privacy_considerations: |
+    Training corpus excludes PII and user-generated telemetry; fully synthetic and public.
+
+intended_use:
+  vendor_intended_use: |
+    Research, education, enterprise copilots, and embedded AI systems.
+    Ideal for local RAG pipelines and on-prem reasoning agents.
+  suitable_domains: ["education","research","enterprise_AI","code_assistants","RAG_systems"]
+  out_of_scope_use: |
+    Regulated decision-making or autonomous systems without human review.
+
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Stable accuracy and low hallucination for mid-size open model.
+    public_evidence: |
+      Benchmarked by Hugging Face Leaderboard and Microsoft research whitepaper.
+    assessment_notes: |
+      Reliable compact model for reasoning and code tasks.
+  safe:
+    safety_measures: |
+      Dataset filtering and alignment for toxicity and bias reduction.
+    known_safety_issues: |
+      May refuse benign requests under strict alignment.
+    assessment_notes: |
+      Safe for educational and enterprise contexts.
+  secure_and_resilient:
+    security_features: |
+      Open weights with hash integrity; no telemetry or logging.
+    known_vulnerabilities: |
+      Prompt-injection and malicious fine-tuning risks apply.
+    assessment_notes: |
+      Secure for local deployment.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Full weights and training pipeline details open-sourced.
+    assessment_notes: |
+      High transparency for open research use.
+  explainable_and_interpretable:
+    explainability_features: |
+      Compatible with TransformerLens and Neuron inspection tools.
+    interpretability_limitations: |
+      No explicit step-by-step reasoning exposure.
+    assessment_notes: |
+      Transparent enough for academic interpretability studies.
+  privacy_enhanced:
+    privacy_features: |
+      Fully synthetic data training; telemetry-free operation.
+    privacy_concerns: |
+      None identified.
+    assessment_notes: |
+      Meets strong privacy requirements for open use.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Fairness calibration via synthetic generation filters and balanced topics.
+    known_biases: |
+      English-centric; slight Western educational content bias.
+    assessment_notes: |
+      Acceptable bias management for general research deployment.
+
+evaluation_guidance:
+  recommended_tests: |
+    • Reasoning benchmarks (GSM8K, ARC-C, MMLU).
+    • Coding benchmarks (HumanEval, MBPP).
+    • Factual QA and bias audits.
+    • Latency and quantization profiling for hardware targets.
+  key_evaluation_questions: |
+    – Does the model meet accuracy targets within compute budget?
+    – Is alignment behavior consistent with enterprise safety policy?
+    – Are code and math outputs verifiable?
+  comparison_considerations: |
+    Outperforms Gemma 2 9B and OpenHermes 2.5;
+    trails Gemma 2 27B and Mistral Large v2 in reasoning depth.
+    Strongest open 14B-class synthetic-trained model of 2024.
+
+rmf_function_mapping:
+  govern:
+    notes: |
+      Include synthetic data documentation and open-weight attribution under MIT license.
+  map:
+    context_considerations: |
+      Evaluate bias and hallucination risks in educational contexts.
+    risk_categories: ["hallucination","bias","alignment_drift"]
+  measure:
+    suggested_metrics: |
+      Accuracy, latency, bias index, hallucination rate.
+  manage:
+    risk_management_considerations: |
+      Apply routine audits for bias and safety post-deployment.
+
+references:
+  vendor_documentation:
+    - url: "https://huggingface.co/microsoft/phi-3-medium-14b"
+       description: "Official Phi-3 Medium release and evaluation card"
+    - url: "https://www.microsoft.com/en-us/research/blog/phi-3-small-language-models-that-think/"
+       description: "Microsoft Research blog announcement"
+  benchmarks:
+    - name: "MMLU"
+       url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+       result: "80.4"
+    - name: "GSM8K"
+       url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+       result: "88.5"
+  third_party_evaluations:
+    - source: "Hugging Face Open LLM Leaderboard (2024)"
+       url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+       summary: "Phi-3 Medium validated as top compact reasoning model in its class."
+  news_coverage:
+    - title: "Microsoft introduces Phi-3 Medium — compact models that reason and code"
+       url: "https://www.microsoft.com/en-us/research/blog/phi-3-small-language-models-that-think/"
+       date: "2024-04-23"
+
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Microsoft Research publications, Hugging Face Leaderboards, and independent evaluations.
+  completeness_assessment: |
+    High for transparency and benchmarks; medium for alignment dataset granularity.
+  change_log:
+    - date: "2025-10-17"
+       author: "Cookbook Team"
+       changes: "Initial card created from Phi-3 Medium release and benchmark data."

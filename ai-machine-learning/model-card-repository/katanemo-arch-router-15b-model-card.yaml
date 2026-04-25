@@ -1,0 +1,195 @@
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+model_identity:
+  name: "Arch-Router-1.5B"
+  vendor: "Katanemo Labs"
+  model_family: "Arch-Router"
+  version: "1.5B"
+  release_date: "2025-07"  # approximate release month based on announcement. :contentReference[oaicite:2]{index=2}
+  model_type: "Large Language Model – Preference-aligned routing model"
+
+  vendor_model_card_url: "https://huggingface.co/katanemo/Arch-Router-1.5B"
+
+  license: "Katanemo License (non-commercial / research use)". :contentReference[oaicite:3]{index=3}
+  deprecation_status: "Active"
+
+technical_specifications:
+  architecture:
+    base_architecture: "Auto-regressive LLM (finetuned from Qwen2.5‑1.5B)". :contentReference[oaicite:5]{index=5}
+    parameter_count: "≈ 1.5 billion parameters" :contentReference[oaicite:6]{index=6}
+    context_window: "Not explicitly disclosed"
+    architectural_details: |
+      - Designed to map user prompts (and optionally conversation context) to a routing decision: selecting which downstream model to call based on domain & action taxonomy. :contentReference[oaicite:7]{index=7}
+      - Supports user-defined “domain” (theme/subject) and “action” (task type) categories, and uses those to route queries. :contentReference[oaicite:8]{index=8}
+
+  modalities:
+    supported_inputs: ["text (user prompt)"]
+    supported_outputs: ["text (routing decision)"]
+
+  performance_characteristics:
+    speed_tier: "Optimised for routing tasks, low latency"
+    cost_tier: "Lower compute footprint than larger deploy models"
+    latency: "Reported as fast (single model routing) — e.g., in routing experiments latency ~51 ms. :contentReference[oaicite:9]{index=9}"
+    throughput: "Not publicly specified"
+
+capabilities:
+  vendor_claimed_strengths: |
+    - High accuracy in mapping queries to the “right” downstream LLM, based on user preferences. :contentReference[oaicite:10]{index=10}
+    - Enables flexible, configurable routing: you can swap in new models or update routing preferences without retraining the router. :contentReference[oaicite:11]{index=11}
+    - Compact size (1.5 B) relative to many large-foundation models, making it easier to deploy as a routing layer rather than heavy generation layer.
+
+  benchmark_performance: |
+    From press / article summarisation: Achieved ~93.17 % routing accuracy in internal testing. :contentReference[oaicite:12]{index=12}
+    Claims to outperform larger closed-models on routing benchmarks. :contentReference[oaicite:13]{index=13}
+  special_capabilities:
+    tools_support: false
+    vision_support: false
+    reasoning_support: true (interprets user intent for routing)
+    image_generation: false
+    additional_capabilities: ["preference-aligned routing","model orchestration","domain-action taxonomy"]
+  known_limitations:
+    vendor_disclosed: |
+      - Focused purely on routing, not on generation; accuracy depends on definition of domains/actions and configuration of downstream models. :contentReference[oaicite:14]{index=14}
+      - Dataset/training details and full evaluation metrics not fully public.
+    common_failure_modes: |
+      - If the domain/action taxonomy is poorly defined or downstream models mis-configured, routing decisions may be sub-optimal.
+      - Will not itself perform content generation — only selects models.
+    unsuitable_use_cases: |
+      - Using it as a generative LLM rather than a router.
+      - Deployments requiring certified evidence generation (since it only routes).
+      - High-stakes decision-making pipelines where routing error may incur significant risk without fallback/human review.
+
+training_information:
+  training_data_description: |
+    Training data details not fully disclosed publicly; described as conversational datasets annotated with domain/action and routing decisions. :contentReference[oaicite:15]{index=15}
+  training_methodology: |
+    Fine-tuning of Qwen2.5-1.5B instruct model with supervised data mapping prompts → routing decisions. :contentReference[oaicite:16]{index=16}
+  data_privacy_considerations: |
+    No detailed breakdown of dataset provenance or filtering; users should assume standard LLM risks.
+
+intended_use:
+  vendor_intended_use: |
+    To serve as a central routing model in multi-LLM systems: given a query, decide which downstream model should handle it.
+  suitable_domains: ["multi-model orchestration","LLM-hub routing","agent-systems","model-selection frameworks"]
+  out_of_scope_use: |
+    - General content generation (since it doesn’t produce final output, only routes)
+    - Regulated domains where routing failure could cause harm without oversight
+    - Stand-alone assistant functionality (without downstream models configured)
+
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      The model is open-source under research license, routing paper published. :contentReference[oaicite:17]{index=17}
+    public_evidence: |
+      Paper: Arch‑Router: Aligning LLM Routing with Human Preferences (arXiv) provided. :contentReference[oaicite:19]{index=19}
+    assessment_notes: |
+      For routing tasks, this is a strong candidate; still implementers should validate for their specific policy/domain configurations.
+  safe:
+    safety_measures: |
+      By design only selects models; doesn’t generate content directly, reducing direct output risk.
+    known_safety_issues: |
+      Wrong routing could send a query to an inferior model, reducing output quality or increasing cost.
+    assessment_notes: |
+      Deploy with monitoring, fallback logic, and track routing decisions vs actual execution performance.
+  secure_and_resilient:
+    security_features: |
+      Lightweight model eases deployment and reduces infrastructure risk.
+    known_vulnerabilities: |
+      Model may rely on prompt format/routing policy being well-maintained; misconfiguration can degrade system.
+    assessment_notes: |
+      Integrators should version routing policies and log both decision and execution.
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Routing decisions are transparent (domain/action mapping) and policies can be inspected; model weights are open.
+    assessment_notes: |
+      Good for governance of multi-LLM systems, but internal routing logic remains model-internal and should be logged.
+  explainable_and_interpretable:
+    explainability_features: |
+      Decision output is simple (“route”: chosen_model) and policy config is human-readable.
+    interpretability_limitations: |
+      The model’s internal reasoning for selection is opaque; just output route.
+    assessment_notes: |
+      Acceptable for routing layer; ensure logs can trace prompt→routing decision→execution.
+  privacy_enhanced:
+    privacy_features: |
+      Routing model doesn’t generate content, can be deployed isolated; local/on-premise deployment possible.
+    privacy_concerns: |
+      Still requires contextual prompt input which may include sensitive information; dataset provenance unknown.
+    assessment_notes: |
+      For sensitive data, ensure prompt sanitization and minimal data forwarded to routing or execution models.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Policies allow developer control over routing; model is not the full decision maker.
+    known_biases: |
+      If policies or downstream model selection is biased, routing may propagate bias.
+    assessment_notes: |
+      Ensure policy config is inclusive, reflect diverse use-cases and model coverage.
+
+evaluation_guidance:
+  recommended_tests: |
+    - Test routing accuracy in your domain: supply a representative set of prompts, ensure correct downstream model chosen per policy.
+    - Measure latency of routing decision (should be low) in your infrastructure.
+    - Monitor cost/usage: ensure routing reduces cost by selecting appropriate model vs default large model.
+    - Conduct safety audits: how often does routing choose a sub-optimal model, what is the impact?
+    - Implement logging and human-fallback: review decisions where routing fails or produces “other” route.
+    - Evaluate policy maintenance: ensure when you add new models or tasks, routing logic integrates without retraining.
+  key_evaluation_questions: |
+    - Does routing decision quality meet your domain thresholds (accuracy, cost, latency)?
+    - Are policy definitions (domain/action) covering your tasks comprehensively?
+    - Is your infrastructure able to deploy the routing model and connect to downstream models reliably?
+    - Are logging, versioning, fallback and monitoring processes in place for routing layer?
+  comparison_considerations: |
+    - Compare routing approach with simpler rule-based or threshold-based routing implementations.
+    - Consider trade-off of 1.5 B parameter cost vs simpler heuristics or larger routing models.
+    - Evaluate how many downstream models you have and complexity of routing domain/action taxonomy.
+
+rmf_function_mapping:
+  govern:
+    notes: |
+      Routing layer is core to multi-model system governance: versioning, policy review, logging, human oversight.
+  map:
+    context_considerations: |
+      Use-case: multi-LLM selection, agent orchestration, cost/latency optimisation, preference alignment.
+    risk_categories: ["incorrect_routing","model_mis-assignment","cost_overrun","downstream_model_inadequacy"]
+  measure:
+    suggested_metrics: |
+      - Incorrect routing rate per 1k prompts.
+      - Latency of routing decision (ms) across 1000 prompts.
+      - Cost savings achieved vs baseline routing per 1000 prompts.
+      - Downstream execution failure rate due to wrong routing decisions per 1k prompts.
+  manage:
+    risk_management_considerations: |
+      Ensure policy review cycle, human-in-the-loop fallback on high-risk prompts, version and rollback of routing model, monitor routing metrics over time.
+
+references:
+  vendor_documentation:
+    - url: "https://huggingface.co/katanemo/Arch-Router-1.5B"
+      description: "Hugging Face model page"
+    - url: "https://arxiv.org/abs/2506.16655"
+      description: "Paper: Arch-Router: Aligning LLM Routing with Human Preferences" :contentReference[oaicite:20]{index=20}
+    - url: "https://www.katanemo.com/arch-router"
+      description: "Katanemo Labs announcement"
+  benchmarks:
+    - name: "Techwalker article: AI router 1.5B parameters mapping to preferences"
+      url: "https://www.techwalker.com/2025/0701/3168357.shtml"
+      result: "1.5B router model 93% accurate" :contentReference[oaicite:21]{index=21}
+  third_party_evaluations:
+    - source: "Reddit user commentary"
+      url: "https://www.reddit.com/r/LLMDevs/comments/1odmz7n"
+      summary: > “I built the router …  The core insight … to decouple task identification from LLM assignment.” :contentReference[oaicite:22]{index=22}
+
+metadata:
+  card_version: "1.0"
+  card_author: "Don Fountain"
+  card_creation_date: "2025-10-24"
+  last_updated: "2025-10-24"
+  information_sources: |
+    Hugging Face model page, arXiv paper, press and community commentary.
+  completeness_assessment: |
+    Good for architecture, purpose, licensing and routing-layer context; moderate for training dataset / full evaluation / parameter breakdown; limited for latency/throughput in large scale production.
+  change_log:
+    - date: "2025-10-24"
+      author: "Don Fountain"
+      changes: "Initial synthesis of Arch-Router-1.5B model card."

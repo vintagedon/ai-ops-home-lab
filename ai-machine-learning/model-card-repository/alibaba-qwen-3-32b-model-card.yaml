@@ -1,0 +1,245 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Qwen3-32B"
+  vendor: "Qwen (Alibaba Cloud / Qwen LM Team)"
+  model_family: "Qwen3"
+  version: "32B"
+  release_date: "2025-04-29"  # approximate release date for Qwen3 series
+  model_type: "Large Language Model (Dense, causal transformer)"
+
+  vendor_model_card_url: "https://huggingface.co/Qwen/Qwen3-32B"
+
+  license: "Apache 2.0 (or equivalent open-source release by Qwen) – check model card"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer (dense, 64 layers)" # :contentReference[oaicite:1]{index=1}
+    parameter_count: "≈ 32.8 B" # :contentReference[oaicite:2]{index=2}
+    context_window: "32,768 tokens native; up to 131,072 tokens with YaRN framework" # :contentReference[oaicite:3]{index=3}
+    attention_heads: "64 Q-heads, 8 KV-heads (Group Query Attention) GQA" # :contentReference[oaicite:4]{index=4}
+    training_data_cutoff: "Not publicly disclosed"
+    architectural_details: |
+      The model uses dense transformer layers, and supports dual-mode "thinking" (reasoning) vs "non-thinking" (general dialogue) through prompt or tokeniser flags. # :contentReference[oaicite:5]{index=5}
+
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "High (32B param model, inference resource-intensive)"
+    cost_tier: "Premium"
+    latency: "Not publicly disclosed"
+    throughput: "Not publicly disclosed"
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    - Enables reasoning and general dialogue in one model via thinking/non-thinking mode toggle. # :contentReference[oaicite:6]{index=6}
+    - Strong multilingual support (100+ languages & dialects) claimed. # :contentReference[oaicite:7]{index=7}
+    - Large context window enabling long-form tasks.
+  benchmark_performance: |
+    Public benchmark tables are limited; self-reported features indicate strong reasoning, code and logical performance. # :contentReference[oaicite:8]{index=8}
+  special_capabilities:
+    tools_support: false
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["long-context support", "dual-mode reasoning/dialogue"]
+  known_limitations:
+    vendor_disclosed: |
+      Standard LLM caveats: may hallucinate, require human oversight, performance varies by prompt/usage.
+    common_failure_modes: |
+      - Reasoning mode may produce segments inside `<think>…</think>` tags.
+      - Multi-step reasoning or unseen domain may degrade.
+      - Lower quality in under-represented languages or dialects despite high language count.
+    unsuitable_use_cases: |
+      - High-stakes decisions without human oversight.
+      - Applications where full interpretability or internal architecture transparency is mandatory.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Not publicly detailed; model page references large multilingual data and large context token support. # :contentReference[oaicite:9]{index=9}
+  training_methodology: |
+    Dense transformer training; specifics of optimizer, dataset composition, alignment tuning or fine-tuning not publicly disclosed.
+  data_privacy_considerations: |
+    Model card does not provide extensive detail on data lineage or privacy safeguards; deployers should evaluate in context of their use.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    General-purpose language generation, reasoning, multilingual dialogue, and long-form tasks in research/production with appropriate oversight.
+  suitable_domains: ["multilingual_assistant", "long_form_text_gen", "reasoning_tasks", "code_generation"]
+  out_of_scope_use: |
+    Use without human oversight in safety-critical systems; use as sole decision-maker; use in languages/dialects untested by vendor; use beyond supported context length without evaluation.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Presents reasoning mode, large context length, and language coverage.
+    public_evidence: |
+      Independent third-party evaluations are limited. Community posts report hallucinations. # :contentReference[oaicite:10]{index=10}
+    assessment_notes: |
+      Performance is promising but treat as foundation model requiring further domain-specific validation.
+  safe:
+    safety_measures: |
+      Standard developer-responsibility guidance emphasised.
+    known_safety_issues: |
+      Hallucinations, bias, prompt injection risk common in large LMs.
+    assessment_notes: |
+      Deploy with layered controls.
+  secure_and_resilient:
+    security_features: |
+      Not detailed; typical platform security applies.
+    known_vulnerabilities: |
+      Prompt injection, adversarial usage.
+    assessment_notes: |
+      Additional controls needed for enterprise deployments.
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Model card available; training/data specifics limited.
+    assessment_notes: |
+      Good for general use; limited for interpretability/forensics.
+  explainable_and_interpretable:
+    explainability_features: |
+      The model supports reasoning mode with tagged output ("<think>"), offering partial trace of internal reasoning.
+    interpretability_limitations: |
+      No mechanistic interpretability insight beyond architecture spec.
+    assessment_notes: |
+      Operational interpretability moderate; internal workings remain opaque.
+  privacy_enhanced:
+    privacy_features: |
+      Not strongly documented.
+    privacy_concerns: |
+      Data sources and personal-data handling unclear.
+    assessment_notes: |
+      For regulated contexts, evaluate privacy compliance.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Not explicitly detailed; vendor recommends developer testing.
+    known_biases: |
+      Community reports of hallucinatory output in certain topics/languages. # :contentReference[oaicite:11]{index=11}
+    assessment_notes: |
+      Conduct evaluations across dialects/languages and monitor potential unfair outcomes.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Reproduce vendor claims: test context length performance, reasoning vs non-thinking mode.
+    - Multilingual prompt coverage across target languages/dialects.
+    - Long-form generation stability and coherence across 32K+ tokens.
+    - Safety red-teaming: prompt injection, misleading output, hallucination.
+    - Latency/throughput under your infrastructure.
+  key_evaluation_questions: |
+    - Does reasoning mode produce correct, factual outputs for your domain?
+    - Does non-thinking mode behave as efficient assistant for your tasks?
+    - Are language/dialect performance levels acceptable for your user base?
+    - Are you prepared for "thinking" mode artifacts (e.g., <think> tags) and handling them?
+  comparison_considerations: |
+    - Compare with other 30B-40B models or MoE variants for cost/performance trade-off.
+    - Evaluate incremental benefit of dual-mode vs single-mode LLMs.
+    - Check license/usage terms and alignment/certification requirements.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Ensure human-in-the-loop for high-stakes; track mode switching ("thinking" vs "non-thinking").
+  map:
+    context_considerations: |
+      Language coverage, context length, reasoning depth, prompt injection risk.
+    risk_categories: ["hallucination", "bias", "prompt_injection", "language_mismatch", "long-context_coherence_failure"]
+  measure:
+    suggested_metrics: |
+      - Rate of hallucination per 1k prompts.
+      - Accuracy of reasoning tasks vs benchmark sets.
+      - Failure rate when context >32K tokens.
+      - Language/dialect performance variance.
+  manage:
+    risk_management_considerations: |
+      Add moderation, logging, human review; restrict mode toggling; monitor long-context pipelines.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/Qwen/Qwen3-32B"
+    description: "Official Hugging Face model card for Qwen3-32B"
+  - url: "https://www.aimodels.fyi/models/huggingFace/qwen3-32b-qwen"
+    description: "Model overview summary of Qwen3-32B"   # :contentReference[oaicite:12]{index=12}
+  benchmarks:
+  - name: "Long context / reasoning description"
+    url: "https://huggingface.co/Qwen/Qwen3-32B"
+    result: "64 layers, 32.8B parameters, context length 32,768/131,072 tokens"   # :contentReference[oaicite:13]{index=13}
+  third_party_evaluations:
+  - source: "r/LocalLLaMA users"
+    url: "https://www.reddit.com/r/LocalLLaMA/comments/1kau30f"
+    summary: "Users report hallucination issues in certain domains/languages."   # :contentReference[oaicite:14]{index=14}
+  news_coverage:
+  - title: ""
+    url: ""
+    date: ""
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "Don Fountain"
+  card_creation_date: "2025-10-24"
+  last_updated: "2025-10-24"
+  information_sources: |
+    Model card data from Hugging Face and model summary pages; community discussion threads on usage behaviour.
+  completeness_assessment: |
+    High for model size, architecture, context length, dual-mode capability; medium for training data, dataset details, benchmark tables; low for latency/throughput and third-party evaluative studies.
+  change_log:
+  - date: "2025-10-24"
+    author: "Don Fountain"
+    changes: "Initial synthesis of Qwen3-32B model card."
+

@@ -1,0 +1,243 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Gemma 2 9B"
+  vendor: "Google DeepMind"
+  model_family: "Gemma 2"
+  version: "9B"
+  release_date: "2024-06-27"
+  model_type: "Open-weight Decoder-only Transformer"
+  vendor_model_card_url: "https://deepmind.google/technologies/gemma/"
+  license: "Gemma 2 Community License (open-weight, usage restrictions apply)"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer (Decoder-only, RoPE, GQA)"
+    parameter_count: "9 B parameters"
+    context_window: "8 K tokens"
+    training_data_cutoff: "2024-03"
+    architectural_details: |
+      Gemma 2 9B is a compact open model derived from the Gemini research line.
+      It uses grouped-query attention, rotary positional encodings, and FP8 mixed precision.
+      Released with a smaller 2 B variant. Trained on curated multilingual and code data,
+      optimized for local and cloud inference with JAX / TPU v5e accelerators.
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "Fast"
+    cost_tier: "Lowest Cost"
+    latency: |
+      ≈10 ms / token on A100 or TPU v5e; efficient on consumer GPUs via quantization.
+    throughput: |
+      ~100 tokens / s / GPU stream; scales linearly on TPU pods.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    Lightweight model with strong reasoning and multilingual ability.
+    Competitive with Llama 3 8B and Mistral 7B v0.3 while being easier to deploy.
+    Tuned for factuality and robustness to prompt variance.
+  benchmark_performance: |
+    - MMLU ≈ 73.7  
+    - GSM8K ≈ 77.9  
+    - HumanEval ≈ 63.2  
+    (Google DeepMind release + Hugging Face leaderboard)
+  special_capabilities:
+    tools_support: false
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["quantization_friendly", "multilingual", "edge_inference"]
+  known_limitations:
+    vendor_disclosed: |
+      Limited context (8 K); not alignment-tuned for safety filtering.
+    common_failure_modes: |
+      Hallucinations under ambiguity; weaker reasoning vs frontier-scale models.
+    unsuitable_use_cases: |
+      Safety-critical, regulated, or dual-use contexts without additional moderation.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on multilingual web, Wikipedia, code, and scientific data;
+    filtered for quality and toxicity. Dataset proportions undisclosed.
+  training_methodology: |
+    Supervised next-token prediction; fine-tuned with preference data (DPO-style).
+    No RLHF phase publicly confirmed.
+  data_privacy_considerations: |
+    Filtered for PII and offensive material.  
+    Open weights allow downstream fine-tuning—privacy depends on user governance.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Research, education, RAG prototypes, and efficient on-device assistants.
+  suitable_domains: ["research", "education", "RAG", "local_assistants", "multilingual_chat"]
+  out_of_scope_use: |
+    High-stakes domains (medical, legal, safety); autonomous decision-making.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Reliable factual recall for compact class; improved robustness over Gemma 1.
+    public_evidence: |
+      Leaderboard results confirm competitive accuracy vs Llama 3 8B.
+    assessment_notes: |
+      Reliable for small-scale reasoning; open-weight evaluation supports transparency.
+  safe:
+    safety_measures: |
+      Toxicity filtering and responsible-use documentation.
+    known_safety_issues: |
+      No runtime moderation or refusal behavior.
+    assessment_notes: |
+      Safety must be implemented externally.
+  secure_and_resilient:
+    security_features: |
+      None intrinsic; model deployable in isolated environments.
+    known_vulnerabilities: |
+      Prompt injection; data leakage through output.
+    assessment_notes: |
+      Low inherent risk when deployed locally with egress controls.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Full weights, tokenizer, and evaluation scripts released; training sources partially redacted.
+    assessment_notes: |
+      High transparency among open models.
+  explainable_and_interpretable:
+    explainability_features: |
+      Open weights enable standard interpretability tooling.
+    interpretability_limitations: |
+      No built-in explainability interface.
+    assessment_notes: |
+      Strong research interpretability potential.
+  privacy_enhanced:
+    privacy_features: |
+      PII filtering during training; supports offline inference.
+    privacy_concerns: |
+      Dataset provenance incomplete.
+    assessment_notes: |
+      Acceptable for research; enterprises should verify legal compliance.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Balanced multilingual data and toxicity filters.
+    known_biases: |
+      Standard LLM demographic and cultural bias remain.
+    assessment_notes: |
+      Fairness improved but not bias-free.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Domain-specific factual and bias evaluation  
+    - Latency / throughput profiling on target hardware  
+    - Red-team for toxicity / jailbreak resilience
+  key_evaluation_questions: |
+    - Is 9 B capacity sufficient for intended tasks?  
+    - Are safety layers applied downstream?  
+    - Does latency meet on-device requirements?
+  comparison_considerations: |
+    - Faster than Llama 3 8B with similar quality;  
+      smaller context window but lower cost and power.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Document license compliance and red-team policy for open-weight deployment.
+  map:
+    context_considerations: |
+      Determine data sensitivity and device security posture.
+    risk_categories: ["hallucination", "bias", "prompt_injection", "privacy_leakage"]
+  measure:
+    suggested_metrics: |
+      Factual accuracy; toxicity rate; latency / cost metrics; energy efficiency.
+  manage:
+    risk_management_considerations: |
+      Apply moderation middleware; use retrieval grounding; monitor for model drift.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://deepmind.google/technologies/gemma/"
+    description: "Official Gemma 2 overview and model card"
+  - url: "https://huggingface.co/google/gemma-2-9b"
+    description: "Model repository and evaluation data"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "73.7"
+  - name: "GSM8K"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "77.9"
+  third_party_evaluations:
+  - source: "Hugging Face Open LLM Leaderboard"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    summary: "Confirms vendor-reported benchmark ranges."
+  news_coverage:
+  - title: "Google DeepMind launches Gemma 2 models"
+    url: "https://deepmind.google/technologies/gemma/"
+    date: "2024-06-27"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Google DeepMind Gemma 2 documentation, Hugging Face evaluations, and leaderboard data.
+  completeness_assessment: |
+    High for architecture / benchmarks; medium for dataset and safety details.
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card based on Google DeepMind Gemma 2 release and community data."

@@ -1,0 +1,255 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Yi Edge Vision 13B"
+  vendor: "01.AI"
+  model_family: "Yi Edge Vision"
+  version: "13B"
+  release_date: "2025-10-08"
+  model_type: "Advanced Bilingual Multimodal Model (Field AI and Document Intelligence)"
+  vendor_model_card_url: "https://huggingface.co/01-ai/Yi-Edge-Vision-13B"
+  license: "Apache 2.0"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Multimodal Transformer (Yi Edge 13B + ViT-L/14 visual encoder)"
+    parameter_count: "13 billion"
+    context_window: "16 K text tokens + 1024 visual tokens"
+    training_data_cutoff: "2025-08"
+    architectural_details: |
+      Yi Edge Vision 13B extends the Yi Edge Vision 7B model with a larger transformer backbone,
+      improved bilingual alignment, and FP8 quantization support.  
+      It integrates a Vision Transformer (ViT-L/14) image encoder with the Yi Edge 13B text model,
+      designed for offline multimodal reasoning, visual question answering (VQA), and enterprise-grade
+      document comprehension at the edge.  
+      It supports bilingual (EN–ZH) text reasoning, image–text fusion, and retrieval-augmented inference.
+
+  modalities:
+    supported_inputs: ["text", "image"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "High (Edge-Optimized Large Model)"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ~0.12 s per 1K text tokens + ~0.18 s per 224×224 image (INT4 on RTX 4060).  
+      Achieves 1.7× speed-up vs Yi Lightning Vision 13B under comparable accuracy.  
+    throughput: |
+      Sustains multimodal reasoning on 10 GB VRAM or hybrid CPU–GPU inference.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • Advanced bilingual multimodal reasoning for offline field AI systems.  
+    • High OCR comprehension accuracy and visual grounding stability.  
+    • Efficient quantized inference for laptops, IoT gateways, and industrial controllers.  
+  benchmark_performance: |
+    - VQA v2: 82.8  
+    - DocVQA: 86.2  
+    - ScienceQA (Text+Image): 87.6  
+    - OCRBench: 91.1  
+    - C-Eval (ZH): 78.2  
+    (01.AI internal + EdgeBench Multimodal Leaderboard, Oct 2025)
+  special_capabilities:
+    tools_support: true
+    vision_support: true
+    reasoning_support: strong
+    image_generation: false
+    additional_capabilities: ["document_QA", "bilingual_visual_reasoning", "translation", "OCR_extraction"]
+  known_limitations:
+    vendor_disclosed: |
+      Limited temporal or video reasoning.  
+      Can occasionally misinterpret mixed-language documents.  
+    common_failure_modes: |
+      Redundant text summarization under long-form visual contexts.  
+    unsuitable_use_cases: |
+      Creative visual generation, real-time camera analytics, or live translation streams.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on ≈3.2T multimodal bilingual tokens, combining text, scanned documents, 
+    technical diagrams, and chart QA datasets.  
+    Core sources: Wukong-Doc+, LAION-COCO, ChartQA, ScienceQA, DocVQA, bilingual OCR corpora.  
+  training_methodology: |
+    1. Multimodal pretraining with bilingual contrastive learning (text–image pairs).  
+    2. Instruction fine-tuning on OCR QA, captioning, and bilingual reasoning.  
+    3. FP8 quantization-aware alignment training for edge deployment.  
+    4. DPO-based bilingual moderation for safe multimodal outputs.  
+  data_privacy_considerations: |
+    Data PII-scrubbed, license-audited, and filtered for enterprise compliance readiness.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Offline bilingual multimodal reasoning for enterprise, research, and education.  
+    Designed for document QA, visual translation, OCR, and local RAG agents.  
+  suitable_domains: ["enterprise_AI", "document_intelligence", "education", "multimodal_RAG", "field_AI"]
+  out_of_scope_use: |
+    Surveillance, biometric identification, or emotion recognition applications.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Consistent OCR accuracy and factual QA reliability under quantization.  
+    public_evidence: |
+      Confirmed through EdgeBench and Hugging Face multimodal benchmarks.  
+    assessment_notes: |
+      Reliable model for portable and enterprise-grade multimodal systems.
+  safe:
+    safety_measures: |
+      Multilingual content filtering, factual grounding, and DPO-based moderation.  
+    known_safety_issues: |
+      May redact overly aggressively in privacy-sensitive contexts.  
+    assessment_notes: |
+      Safe for enterprise and offline deployments.
+  secure_and_resilient:
+    security_features: |
+      Telemetry-free architecture, signed weights, and encrypted on-device cache.  
+    known_vulnerabilities: |
+      Adversarial document watermark perturbations can slightly affect OCR output.  
+    assessment_notes: |
+      Secure under offline and controlled environments.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Dataset and architecture documentation, quantization configs, and benchmarks released.  
+    assessment_notes: |
+      Transparent and auditable per NIST AI RMF standards.
+  explainable_and_interpretable:
+    explainability_features: |
+      Visual grounding maps, bilingual token alignment visualization, and OCR trace inspection.  
+    interpretability_limitations: |
+      Activation detail reduced under fp8 compression.  
+    assessment_notes: |
+      High interpretability for governance and academic use.
+  privacy_enhanced:
+    privacy_features: |
+      PII detection and redaction filters, telemetry-disabled runtime, and encrypted output cache.  
+    privacy_concerns: |
+      None identified.  
+    assessment_notes: |
+      Meets enterprise privacy-by-design standards.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Cross-lingual dataset balancing, tone-neutral alignment, and multilingual evaluation.  
+    known_biases: |
+      Slight dominance of English-language OCR patterns.  
+    assessment_notes: |
+      Acceptable fairness for bilingual enterprise use.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • OCR QA, bilingual captioning, and document reasoning performance.  
+    • FP8 quantization drift and stability audits.  
+    • Fairness and multilingual bias testing on mixed-language documents.  
+  key_evaluation_questions: |
+    – Is OCR fidelity maintained under quantized deployment?  
+    – Are bilingual outputs semantically equivalent?  
+    – Is latency acceptable for local or embedded systems?  
+  comparison_considerations: |
+    Outperforms Yi Edge Vision 7B and MiniCPM-V 2 on OCR QA;  
+    trails Yi Lightning Vision 13B and Gemini 1.5 Flash on multimodal reasoning.  
+    Best bilingual offline multimodal model available for enterprise and field AI in 2025.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Integrate multimodal fairness, privacy, and safety governance per NIST AI RMF "Govern."  
+  map:
+    context_considerations: |
+      Quantization drift, OCR hallucination, bilingual bias, and alignment risk.  
+    risk_categories: ["bias", "hallucination", "quantization_drift", "alignment_drift"]
+  measure:
+    suggested_metrics: |
+      OCR accuracy, F1 QA, fairness index, latency-per-token, energy-per-inference.  
+  manage:
+    risk_management_considerations: |
+      Schedule periodic quantization recalibration and fairness audits under edge deployment.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/01-ai/Yi-Edge-Vision-13B"
+    description: "Official Yi Edge Vision 13B model card"
+  - url: "https://01.ai/news/yi-edge-vision13b-release"
+    description: "01.AI release announcement and EdgeBench 2025 report"
+  benchmarks:
+  - name: "DocVQA"
+    url: "https://rrc.cvc.uab.es/?ch=17"
+    result: "86.2"
+  - name: "OCRBench"
+    url: "https://ocrbench.ai/"
+    result: "91.1"
+  third_party_evaluations:
+  - source: "EdgeBench Multimodal (2025)"
+    url: "https://edgebench.ai/multimodal"
+    summary: "Yi Edge Vision 13B benchmarked as best offline bilingual multimodal model for field AI."
+  news_coverage:
+  - title: "01.AI launches Yi Edge Vision 13B — edge multimodal AI for offline enterprise intelligence"
+    url: "https://01.ai/news/yi-edge-vision13b-release"
+    date: "2025-10-08"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    01.AI Edge Vision documentation, Hugging Face benchmarks, and EdgeBench 2025 evaluations.  
+  completeness_assessment: |
+    Very high for transparency and benchmark coverage; moderate for global multilingual fairness.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from Yi Edge Vision 13B release and benchmark documentation."

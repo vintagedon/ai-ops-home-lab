@@ -1,0 +1,251 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Baichuan 2 13B"
+  vendor: "Baichuan Intelligent Technology (China)"
+  model_family: "Baichuan"
+  version: "2 (13B)"
+  release_date: "2024-03-18"
+  model_type: "Open-Weight Bilingual Reasoning and Instruction Model"
+  vendor_model_card_url: "https://huggingface.co/baichuan-inc/Baichuan2-13B"
+  license: "Apache 2.0"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Dense Transformer (decoder-only)"
+    parameter_count: "13 billion"
+    context_window: "32 K tokens"
+    training_data_cutoff: "2024-01"
+    architectural_details: |
+      Baichuan 2 13B is a compact bilingual model optimized for reasoning, summarization, and enterprise workloads.
+      It shares the same design principles as Baichuan 2 53B, including rotary positional embeddings (RoPE),
+      grouped-query attention (GQA), and fused attention kernels, but scaled for single-GPU deployment.
+      It supports quantization to 8-bit and 4-bit precision for laptop or edge use.
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "High"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      0.25–0.35 s per 1 K tokens on RTX 4090 / A100;  
+      highly optimized for inference frameworks like vLLM and TensorRT-LLM.
+    throughput: |
+      Efficient for chatbots, summarization, and reasoning; can serve multiple users on modest GPU hardware.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • Balanced bilingual (Chinese + English) reasoning at low cost.  
+    • Efficient and fine-tuning-friendly model for enterprises and researchers.  
+    • Good factual grounding and safety alignment inherited from Baichuan 2 53B.
+  benchmark_performance: |
+    - MMLU: 78.2  
+    - GSM8K: 83.1  
+    - C-Eval: 88.7  
+    - CMMLU: 90.1  
+    - ARC-C: 79.9  
+    (Baichuan Inc. and OpenCompass results, Apr 2024)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["bilingual_reasoning", "summarization", "code_generation", "education_assistance"]
+  known_limitations:
+    vendor_disclosed: |
+      Weaker deep reasoning and mathematical performance than 53B version.  
+      English output sometimes overly literal or formal.  
+    common_failure_modes: |
+      Mild hallucination in multi-hop reasoning; minor grammatical drift in long Chinese passages.  
+    unsuitable_use_cases: |
+      Safety-critical decision systems or compliance automation.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on ~4 trillion bilingual tokens spanning Chinese, English, and other high-resource languages,
+    with curated corpora from books, academic data, Wikipedia, and safe web content.  
+    Instruction datasets sourced from community contributions and AI-generated data.
+  training_methodology: |
+    Pretrained with autoregressive next-token prediction, followed by instruction tuning and safety alignment.
+    SafeRL employed for bias and toxicity reduction.  
+  data_privacy_considerations: |
+    Public and licensed data only; no personal or proprietary data included.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Bilingual research, enterprise copilots, and educational AI assistants.  
+    Suitable for environments needing controllable reasoning at moderate compute cost.
+  suitable_domains: ["education", "research", "enterprise_AI", "multilingual_chat", "knowledge_assistance"]
+  out_of_scope_use: |
+    Regulated or safety-sensitive applications requiring certified moderation or legal guarantees.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Stable bilingual reasoning with strong factual accuracy for open-weight scale.  
+    public_evidence: |
+      Verified via OpenCompass bilingual benchmarks; community validation consistent within ±1%.  
+    assessment_notes: |
+      Reliable for educational and enterprise contexts.
+  safe:
+    safety_measures: |
+      SafeRL alignment, toxic-content filters, and refusal training for sensitive topics.  
+    known_safety_issues: |
+      Conservative refusals in gray topics; occasional unfiltered humor content.  
+    assessment_notes: |
+      Safe for general-purpose deployment under moderation.
+  secure_and_resilient:
+    security_features: |
+      Hash-verified model checkpoints; open-source weights; no telemetry or API tracking.  
+    known_vulnerabilities: |
+      Same as other open models (prompt injection, data leakage in RAG).  
+    assessment_notes: |
+      Secure in private or air-gapped environments.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Full weights, tokenizer, and evaluation code released; training details summarized in official card.  
+    assessment_notes: |
+      High transparency for an open bilingual model.
+  explainable_and_interpretable:
+    explainability_features: |
+      Compatible with interpretability tools (e.g., TransformerLens, Captum).  
+      Public architecture facilitates gradient and attention analysis.  
+    interpretability_limitations: |
+      No built-in reasoning trace; limited CoT visualization.  
+    assessment_notes: |
+      Strong interpretability for open research and education.
+  privacy_enhanced:
+    privacy_features: |
+      No telemetry, no data retention; training dataset filtered for PII.  
+    privacy_concerns: |
+      Minimal; residual risks limited to public data.  
+    assessment_notes: |
+      Excellent privacy posture.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      SafeRL and bilingual fairness adjustments; evaluated on BOLD and C-Eval fairness subsets.  
+    known_biases: |
+      Slight preference toward Mandarin phrasing; reduced idiomatic variation in English.  
+    assessment_notes: |
+      Acceptable bias profile for bilingual model class.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • Bilingual QA and translation accuracy  
+    • Safety and bias testing for target domains  
+    • Quantization validation and latency profiling  
+    • Factual consistency and RAG performance
+  key_evaluation_questions: |
+    – Does it meet reasoning and translation goals for your workload?  
+    – Is moderation sufficient for deployment context?  
+    – Are hardware constraints acceptable for 13B-scale inference?
+  comparison_considerations: |
+    Outperforms Gemma 2 9B and Mistral 7B in multilingual tasks;  
+    trails Yi-Large and Baichuan 2 53B in advanced reasoning.  
+    Strongest open 13B bilingual model of 2024.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Track dataset provenance and bilingual fairness metrics in organizational governance.
+  map:
+    context_considerations: |
+      Assess hallucination and bias risks in bilingual outputs.  
+    risk_categories: ["hallucination", "bias", "prompt_injection", "data_contamination"]
+  measure:
+    suggested_metrics: |
+      Accuracy, latency, fairness index, hallucination rate.  
+  manage:
+    risk_management_considerations: |
+      Apply moderation layers and prompt sanitization; verify bilingual balance after fine-tuning.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/baichuan-inc/Baichuan2-13B"
+    description: "Official Baichuan 2 13B release and model card"
+  - url: "https://github.com/baichuan-inc/Baichuan2"
+    description: "Training and evaluation repository"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "78.2"
+  - name: "C-Eval"
+    url: "https://arxiv.org/abs/2305.08322"
+    result: "88.7"
+  third_party_evaluations:
+  - source: "OpenCompass (2024)"
+    url: "https://opencompass.org.cn/"
+    summary: "Baichuan 2 13B validated for high efficiency and bilingual reasoning accuracy."
+  news_coverage:
+  - title: "Baichuan 2 13B — efficient open bilingual AI model for research and enterprise"
+    url: "https://www.baichuan-ai.com/news/baichuan2"
+    date: "2024-03-18"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Baichuan Inc. release documentation, OpenCompass and Hugging Face benchmarks, replication studies.  
+  completeness_assessment: |
+    High for transparency and performance benchmarks; medium for dataset composition details.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from Baichuan 2 13B release and benchmark data."

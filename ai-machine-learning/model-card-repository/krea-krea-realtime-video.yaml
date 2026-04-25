@@ -1,0 +1,205 @@
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+model_identity:
+  name: "Krea Realtime Video"
+  vendor: "Krea AI"
+  model_family: "Krea Realtime"
+  version: "14B"  # distilled from Wan 2.1 14B
+  release_date: "2025-10-20"  # approximate public release date
+  model_type: "Video generation model (text-to-video & video-to-video, real-time interactive)"
+
+  vendor_model_card_url: "https://huggingface.co/krea/krea-realtime-video"
+
+  license: "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 (CC BY-NC-SA 4.0)" :contentReference[oaicite:1]{index=1}
+  deprecation_status: "Active"
+
+technical_specifications:
+  architecture:
+    base_architecture: "Distilled from Wan 2.1 T2V 14B using the Self-Forcing technique" :contentReference[oaicite:3]{index=3}
+    parameter_count: "≈ 14 billion parameters" :contentReference[oaicite:4]{index=4}
+    context_window: "Not conventionally defined (video frames/sequences rather than token window)"
+    architectural_details: |
+      - Converted diffusion-based video model into an autoregressive streaming model via Self-Forcing. :contentReference[oaicite:5]{index=5}
+      - Engineered KV-cache recomputation and KV-cache attention bias optimizations to support streaming at ~11 fps on a single NVIDIA B200 GPU. :contentReference[oaicite:6]{index=6}
+      - Supports both text-to-video and video-to-video (input transformations) workflows. :contentReference[oaicite:7]{index=7}
+
+  modalities:
+    supported_inputs: ["text prompt", "video or webcam stream", "canvas/sketch input"] :contentReference[oaicite:8]{index=8}
+    supported_outputs: ["video (generated frames)"]
+
+  performance_characteristics:
+    speed_tier: "Real-time capable (~11 fps) on optimized hardware" :contentReference[oaicite:9]{index=9}
+    cost_tier: "High compute (large-scale 14B parameters) but engineered for streaming use-cases"
+    latency: "Time to first frame ~1 second reported for text-to-video. :contentReference[oaicite:10]{index=10}
+    throughput: "Not fully disclosed but optimised for streaming interactive use"
+
+capabilities:
+  vendor_claimed_strengths: |
+    - Real-time video generation and editing: “see first frames within ~1 second, modify prompts mid-generation and restyle on-the-fly”. :contentReference[oaicite:11]{index=11}
+    - Supports both text-to-video and video-to-video workflows (e.g., streaming webcam or canvas input to video output). :contentReference[oaicite:12]{index=12}
+    - Engineered for interactive creative workflows, not just offline batch generation. :contentReference[oaicite:13]{index=13}
+
+  benchmark_performance: |
+    - Achieves ~11 fps on NVIDIA B200 using 4 inference steps for text-to-video generation. :contentReference[oaicite:14]{index=14}
+    - No widely published standard benchmark table yet.
+
+  special_capabilities:
+    tools_support: false
+    vision_support: true
+    reasoning_support: false
+    image_generation: false  # focus is video output
+    additional_capabilities: ["interactive prompt modification", "canvas/sketch→video", "multi-modal video editing"]
+
+  known_limitations:
+    vendor_disclosed: |
+      - Require high-end GPU hardware to achieve real-time performance. :contentReference[oaicite:15]{index=15}
+      - Being a large 14 B parameter model, inference cost and memory demands are significant.
+    common_failure_modes: |
+      - Quality may degrade if hardware is insufficient, or in complex video layouts/long durations.
+      - As with many generative video models, possibly lower fidelity in highly detailed scenes or very long motion sequences not explicitly tested.
+    unsuitable_use_cases: |
+      - Regulated or mission-critical video generation without human review.
+      - Use where full deterministic reproducibility or error-free output is mandated.
+
+training_information:
+  training_data_description: |
+    The model card states the model is distilled from Wan 2.1 14B; detailed dataset composition, sources, and filtering are *not publicly disclosed*. :contentReference[oaicite:16]{index=16}
+  training_methodology: |
+    - Self-Forcing distillation technique used to convert a diffusion model into autoregressive streaming architecture. :contentReference[oaicite:17]{index=17}
+  data_privacy_conside­rations: |
+    - No explicit breakdown of dataset provenance or PII filtering is included. Deployers for sensitive domains should undertake additional due diligence.
+
+intended_use:
+  vendor_intended_use: |
+    Creative, interactive video generation and editing workflows (text or live input to video output) where real-time feedback is beneficial. :contentReference[oaicite:18]{index=18}
+  suitable_domains: ["interactive content creation","real-time video prototyping","canvas/sketch-to-video","live stream augmentation"]
+  out_of_scope_use: |
+    - High-stakes safety-critical video generation without oversight.
+    - Domains requiring fully deterministic outputs for verification (this is a stochastic generative model).
+    - Situations where hardware constraints cannot meet real-time performance.
+
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Public descriptions of architecture and performance exist (11 fps, streaming readiness).
+    public_evidence: |
+      GitHub repo code and README show model implementation and inference details. :contentReference[oaicite:19]{index=19}
+    assessment_notes: |
+      Solid for experimentation and creative workflows; for production use evaluate on your specific video domain and hardware.
+
+  safe:
+    safety_measures: |
+      Licensed under CC BY-NC-SA, which restricts commercial use and encourages attribution.
+    known_safety_issues: |
+      Generated video may still include unwanted artifacts, bias in content, or mis-interpretations of prompts.
+    assessment_notes: |
+      Operators should apply human review and ensure content moderation pipelines in place, especially for public-facing or brand use.
+
+  secure_and_resilient:
+    security_features: |
+      Local inference possible (weights available) so on-premises deployment is feasible.
+    known_vulnerabilities: |
+      Large model size means hardware/VRAM bottlenecks; potential for resource exhaustion or degraded quality if mis-deployed.
+    assessment_notes: |
+      Ensure infrastructure monitoring, fallback strategy if performance degrades.
+
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Model weights, README and codebase are public; however full training data provenance and detailed benchmark metrics are not disclosed.
+    assessment_notes: |
+      Suitable for many creative uses; for regulated or highly audited workflows additional documentation may be required.
+
+  explainable_and_interpretable:
+    explainability_features: |
+      Generated video frames are inspectable; prompt→video workflow observable.
+    interpretability_limitations: |
+      Internal model decision making and training data are opaque.
+    assessment_notes: |
+      Treat as advanced generative tool rather than fully interpretable model.
+
+  privacy_enhanced:
+    privacy_features: |
+      On-prem deployment supports data-residency; no mandatory cloud inference.
+    privacy_concerns: |
+      Training data provenance unclear; risk of memorised content or unintended data generation.
+    assessment_notes: |
+      For sensitive or private content ask for risk assessment and potentially employ watermarking or retention controls.
+
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      No detailed published bias/fairness audit.
+    known_biases: |
+      As a video generation model, it may reflect biases in training data (e.g., scene types, motion styles, cultural framing).
+    assessment_notes: |
+      Organizations should perform their own bias/harm audits especially for culturally diverse or sensitive video content.
+
+evaluation_guidance:
+  recommended_tests: |
+    - Generate a representative set of video prompts in your domain (style, content, motion complexity) and evaluate frame consistency, motion coherence, artifact rate.
+    - Benchmark inference latency/throughput on your target hardware (e.g., GPU type B200, H100, RTX 5xxx) to ensure real-time performance.
+    - Evaluate prompt modification mid-generation and dynamic editing workflows (use case specific).
+    - Conduct safety/red-teaming: test for unwanted or biased content, test misuse (e.g., misleading video output) and ensure moderation.
+    - Monitor resource usage and VRAM footprint, ensure stable performance and fallback if hardware saturates.
+
+  key_evaluation_questions: |
+    - Does the generated video meet your quality, fidelity, motion coherence and frame-consistency thresholds?
+    - Is your hardware infrastructure able to deliver required latency/throughput?
+    - Are human-review, moderation, versioning, and logging in place for generated video content?
+    - Are you compliant with the license (non-commercial use under CC BY-NC-SA) and aware of restrictions in production/commercial settings?
+
+  comparison_considerations: |
+    - Compare with other video generation models (e.g., Wan 2.1/2.2 series, other open-source text-to-video models) in terms of speed, quality, hardware cost.
+    - Evaluate trade-off: 14B parameter model with real-time streaming vs smaller offline models; check your domain needs (interactive vs batch).
+    - Assess if further fine-tuning or adaptation is required for your target domain (style, resolution, motion type).
+
+rmf_function_mapping:
+  govern:
+    notes: |
+      For generated video pipelines, version control, model-usage logging, moderation workflows, human oversight and licensing review are needed.
+  map:
+    context_considerations: |
+      Real-time video generation, interactive prompt workflows, streaming input (webcam/canvas) to video output.
+    risk_categories: ["hallucination_video","motion_inconsistency","bias_scene_content","resource_exhaustion","licence_non-compliance"]
+  measure:
+    suggested_metrics: |
+      - Artifact/hallucination rate per 1k frames.
+      - Latency (ms/frame) on target hardware over 1k frames.
+      - Throughput (fps) sustained over 1k seconds.
+      - Bias or cultural-style mismatch incidents per 1k videos.
+  manage:
+    risk_management_considerations: |
+      Implement moderation of generated videos, log prompt→video mapping and version of model deployed, monitor drift in output quality over time, fallback to human approval for public or brand-facing uses.
+
+references:
+  vendor_documentation:
+    - url: "https://huggingface.co/krea/krea-realtime-video"
+      description: "Model page on Hugging Face" :contentReference[oaicite:20]{index=20}
+    - url: "https://github.com/krea-ai/realtime-video"
+      description: "GitHub repo with inference code and model details" :contentReference[oaicite:21]{index=21}
+    - url: "https://www.krea.ai/blog/announcing-realtime-video"
+      description: "Vendor blog announcement of real-time video capability" :contentReference[oaicite:22]{index=22}
+  benchmarks:
+    - name: "Reddit discussion: Krea Realtime Video model release"
+      url: "https://www.reddit.com/r/comfyui/comments/1oc7ye9/krea_realtime_video_model_and_lora_are_released/?utm_source=chatgpt.com"
+      result: "Community release and feature discussion" :contentReference[oaicite:23]{index=23}
+  third_party_evaluations:
+    - source: "Note article summarising generative-AI news including Krea Realtime"
+      url: "https://note.com/toshia_fuji/n/n868088c3cff8c4e?utm_source=chatgpt.com"
+      summary: "Mentions 14B size and real-time speed ~11fps" :contentReference[oaicite:24]{index=24}
+
+metadata:
+  card_version: "1.0"
+  card_author: "Generated-By-Assistant"
+  card_creation_date: "2025-10-24"
+  last_updated: "2025-10-24"
+  information_sources: |
+    Hugging Face model page, GitHub repository, vendor blog announcement, community commentary.
+  completeness_assessment: |
+    Good for architecture, performance claims, use-case; moderate for dataset/training data details (not fully disclosed); limited independent benchmark evaluations.
+  change_log:
+    - date: "2025-10-24"
+      author: "Generated-By-Assistant"
+      changes: "Initial synthesis of Krea Realtime Video model card."
+

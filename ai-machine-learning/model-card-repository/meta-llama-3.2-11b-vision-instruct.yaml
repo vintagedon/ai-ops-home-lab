@@ -1,0 +1,1484 @@
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+# Model card for Meta Llama 3.2 11B Vision Instruct
+# This card follows NIST AI RMF principles for trustworthiness assessment
+
+schema_version: "1.0.0"
+
+# =============================================================================
+# MODEL IDENTITY
+# =============================================================================
+
+model_identity:
+  name: "Llama 3.2 11B Vision Instruct"
+  vendor: "Meta (Facebook AI Research)"
+  model_family: "Llama 3.2"
+  version: "3.2-11B-Vision-Instruct"
+  release_date: "2024-09-25"
+  model_type: "Multimodal Large Language Model - Vision + Text to Text"
+
+  vendor_model_card_url: "https://huggingface.co/meta-llama/Llama-3.2-11B-Vision-Instruct"
+
+  license: "Llama 3.2 Community License - Permits commercial use with restrictions on competing model training"
+  
+  deprecation_status: "Active - Current generation multimodal model"
+
+# =============================================================================
+# MODEL ARCHITECTURE & TECHNICAL SPECIFICATIONS
+# =============================================================================
+
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer decoder with vision adapter - built on top of Llama 3.1 8B text model"
+    
+    parameter_count: "10.67B (10,670.2M parameters)"
+    
+    context_window: "128,000 tokens (130K per some sources)"
+    
+    training_data_cutoff: "2023-12 (December 2023)"
+
+    architectural_details: |
+      - Built on Llama 3.1 8B text-only model foundation
+      - Auto-regressive language model with optimized transformer architecture
+      - Separately trained vision adapter integrating with pre-trained Llama 3.1 language model
+      - Cross-attention layers align image and text data
+      - Instruction-tuned for visual recognition, image reasoning, captioning, and image Q&A
+      - Post-training: Supervised Fine-Tuning (SFT) + Reinforcement Learning with Human Feedback (RLHF)
+      - Aligned with human preferences for helpfulness and safety
+      - Multimodal input (text + images), text-only output
+      - Vision pretraining: 6B image and text pairs
+      - Instruction tuning: Publicly available vision datasets + 3M+ synthetically generated examples
+      - Training compute: 2.02M GPU hours on H100-80GB GPUs (700W TDP)
+      - Greenhouse gas emissions: 584 tons CO2eq for training (net-zero via renewable energy matching)
+      - Supports 8 languages for text tasks: English, German, French, Italian, Portuguese, Hindi, Spanish, Thai
+      - English-only for image+text applications
+
+  modalities:
+    supported_inputs: ["text", "image"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "Fast - Low latency for multimodal class"
+    
+    cost_tier: "Low - $0.16 per 1M tokens (blended 3:1, vision-capable pricing)"
+    
+    latency: "0.44s time to first token (TTFT) - lower than average for vision models"
+    
+    throughput: "Missing from source - varies by provider and deployment"
+
+# =============================================================================
+# CAPABILITIES & LIMITATIONS
+# =============================================================================
+
+capabilities:
+  vendor_claimed_strengths: |
+    Per Meta documentation:
+    - Optimized for visual recognition, image reasoning, captioning, and answering general questions about images
+    - Outperforms many available open source and closed multimodal models on common industry benchmarks
+    - Strong document-level understanding (DocVQA, document visual Q&A)
+    - Excellent chart and diagram interpretation (ChartQA, AI2D)
+    - Visual grounding capabilities (connecting language to specific image regions)
+    - Optical Character Recognition (OCR) capabilities
+    - 128K context window enables extended multi-turn conversations with images
+    - Competitive with or superior to Claude 3 Haiku, Claude 3 Sonnet, Gemini 1.5 Flash 8B in key benchmarks
+    - Suitable for Visual Question Answering, Document VQA, image captioning, text retrieval from images
+    
+    Architecture benefits:
+    - Built on proven Llama 3.1 8B foundation
+    - Vision adapter approach preserves text model capabilities while adding vision
+
+  benchmark_performance: |
+    Official Meta benchmarks (instruction-tuned 11B Vision model):
+    
+    Vision-specific benchmarks:
+    - VQAv2 (Visual Question Answering): 75.2%
+    - MMMU (Multimodal Multi-discipline Understanding): 50.7%
+    - DocVQA (Document Visual Q&A): 88.4%
+    - ChartQA (Chart Question Answering): Beats Claude 3 Haiku/Sonnet, beats Gemini 1.5 Flash 8B
+    - AI2D (Science Diagram Understanding): Beats Claude 3 Haiku/Sonnet
+    - MathVista (Visual Mathematical Reasoning): Beats Claude 3 Haiku/Sonnet
+    
+    Text-only benchmarks (inherits from Llama 3.1 8B base):
+    - MMLU: Performance comparable to base Llama 3.1 8B
+    - MATH: Performance comparable to base Llama 3.1 8B
+    
+    Third-party validation (Artificial Analysis):
+    - Intelligence Index: 16 (lower than average, as expected for 11B multimodal class)
+    - Performance competitive in weight class
+    - Beats Pixtral 12B and Qwen2-VL 7B on some benchmarks
+    - Keeps pace with Pixtral 12B on VQAv2
+    
+    Competitive positioning:
+    - Beats Gemini 1.5 Flash 8B on DocVQA
+    - Tops Claude 3 Haiku and Claude 3 Sonnet on AI2D, ChartQA, MathVista
+    - Competitive with Pixtral 12B and Qwen2-VL 7B in weight class
+    
+    Note: 90B variant significantly outperforms 11B on all benchmarks but at higher cost.
+
+  special_capabilities:
+    tools_support: false  # Vision model, tool use not primary capability
+    vision_support: true  # Core multimodal capability
+    reasoning_support: true  # Chain-of-thought reasoning for visual tasks
+    image_generation: false  # Text output only, no image generation
+    additional_capabilities: 
+      - "Visual Question Answering (VQA)"
+      - "Document Visual Question Answering (DocVQA)"
+      - "Chart and diagram interpretation"
+      - "Image captioning and description"
+      - "Visual grounding (object/region identification from text)"
+      - "Optical Character Recognition (OCR)"
+      - "Image reasoning and analysis"
+      - "Multilingual text support (8 languages)"
+      - "128K context window for extended image conversations"
+
+  known_limitations:
+    vendor_disclosed: |
+      From Meta documentation:
+      - Model knowledge cutoff: December 2023 (information after this date not in training)
+      - English-only for image+text applications (multilingual only for text-only tasks)
+      - Optimized for single image at a time; multi-image quality may degrade
+      - 11B parameter size limits capability ceiling compared to 90B variant
+      - Works best with one image per interaction for optimal quality and memory
+      - May not be robust to adversarial prompts
+      - Facial identification capabilities specifically mitigated but not eliminated
+      - RLHF alignment may affect performance on certain edge cases
+      - Not designed for high-stakes decision making without human oversight
+      - Context window of 128K may approach quality degradation at extreme lengths
+      
+      Out of scope uses:
+      - Use in any manner that violates applicable laws or regulations
+      - Use in languages beyond the 8 explicitly supported languages
+      - Prohibited by Acceptable Use Policy and Llama 3.2 Community License
+
+    common_failure_modes: |
+      Known patterns from testing and community reports:
+      - Hallucination: Can generate plausible but incorrect descriptions of images
+      - Multi-image handling: Performance degrades with multiple images in same context
+      - Facial identification: Despite mitigations, may still identify individuals in some cases
+      - Fine detail: May miss small or subtle visual details
+      - Text in images: OCR capabilities present but not perfect on all text types
+      - Complex scenes: May struggle with highly complex multi-object scenes
+      - Ambiguous images: May make confident but incorrect interpretations
+      - Prompt sensitivity: Output quality varies with prompt phrasing
+      - Language mixing: Image+text works best in English only
+      - Visual reasoning: Strong but not at GPT-4V/GPT-4o level on complex reasoning
+      
+      Vision-specific limitations:
+      - Image quality sensitivity (low resolution, poor lighting affects performance)
+      - Cultural/geographic bias in image interpretation
+      - May reflect training data biases in image descriptions
+
+    unsuitable_use_cases: |
+      This model should NOT be used for:
+      - Medical diagnosis from medical images without qualified professional review
+      - Legal document analysis as sole decision maker
+      - Financial document processing without human oversight
+      - Safety-critical image analysis (autonomous vehicles, surveillance, security)
+      - High-stakes individual identification or assessment
+      - Facial recognition for identification purposes (specifically mitigated)
+      - Real-time factual information retrieval about events after December 2023
+      - Tasks requiring processing of many images simultaneously
+      - Mission-critical applications where visual hallucination is unacceptable
+      - Regulated industries without appropriate validation and human oversight
+      - Content moderation as sole filter
+      - Medical imaging analysis
+      - Surveillance and tracking applications
+      - Biometric identification systems
+
+# =============================================================================
+# TRAINING & DATA
+# =============================================================================
+
+training_information:
+  training_data_description: |
+    Per Meta disclosure:
+    
+    Vision pretraining:
+    - 6 billion image and text pairs
+    - Image-text paired data from various sources
+    - Training period: Data through December 2023
+    
+    Instruction tuning:
+    - Publicly available vision instruction datasets
+    - Over 3 million synthetically generated examples
+    - Fine-tuning focused on visual recognition, reasoning, captioning, and Q&A
+    
+    Base model:
+    - Built on Llama 3.1 8B text model
+    - Inherits 15T token pretraining from Llama 3.1
+    - Vision adapter trained separately and integrated
+    
+    Data transparency gaps:
+    - Specific vision dataset sources not disclosed
+    - Synthetic data generation methodology not detailed
+    - Image sourcing and consent mechanisms not fully documented
+    - Filtering and curation processes partially disclosed
+
+  training_methodology: |
+    Training approach:
+    1. Base model: Started with pre-trained Llama 3.1 8B text model
+    2. Vision adapter training: Trained separately on 6B image-text pairs
+    3. Integration: Cross-attention layers connect vision and text
+    4. Supervised Fine-Tuning (SFT): Instruction-following optimization for vision tasks
+    5. Reinforcement Learning with Human Feedback (RLHF): Alignment for helpfulness and safety
+    
+    Training compute:
+    - 2.02M GPU hours on H100-80GB hardware (700W TDP)
+    - Custom Meta training libraries and GPU clusters
+    - Production infrastructure for fine-tuning, annotation, and evaluation
+    
+    Safety measures:
+    - Facial identification risk mitigation (dedicated measures)
+    - Red-team testing for harmful content generation
+    - Adversarial prompt robustness testing
+    - Llama Guard 3-11B-Vision recommended as safety layer
+    - Three-pronged trust & safety strategy:
+      1. Enable safe, helpful, flexible experiences
+      2. Protect against adversarial exploitation
+      3. Prevent community misuse
+    
+    Architecture innovation:
+    - Vision adapter preserves text model capabilities
+    - Cross-attention mechanism for multimodal alignment
+    - High-quality data filtering for instruction tuning
+
+  data_privacy_considerations: |
+    Privacy and data handling:
+    - Training data includes image-scraped content; consent mechanisms not fully disclosed
+    - 6B image-text pairs likely include publicly available web images
+    - No explicit PII filtering disclosure in public documentation
+    - Facial identification capabilities specifically addressed with mitigations
+    - Recommend privacy review before deployment in sensitive contexts
+    - User data in API deployments subject to provider privacy policies (not Meta-controlled)
+    - Model outputs may inadvertently reference training data
+    - Image inputs to deployed models create additional privacy considerations
+    
+    Concerns for sensitive deployments:
+    - Data provenance not fully transparent for vision training data
+    - Potential for training data memorization and regurgitation
+    - Image inputs may contain PII, faces, sensitive information
+    - No guarantees about specific dataset exclusions
+    - Recommend additional privacy testing for regulated industries
+    - Consider image data retention policies in deployment
+
+# =============================================================================
+# INTENDED USE & SCOPE
+# =============================================================================
+
+intended_use:
+  vendor_intended_use: |
+    Per Meta documentation:
+    
+    Primary use cases:
+    - Visual recognition and image understanding
+    - Image reasoning and analysis
+    - Image captioning and description
+    - Answering general questions about images
+    - Visual Question Answering (VQA)
+    - Document Visual Question Answering (DocVQA)
+    - Chart and diagram interpretation
+    - Visual grounding (connecting language to image regions)
+    - Optical Character Recognition (OCR)
+    - Image-text retrieval
+    - Assistant-like chat with images
+    
+    Additional use cases:
+    - Document analysis and understanding
+    - Data extraction from charts and visualizations
+    - Scientific diagram interpretation
+    - Educational applications with visual content
+    - Research applications involving image analysis
+    
+    Explicitly stated as optimized for:
+    - Instruction-following with visual inputs
+    - Multi-turn conversations with images (one image at a time)
+    - English language image+text interactions
+
+  suitable_domains: 
+    - "Content moderation and analysis (with human oversight)"
+    - "Educational image analysis and tutoring"
+    - "Document processing and extraction"
+    - "Chart and data visualization interpretation"
+    - "E-commerce product description generation"
+    - "Image cataloging and metadata generation"
+    - "Accessibility applications (image descriptions for visually impaired)"
+    - "Research assistance with visual data"
+    - "Customer service with image understanding"
+    - "OCR and text extraction from images"
+    - "Scientific diagram analysis"
+    - "Visual content moderation (first pass with human review)"
+
+  out_of_scope_use: |
+    Out of scope or requiring significant additional validation:
+    - Healthcare: Medical image diagnosis, radiology analysis, pathology
+    - Legal: Evidence analysis, forensic image examination
+    - Finance: Check processing, financial document analysis as sole authority
+    - Safety-critical: Autonomous vehicle vision, surveillance systems, security screening
+    - Biometrics: Facial recognition, identification systems
+    - High-stakes decisions: Content moderation without human review
+    - Regulated industries: Use cases subject to regulatory approval without proper validation
+    - Real-time factual queries: Information after December 2023 knowledge cutoff
+    - Multi-image analysis: Performance degrades with multiple images
+    
+    Requires human oversight:
+    - Any application where visual interpretation errors could cause significant harm
+    - Content moderation and safety classification
+    - Fact-checking and information verification
+    - Professional visual analysis of any kind
+    - Decisions affecting individuals based on image content
+    
+    Explicitly prohibited:
+    - Facial recognition for identification purposes
+    - Surveillance and tracking applications
+    - Any use violating applicable laws or regulations
+
+# =============================================================================
+# TRUSTWORTHINESS CHARACTERISTICS
+# =============================================================================
+
+trustworthiness_assessment:
+  # CHARACTERISTIC 1: Valid and Reliable
+  valid_and_reliable:
+    vendor_claims: |
+      Meta claims strong performance on industry vision benchmarks (VQAv2, MMMU, DocVQA,
+      ChartQA, AI2D, MathVista) and competitive or superior performance compared to
+      Claude 3 Haiku/Sonnet and Gemini 1.5 Flash 8B. Model validated across multiple
+      vision-language benchmarks.
+
+    public_evidence: |
+      Independent validation via third-party benchmarking:
+      - Artificial Analysis confirms competitive performance in 11B vision class
+      - IBM watsonx validation confirms benchmark claims
+      - Multiple deployment platforms (AWS, Azure, Oracle) provide performance data
+      - Benchmark scores align with Meta's published results
+      - Latency (0.44s TTFT) verified by multiple API providers
+      
+      Reliability considerations:
+      - Consistent performance within benchmark testing
+      - Output variability inherent to multimodal LLM generation
+      - Performance degrades on multi-image inputs
+      - Visual hallucination rate not quantified in public documentation
+      - Single-image performance generally reliable
+
+    assessment_notes: |
+      Deployment recommendations:
+      - Validate on domain-specific vision test sets before production deployment
+      - Test with representative images from your use case (quality, type, complexity)
+      - Establish acceptable error rates for visual interpretation
+      - Monitor visual hallucination rates in production
+      - Test edge cases: poor image quality, ambiguous scenes, multi-object complexity
+      - Compare with alternative vision models (Pixtral, Qwen2-VL, GPT-4V) for your workload
+      - Validate OCR accuracy on your document types
+      - Test single vs. multi-image scenarios
+      
+      Testing priorities:
+      1. Visual accuracy on domain-specific images
+      2. Visual hallucination rate measurement
+      3. OCR accuracy for document types in your use case
+      4. Consistency across multiple generations for same image
+      5. Performance at context window limits with images
+      6. Multi-image handling (if needed)
+      7. Image quality sensitivity testing
+
+  # CHARACTERISTIC 2: Safe
+  safe:
+    safety_measures: |
+      Meta-documented safety measures:
+      - RLHF alignment for safety and helpfulness
+      - Red-team testing for harmful content generation
+      - Dedicated measures for facial identification risk mitigation
+      - Adversarial prompt robustness testing
+      - Llama Guard 3-11B-Vision recommended as companion safety layer
+      - Three-pronged trust & safety strategy
+      - Acceptable Use Policy compliance required
+      
+      Vision-specific safety testing:
+      - Facial identification mitigation (primary risk for vision models)
+      - Image-based prompt injection testing
+      - Harmful image content handling evaluation
+      - Privacy risk assessment for image inputs
+      
+      Safety deployment recommendations:
+      - Deploy Llama Guard 3-11B-Vision alongside for content filtering
+      - Implement application-level content filtering for image inputs
+      - Monitor for inappropriate image processing
+
+    known_risks: |
+      Identified safety risks:
+      - Visual jailbreaking: Alignment can be bypassed with adversarial images
+      - Harmful content: May generate inappropriate descriptions despite safety training
+      - Facial identification: Mitigations in place but not eliminated
+      - Privacy leakage: May extract and reproduce text/PII from images
+      - Dual-use: Can assist with malicious image analysis if misused
+      - Misinformation: Can generate convincing false descriptions of images
+      - Image-based prompt injection: Vulnerable to attacks via image content
+      - Training data leakage: May reproduce memorized image-text pairs
+      
+      Vision-specific risks:
+      - Deepfake analysis: May incorrectly assess manipulated images
+      - Sensitive content: May process NSFW or disturbing images without filtering
+      - Children in images: Additional child safety considerations
+      - Surveillance: Potential misuse for tracking and identification
+      
+      Risk factors:
+      - Open-weights model: Can be fine-tuned to remove safety controls
+      - No runtime content filtering: Safety depends on RLHF alignment only
+      - Vision adds attack surface: Images can encode adversarial content
+      - Facial identification partially mitigated but capabilities remain
+
+    assessment_notes: |
+      Safety deployment requirements:
+      - Implement input image filtering (NSFW, prohibited content)
+      - Implement output text filtering (harmful descriptions)
+      - Deploy Llama Guard 3-11B-Vision for vision-specific safety
+      - Monitor for privacy violations (PII extraction from images)
+      - Establish clear usage policies prohibiting harmful use cases
+      - Implement rate limiting and abuse detection
+      - Log image-text interactions for safety auditing
+      - Develop incident response procedures for vision-specific risks
+      - Consider facial detection filtering if identification is concern
+      - Test safety controls with adversarial images before deployment
+      
+      High-risk scenarios requiring additional controls:
+      - User-generated image inputs (high abuse potential)
+      - Children in images (child safety considerations)
+      - Sensitive documents (privacy leakage risk)
+      - Public-facing deployments (content moderation essential)
+      
+      CRITICAL: Vision safety alignment is not sufficient for high-risk applications.
+      Multi-layer defense essential for vision models.
+
+  # CHARACTERISTIC 3: Secure and Resilient
+  secure_and_resilient:
+    security_considerations: |
+      Model security characteristics:
+      - Open-weights: Full model access enables security analysis but also attack research
+      - Gated access on Hugging Face: Requires license acceptance
+      - No runtime security controls: Security depends on deployment infrastructure
+      - Vision adds attack surface: Images can encode malicious payloads
+      
+      Security testing:
+      - Adversarial image robustness testing conducted
+      - Image-based prompt injection vulnerability testing performed
+      - Facial identification attack testing conducted
+      
+      Vision-specific security concerns:
+      - Image-based prompt injection attacks
+      - Steganographic attacks (hidden instructions in images)
+      - Adversarial images designed to elicit specific outputs
+      - Privacy attacks via image inputs
+      - PII extraction from document images
+      
+      Deployment security requirements:
+      - Image validation and sanitization
+      - API key management and authentication
+      - Input validation (text and image)
+      - Output filtering and sanitization
+      - Rate limiting and DDoS protection
+      - Logging and monitoring for security events
+      - Image storage security and retention policies
+
+    resilience_factors: |
+      Operational resilience:
+      - Model stability: Deterministic given fixed seed and temperature
+      - Graceful degradation: Generally degrades gracefully on out-of-distribution images
+      - Recovery: Stateless model allows easy recovery from failures
+      - Redundancy: Can be deployed across multiple instances
+      
+      Vision-specific resilience:
+      - Image quality robustness: Handles various image qualities
+      - Format support: Standard image formats supported
+      - Size constraints: Image size limits need management
+      
+      Infrastructure resilience:
+      - Requires inference infrastructure (11B model manageable on GPUs with vision support)
+      - Available from multiple API providers (redundancy possible)
+      - Self-hosting option available (operational control)
+      - Higher resource requirements than text-only 8B models
+
+    assessment_notes: |
+      Security testing priorities:
+      1. Image-based prompt injection attack testing
+      2. Adversarial image robustness testing
+      3. Steganographic attack detection
+      4. PII extraction testing from document images
+      5. Facial identification bypass testing
+      6. Input validation effectiveness (image and text)
+      7. Output filtering validation
+      8. API security and authentication testing
+      9. Image storage security review
+      10. Logging and monitoring capability verification
+      
+      Resilience considerations:
+      - Establish failover procedures
+      - Plan for model version updates
+      - Document rollback procedures
+      - Test disaster recovery scenarios
+      - Image storage and retention policies
+      - Backup strategies for image inputs
+
+  # CHARACTERISTIC 4: Accountable and Transparent
+  accountable_and_transparent:
+    transparency_level: |
+      Transparency assessment:
+      
+      High transparency:
+      - Model architecture publicly documented
+      - Parameter count disclosed (10.67B)
+      - Training compute disclosed (2.02M GPU hours)
+      - Vision benchmark results extensively published
+      - License terms clearly stated
+      - Safety testing approach described
+      - Vision adapter architecture explained
+      
+      Moderate transparency:
+      - Training methodology described at high level
+      - RLHF process outlined but not detailed
+      - Vision pretraining: 6B image-text pairs (quantity disclosed)
+      - Instruction tuning: 3M+ synthetic examples (quantity disclosed)
+      - Context window size disclosed (128K)
+      - Facial identification mitigation described generally
+      
+      Low transparency:
+      - Vision training data composition not fully disclosed
+      - Specific vision datasets not enumerated
+      - RLHF preference data not described
+      - Synthetic data generation method not detailed
+      - Image sourcing and consent mechanisms not documented
+      - Filtering and curation processes partially disclosed
+      - Facial identification mitigation techniques not detailed
+      
+      Transparency gaps impact:
+      - Difficult to assess vision data-related risks (bias, privacy, copyright)
+      - Cannot fully evaluate vision training data quality
+      - Challenging to predict edge case behavior on images
+      - Limited ability to assess visual memorization risks
+      - Facial identification mitigation effectiveness unclear
+
+    accountability_mechanisms: |
+      Accountability structures:
+      - Vendor: Meta Platforms, Inc. (responsible party)
+      - Model card: Available on Hugging Face with technical details
+      - License: Llama 3.2 Community License defines usage terms
+      - Version control: Versioned releases (3.2 designation)
+      - Issue reporting: Hugging Face discussions and GitHub issues
+      - Llama Guard 3-11B-Vision: Companion safety model
+      
+      Accountability limitations:
+      - Open-weights: Downstream use difficult to track or control
+      - Community deployments: No central accountability for derivatives
+      - Limited recourse: No service-level agreements for open model
+      - Indirect liability: Deployer assumes responsibility for applications
+      - Vision adds complexity: Image inputs create additional accountability challenges
+
+    assessment_notes: |
+      Governance recommendations:
+      - Maintain model inventory with version tracking
+      - Document model selection rationale (why vision model needed)
+      - Establish approval process for vision model deployments
+      - Define acceptable and prohibited vision use cases
+      - Assign ownership and accountability (model steward)
+      - Implement usage logging and audit trails (including image inputs)
+      - Develop model update and deprecation policies
+      - Create documentation for vision model behavior and limitations
+      - Document image input handling policies
+      
+      Transparency mitigation:
+      - Conduct independent vision testing to fill knowledge gaps
+      - Document observed visual behavior and failure modes
+      - Maintain internal knowledge base of vision model characteristics
+      - Test facial identification capabilities and document findings
+      - Consider requiring supplier transparency for procurement
+
+  # CHARACTERISTIC 5: Explainable and Interpretable
+  explainable_and_interpretable:
+    explainability_capabilities: |
+      Inherent explainability:
+      - Text outputs are human-readable (surface-level interpretability)
+      - Can be prompted to explain visual reasoning (chain-of-thought for vision)
+      - Can describe what it "sees" in images
+      - Attention mechanisms theoretically analyzable (not practical at scale)
+      
+      Vision-specific explainability:
+      - Visual grounding capability (can identify regions/objects it's describing)
+      - Can generate descriptions of visual reasoning process
+      - Can explain what visual features inform its conclusions
+      
+      Explainability limitations:
+      - Black-box neural network: Internal decision process not transparent
+      - 10.67B parameters: Too complex for human understanding of weights
+      - Vision-text cross-attention: Multimodal reasoning even less interpretable
+      - Emergent behavior: Capabilities arise from training, not explicit programming
+      - Post-hoc explanations: Model-generated explanations may be unreliable or fabricated
+      
+      No built-in explainability features:
+      - No attention visualization tools provided
+      - No confidence scores for visual interpretations
+      - No uncertainty quantification
+      - No causal tracing capabilities for vision decisions
+      - No guaranteed accurate self-explanation of visual reasoning
+
+    interpretability_challenges: |
+      Fundamental challenges:
+      - Scale: 10.67B parameters beyond human comprehension
+      - Multimodal complexity: Vision-text alignment adds opacity
+      - Distributed representations: Visual knowledge encoded across network
+      - Non-linear: Complex non-linear transformations obscure reasoning
+      - Cross-attention: Vision-text interaction difficult to interpret
+      - Stochastic: Sampling introduces randomness
+      
+      Vision-specific challenges:
+      - Cannot definitively explain why it "sees" specific things in images
+      - Visual reasoning process opaque
+      - Attention on image regions doesn't fully explain interpretations
+      - Facial recognition process (even if mitigated) not explainable
+      - OCR decisions and text extraction reasoning unclear
+      
+      Practical limitations:
+      - Cannot definitively explain any specific visual interpretation
+      - Post-hoc visual explanations may be fabricated or rationalized
+      - Debugging visual failure modes requires extensive testing
+      - Multi-modal reasoning especially difficult to trace
+
+    assessment_notes: |
+      Explainability strategies:
+      - Use chain-of-thought prompting for visual reasoning tasks
+      - Request visual grounding (identify specific regions/objects)
+      - Implement output validation independent of model explanations
+      - Don't rely on model-generated visual explanations for high-stakes decisions
+      - Use multiple prompts to test consistency of visual interpretations
+      - Consider ensemble approaches for critical visual applications
+      - Test with images that have known ground truth
+      
+      Regulatory considerations:
+      - May not satisfy explainability requirements for regulated vision domains
+      - Human oversight essential for decisions requiring visual explanation
+      - Document known limitations in visual interpretability
+      - Maintain audit trails separate from model outputs
+      - Image inputs create additional explainability challenges
+      
+      Not suitable for:
+      - Applications requiring legally defensible visual interpretations
+      - Regulated decisions with "right to explanation" requirements (medical, legal)
+      - Critical systems where visual failure modes must be understood
+      - Safety-critical vision applications (autonomous vehicles, medical imaging)
+
+  # CHARACTERISTIC 6: Privacy-Enhanced
+  privacy_enhanced:
+    privacy_protections: |
+      Privacy considerations:
+      
+      Model-level:
+      - No explicit PII filtering disclosed in training
+      - May have memorized training image-text pairs (including faces, PII)
+      - Facial identification capabilities specifically mitigated but not eliminated
+      - No differential privacy guarantees
+      - No unlearning mechanisms available
+      
+      Vision-specific privacy risks:
+      - Images can contain faces, PII, sensitive information
+      - OCR capability can extract text from images (including PII)
+      - May identify individuals in images despite mitigations
+      - Document images may contain confidential information
+      - Image memorization risk (may reproduce training images)
+      
+      Deployment-level (varies by provider):
+      - API deployments subject to provider privacy policies
+      - Self-hosting provides data control
+      - Image inputs create additional privacy surface
+      - No inherent logging of user interactions (implementation-dependent)
+      
+      Privacy testing:
+      - Facial identification testing conducted with mitigations
+      - No public disclosure of comprehensive privacy evaluation results
+      - Extraction attacks not thoroughly documented
+      - Image memorization vulnerability unknown
+
+    data_handling: |
+      Training data handling:
+      - 6B image-text pairs likely include web-scraped images (consent not documented)
+      - Publicly available images without clear consent mechanisms
+      - No disclosure of image data anonymization processes
+      - Facial data in training set acknowledged (mitigations applied)
+      - Data retention and deletion policies not specified
+      - Training data access controls not disclosed
+      
+      Inference data handling (deployment-dependent):
+      - Image inputs may contain faces, PII, confidential information
+      - Prompts and outputs may be logged by API providers
+      - Images may be stored by API providers
+      - Self-hosting provides full control over image data
+      - No built-in privacy-preserving inference techniques
+      - Context window (128K) may expose significant user data
+      - Image inputs create substantial privacy exposure
+      
+      Vision-specific data handling concerns:
+      - Images persist in context window for conversation duration
+      - OCR extracts text that may contain PII
+      - Facial features processed even if identification mitigated
+      - Document images may contain sensitive business information
+
+    assessment_notes: |
+      Privacy deployment requirements:
+      - Implement strict image input policies (no faces without consent)
+      - Redact PII from images before model interaction if possible
+      - Use self-hosting for sensitive image applications
+      - Review API provider privacy policies carefully (especially image handling)
+      - Implement image retention policies (automatic deletion after processing)
+      - Consider edge/local deployment for privacy-critical applications
+      - Test for training data memorization (visual and text)
+      - Implement facial detection and blurring if needed
+      - OCR PII detection and redaction before processing
+      
+      High-risk privacy scenarios:
+      - Healthcare: Medical images with patient information
+      - Financial: Documents with account numbers, PII
+      - Legal: Privileged documents and communications
+      - Government: Classified or sensitive information
+      - Personal photos: Faces and identifying information
+      - Identity documents: Passports, licenses, IDs
+      
+      Privacy testing priorities:
+      1. Facial identification testing (verify mitigations)
+      2. PII extraction from document images
+      3. Image memorization testing (prompt for known training images)
+      4. OCR PII extraction testing
+      5. Context window data handling validation
+      6. Image logging and retention policy review
+      7. Image data deletion capability verification
+      8. Compliance validation (GDPR, HIPAA, BIPA, etc.)
+      
+      CRITICAL: Vision models have fundamentally different privacy profile than
+      text-only models. Image inputs create substantial privacy exposure.
+
+  # CHARACTERISTIC 7: Fair with Harmful Bias Managed
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Vendor-disclosed bias mitigation:
+      - RLHF training includes fairness considerations (not detailed)
+      - Facial identification specifically mitigated (bias implications)
+      - Multilingual training data intended to reduce language bias
+      - Safety testing includes demographic fairness evaluation (limited disclosure)
+      - Vision training on 6B image-text pairs (diversity not characterized)
+      
+      Bias mitigation limitations:
+      - Vision training data biases not fully characterized
+      - No demographic parity guarantees for visual interpretations
+      - Mitigation effectiveness not quantified
+      - Fairness across protected attributes in images not systematically evaluated
+      - Geographic and cultural bias in image understanding not addressed
+      
+      Testing conducted:
+      - Red-team testing for harmful stereotypes (not fully disclosed)
+      - Facial identification bias testing (as part of mitigation)
+      - Community feedback incorporated (process not detailed)
+
+    known_biases: |
+      Expected biases from training data:
+      
+      Language performance:
+      - Best in English for image+text tasks
+      - Multilingual only for text-only tasks
+      - Variable quality in non-English supported languages
+      
+      Visual biases:
+      - Western/US-centric image understanding likely
+      - May reflect geographic biases in image descriptions
+      - Cultural context understanding likely uneven
+      - Skin tone bias in person descriptions (common in vision models)
+      - Gender bias in visual associations and descriptions
+      - Age bias in person descriptions
+      - Occupational stereotypes in image descriptions
+      
+      Common vision model bias patterns (likely present):
+      - Racial/ethnic bias in face and person descriptions
+      - Gender stereotyping in image interpretations
+      - Socioeconomic bias in scene descriptions
+      - Geographic bias (US/Western locations better recognized)
+      - Cultural artifacts recognition uneven
+      - Disability representation gaps
+      
+      Document/chart biases:
+      - Western business document formats better understood
+      - Chart types common in Western contexts recognized better
+      - Non-Latin scripts may have lower OCR accuracy
+      
+      Bias manifestation areas:
+      - Image descriptions may reflect stereotypes
+      - Person descriptions may perpetuate racial/gender biases
+      - Scene interpretations may favor Western contexts
+      - Object recognition may be culturally biased
+      - Language quality varies by dialect/variant
+
+    assessment_notes: |
+      Bias testing requirements:
+      - Evaluate on diverse image sets (demographics, cultures, geographies)
+      - Test person descriptions across skin tones, genders, ages
+      - Assess cultural bias in scene interpretations
+      - Measure OCR accuracy across languages and scripts
+      - Evaluate stereotype perpetuation in image descriptions
+      - Test facial identification mitigation effectiveness across demographics
+      - Assess geographic bias in location recognition
+      
+      Fairness deployment considerations:
+      - Human review for vision decisions affecting individuals
+      - Diverse image testing teams for bias detection
+      - Demographic performance monitoring for image interpretations
+      - User feedback mechanisms for vision bias reporting
+      - Regular fairness audits with diverse image sets
+      - Test with images representing diverse populations
+      
+      High-risk bias scenarios:
+      - Hiring/recruitment: Bias in image-based screening (photos on resumes)
+      - Security: Racial bias in surveillance or security applications
+      - Healthcare: Bias in medical image interpretations
+      - Content moderation: Disproportionate flagging by demographic
+      - Education: Bias in image-based assessment or grading
+      - Facial analysis: Differential performance across skin tones (even if mitigated)
+      
+      Mitigation strategies:
+      - Implement bias detection for person descriptions
+      - Use diverse prompt engineering
+      - Test across diverse image sets before deployment
+      - Maintain human oversight for person-related visual decisions
+      - Document observed visual biases for transparency
+      - Consider demographic performance monitoring in production
+      
+      CRITICAL: Vision models have unique bias considerations. Facial recognition
+      and person description biases are particularly concerning and well-documented
+      across industry.
+
+# =============================================================================
+# EVALUATION GUIDANCE
+# =============================================================================
+
+evaluation_guidance:
+  recommended_tests: |
+    Pre-deployment testing checklist:
+    
+    1. VISION ACCURACY & PERFORMANCE
+       - Domain-specific visual accuracy testing on representative images
+       - Visual hallucination rate measurement (fact-checking descriptions against ground truth)
+       - Consistency testing (same image, multiple descriptions)
+       - Image quality sensitivity (low resolution, poor lighting, compression artifacts)
+       - Multi-object scene understanding
+       - Fine detail recognition testing
+       - Latency benchmarking on target infrastructure (with image inputs)
+       - Throughput testing under expected load (images + text)
+       Pass criteria: Define acceptable visual error rates for your use case
+    
+    2. DOCUMENT & OCR TESTING
+       - OCR accuracy on your document types
+       - Chart and diagram interpretation accuracy
+       - Document structure understanding (tables, forms, layouts)
+       - Text extraction from images (various fonts, sizes, orientations)
+       - Handwriting recognition (if applicable)
+       Pass criteria: OCR/document accuracy meets business requirements
+    
+    3. SAFETY & SECURITY
+       - Image-based prompt injection attack testing
+       - Adversarial image robustness testing
+       - Steganographic attack detection
+       - Facial identification testing (verify mitigations effective)
+       - NSFW image handling testing
+       - Harmful description generation testing
+       - Content filtering effectiveness validation
+       - PII extraction from images testing
+       Pass criteria: Zero critical safety failures, defined threshold for edge cases
+    
+    4. FAIRNESS & BIAS (VISION-SPECIFIC)
+       - Person description bias analysis (across demographics)
+       - Skin tone performance testing
+       - Gender bias in visual interpretations
+       - Cultural bias in scene descriptions
+       - Geographic bias in location recognition
+       - OCR accuracy across languages/scripts
+       - Stereotype perpetuation in image descriptions
+       Pass criteria: Performance gaps within acceptable thresholds, no egregious biases
+    
+    5. PRIVACY (VISION-SPECIFIC)
+       - Facial identification capability testing
+       - PII extraction from document images
+       - Image memorization testing
+       - Context window image data handling validation
+       - Image logging and retention compliance
+       - Consent mechanism validation for image inputs
+       Pass criteria: No unintended PII leakage, compliant image handling
+    
+    6. OPERATIONAL
+       - Integration testing with your systems
+       - Image upload/processing pipeline testing
+       - Image format compatibility testing
+       - Image size limit testing
+       - Failover and recovery testing
+       - Monitoring and logging capability validation
+       - Version upgrade/rollback testing
+       Pass criteria: Smooth integration, reliable operations
+    
+    7. COMPLIANCE
+       - License terms acceptance and compliance validation
+       - Image data handling regulatory compliance (GDPR, BIPA, HIPAA, etc.)
+       - Acceptable use policy compliance
+       - Documentation completeness review
+       Pass criteria: All compliance requirements satisfied
+
+  key_evaluation_questions: |
+    Critical decision questions:
+    
+    VISION CAPABILITY MATCH:
+    - Do we actually need vision capabilities, or is text-only sufficient?
+    - Does visual accuracy meet our requirements?
+    - Is OCR accuracy sufficient for our document types?
+    - Are 11B parameters sufficient, or do we need 90B for our vision tasks?
+    - Is the 128K context window adequate for our image+text use cases?
+    - Can it handle our image types (quality, format, complexity)?
+    - Does single-image limitation affect our use case?
+    
+    RESOURCE & OPERATIONS:
+    - Can our infrastructure support vision model hosting (GPU memory for vision)?
+    - Are we comfortable with self-hosting vs API deployment for images?
+    - Do we have expertise to operate and monitor a vision model?
+    - What are total cost implications (compute, storage, bandwidth for images)?
+    - How will we handle image storage and retention?
+    
+    VISION-SPECIFIC RISKS:
+    - Are safety controls adequate for our image-related risks?
+    - Is facial identification mitigation sufficient for our use case?
+    - Can we handle PII in images appropriately?
+    - Are bias levels acceptable for our visual applications?
+    - Is visual explainability sufficient for our use cases?
+    - Are we comfortable with vision training data transparency gaps?
+    - Do we have policies for user-submitted images?
+    
+    LEGAL & COMPLIANCE:
+    - Do license terms permit our intended vision use?
+    - Are we comfortable with Llama 3.2 Community License for vision?
+    - Do we meet regulatory requirements for image processing (BIPA, GDPR, etc.)?
+    - Have we documented vision model selection rationale for auditing?
+    - Do we have consent mechanisms for processing images with faces?
+    
+    ALTERNATIVES:
+    - How does this compare to GPT-4V, Claude 3 Opus, Gemini Vision?
+    - How does this compare to Pixtral 12B, Qwen2-VL 7B in open-source space?
+    - Are we choosing this for capability, cost, control, or combination?
+    - Have we validated trade-offs against our priorities?
+    - Is the 90B variant worth the extra cost for our use case?
+
+  comparison_considerations: |
+    Alternative vision model comparison framework:
+    
+    OPEN-SOURCE VISION ALTERNATIVES:
+    - Llama 3.2 90B Vision: More capable but higher cost
+    - Pixtral 12B: Comparable size, different architecture
+    - Qwen2-VL 7B/72B: Strong OCR, Chinese language support
+    - InternVL: Research-focused vision model
+    
+    CLOSED-SOURCE VISION ALTERNATIVES:
+    - GPT-4V/GPT-4o: Superior vision but API-only, higher cost
+    - Claude 3 Opus: Strong vision but API-only, higher cost
+    - Gemini 1.5 Pro/Flash: Google ecosystem, strong vision
+    
+    COMPARISON DIMENSIONS:
+    
+    Cost vs Quality (Vision):
+    - Llama 3.2 11B: Low cost ($0.16/M tokens), good quality for 11B vision
+    - Consider: Are 90B quality improvements worth higher cost?
+    - Consider: Do closed models justify API lock-in for vision quality?
+    
+    Speed vs Accuracy (Vision):
+    - Llama 3.2 11B: Fast (0.44s TTFT), good vision accuracy for size
+    - Consider: Can we trade latency for quality with larger model?
+    
+    Open vs Closed (Vision):
+    - Llama 3.2 11B: Open weights (control, customization, privacy for images)
+    - Consider: Do proprietary vision models justify API lock-in?
+    - Consider: Privacy implications of sending images to third-party APIs
+    
+    Self-host vs API (Vision):
+    - Llama 3.2 11B: Requires vision-capable GPUs (manageable for 11B)
+    - Consider: Infrastructure burden vs API convenience?
+    - Consider: Privacy sensitivity of image data (favor self-hosting?)
+    
+    Deployment constraints (Vision):
+    - On-device: Too large for mobile (consider Llama 3.2 1B/3B text-only)
+    - Edge: Possible with quantization on powerful edge devices
+    - Cloud: Flexible (self-host or API)
+    - Hybrid: Open weights enable mixed deployment
+    
+    USE CASE DIFFERENTIATION (VISION):
+    - Document understanding: Compare DocVQA scores (Llama 3.2 11B: 88.4%)
+    - Chart interpretation: Compare ChartQA scores (competitive with closed models)
+    - Visual Q&A: Compare VQAv2 scores (75.2%)
+    - OCR: Test on your document types
+    - Visual reasoning: Compare MathVista scores
+    - General vision: Compare across multiple benchmarks
+    
+    TOTAL COST OF OWNERSHIP (VISION):
+    - API costs: Input/output token pricing + image processing fees
+    - Infrastructure: GPU hosting costs if self-hosting (vision requires more VRAM)
+    - Image storage: Costs for storing user-submitted images
+    - Operations: Monitoring, updates, support
+    - Integration: Development time and complexity
+    - Risk: Safety incidents, compliance violations, bias issues
+    
+    PRIVACY CONSIDERATIONS (VISION):
+    - Self-hosting: Full control over image data (favor for sensitive images)
+    - API: Convenience but images sent to third-party (privacy risk)
+    - Facial data: Self-hosting if processing faces
+    - Document images: Self-hosting for confidential documents
+
+# =============================================================================
+# NIST AI RMF MAPPING
+# =============================================================================
+
+rmf_function_mapping:
+  # GOVERN: Organizational policies and oversight
+  govern:
+    notes: |
+      Governance framework considerations:
+      
+      POLICY ALIGNMENT:
+      - Document vision model in organizational AI inventory
+      - Map to existing AI and image processing policies
+      - Establish approval workflow for vision model deployments
+      - Define acceptable and prohibited vision use cases
+      - Assign ownership and accountability (vision model steward)
+      - Develop image input policies (prohibited content, consent requirements)
+      
+      VERSION CONTROL:
+      - Track model version (3.2-11B-Vision-Instruct)
+      - Maintain change log for model updates
+      - Document prompt engineering changes (vision-specific)
+      - Version control integration code
+      - Track vision adapter versions
+      
+      OVERSIGHT MECHANISMS:
+      - Define review frequency for vision model performance
+      - Establish escalation procedures for vision-related incidents
+      - Implement usage auditing and logging (including image inputs)
+      - Create reporting structure for AI governance board
+      - Special review for facial identification incidents
+      
+      IMAGE DATA GOVERNANCE:
+      - Image retention and deletion policies
+      - Consent management for processing images with faces
+      - PII handling in image inputs
+      - Image data security requirements
+      - Third-party image processing agreements
+      
+      DOCUMENTATION REQUIREMENTS:
+      - Maintain this model card (update as new information emerges)
+      - Document deployment architecture (including image pipeline)
+      - Record evaluation results and decisions
+      - Track incident history and mitigations (vision-specific)
+      - Document facial identification testing results
+
+  # MAP: Context and risk identification
+  map:
+    context_considerations: |
+      Risk context assessment:
+      
+      USE CASE CONTEXT:
+      - Who: End users, internal staff, external customers?
+      - What: Vision task description, criticality, impact scope
+      - Where: Geographic deployment, regulatory jurisdiction
+      - When: Real-time, batch, on-demand?
+      - Why: Business justification, alternatives considered
+      - What images: Types of images (photos, documents, medical, etc.)
+      
+      IMAGE DATA SENSITIVITY:
+      - Public images: Lower risk profile
+      - Personal photos: Privacy concerns, faces
+      - Documents: PII, confidential information, financial data
+      - Medical images: HIPAA compliance, patient privacy
+      - Identity documents: Highly sensitive, BIPA compliance
+      - Children in images: Enhanced child safety requirements
+      
+      STAKEHOLDER IMPACT:
+      - Direct users: Immediate impact of visual errors
+      - People in images: Privacy, bias, identification risks
+      - Indirect affected parties: Broader societal impact
+      - Protected groups: Fairness and bias considerations in visual interpretations
+      - Vulnerable populations: Enhanced protection needed
+      
+      REGULATORY LANDSCAPE (VISION-SPECIFIC):
+      - GDPR (EU): Image data protection, facial data as biometric
+      - BIPA (Illinois, US): Biometric data regulation
+      - AI Act (EU): Risk-based compliance for vision systems
+      - HIPAA (US): Medical image restrictions
+      - COPPA (US): Children's image privacy
+      - State privacy laws: California, Virginia, etc.
+      - Industry-specific: Sector regulations
+
+    risk_categories: 
+      - "Visual accuracy risk: Hallucination, misinterpretation, missed details"
+      - "Safety risk: Harmful descriptions, NSFW content, misuse for surveillance"
+      - "Security risk: Image-based prompt injection, steganographic attacks, adversarial images"
+      - "Privacy risk: Facial identification, PII extraction from images, image memorization"
+      - "Bias risk: Demographic visual performance gaps, stereotype perpetuation in descriptions"
+      - "Explainability risk: Inability to justify visual interpretations, black-box vision reasoning"
+      - "Operational risk: Downtime, image processing failures, version instability"
+      - "Legal risk: License compliance, biometric regulations (BIPA), liability for visual errors"
+      - "Reputational risk: Public incidents involving inappropriate image processing, trust erosion"
+      - "Facial identification risk: Unintended identification despite mitigations"
+
+  # MEASURE: Metrics and monitoring
+  measure:
+    suggested_metrics: |
+      Operational metrics:
+      
+      VISION PERFORMANCE METRICS:
+      - Visual accuracy: Task-specific error rates (measure against ground truth images)
+      - Visual hallucination rate: Incorrect descriptions per total descriptions
+      - OCR accuracy: Text extraction correctness
+      - Document understanding: Chart/diagram interpretation accuracy
+      - Latency: Time to first token with images (TTFT), end-to-end response time
+      - Throughput: Requests per second with images, images processed per hour
+      - Availability: Uptime percentage, mean time between failures
+      - Image size/format handling: Success rates by image characteristics
+      
+      QUALITY METRICS:
+      - Visual consistency: Variation across multiple descriptions of same image
+      - User satisfaction: Feedback scores for vision tasks
+      - Task completion rate: Successful vision task execution percentage
+      - OCR error rate: Character/word error rate
+      - Multi-image handling: Performance with multiple images
+      
+      SAFETY METRICS (VISION-SPECIFIC):
+      - Inappropriate description rate: NSFW or harmful outputs per total outputs
+      - Facial identification attempts: Detection and blocking rate
+      - Image-based attack attempts: Prompt injection, adversarial detection rate
+      - Content filter effectiveness: False positive/negative rates for images
+      - Incident frequency: Vision-related safety escalations per time period
+      - Child safety: Flagging rate for images containing children
+      
+      FAIRNESS METRICS (VISION-SPECIFIC):
+      - Demographic visual performance gaps: Accuracy across protected attributes in images
+      - Stereotype rate: Biased descriptions per total descriptions
+      - Skin tone bias: Description quality variance across skin tones
+      - Gender bias: Description bias in person descriptions
+      - Cultural bias: Scene interpretation variance across cultures
+      - OCR accuracy by language: Performance across scripts
+      
+      PRIVACY METRICS (VISION-SPECIFIC):
+      - Facial detection rate: Faces identified in images
+      - PII extraction rate: PII found in document images
+      - Facial identification attempts: Despite mitigations
+      - Image retention compliance: Adherence to deletion policies
+      
+      OPERATIONAL METRICS:
+      - Error rate: Technical failures per requests
+      - API response codes: Distribution of success/failure codes
+      - Resource utilization: GPU/CPU/memory usage (higher for vision)
+      - Image processing failures: Upload, format, size errors
+      - Cost per request: Infrastructure and API costs (higher for vision)
+      
+      COMPLIANCE METRICS:
+      - Policy violations: Usage outside approved vision use cases
+      - Image consent compliance: Processing images without proper consent
+      - Audit trail completeness: Logging coverage percentage (including images)
+      - SLA adherence: Meeting defined service levels for vision tasks
+      - Biometric regulation compliance: BIPA, GDPR biometric provisions
+      
+      MEASUREMENT METHODS:
+      - Automated testing: Continuous evaluation on vision test sets
+      - User feedback: Ratings, reports, surveys on vision quality
+      - Manual review: Sample-based quality audits of image descriptions
+      - Logging analysis: Automated pattern detection in vision outputs
+      - Bias audits: Regular testing with diverse image sets
+      
+      THRESHOLDS:
+      - Define acceptable ranges for each metric
+      - Establish alerting for threshold breaches
+      - Create escalation procedures for critical vision issues
+      - Special thresholds for facial identification incidents
+
+  # MANAGE: Risk controls and responses
+  manage:
+    risk_management_considerations: |
+      Risk management framework:
+      
+      TECHNICAL CONTROLS:
+      
+      Input controls (Vision-specific):
+      - Image validation and sanitization
+      - Image format and size validation
+      - NSFW image filtering (pre-processing)
+      - Facial detection and optional blurring
+      - Image-based prompt injection detection
+      - Rate limiting per user/API key (images counted)
+      - PII detection in images (OCR-based)
+      - Prohibited content detection (violence, gore, etc.)
+      
+      Input controls (Text):
+      - Input validation and sanitization
+      - Text prompt injection detection
+      - Content filtering (pre-processing)
+      
+      Output controls (Vision outputs):
+      - Description content filtering (post-processing)
+      - Fact-checking for critical vision applications
+      - Output validation against business rules
+      - Harmful description detection and blocking
+      - PII redaction in extracted text
+      - Stereotype detection in descriptions
+      
+      Monitoring controls (Vision-specific):
+      - Real-time vision safety monitoring
+      - Anomaly detection for unusual image patterns
+      - Facial identification attempt detection
+      - Visual performance degradation alerting
+      - Security event logging and alerting (image attacks)
+      - Audit trail generation (including image metadata)
+      
+      Infrastructure controls:
+      - Access controls and authentication
+      - Network segmentation
+      - Encryption in transit and at rest (images + text)
+      - Image storage security
+      - Backup and disaster recovery
+      - Version control and rollback capability
+      
+      PROCESS CONTROLS:
+      
+      Human oversight (Vision-specific):
+      - Human-in-the-loop for high-stakes vision decisions
+      - Review workflows for sensitive image outputs
+      - Escalation procedures for edge cases (facial identification, inappropriate content)
+      - Expert review for domain-critical vision applications (medical, legal, etc.)
+      
+      Quality assurance (Vision):
+      - Regular visual accuracy testing
+      - Bias auditing with diverse image sets
+      - Safety testing with adversarial images
+      - OCR accuracy validation
+      - User acceptance testing with representative images
+      
+      Change management:
+      - Controlled model updates
+      - Testing before production deployment (including vision tests)
+      - Gradual rollout procedures
+      - Rollback plans
+      
+      Image data management:
+      - Image retention policies (automatic deletion after processing)
+      - Consent management for images with faces
+      - PII handling in images
+      - Secure image storage and access controls
+      
+      ORGANIZATIONAL CONTROLS:
+      
+      Training (Vision-specific):
+      - User training on vision model capabilities and limitations
+      - Developer training on secure vision integration
+      - Incident responder training for vision-specific issues
+      - Privacy training for handling image inputs
+      
+      Policies (Vision-specific):
+      - Acceptable use policy (vision-specific provisions)
+      - Image input policy (prohibited content, consent requirements)
+      - Facial data handling policy
+      - Data handling policy (image retention, deletion)
+      - Incident response policy (vision-specific procedures)
+      - Model governance policy
+      
+      Documentation:
+      - Vision model behavior documentation
+      - Known visual limitations documentation
+      - Incident playbooks (vision-specific scenarios)
+      - User guidance and disclaimers (vision capabilities)
+      - Image privacy notices
+      
+      INCIDENT RESPONSE (VISION-SPECIFIC):
+      
+      Preparation:
+      - Define incident severity levels (vision-specific)
+      - Assign incident response roles (vision expert required)
+      - Create communication templates
+      - Establish escalation paths
+      - Special procedures for facial identification incidents
+      
+      Detection:
+      - Monitoring and alerting (vision-specific)
+      - User reporting mechanisms (inappropriate descriptions, privacy violations)
+      - Automated anomaly detection (image attacks)
+      
+      Response:
+      - Immediate mitigations (circuit breakers, content filters, feature flags)
+      - Root cause analysis (visual failure analysis)
+      - Corrective actions
+      - Communication to stakeholders (privacy breach notification if needed)
+      - Regulatory reporting (BIPA violations, etc.)
+      
+      Recovery:
+      - Service restoration procedures
+      - Data integrity verification (image pipeline)
+      - Post-incident review
+      
+      Lessons learned:
+      - Incident documentation (vision-specific)
+      - Control improvements
+      - Training updates
+      - Model card updates
+      
+      CONTINUOUS IMPROVEMENT:
+      
+      Regular reviews:
+      - Quarterly vision model performance review
+      - Annual risk assessment (vision-specific risks)
+      - Ongoing bias audits with diverse images
+      - Regular safety testing with adversarial images
+      - Facial identification mitigation testing
+      
+      Feedback loops:
+      - User feedback incorporation
+      - Incident analysis integration
+      - Benchmark tracking (vision benchmarks)
+      - Industry best practice adoption (vision models)
+      
+      Evolution:
+      - Model update evaluation (vision improvements)
+      - Alternative vision model assessment
+      - Capability expansion planning (new vision features)
+      - Risk control enhancement (vision-specific)
+
+# =============================================================================
+# REFERENCES & SOURCES
+# =============================================================================
+
+references:
+  vendor_documentation:
+    - url: "https://huggingface.co/meta-llama/Llama-3.2-11B-Vision-Instruct"
+      description: "Official Hugging Face model card with technical specifications, benchmarks, and usage instructions"
+    - url: "https://ai.meta.com/blog/llama-3-2-connect-2024-vision-edge-mobile-devices/"
+      description: "Meta AI blog post announcing Llama 3.2 family with vision capabilities overview"
+    - url: "https://github.com/meta-llama/llama-models/tree/main/models/llama3_2"
+      description: "Meta's GitHub repository with model card and evaluation details"
+    - url: "https://docs.api.nvidia.com/nim/reference/meta-llama-3_2-11b-vision-instruct"
+      description: "NVIDIA NIM documentation for Llama 3.2 11B Vision"
+
+  benchmarks:
+    - name: "VQAv2 (Visual Question Answering v2)"
+      url: "https://huggingface.co/meta-llama/Llama-3.2-11B-Vision-Instruct"
+      result: "75.2%"
+    - name: "MMMU (Multimodal Multi-discipline Understanding)"
+      url: "https://docsbot.ai/models/llama-3-2-11b-vision-instruct"
+      result: "50.7%"
+    - name: "DocVQA (Document Visual Question Answering)"
+      url: "https://docsbot.ai/models/llama-3-2-11b-vision-instruct"
+      result: "88.4% - beats Gemini 1.5 Flash 8B"
+    - name: "ChartQA (Chart Question Answering)"
+      url: "https://www.ibm.com/think/news/meta-llama-3-2-models"
+      result: "Beats Claude 3 Haiku and Claude 3 Sonnet"
+    - name: "AI2D (Science Diagram Understanding)"
+      url: "https://www.ibm.com/think/news/meta-llama-3-2-models"
+      result: "Beats Claude 3 Haiku and Claude 3 Sonnet"
+    - name: "MathVista (Visual Mathematical Reasoning)"
+      url: "https://www.ibm.com/think/news/meta-llama-3-2-models"
+      result: "Beats Claude 3 Haiku and Claude 3 Sonnet"
+
+  third_party_evaluations:
+    - source: "Artificial Analysis - Performance Benchmarking"
+      url: "https://artificialanalysis.ai/models/llama-3-2-instruct-11b-vision"
+      summary: "Intelligence Index: 16, Cost: $0.16 per 1M tokens (blended), Latency: 0.44s TTFT, Context: 130K tokens. Confirms competitive performance in 11B vision class."
+    - source: "IBM watsonx - Llama 3.2 Validation"
+      url: "https://www.ibm.com/think/news/meta-llama-3-2-models"
+      summary: "Llama 3.2 11B-Vision beats Gemini 1.5 Flash 8B on DocVQA, tops Claude 3 Haiku/Sonnet on AI2D, ChartQA, MathVista"
+    - source: "DataCamp - Llama 3.2 Analysis"
+      url: "https://www.datacamp.com/blog/llama-3-2"
+      summary: "Llama 3.2 vision models shine in chart and diagram understanding, outperforming Claude 3 Haiku in DocVQA (90.1) and AI2D (92.3 for 90B)"
+    - source: "Analytics Vidhya - Llama 3.2 Deep Dive"
+      url: "https://www.analyticsvidhya.com/blog/2024/09/llama-3-2-models/"
+      summary: "11B and 90B models integrate image encoder via cross-attention, using Llama 3.1 8B and 70B as backbones respectively"
+    - source: "Ori Cloud - Llama 3.2 vs Pixtral Comparison"
+      url: "https://blog.ori.co/how-to-run-llama3.2-on-a-cloud-gpu-with-transformers"
+      summary: "Llama 3.2 11B Vision comparable to Pixtral 12B, slightly better prompt adherence, more detailed responses"
+
+# =============================================================================
+# METADATA
+# =============================================================================
+
+metadata:
+  card_version: "1.0"
+  card_author: "Hatz.ai Evaluation Project"
+  card_creation_date: "2025-01-09"
+  last_updated: "2025-01-09"
+  
+  information_sources: |
+    Primary sources:
+    - Meta official model card (Hugging Face)
+    - Meta GitHub repository (llama-models)
+    - Meta AI blog announcements
+    - Official evaluation details documentation
+    
+    Third-party sources:
+    - Artificial Analysis benchmarking
+    - IBM watsonx validation
+    - Community research and analysis
+    - Independent performance testing
+    - Deployment platform documentation (NVIDIA, Oracle, AWS, Azure)
+    
+    Testing basis:
+    - Published vision benchmark results
+    - Third-party validation studies
+    - Community feedback and reports
+
+  completeness_assessment: |
+    Information completeness by section:
+    
+    COMPREHENSIVE (high confidence):
+    - Model architecture and specifications (vision adapter design)
+    - Context window and parameter count
+    - Published vision benchmark performance (VQAv2, MMMU, DocVQA, ChartQA, AI2D, MathVista)
+    - License terms and deployment options
+    - Multilingual capabilities (text-only)
+    - Performance characteristics (speed, latency)
+    - Vision training data quantity (6B image-text pairs)
+    
+    GOOD (moderate confidence):
+    - Safety testing approach (facial identification mitigation)
+    - Training methodology overview
+    - Intended vision use cases
+    - Known limitations from vendor
+    - Vision adapter architecture
+    
+    PARTIAL (limited confidence):
+    - Vision training data composition (not fully disclosed)
+    - Specific image datasets not enumerated
+    - RLHF methodology details for vision
+    - Bias mitigation specifics for visual interpretations
+    - Privacy protections for image inputs
+    - Fairness evaluation results across demographics in images
+    - Facial identification mitigation techniques
+    
+    CRITICAL GAPS:
+    - Specific vision dataset enumeration and sources
+    - Image sourcing and consent mechanisms
+    - Quantified visual hallucination rates
+    - Systematic fairness benchmarks across demographics in images
+    - Privacy evaluation (image memorization, extraction)
+    - Real-world vision safety incident data
+    - Facial identification false positive/negative rates
+    - OCR accuracy across languages/scripts
+    - Multi-image performance characteristics
+    
+    Confidence level: MODERATE
+    - Technical specifications well-documented
+    - Vision performance characteristics validated by third parties
+    - Vision training data transparency limited
+    - Safety/fairness testing for images not comprehensively disclosed
+    - Facial identification mitigation described but not quantified
+    
+    Recommended additional testing:
+    - Domain-specific visual accuracy evaluation
+    - Visual hallucination rate measurement
+    - Bias and fairness auditing with diverse images
+    - Privacy and facial identification testing
+    - Security vulnerability assessment (image attacks)
+    - OCR accuracy validation on target document types
+    - Multi-image performance validation
+    - Image quality sensitivity testing
+
+  change_log:
+    - date: "2025-01-09"
+      author: "Hatz.ai Evaluation Project"
+      changes: "Initial model card creation based on Meta documentation, Hugging Face model card, third-party benchmarks, and community evaluation reports for Llama 3.2 11B Vision Instruct"

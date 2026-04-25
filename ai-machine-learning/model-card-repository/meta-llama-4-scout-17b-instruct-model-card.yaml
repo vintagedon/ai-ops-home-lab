@@ -1,0 +1,627 @@
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+# Model card for Meta Llama 4 Scout 17B 16E Instruct
+# This card follows NIST AI RMF principles for trustworthiness assessment
+
+schema_version: "1.0.0"
+
+# =============================================================================
+# MODEL IDENTITY
+# =============================================================================
+
+model_identity:
+  name: "Llama 4 Scout 17B 16E Instruct"
+  vendor: "Meta (Facebook AI Research)"
+  model_family: "Llama 4"
+  version: "4-Scout-17B-16E-Instruct"
+  release_date: "2025-04-05"
+  model_type: "Multimodal Large Language Model - Mixture of Experts with Vision"
+
+  vendor_model_card_url: "https://huggingface.co/meta-llama/Llama-4-Scout-17B-16E-Instruct"
+
+  license: "Llama 4 Community License - Custom commercial license with MAU restrictions (700M MAU threshold)"
+  
+  deprecation_status: "Active - Current generation efficient multimodal MoE model"
+
+# =============================================================================
+# MODEL ARCHITECTURE & TECHNICAL SPECIFICATIONS
+# =============================================================================
+
+technical_specifications:
+  architecture:
+    base_architecture: "Mixture-of-Experts (MoE) Transformer with early fusion multimodality"
+    
+    parameter_count: "17B activated parameters from 16 experts (~109B total parameters)"
+    
+    context_window: "128,000 tokens (128K)"
+    
+    training_data_cutoff: "2024-08 (August 2024)"
+
+    architectural_details: |
+      - Mixture-of-Experts architecture with 16 expert networks
+      - 17B parameters activated per forward pass (sparse activation)
+      - Total parameter count ~108-109B across all experts
+      - Auto-regressive language model with optimized transformer architecture
+      - Early fusion approach for native multimodality (text + images)
+      - Supports up to 5 input images per query (tested range)
+      - Multi-round alignment: Supervised Fine-Tuning (SFT), Rejection Sampling (RS), Direct Preference Optimization (DPO)
+      - Multilingual capabilities across 12 officially supported languages (trained on 200+ languages)
+      - Native image understanding without separate vision encoder bolted on
+      - More efficient training than Maverick (fewer experts)
+      
+    quantization_support: |
+      - BF16 weights (native release format)
+      - On-the-fly int4 quantization supported (fits single H100 GPU)
+      - Minimal performance degradation with int4 quantization
+      - Multiple deployment options across cloud providers
+      
+  training_approach:
+    pretraining_summary: |
+      - Pre-trained on ~40 trillion tokens of multimodal data
+      - Mix of publicly available data, licensed data, and Meta product data
+      - Includes publicly shared posts from Instagram and Facebook
+      - Incorporates user interactions with Meta AI
+      - Multi-round post-training alignment (SFT → RS → DPO)
+      - Emphasis on reducing false refusals and improving tone
+      - System prompt steerability improvements over Llama 3
+      - Nearly 2x more training tokens than Maverick (40T vs 22T)
+      
+    compute_requirements:
+      training_compute: "5.0M GPU hours (H100-80GB, 700W TDP)"
+      training_emissions: "1,354 tons CO2eq location-based (0 tons market-based due to Meta's net-zero commitment)"
+      
+  multilingual_capabilities:
+    officially_supported_languages:
+      - "Arabic (ar)"
+      - "English (en)"
+      - "French (fr)"
+      - "German (de)"
+      - "Hindi (hi)"
+      - "Indonesian (id)"
+      - "Italian (it)"
+      - "Portuguese (pt)"
+      - "Spanish (es)"
+      - "Tagalog (tl)"
+      - "Thai (th)"
+      - "Vietnamese (vi)"
+    
+    additional_training_data: "Pre-training includes 200 total languages; developers may fine-tune for additional languages beyond the 12 supported with license compliance"
+
+# =============================================================================
+# PERFORMANCE CHARACTERISTICS
+# =============================================================================
+
+performance_characteristics:
+  benchmark_results:
+    # Pre-trained model benchmarks
+    general_knowledge_pretrained:
+      mmlu_5shot:
+        score: 79.6
+        metric: "macro_avg/acc_char"
+        notes: "Competitive with Llama 3.1 70B (79.3), trails 3.1 405B (85.2) and Maverick (85.5)"
+      
+      mmlu_pro_5shot:
+        score: 58.2
+        metric: "macro_avg/em"
+        notes: "Exceeds Llama 3.1 70B (53.8), trails 3.1 405B (61.6) and Maverick (62.9)"
+    
+    mathematical_reasoning_pretrained:
+      math_cot_4shot:
+        score: 50.3
+        metric: "em_maj1@1"
+        notes: "Significantly exceeds Llama 3.1 70B (41.6), trails 3.1 405B (53.5) and Maverick (61.2)"
+    
+    coding_pretrained:
+      mbpp_3shot:
+        score: 67.8
+        metric: "pass@1"
+        notes: "Slightly exceeds Llama 3.1 70B (66.4), trails 3.1 405B (74.4) and Maverick (77.6)"
+    
+    multilingual_pretrained:
+      tydiqa_1shot:
+        score: 31.5
+        metric: "average/f1"
+        notes: "Exceeds Llama 3.1 70B (29.9), trails 3.1 405B (34.3), competitive with Maverick (31.7)"
+    
+    vision_pretrained:
+      chartqa:
+        score: 83.4
+        metric: "relaxed_accuracy"
+        notes: "0-shot; trails Maverick (85.3)"
+      
+      docvqa:
+        score: 89.4
+        metric: "anls"
+        notes: "0-shot; trails Maverick (91.6)"
+    
+    # Instruction-tuned model benchmarks
+    image_reasoning_instruct:
+      mmmu:
+        score: 69.4
+        metric: "accuracy"
+        notes: "0-shot; trails Maverick (73.4) significantly"
+      
+      mmmu_pro:
+        score: 52.2
+        metric: "accuracy"
+        notes: "0-shot; average of Standard and Vision tasks; trails Maverick (59.6)"
+      
+      mathvista:
+        score: 70.7
+        metric: "accuracy"
+        notes: "0-shot; visual math reasoning; trails Maverick (73.7)"
+    
+    image_understanding_instruct:
+      chartqa_instruct:
+        score: 88.8
+        metric: "relaxed_accuracy"
+        notes: "0-shot; trails Maverick (90.0) marginally"
+      
+      docvqa_test_instruct:
+        score: 94.4
+        metric: "anls"
+        notes: "0-shot; matches Maverick performance (94.4)"
+    
+    coding_instruct:
+      livecodebench:
+        score: 32.8
+        metric: "pass@1"
+        notes: "0-shot; 10/01/2024-02/01/2025 window; competitive with Llama 3.3 70B (33.3), trails Maverick (43.4)"
+    
+    reasoning_knowledge_instruct:
+      mmlu_pro_instruct:
+        score: 74.3
+        metric: "macro_avg/acc"
+        notes: "0-shot; exceeds Llama 3.3 70B (68.9), trails Maverick (80.5)"
+      
+      gpqa_diamond:
+        score: 57.2
+        metric: "accuracy"
+        notes: "0-shot; exceeds 3.3 70B (50.5) and 3.1 405B (49.0), trails Maverick (69.8)"
+    
+    multilingual_instruct:
+      mgsm:
+        score: 90.6
+        metric: "average/em"
+        notes: "0-shot; competitive with Llama 3.3 70B (91.1) and 3.1 405B (91.6), trails Maverick (92.3)"
+    
+    long_context_instruct:
+      mtob_half_book:
+        score: "42.2 (eng→kgv) / 36.6 (kgv→eng)"
+        metric: "chrF"
+        notes: "Trails Maverick significantly: 54.0/46.4; demonstrates long-context translation capability"
+      
+      mtob_full_book:
+        score: "39.7 (eng→kgv) / 36.3 (kgv→eng)"
+        metric: "chrF"
+        notes: "Trails Maverick: 50.8/46.7; maintains quality at maximum 128K context"
+
+  latency_throughput:
+    time_to_first_token: "Missing from source"
+    output_speed: "Missing from source"
+    notes: |
+      - Performance optimized for Groq, Fireworks AI, SambaNova, Cerebras, Together, Novita, NScale inference platforms
+      - Int4 quantization enables single H100 GPU deployment
+      - MoE architecture provides efficiency benefits (17B active vs ~109B total)
+      - Sparse activation reduces computational load compared to dense models
+      - 16 experts (vs Maverick's 128) provides faster routing and lower latency
+
+  pricing:
+    input_token_cost: "Missing from source - varies by provider"
+    output_token_cost: "Missing from source - varies by provider"
+    blended_cost: "Missing from source - varies by provider"
+    
+    cost_context: |
+      - Pricing varies significantly across providers (Groq, Fireworks, Cerebras, etc.)
+      - MoE architecture provides cost efficiency through sparse activation
+      - 16 experts (vs Maverick's 128) offers better cost-performance tradeoff
+      - Self-hosting option available with open weights
+      - Int4 quantization reduces infrastructure costs
+      - License includes 700M MAU threshold (requires Meta approval above this)
+
+# =============================================================================
+# CAPABILITIES & USE CASES
+# =============================================================================
+
+capabilities_and_use_cases:
+  primary_strengths:
+    - "Multimodal reasoning - native text + image understanding with early fusion"
+    - "Balanced performance-efficiency tradeoff (16 experts vs Maverick's 128)"
+    - "Strong mathematical reasoning (MATH: 50.3, GPQA Diamond: 57.2)"
+    - "Competitive coding capabilities (MBPP: 67.8, LiveCodeBench: 32.8)"
+    - "Document understanding (DocVQA: 94.4, ChartQA: 88.8)"
+    - "Visual reasoning (MMMU: 69.4, MathVista: 70.7)"
+    - "128K context window for long-context applications"
+    - "12-language multilingual support (trained on 200+ languages)"
+    - "MoE efficiency with simpler routing (16 experts vs 128)"
+    - "More training data than Maverick (40T vs 22T tokens)"
+    - "Reduced false refusals and improved conversational tone vs Llama 3"
+    - "High system prompt steerability"
+  
+  primary_limitations:
+    - "Trails Maverick across all benchmarks (smaller expert pool)"
+    - "Tested for up to 5 input images - performance beyond this unvalidated"
+    - "First-generation multimodal capabilities for Llama family"
+    - "Training data includes Meta product data (Instagram/Facebook posts, Meta AI interactions)"
+    - "700M MAU license restriction requires Meta approval for very large deployments"
+    - "August 2024 knowledge cutoff - 8 months behind current date"
+    - "Static model - no continuous updates planned"
+    - "16 experts limit capacity vs Maverick's 128 experts"
+  
+  recommended_use_cases:
+    - name: "Cost-efficient multimodal applications"
+      rationale: "16 experts provide better cost-performance tradeoff than Maverick for budget-conscious deployments; MMMU 69.4, DocVQA 94.4"
+      
+    - name: "Visual question answering at scale"
+      rationale: "MMMU 69.4, MathVista 70.7, DocVQA 94.4 demonstrate solid multimodal reasoning; lower inference cost than Maverick"
+      
+    - name: "Document processing and understanding"
+      rationale: "DocVQA 94.4 (matches Maverick) and ChartQA 88.8 show excellent document comprehension at lower cost"
+      
+    - name: "Code generation for resource-constrained scenarios"
+      rationale: "LiveCodeBench 32.8 and MBPP 67.8 adequate for many code generation tasks; int4 quantization fits single H100"
+      
+    - name: "Multilingual conversational AI"
+      rationale: "12 officially supported languages with MGSM 90.6; suitable for global deployment"
+      
+    - name: "Long-context applications (moderate complexity)"
+      rationale: "128K context window with validated full-book translation (MTOB); trails Maverick but adequate for many use cases"
+      
+    - name: "Prototyping and development"
+      rationale: "Lower inference cost and simpler architecture ideal for experimentation before scaling to Maverick"
+      
+    - name: "High-throughput batch processing"
+      rationale: "Simpler MoE routing (16 experts) enables faster inference for batch workloads"
+  
+  discouraged_use_cases:
+    - name: "Maximum-accuracy critical applications"
+      rationale: "Trails Maverick across all benchmarks; use Maverick or larger models for highest accuracy requirements"
+      
+    - name: "Advanced mathematical reasoning"
+      rationale: "MATH 50.3 and GPQA 57.2 trail Maverick (61.2 and 69.8); use Maverick for expert-level math"
+      
+    - name: "Complex visual reasoning tasks"
+      rationale: "MMMU 69.4 vs Maverick 73.4; use Maverick for sophisticated vision applications"
+      
+    - name: "Applications requiring >5 images per query"
+      rationale: "Tested only up to 5 input images; behavior beyond this range unvalidated by Meta"
+      
+    - name: "Real-time video processing"
+      rationale: "Static image understanding only; no video or temporal reasoning capabilities documented"
+      
+    - name: "Deployments >700M monthly active users without Meta approval"
+      rationale: "License explicitly requires Meta permission above 700M MAU threshold"
+      
+    - name: "Applications requiring post-August 2024 knowledge"
+      rationale: "Knowledge cutoff is August 2024; no mechanism for continuous updates"
+      
+    - name: "Resource-constrained edge deployment"
+      rationale: "17B active parameters still too large for mobile/edge; use Llama 3.2 1B/3B instead"
+
+  modality_support:
+    text_input: true
+    text_output: true
+    image_input: true
+    image_output: false
+    audio_input: false
+    audio_output: false
+    video_input: false
+    
+    modality_notes: "Natively multimodal with early fusion for text + images; supports up to 5 input images; image output not supported"
+
+# =============================================================================
+# TRUST CHARACTERISTICS (NIST AI RMF)
+# =============================================================================
+
+trust_characteristics:
+  safety:
+    evaluations_conducted:
+      - "Recurring red teaming exercises with subject-matter experts"
+      - "CBRNE (Chemical, Biological, Radiological, Nuclear, Explosive) risk assessment"
+      - "Child Safety risk assessment with expert teams"
+      - "Cyber attack enablement evaluation"
+      - "Adversarial evaluation datasets for common use cases (chatbot, visual QA)"
+      - "Multi-round safety fine-tuning with diverse data sources"
+      - "System-level evaluation with Llama Guard 3 for input/output filtering"
+      - "Expanded child safety benchmarks for multi-image and multilingual contexts"
+    
+    known_risks:
+      - "MoE architecture may introduce unpredictable failure modes not present in dense models"
+      - "First-generation multimodal capabilities may have unidentified vision-related risks"
+      - "Training on Meta product data introduces potential for platform-specific biases"
+      - "Cyber evaluation found model does NOT enable catastrophic cyber outcomes"
+      - "False refusal reduction increases risk of borderline content approval"
+      - "16 expert capacity lower than Maverick but still presents attack surface"
+      - "Lower capability than Maverick may increase unpredictable failures"
+    
+    mitigation_strategies:
+      - "Llama Guard 3 for input prompt and output response filtering"
+      - "Prompt Guard for jailbreak and prompt injection detection"
+      - "Code Shield for malicious code detection"
+      - "System prompts to guide tone and reduce templated/preachy language"
+      - "Multi-round alignment (SFT, RS, DPO) with emphasis on borderline prompts"
+      - "Reference implementations include safeguards by default"
+      - "Community-driven safety improvements through GitHub contributions"
+  
+  fairness_and_bias:
+    bias_evaluations: |
+      - Training data includes Meta product data (Instagram/Facebook posts, Meta AI interactions)
+      - Potential for platform-specific biases from Meta's user base demographics
+      - Multilingual testing across 12 languages (MGSM 90.6)
+      - Red teaming includes multilingual content specialists
+      - Missing from source: comprehensive demographic fairness benchmarks, toxicity scores
+      - MoE architecture may amplify biases if experts specialize on biased data subsets
+      - 40T token training (vs Maverick's 22T) increases potential bias exposure
+    
+    known_biases: |
+      - Meta product data may reflect platform-specific demographic skews
+      - Training on publicly shared posts may over-represent certain viewpoints
+      - Vision capabilities may inherit biases from image-text training data
+      - Insufficient documentation on systematic bias testing
+  
+  transparency:
+    model_transparency: |
+      - Open weights under Llama 4 Community License
+      - Architecture details disclosed (MoE with 16 experts, 17B active)
+      - Training methodology documented (pre-training, alignment approach)
+      - Comprehensive benchmark scores published across multiple domains
+      - Training compute and emissions reported (5.0M GPU hours, 1,354 tons CO2eq)
+      - Quantization options clearly specified (BF16, int4)
+      
+    data_transparency: |
+      - Pre-trained on ~40 trillion tokens of multimodal data
+      - Data sources disclosed at high level: public data, licensed data, Meta products
+      - Includes Instagram/Facebook posts and Meta AI interactions (explicitly stated)
+      - August 2024 knowledge cutoff specified
+      - Missing from source: detailed dataset composition, data filtering criteria, consent mechanisms
+      - Meta Privacy Policy governs data collection and use
+    
+    limitations_disclosure: |
+      - Tested only up to 5 input images (explicitly noted)
+      - 700M MAU license restriction clearly stated
+      - Static model status disclosed (no continuous updates)
+      - Knowledge cutoff limitations noted
+      - Performance gaps vs Maverick acknowledged in benchmark tables
+      - Recommendations to fine-tune for languages beyond 12 supported
+  
+  accountability:
+    responsible_ai_practices: |
+      - Meta AI developer responsible for model
+      - Llama 4 Community License governs use
+      - Acceptable Use Policy prohibits harmful applications
+      - Three-pronged safety strategy: developer enablement, adversarial protection, community safeguards
+      - Active participation in AI Alliance, Partnership on AI, MLCommons
+      - Llama Impact Grants program for societal benefit applications
+      - Output reporting mechanism and bug bounty program available
+      
+    monitoring_mechanisms: |
+      - Developers responsible for deployment-specific safety testing
+      - Recommendation to build dedicated evaluation datasets for use cases
+      - Community contributions encouraged via GitHub
+      - Reference implementations demonstrate safety-by-default approach
+      - Missing from source: post-deployment monitoring requirements, incident response procedures
+  
+  security_and_privacy:
+    security_considerations: |
+      - Open weights enable security auditing by third parties
+      - MoE architecture increases complexity and potential attack surface
+      - 16 experts create fewer pathways than Maverick but still vulnerable
+      - Cyber evaluation found model does NOT enable catastrophic outcomes
+      - Code Shield available for malicious code detection
+      - Int4 quantization maintains security properties
+      
+    privacy_considerations: |
+      - Training data includes Meta product data (privacy implications unclear)
+      - Meta Privacy Policy governs data collection from user interactions
+      - 128K context window requires careful handling of sensitive documents
+      - Self-hosting option available for data sovereignty
+      - Missing from source: memorization testing, data extraction vulnerability assessment
+      - No built-in privacy mechanisms (e.g., differential privacy)
+    
+    vulnerabilities: |
+      - Prompt injection and jailbreaking risks not fully quantified
+      - Multimodal inputs create additional attack vectors (adversarial images)
+      - MoE routing decisions may be exploitable
+      - False refusal reduction may increase vulnerability to social engineering
+      - Prompt Guard recommended but effectiveness not comprehensively tested
+  
+  reliability:
+    consistency_and_accuracy: |
+      - MMLU Pro 74.3 indicates strong knowledge reliability (trails Maverick 80.5)
+      - GPQA Diamond 57.2 demonstrates above-average reasoning consistency
+      - DocVQA 94.4 shows high document understanding accuracy (matches Maverick)
+      - Long-context performance validated but trails Maverick (MTOB scores)
+      - MoE routing with 16 experts may be more consistent than Maverick's 128
+      - Missing from source: hallucination rates, cross-run consistency testing
+    
+    robustness: |
+      - Strong performance across diverse benchmarks (text, vision, code, math)
+      - Multilingual capabilities tested across 12 languages
+      - Long-context capability validated up to 128K tokens
+      - MoE architecture may exhibit brittle behavior at distribution boundaries
+      - First-generation multimodal may have untested edge cases
+      - 16 experts may provide more predictable behavior than Maverick's 128
+      - Missing from source: adversarial robustness, out-of-distribution performance, vision failure modes
+    
+    uncertainty_quantification: "Missing from source - no confidence scoring or uncertainty estimates provided"
+
+# =============================================================================
+# COMPARISON TO SIMILAR MODELS
+# =============================================================================
+
+competitive_landscape:
+  direct_competitors:
+    - model: "Llama 4 Maverick 17Bx128E"
+      comparison: |
+        - Scout: 16 experts vs Maverick: 128 experts
+        - Scout trained on ~40T tokens vs Maverick: ~22T tokens (more data, fewer experts)
+        - Maverick significantly outperforms Scout across ALL benchmarks (MMLU Pro: 80.5 vs 74.3, GPQA: 69.8 vs 57.2)
+        - Scout: 5.0M GPU hours vs Maverick: 2.38M GPU hours (Scout more expensive to train)
+        - Scout offers better cost-performance for inference (simpler routing)
+        - Use Scout for cost-efficiency, Maverick for maximum accuracy
+    
+    - model: "Llama 3.1 70B"
+      comparison: |
+        - Scout (17B active MoE) competitive with or exceeds 70B dense model on most benchmarks
+        - Scout: MMLU 79.6 vs 70B: 79.3 (on par)
+        - Scout: MATH 50.3 vs 70B: 41.6 (significantly better)
+        - Scout adds native multimodal capabilities (70B text-only)
+        - Scout more efficient for inference (MoE sparse activation)
+        - 70B has no vision; Scout has text + images
+    
+    - model: "Llama 3.1 405B"
+      comparison: |
+        - Scout (17B active) trails 405B on most benchmarks but holds its own
+        - Scout: MMLU 79.6 vs 405B: 85.2 (competitive considering 23x fewer parameters)
+        - Scout: MATH 50.3 vs 405B: 53.5 (close gap)
+        - Scout: GPQA Diamond 57.2 vs 405B: 49.0 (Scout better!)
+        - Scout adds native multimodal capabilities (405B text-only)
+        - Scout vastly more efficient (17B active vs 405B dense)
+    
+    - model: "Llama 3.3 70B"
+      comparison: |
+        - Scout significantly outperforms 3.3 70B on reasoning (MMLU Pro: 74.3 vs 68.9)
+        - Scout: GPQA 57.2 vs 3.3 70B: 50.5 (better reasoning)
+        - Scout: LiveCodeBench 32.8 vs 3.3 70B: 33.3 (competitive)
+        - Scout adds vision capabilities (3.3 70B text-only)
+        - Scout more efficient (17B active MoE vs 70B dense)
+    
+    - model: "Llama 3.2 11B/90B Vision"
+      comparison: |
+        - Scout represents next-generation MoE multimodal vs 3.2's dense multimodal
+        - Scout: 16 expert MoE architecture vs 3.2: dense architecture
+        - Scout: 128K context vs 3.2 11B/90B: 128K (comparable)
+        - Missing from source: direct benchmark comparisons
+        - Scout likely more efficient for inference (MoE vs dense)
+  
+  model_family_positioning: |
+    Llama 4 Scout is Meta's efficient multimodal MoE model, positioned as:
+    - Llama 3.2 1B/3B: Edge/mobile lightweight text-only
+    - Llama 3.2 11B/90B Vision: Dense multimodal (first-gen vision)
+    - Llama 3.1 8B/70B: Dense text-only models
+    - Llama 3.3 70B: Dense instruction-tuned text-only
+    - Llama 3.1 405B: Massive dense text-only flagship
+    - Llama 4 Scout 17Bx16E: Efficient MoE multimodal (16 experts) ← CURRENT MODEL
+    - Llama 4 Maverick 17Bx128E: Advanced MoE multimodal flagship (128 experts)
+    
+    Scout offers best cost-performance balance in Llama 4 family; use Maverick when maximum accuracy required.
+
+# =============================================================================
+# DEPLOYMENT CONSIDERATIONS
+# =============================================================================
+
+deployment_guidance:
+  recommended_platforms:
+    - "Groq (live inference provider)"
+    - "Fireworks AI (live inference provider)"
+    - "SambaNova (error status)"
+    - "Cerebras (live inference provider)"
+    - "Together (live inference provider)"
+    - "Novita (live inference provider)"
+    - "NScale (live inference provider)"
+    - "Amazon Bedrock and SageMaker"
+    - "NVIDIA NIM (TensorRT-LLM acceleration)"
+    - "Self-hosted on H100 GPUs (int4 fits single GPU)"
+  
+  optimization_options:
+    - "BF16 native weights for maximum quality"
+    - "On-the-fly int4 quantization (fits single H100 GPU, minimal quality loss)"
+    - "TensorRT-LLM optimization for NVIDIA infrastructure"
+    - "Transformers v4.51.0+ with flex_attention support"
+  
+  integration_considerations: |
+    - Pair with Llama Guard 3 for input/output safety filtering
+    - Use Prompt Guard for jailbreak/injection detection
+    - Deploy Code Shield if code generation is primary use case
+    - System prompts critical for tone and behavior control
+    - Requires transformers v4.51.0 or higher
+    - Int4 quantization recommended for cost-performance balance
+    - 128K context requires ~80-90GB+ VRAM in BF16, less with quantization
+    - Up to 5 images per query validated; beyond this requires custom testing
+    - Multi-image processing increases memory and latency requirements
+    - 16 experts provide simpler routing and faster inference vs Maverick
+  
+  fine_tuning_guidance: |
+    - Pre-trained base model available for custom fine-tuning
+    - Fine-tune for languages beyond 12 supported (trained on 200+ languages)
+    - Custom safety tuning recommended for specific use cases
+    - Developers responsible for safety of fine-tuned deployments
+    - MLCommons Proof of Concept evaluations recommended
+    - Llama Agentic System reference implementation available
+    - Community contributions via GitHub encouraged
+
+# =============================================================================
+# ADDITIONAL CONTEXT
+# =============================================================================
+
+additional_information:
+  related_resources:
+    - "Llama Guard 3 for safety filtering"
+    - "Prompt Guard for jailbreak detection"
+    - "Code Shield for malicious code detection"
+    - "Llama Agentic System reference implementation"
+    - "Llama Stack Distribution for production infrastructure"
+    - "Llama Impact Grants program for societal benefit applications"
+    - "GitHub repository: https://github.com/meta-llama/llama-models"
+    - "Developer Use Guide: AI Protections"
+  
+  model_card_metadata:
+    card_version: "1.0.0"
+    last_updated: "2025-01-09"
+    card_author: "Hatz.ai Evaluation Project"
+    
+  data_quality_assessment: |
+    COMPLETE DATA:
+    - Technical specifications (MoE architecture, 16 experts, 17B active parameters)
+    - Comprehensive benchmark scores across text, vision, code, math, multilingual
+    - Training methodology (40T tokens, alignment approach, compute requirements)
+    - License terms (Llama 4 Community License with 700M MAU threshold)
+    - Multimodal capabilities (text + image input, up to 5 images)
+    - 12 officially supported languages + 200 training languages
+    - Deployment options (BF16, int4 quantization)
+    - Safety evaluation approach (red teaming, CBRNE, child safety, cyber)
+    - Direct comparison benchmarks vs Maverick and Llama 3.x models
+    
+    PARTIAL DATA:
+    - Training data composition (high-level sources disclosed, details missing)
+    - Vision capability boundaries (up to 5 images tested, beyond this unclear)
+    - MoE routing behavior and expert specialization patterns
+    - Hallucination rates (not quantified)
+    - Latency and throughput characteristics (provider-dependent)
+    
+    CRITICAL GAPS:
+    - Detailed training dataset composition and data quality controls
+    - Pricing information (varies by provider, no standardized reference)
+    - Comprehensive fairness and demographic bias testing
+    - Vision-specific failure modes and adversarial robustness
+    - MoE routing vulnerabilities and expert manipulation risks
+    - Long-term reliability and consistency testing
+    - Privacy evaluation (memorization, extraction attacks)
+    - Comparative benchmarks against GPT-4o, Gemini 2.0, Claude 3.5
+    
+    Confidence level: HIGH
+    - Core technical specifications extremely well-documented by Meta
+    - Benchmark scores comprehensive and validated across multiple domains
+    - Training compute and emissions transparently reported
+    - Open weights enable third-party validation
+    - Multimodal capabilities clearly scoped (text + images, up to 5)
+    - License terms unambiguous (700M MAU threshold, commercial use allowed)
+    - MoE architecture details disclosed (16 experts, 17B active)
+    - Direct comparison data vs Maverick available
+    - Critical gaps primarily in data transparency and fairness evaluation
+    
+    Recommended additional testing:
+    - Domain-specific accuracy evaluation (especially multimodal tasks)
+    - Hallucination rate measurement for vision + text reasoning
+    - Bias and fairness auditing across demographics and cultures
+    - Privacy testing (memorization, data extraction from Meta product data)
+    - Adversarial robustness for images (adversarial patches, perturbations)
+    - MoE routing analysis and expert specialization patterns
+    - Long-context quality degradation at 128K token limit
+    - Multi-image reasoning consistency (>5 images if needed)
+    - System-level safety validation with Llama Guard 3
+    - Cost-performance comparison vs Maverick in production workloads
+
+  change_log:
+    - date: "2025-01-09"
+      author: "Hatz.ai Evaluation Project"
+      changes: "Initial model card creation based on Meta documentation, Hugging Face model card, multiple provider docs, and official Llama 4 benchmarks with direct Maverick comparisons"

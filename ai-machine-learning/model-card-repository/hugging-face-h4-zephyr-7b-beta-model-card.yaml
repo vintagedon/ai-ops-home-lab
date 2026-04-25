@@ -1,0 +1,252 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Zephyr 7B Beta"
+  vendor: "Hugging Face H4 Team"
+  model_family: "Zephyr"
+  version: "7B Beta"
+  release_date: "2023-10-16"
+  model_type: "Instruction-Tuned Alignment Model (Chat & Reasoning)"
+  vendor_model_card_url: "https://huggingface.co/HuggingFaceH4/zephyr-7b-beta"
+  license: "Apache 2.0"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Mistral 7B"
+    parameter_count: "7 billion"
+    context_window: "8 K tokens"
+    training_data_cutoff: "2023-09"
+    architectural_details: |
+      Zephyr 7B Beta is an open alignment-tuned conversational model developed by the Hugging Face H4 team.  
+      Built on the Mistral 7B base model, it was instruction-tuned using a hybrid of open-source datasets
+      (OpenOrca, UltraChat, ShareGPT, Alpaca, and Anthropic HH dialogues) to achieve strong chat and reasoning performance.  
+      The Beta version used Direct Preference Optimization (DPO) for alignment stability and reproducibility.
+
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "High"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ~0.10 s per 1K tokens (fp16 A100); ~0.05 s INT4 on RTX 4090.  
+      Optimized for fast inference and interactive assistant use.  
+    throughput: |
+      Excellent concurrency scaling under vLLM and text-generation-inference (TGI) runtimes.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • Robust open-alignment for chat and reasoning.  
+    • Balanced refusal and helpfulness profiles via DPO training.  
+    • Competitive performance with mid-scale commercial assistants.  
+  benchmark_performance: |
+    - MT-Bench: 7.1  
+    - MMLU: 70.3  
+    - GSM8K: 74.7  
+    - ARC-C: 71.2  
+    - TruthfulQA: 63.9  
+    (Hugging Face H4 evaluation, Oct 2023)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: strong
+    image_generation: false
+    additional_capabilities: ["instruction_following", "dialogue_reasoning", "safe_chat", "summarization"]
+  known_limitations:
+    vendor_disclosed: |
+      English-only; limited generalization in non-Western contexts.  
+      May over-refuse neutral content.  
+    common_failure_modes: |
+      Slight verbosity and safety overfitting in creative tasks.  
+    unsuitable_use_cases: |
+      High factual accuracy demands, code generation, or legal QA.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on ≈3T tokens of open and synthetic instruction datasets (OpenOrca, UltraChat, ShareGPT),
+    supplemented by filtered Anthropic HH alignment data.  
+    Post-training via Direct Preference Optimization (DPO) to refine helpfulness, harmlessness, and honesty.
+  training_methodology: |
+    SFT → DPO alignment → safety-tuning pipeline; no reinforcement learning.  
+    Preference pairs curated from human feedback and AI-generated comparisons.  
+  data_privacy_considerations: |
+    All data publicly available or synthetic; PII scrubbed from source datasets.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Open conversational and reasoning research; baseline for alignment studies.  
+    Ideal for educational, research, and assistant prototype applications.  
+  suitable_domains: ["education", "research", "AI_alignment", "chatbots"]
+  out_of_scope_use: |
+    Regulated industries, sensitive data handling, or factual authority use.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Stable conversational alignment and moderate reasoning fidelity.  
+    public_evidence: |
+      Validated via Hugging Face H4 evaluations and open leaderboard.  
+    assessment_notes: |
+      Reliable mid-scale model for chat, instruction-following, and alignment analysis.
+  safe:
+    safety_measures: |
+      Preference optimization targeting helpfulness-harmlessness balance.  
+    known_safety_issues: |
+      Over-safety bias can suppress benign responses.  
+    assessment_notes: |
+      Suitable for safe open research contexts.
+  secure_and_resilient:
+    security_features: |
+      Telemetry-free weights; integrity verified on Hugging Face Hub.  
+    known_vulnerabilities: |
+      Standard prompt-injection and refusal circumvention.  
+    assessment_notes: |
+      Secure for on-prem or academic environments.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Datasets, scripts, and preference data openly released for replication.  
+    assessment_notes: |
+      Exemplary transparency and open governance for an alignment model.
+  explainable_and_interpretable:
+    explainability_features: |
+      Compatible with interpretability tooling; transparent preference functions.  
+    interpretability_limitations: |
+      No intrinsic reasoning trace annotations.  
+    assessment_notes: |
+      Suitable for explainability and alignment pedagogy.
+  privacy_enhanced:
+    privacy_features: |
+      Synthetic and public datasets only; no telemetry.  
+    privacy_concerns: |
+      Minimal.  
+    assessment_notes: |
+      Fully compliant with open-model privacy norms.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Filtered datasets and alignment preference weighting for fairness.  
+    known_biases: |
+      English and Western cultural alignment bias.  
+    assessment_notes: |
+      Acceptable for open academic use.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • Alignment quality and refusal accuracy tests.  
+    • Bias and fairness audits.  
+    • Latency and quantization profiling.  
+    • Instruction-following stability under adversarial prompting.  
+  key_evaluation_questions: |
+    – Does alignment balance helpfulness and safety as intended?  
+    – Are refusal and reasoning behaviors stable under stress prompts?  
+    – Is dataset provenance fully verifiable?  
+  comparison_considerations: |
+    Outperforms OpenHermes 2.5 and StableLM 2;  
+    trails Tulu 2 DPO and Phi-3 Medium 14B in reasoning.  
+    One of the most influential 7B alignment baselines for 2023–2024.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Supports governance of open alignment and transparent preference data per NIST AI RMF "Govern."  
+  map:
+    context_considerations: |
+      Identify risks of over-alignment, hallucination, and bias in open instruction-tuned systems.  
+    risk_categories: ["alignment_drift", "bias", "hallucination"]
+  measure:
+    suggested_metrics: |
+      Alignment accuracy, refusal precision, and helpfulness bias scores.  
+  manage:
+    risk_management_considerations: |
+      Monitor drift in safety behaviors over iterative DPO retraining cycles.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/HuggingFaceH4/zephyr-7b-beta"
+    description: "Official Hugging Face Zephyr 7B Beta model card"
+  - url: "https://huggingface.co/blog/zephyr-7b"
+    description: "Zephyr release blog"
+  benchmarks:
+  - name: "MT-Bench"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "7.1"
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "70.3"
+  third_party_evaluations:
+  - source: "Hugging Face Open LLM Leaderboard (2023)"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    summary: "Zephyr 7B Beta validated as open alignment leader among 7B-class models."
+  news_coverage:
+  - title: "Hugging Face releases Zephyr — an open alignment model rivaling ChatGPT"
+    url: "https://huggingface.co/blog/zephyr-7b"
+    date: "2023-10-16"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Hugging Face H4 documentation, Open LLM Leaderboard data, and community evaluations.  
+  completeness_assessment: |
+    High for transparency and alignment methodology; medium for cultural and multilingual fairness.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from Zephyr 7B Beta release and benchmark documentation."

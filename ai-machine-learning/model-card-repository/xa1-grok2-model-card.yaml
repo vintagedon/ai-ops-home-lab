@@ -1,0 +1,270 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Grok-2"
+  vendor: "xAI"
+  model_family: "Grok"
+  version: "2"
+  release_date: "2024-08-07"
+  model_type: "Frontier Conversational and Reasoning Model"
+  vendor_model_card_url: "https://x.ai/blog/grok-2"
+  license: "Commercial (xAI API and X Premium Integration)"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Dense Transformer (multimodal-enabled variant)"
+    parameter_count: "Undisclosed (estimated 250–350B)"
+    context_window: "128 K tokens (expandable to 256 K for enterprise endpoints)"
+    training_data_cutoff: "2024-05"
+    architectural_details: |
+      Grok-2 is xAI’s second-generation frontier-scale model, trained with multi-stage reinforcement 
+      and retrieval grounding.  
+      It incorporates an updated transformer architecture with long-context memory optimization, 
+      adaptive positional embeddings, and safety alignment influenced by open-weight research from LLaMA 3 
+      and Gemini 1.5 families.  
+      Grok-2 supports multimodal embeddings (text, code, limited image metadata) but is deployed text-first 
+      in production through X (Twitter) and xAI Cloud.
+  modalities:
+    supported_inputs: ["text", "structured_metadata"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "Medium"
+    cost_tier: "High (API / X Premium+)"
+    latency: |
+      Typical: 1.5–2.5 s per 1 K tokens under hosted inference.  
+      Enterprise API offers streaming mode and parallel context pipelines.
+    throughput: |
+      Designed for conversational workloads and large-context summarization in social and enterprise settings.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • Context-aware conversation and retrieval-grounded reasoning.  
+    • Integrates with live X platform data streams for factual synthesis.  
+    • Excels in summarizing threads, drafting content, and long-form reasoning.  
+    • Alignment tuned for wit, brevity, and factuality over creative elaboration.
+  benchmark_performance: |
+    - MMLU: 88.9  
+    - GSM8K: 93.4  
+    - HumanEval: 83.5  
+    - TruthfulQA: 90.1  
+    - ARC-C: 87.2  
+    (xAI internal and ARC 2024–2025 third-party tests)
+  special_capabilities:
+    tools_support: true
+    vision_support: limited
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["real_time_retrieval", "structured_reasoning", "social_data_summarization", "context_persistence"]
+  known_limitations:
+    vendor_disclosed: |
+      Image understanding limited to caption and metadata parsing; 
+      not a full multimodal model.  
+      Factual reliability depends on retrieval freshness and source credibility.  
+      Distinct personality tuning ("Grok style") may yield informal tone.
+    common_failure_modes: |
+      Occasional sarcasm or humor misinterpretation; factual drift when retrieval disabled.  
+      Long reasoning chains occasionally truncated under streaming mode.
+    unsuitable_use_cases: |
+      Regulatory, legal, or medical automation; environments requiring deterministic reasoning logs.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Mixed corpus including public web, open academic data, open-license code, and curated X/Twitter datasets.  
+    Fine-tuning integrates structured social graph and news corpora for temporal awareness.  
+    Synthetic reinforcement data used for reasoning depth and tone alignment.
+  training_methodology: |
+    Two-phase training: large-scale autoregressive pretraining followed by reinforcement 
+    with human feedback (RLHF) and "Retrieval-Grounded RL" for factual consistency.  
+    Alignment targeted for personality, humor, and correctness balance.
+  data_privacy_considerations: |
+    X/Twitter user data used only in aggregated, anonymized form.  
+    No personal messages or private data included in pretraining.  
+    Enterprise APIs provide isolation and retention control.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Real-time reasoning and conversation; summarization of public information streams;  
+    enterprise copilots and knowledge assistants integrated with X Cloud.  
+    Optimized for productivity, data synthesis, and educational applications.
+  suitable_domains: ["social_analytics", "content_summarization", "education", "enterprise_assistants", "RAG_systems"]
+  out_of_scope_use: |
+    Safety-critical decision systems, compliance workflows, or personal data processing without consent.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Consistent factual recall and temporal reasoning; enhanced grounding from live data integration.  
+      Accuracy comparable to Claude 3 Sonnet and GPT-4 Turbo.
+    public_evidence: |
+      Independent ARC 2025 benchmarks confirm competitive reasoning and low hallucination rates.  
+      Community testing verifies stability across 100K-token contexts.
+    assessment_notes: |
+      Highly reliable for conversational and reasoning tasks; requires verified retrieval for precision work.
+  safe:
+    safety_measures: |
+      Reinforcement alignment and safety filters; dynamic redaction of PII and sensitive content.  
+      Humor and sarcasm guardrails tuned to avoid targeted or offensive responses.
+    known_safety_issues: |
+      Informal tone may misfire in professional or neutral contexts.  
+      Over-refusal on sensitive political topics in some locales.
+    assessment_notes: |
+      Generally safe; moderation controls accessible via xAI API.
+  secure_and_resilient:
+    security_features: |
+      Encrypted inference endpoints; regional isolation via X Cloud infrastructure.  
+      Live retrieval sandboxing prevents data leakage across sessions.
+    known_vulnerabilities: |
+      Prompt injection and retrieval poisoning possible if third-party connectors misconfigured.  
+    assessment_notes: |
+      Meets enterprise cloud security norms; additional validation required for external RAG connectors.
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      System card public; weights proprietary.  
+      Retrieval logs and moderation events auditable for enterprise users.
+    assessment_notes: |
+      Moderate transparency—sufficient for platform compliance reviews.
+  explainable_and_interpretable:
+    explainability_features: |
+      Optional "reasoning summary" metadata on API responses; context chain logging in enterprise mode.  
+    interpretability_limitations: |
+      Humor and tone decisions not explicitly explainable; internal state opaque.  
+    assessment_notes: |
+      Partial explainability acceptable for production conversational use.
+  privacy_enhanced:
+    privacy_features: |
+      Differential privacy layers on social-data embeddings; encryption at rest and in transit.  
+      Data residency options for enterprise customers.
+    privacy_concerns: |
+      Public-data retrieval may surface sensitive information if sources unfiltered.  
+    assessment_notes: |
+      Adequate privacy protections when paired with X data governance policies.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Multilingual fairness tuning and tone balancing across demographics;  
+      trained with bias-reduction RLHF datasets.  
+    known_biases: |
+      Mild bias toward English, Western humor, and high-activity online discourse.  
+    assessment_notes: |
+      Acceptable fairness; periodic audits in progress.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Temporal reasoning and retrieval accuracy validation  
+    - Bias and tone appropriateness assessment across domains  
+    - Latency and throughput measurement under streaming mode  
+    - Safety and moderation audit in open chat environments
+  key_evaluation_questions: |
+    - Does retrieval governance align with your organization’s policies?  
+    - Is tone calibration appropriate for your domain?  
+    - Are data privacy constraints compatible with API mode?
+  comparison_considerations: |
+    - Outperforms Claude 3 Haiku and Gemini 1.5 Flash in conversational context handling.  
+      Trails GPT-4o and Claude 4 Opus in deep reasoning.  
+      Distinct personality and humor tuning differentiate it from peers.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Establish retrieval and tone-alignment governance under AI usage policy.  
+      Document how live data access is audited and logged.
+  map:
+    context_considerations: |
+      Evaluate exposure to unverified retrieval content and tone-bias risks.
+    risk_categories: ["hallucination", "bias", "retrieval_poisoning", "tone_misfire"]
+  measure:
+    suggested_metrics: |
+      Retrieval accuracy, bias score, hallucination frequency, moderation trigger rate.
+  manage:
+    risk_management_considerations: |
+      Enable live-data filters, monitor moderation triggers, and enforce tone-use guidelines.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://x.ai/blog/grok-2"
+    description: "Official Grok-2 announcement and system overview"
+  - url: "https://api.x.ai/docs"
+    description: "xAI API developer documentation"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://arxiv.org/abs/2408.01722"
+    result: "88.9"
+  - name: "TruthfulQA"
+    url: "https://arxiv.org/abs/2408.01722"
+    result: "90.1"
+  third_party_evaluations:
+  - source: "ARC Conversational Benchmark (2025)"
+    url: "https://arxiv.org/abs/2502.03111"
+    summary: "Grok-2 achieves competitive reasoning accuracy with superior retrieval consistency."
+  news_coverage:
+  - title: "xAI launches Grok-2 — conversational AI integrated with X data streams"
+    url: "https://x.ai/blog/grok-2"
+    date: "2024-08-07"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    xAI Grok-2 documentation, ARC and community benchmarks, and public technical analyses.
+  completeness_assessment: |
+    High for governance and safety; medium for architectural disclosure and dataset transparency.
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from Grok-2 release and benchmark data."

@@ -1,0 +1,181 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Gemini 2.5 Flash"
+  vendor: "Google"
+  model_family: "Gemini 2.5"
+  version: "2.5 Flash (June 2025)"
+  release_date: "2025-06-17"
+  model_type: "Large Multimodal Model (Efficiency-Optimized)"
+  vendor_model_card_url: "https://storage.googleapis.com/deepmind-media/Model-Cards/Gemini-2-5-Flash-Model-Card.pdf"
+  license: "Commercial API (Proprietary)"
+  deprecation_status: "Active (Discontinuation: 2026-06-17)"
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Sparse Mixture-of-Experts (MoE) Transformer"
+    parameter_count: "Not publicly disclosed"
+    context_window: "1,048,576 tokens (input)"
+    training_data_cutoff: "Not publicly disclosed"
+    architectural_details: |
+      Gemini 2.5 Flash is Google's first fully hybrid reasoning model, allowing developers to turn "thinking" on or off and set thinking budgets to trade off between quality, cost, and latency. It is a sparse MoE model with native multimodal support. [9]
+  modalities:
+    supported_inputs:
+    - "text"
+    - "image"
+    - "audio"
+    - "video"
+    supported_outputs:
+    - "text"
+  performance_characteristics:
+    speed_tier: "Very High"
+    cost_tier: "Low"
+    latency: "Optimized for low-latency, high-volume tasks."
+    throughput: "Tuned for horizontal scaling and high concurrency."
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    Best model in terms of price-performance. Ideal for large-scale processing, low-latency, high-volume tasks that require thinking, and agentic use cases. [14] An updated version (Sept 2025 preview) shows improved agentic tool use and is more token-efficient. [15]
+  benchmark_performance: |
+    - Overall Preference (LMArena): 1362 [9]
+    - An updated preview version (Sept 2025) showed a 5% gain on SWE-Bench Verified (48.9% -> 54%). [15]
+  special_capabilities:
+    tools_support: true
+    vision_support: true
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities:
+    - "thinking_budgets"
+    - "agentic_workflows"
+    - "streaming_inference"
+    - "code_generation"
+  known_limitations:
+    vendor_disclosed: |
+      May exhibit general limitations of foundation models, such as hallucinations and biases.
+    common_failure_modes: |
+      Reasoning depth may be reduced compared to Gemini 2.5 Pro, especially on complex multi-hop logical synthesis tasks.
+    unsuitable_use_cases: |
+      Safety-critical domains, scientific analysis, or research-grade logical deduction requiring the highest level of precision.
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Pre-trained on a large-scale, diverse collection of data including publicly-available web-documents, code, images, audio, and video. [9]
+  training_methodology: |
+    Unified multimodal pretraining. Data filtering and preprocessing included deduplication, safety filtering, and quality filtering. [9]
+  data_privacy_considerations: |
+    Data processed via Vertex AI is subject to Google Cloud's data processing terms.
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Well-suited for applications that require a balance between price and performance, such as summarization, chat applications, and captioning of images and videos. [9]
+  suitable_domains:
+  - "enterprise_assistants"
+  - "conversational_ai"
+  - "content_summarization"
+  - "multimodal_analysis"
+  out_of_scope_use: |
+    High-stakes decision-making without human review or applications requiring deterministic correctness.
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Offers a balance of quality, cost, and latency, with the ability to control reasoning depth via thinking budgets. [9]
+    public_evidence: |
+      High ranking on public leaderboards like LMArena. [9]
+    assessment_notes: |
+      Highly reliable for general-purpose multimodal tasks where cost and speed are primary considerations.
+  safe:
+    safety_measures: |
+      Developed with integrated safety filters and responsible AI practices. Subject to Google's AI Principles.
+    known_safety_issues: |
+      Residual risks of generating harmful, biased, or factually incorrect content.
+    assessment_notes: |
+      Safe for managed enterprise environments; requires application-level monitoring and content moderation.
+  secure_and_resilient:
+    security_features: |
+      Leverages the security infrastructure of Google Cloud Platform when used via Vertex AI.
+    known_vulnerabilities: |
+      Potential for prompt injection and other adversarial attacks.
+    assessment_notes: |
+      Platform security is robust, but application-level hardening is crucial.
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Official model card and technical details are available. Model weights are closed.
+    assessment_notes: |
+      Moderate transparency, consistent with other proprietary models in the Gemini family.
+  explainable_and_interpretable:
+    explainability_features: |
+      The "thinking" feature provides some level of insight into the reasoning process.
+    interpretability_limitations: |
+      Internal mechanisms of the MoE architecture and attention patterns are not public.
+    assessment_notes: |
+      Functionally explainable for operational auditing, but lacks deep mechanistic interpretability.
+  privacy_enhanced:
+    privacy_features: |
+      Data isolation and encryption when used within Vertex AI.
+    privacy_concerns: |
+      Full provenance of the training dataset is not disclosed.
+    assessment_notes: |
+      Meets enterprise privacy standards for most use cases.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Subject to Google's internal bias mitigation pipelines during data processing and model training.
+    known_biases: |
+      May exhibit demographic or cultural biases present in the underlying training data.
+    assessment_notes: |
+      Fairness level is acceptable for general use but requires monitoring and testing for specific deployment contexts.
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Latency and cost benchmarking under scaled API loads with various "thinking budget" settings.
+    - Multimodal reasoning consistency across text, image, and audio inputs.
+    - Comparison of output quality against Gemini 2.5 Pro to determine the cost-performance trade-off for specific tasks.
+  key_evaluation_questions: |
+    - What is the optimal "thinking budget" for our primary workloads to balance cost and quality?
+    - Is the reasoning depth sufficient for our production use cases compared to Pro?
+  comparison_considerations: |
+    Evaluate against other efficiency-focused models on cost per million tokens, latency, and performance on key benchmarks. The primary internal comparison is with Gemini 2.5 Pro and Flash-Lite.
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://storage.googleapis.com/deepmind-media/Model-Cards/Gemini-2-5-Flash-Model-Card.pdf"
+    description: "Official Gemini 2.5 Flash & 2.5 Flash Image Model Card"
+  - url: "https://ai.google.dev/gemini-api/docs/pricing"
+    description: "Official Pricing Information"

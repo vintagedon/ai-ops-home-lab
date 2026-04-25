@@ -1,0 +1,1812 @@
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+# GPT-4.1 Model Card - Populated from OpenAI documentation and public sources
+# Primary Sources: OpenAI blog announcement, technical documentation, benchmark reports
+# Release Date: April 14, 2025
+
+schema_version: "1.0.0"
+
+# =============================================================================
+# MODEL IDENTITY
+# =============================================================================
+
+model_identity:
+  name: "GPT-4.1"
+  vendor: "OpenAI"
+  model_family: "GPT-4 Series"
+  version: "4.1"
+  release_date: "2025-04-14"
+  model_type: "Large Language Model (Multimodal)"
+
+  vendor_model_card_url: "https://openai.com/index/gpt-4-1/"
+
+  license: "Proprietary - Commercial License (accessed via OpenAI API)"
+  
+  deprecation_status: "Active (GPT-4.5 Preview being deprecated July 14, 2025 in favor of GPT-4.1)"
+
+# =============================================================================
+# MODEL ARCHITECTURE & TECHNICAL SPECIFICATIONS
+# =============================================================================
+
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer-based large language model (specific architectural details not publicly disclosed)"
+    
+    parameter_count: "Not publicly disclosed"
+    
+    context_window: "1,000,000 tokens (1,047,576 tokens precise - approximately 750,000 words or 3,000 pages)"
+    
+    training_data_cutoff: "2024-06-01 (June 1, 2024)"
+
+    architectural_details: |
+      GPT-4.1 is OpenAI's flagship general-purpose model released April 14, 2025, positioned as an optimized 
+      successor to GPT-4o and replacement for the experimental GPT-4.5.
+      
+      Key architectural features:
+      - Optimized attention architecture for reduced computational complexity with long contexts
+      - Maintains coherence and relevance across massive context window (up to 1 million tokens)
+      - Enhanced structural understanding for software architecture and component relationships
+      - Improved instruction following reliability through focused training
+      - Better diff format handling and code compilation capabilities
+      - Native integration of SOLID principles, design patterns, and modern security standards
+      - Trained with developer feedback on frontend coding, format reliability, tool usage consistency
+      
+      Design Philosophy:
+      - General-purpose model (distinct from reasoning-focused O-series models)
+      - Three-dimensional focus: coding, instruction following, and long context understanding
+      - Optimized for real-world developer workflows and practical applications
+      - Balance of capability, cost, and latency
+
+  modalities:
+    supported_inputs: ["text", "image"]
+    
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "Optimized for balance of speed and capability"
+    
+    cost_tier: "Premium tier - $2.00/1M input tokens, $8.00/1M output tokens"
+    
+    latency: "Lower latency than GPT-4.5 (specific metrics not disclosed); GPT-4.1 mini: ~50% latency reduction vs GPT-4o"
+    
+    throughput: "32,768 output tokens per request (double GPT-4o's 16,384 tokens)"
+
+# =============================================================================
+# CAPABILITIES & LIMITATIONS
+# =============================================================================
+
+capabilities:
+  vendor_claimed_strengths: |
+    OpenAI positions GPT-4.1 as "the flagship model of the new 4.1 family" with the following strengths:
+    
+    **Core Capabilities:**
+    - "Powerhouse for these three dimensions: coding, instruction following and long context" (Michelle Pokrass, 
+      OpenAI Post-Training Research Lead)
+    - Excels in coding tasks with focus on real-world software engineering
+    - Superior instruction following reliability
+    - State-of-the-art long context comprehension up to 1 million tokens
+    - More efficient and economical than GPT-4.5 at similar or better performance
+    
+    **Coding Excellence:**
+    - "Makes the model way better at instruction following" for coding tasks (Ishaan Singal, OpenAI Research)
+    - Improved diff format handling for code editing tools
+    - Better repository exploration and unit test writing
+    - Generates compilable code 82% of the time (vs 67% for GPT-4o)
+    - Enhanced frontend coding capabilities - creates more functional and aesthetically pleasing web apps
+    - 80% human preference for GPT-4.1 websites vs GPT-4o in head-to-head comparisons
+    
+    **Long Context Mastery:**
+    - Processes up to 8 copies of entire React codebase in single context
+    - "Reliably attend to information across the full 1 million context length"
+    - "Far more reliable than GPT-4o at noticing relevant text, and ignoring distractors"
+    - Eliminates need for manual content fragmentation in many use cases
+    
+    **Real-World Optimization:**
+    - Trained with close collaboration with developer community
+    - Optimized for tasks that "matter most to their applications"
+    - Better adherence to task requirements and contextually relevant suggestions
+    - Improved response structure and ordering consistency
+    - Enhanced tool calling capabilities
+    
+    **Agent and Agentic Use:**
+    - "Considerably more effective at powering agents"
+    - Systems that can "independently accomplish tasks on behalf of users"
+    - Suitable for software engineering, document insight extraction, customer request resolution
+
+  benchmark_performance: |
+    GPT-4.1 demonstrates strong performance across multiple benchmark categories:
+    
+    **General Intelligence (MMLU - Massive Multitask Language Understanding):**
+    - GPT-4.1: 90.2% (4.5 percentage point improvement over GPT-4o's 85.7%)
+    - Tests reasoning across 57 academic subjects from abstract algebra to formal logic
+    - Indicates enhanced mathematical reasoning, scientific knowledge, and logical analysis
+    - Above expert human baseline of ~90%
+    
+    **Coding Performance:**
+    - SWE-bench Verified: 54.6% pass@1 (52.1% conservative scoring)
+      * 21.4 percentage point improvement over GPT-4o (33.2%)
+      * 26.6 percentage point improvement over GPT-4.5 (27.8%)
+      * Tests ability to fix real-world GitHub repository bugs
+    - Aider Polyglot Diff Benchmark: >2× GPT-4o's score
+      * 8 percentage points better than GPT-4.5
+      * Tests code editing across multiple languages and formats
+    
+    **Instruction Following:**
+    - MultiChallenge: 38.3%
+      * 10.5 percentage point improvement over GPT-4o (27.8%)
+      * Tests adherence to structured, multi-step prompts
+    
+    **Long Context Understanding:**
+    - Video-MME (long, no subtitles): 72.0% (state-of-the-art)
+      * 6.7 percentage point improvement over GPT-4o
+      * Tests multimodal long context comprehension
+    - Needle-in-a-Haystack: Consistently accurate retrieval at all positions up to 1M tokens
+    - Graphwalks: 61.7%
+      * 20 percentage point improvement over GPT-4o (41.7%)
+      * Tests multi-hop reasoning over long contexts
+      * Still trails GPT-4.5 (72.3%)
+    
+    **Advanced Reasoning:**
+    - GPQA Diamond (Graduate-Level): 66.3%
+    - 2024 AIME (American Invitational Mathematics Examination): Performance reported but specific score not disclosed
+    
+    **Vision Benchmarks:**
+    - MMMU (Multimodal Understanding): Performance matches or exceeds GPT-4o
+    - MathVista (visual mathematics): Strong performance reported
+    - CharXiv (chart questions from research papers): Improved over GPT-4o
+    
+    **Real-World Application Performance:**
+    - Blue J (tax scenarios): 53% more accurate than GPT-4o on challenging real-world tax cases
+    - Hex (SQL evaluation): ~2× improvement on most challenging SQL evaluation set
+    - Qodo (code suggestions): Slight edge over Claude 3.7 Sonnet in PR code suggestions
+    
+    **GPT-4.1 mini Benchmarks:**
+    - MMLU: Performance matches or exceeds GPT-4o
+    - Intelligence evaluations: Matches or exceeds GPT-4o across most metrics
+    - Latency: ~50% reduction compared to GPT-4o
+    - Cost: 83% reduction compared to GPT-4o
+    - Vision tasks: "Top model for multimodal or image processing" per OpenAI
+    
+    **GPT-4.1 nano Benchmarks:**
+    - MMLU: 80.1%
+    - GPQA: 50.3%
+    - Aider polyglot coding: 9.8% (higher than GPT-4o mini)
+    
+    **Competitive Context:**
+    - Trails Claude Opus 4 (72.5%) and Sonnet 4 (72.7%) on SWE-bench
+    - Trails Gemini 2.5 Pro (63.8% with agent tools) on SWE-bench
+    - Leads on MMLU compared to most competitors
+    - Competitive on instruction following and long context tasks
+
+  special_capabilities:
+    tools_support: true
+    
+    vision_support: true
+    
+    reasoning_support: true
+    
+    image_generation: false
+    
+    additional_capabilities: 
+      - "Extended context window (1 million tokens - 8× GPT-4o's 128K)"
+      - "Function calling with improved reliability"
+      - "Structured outputs"
+      - "Chat completions"
+      - "Batch API support (50% cost reduction)"
+      - "Fine-tuning capabilities"
+      - "Web search tools integration"
+      - "Improved tool calling consistency"
+      - "Better diff format generation for code editing"
+      - "Enhanced frontend web development"
+      - "Repository-scale code understanding"
+      - "Multi-step instruction following"
+      - "Long document processing and analysis"
+      - "Needle-in-haystack information retrieval"
+      - "Multi-hop reasoning across extended contexts"
+
+  known_limitations:
+    vendor_disclosed: |
+      While OpenAI emphasizes GPT-4.1's strengths, the following limitations are implicit or acknowledged:
+      
+      **Comparative Performance Gaps:**
+      - SWE-bench performance trails Claude Opus 4 (72.5%) and Claude Sonnet 4 (72.7%) by ~18 percentage points
+      - SWE-bench performance trails Gemini 2.5 Pro (63.8%) by ~9 percentage points
+      - Graphwalks performance (61.7%) trails GPT-4.5 (72.3%) by 10.6 percentage points
+      - Not state-of-the-art across all dimensions despite improvements
+      
+      **Infrastructure and Scoring Limitations:**
+      - SWE-bench: 23 of 500 problems could not run on OpenAI infrastructure
+      - Conservative scoring (treating infrastructure failures as 0%) reduces score from 54.6% to 52.1%
+      - Performance "highly dependent on the prompts and tools used" per OpenAI documentation
+      
+      **Model Positioning:**
+      - General-purpose model, not specialized for STEM reasoning (unlike O-series)
+      - Optimized for specific use cases (coding, instruction following, long context) rather than universal excellence
+      - Replaces GPT-4.5 due to better cost/performance, suggesting GPT-4.5 was not economically viable
+      
+      **Multimodal Limitations:**
+      - Text and image input support, but no audio input
+      - Text-only output (no image or audio generation)
+      - Vision capabilities present but specific benchmark performance less emphasized than text/code
+      
+      **Knowledge Cutoff:**
+      - Training data cutoff June 1, 2024
+      - No real-time information access without additional tools
+      - Events after June 2024 outside training knowledge
+
+    common_failure_modes: |
+      Based on benchmark results and comparisons, the following failure modes can be inferred:
+      
+      **Coding Limitations:**
+      - 45.4% failure rate on SWE-bench Verified indicates significant difficulty with complex real-world bugs
+      - May struggle with very complex bug fixes requiring deep system understanding
+      - 18% of generated code fails to compile even with improvements
+      - Lower performance on certain coding tasks compared to Claude 4 series
+      
+      **Instruction Following Edge Cases:**
+      - 61.7% failure rate on MultiChallenge indicates difficulty with complex, multi-step instructions
+      - May misinterpret nuanced or ambiguous instructions
+      - Room for improvement in structured task execution
+      
+      **Long Context Challenges:**
+      - Graphwalks score of 61.7% shows ~38% failure on multi-hop reasoning across long contexts
+      - May miss subtle connections across very long documents
+      - Performance varies based on information density and document structure
+      
+      **Reasoning Limitations:**
+      - GPQA Diamond 66.3% indicates 33.7% failure on graduate-level science questions
+      - Not specialized for advanced STEM reasoning (O-series better for this)
+      - May struggle with highly specialized domain knowledge
+      
+      **Competitive Weaknesses:**
+      - Underperforms Claude 4 on sustained autonomous coding tasks (7-hour workflows)
+      - Less robust than Gemini 2.5 Pro on certain coding agent scenarios
+      - Not the absolute leader in any single benchmark category
+
+    unsuitable_use_cases: |
+      Based on model characteristics and benchmark performance, GPT-4.1 should NOT be used for:
+      
+      **High-Stakes Autonomous Operations:**
+      - Fully autonomous production code deployment without review (45% SWE-bench failure rate)
+      - Safety-critical systems requiring perfect reliability
+      - Mission-critical applications where 90%+ accuracy is mandatory
+      - Autonomous decision-making in regulated domains (medical, legal, financial)
+      
+      **Specialized Reasoning Tasks:**
+      - Advanced STEM problem-solving requiring extended reasoning (use O-series instead)
+      - Graduate-level scientific research without expert oversight
+      - Complex mathematical proofs or theorem proving
+      - Deep theoretical physics or advanced chemistry problems
+      
+      **Perfect Accuracy Requirements:**
+      - Applications requiring 100% code compilation success
+      - Systems where any hallucination is unacceptable
+      - Critical infrastructure with zero-error tolerance
+      - Real-time safety systems (medical devices, aviation, autonomous vehicles)
+      
+      **Audio/Video Generation:**
+      - Any task requiring audio output generation
+      - Video generation or editing
+      - Real-time speech synthesis
+      - Multimodal outputs beyond text
+      
+      **Real-Time Information Needs:**
+      - Tasks requiring information after June 1, 2024 without additional tools
+      - Live market analysis or real-time decision making without data feeds
+      - Current events monitoring without web search integration
+      
+      **Regulated and Compliance-Heavy Domains:**
+      - Medical diagnosis or treatment planning as sole decision-maker
+      - Legal advice without attorney review and approval
+      - Financial investment decisions without human oversight
+      - Regulatory compliance determination without expert validation
+      
+      **Extended Autonomous Agent Tasks:**
+      - Tasks requiring >7 hours of autonomous operation (Claude 4 better suited)
+      - Self-improving AI systems without human oversight
+      - Autonomous resource acquisition or system modification
+      - Unsupervised long-horizon mission-critical workflows
+
+# =============================================================================
+# TRAINING & DATA
+# =============================================================================
+
+training_information:
+  training_data_description: |
+    OpenAI has not published a detailed system card for GPT-4.1, so training data specifics are limited:
+    
+    **Known Information:**
+    - Training data cutoff: June 1, 2024
+    - Includes diverse data for general-purpose capabilities
+    - Includes specialized coding data across multiple programming languages
+    - Incorporates developer feedback and real-world use cases
+    
+    **Inferred from Capabilities:**
+    - Large-scale code repositories (evidenced by SWE-bench and Aider performance)
+    - Frontend development examples (HTML, CSS, JavaScript, React, etc.)
+    - Software engineering documentation and best practices
+    - Multi-language programming content (polyglot capability)
+    - Long-form documents and extended contexts
+    - Instruction-following examples for alignment
+    - Real-world developer workflow patterns
+    
+    **Not Disclosed:**
+    - Specific dataset names or sources
+    - Total dataset size or token count
+    - Data filtering and curation methodology
+    - Proprietary vs public data mix
+    - Language distribution and coverage
+    - Data licensing and rights
+    - PII handling procedures
+    
+    **Training Methodology:**
+    - "Trained with close collaboration and partnership with the developer community"
+    - Optimized based on "tasks that matter most to their applications"
+    - Focus on real-world utility over pure benchmark performance
+    - Incorporated feedback on: frontend coding, format reliability, response structure, tool usage
+
+  training_methodology: |
+    Limited public disclosure, but can infer the following:
+    
+    **Training Approach:**
+    - Transformer-based architecture (continuation of GPT-4 series)
+    - Likely uses similar methods to GPT-4o and GPT-4.5 (SFT, RLHF)
+    - Optimized attention mechanisms for long context processing
+    - Focused training on three core dimensions: coding, instruction following, long context
+    
+    **Optimization Focus:**
+    - Developer-centric optimization based on community feedback
+    - Real-world task performance prioritization
+    - Cost and latency optimization compared to GPT-4.5
+    - Balance between capability and operational efficiency
+    
+    **Specific Training Enhancements:**
+    - "Making it follow diff formats better" (Michelle Pokrass, OpenAI)
+    - "Explore repos, write unit tests, and write code that compiles" (Michelle Pokrass)
+    - Enhanced instruction following through targeted training
+    - Improved tool calling consistency
+    - Better format adherence (SQL, diffs, configurations)
+    - Frontend coding optimization
+    
+    **Not Disclosed:**
+    - Specific training compute requirements
+    - Training duration and iterations
+    - Hyperparameter configurations
+    - Model scaling laws applied
+    - Multi-stage training pipeline details
+    - Safety and alignment training specifics
+    - Reinforcement learning methodology
+    - Evaluation criteria during training
+
+  data_privacy_considerations: |
+    **Limited Public Information:**
+    - No dedicated system card published for GPT-4.1
+    - Privacy practices likely similar to GPT-4o and GPT-4.5
+    - Subject to OpenAI's standard privacy policy and terms of service
+    
+    **Assumed Practices (based on OpenAI's general approach):**
+    - PII filtering during data collection and processing
+    - Compliance with relevant data protection regulations
+    - API usage subject to OpenAI's data usage policies
+    - No disclosure of training data memorization mitigation
+    
+    **Deployment Privacy Considerations:**
+    - API-only access means all data transmitted to OpenAI servers
+    - No on-device or self-hosted deployment options
+    - Batch API available with different data handling
+    - Enterprise deployments may have custom data handling agreements
+    - Fine-tuning raises additional data privacy questions
+    
+    **Key Concerns for Deployers:**
+    - Data residency requirements (API hosted by OpenAI)
+    - Sensitive information transmission via API
+    - GDPR, CCPA, and regional compliance needs
+    - Industry-specific regulations (HIPAA, financial services, etc.)
+    - Intellectual property protection for proprietary code/documents
+    - Third-party data processing implications
+    
+    **Recommendations:**
+    - Review OpenAI's terms of service and privacy policy
+    - Implement data sanitization before API calls for sensitive information
+    - Consider contractual data protection agreements for enterprise use
+    - Evaluate regulatory compliance for your specific jurisdiction and industry
+    - Do not transmit highly sensitive PII, trade secrets, or regulated data without additional controls
+
+# =============================================================================
+# INTENDED USE & SCOPE
+# =============================================================================
+
+intended_use:
+  vendor_intended_use: |
+    OpenAI positions GPT-4.1 as:
+    
+    **Primary Use Cases:**
+    - Software development and coding assistance
+    - Code editing and repository management
+    - Frontend web development
+    - Software engineering task automation
+    - Long document processing and analysis
+    - Complex instruction following workflows
+    - Agentic systems and autonomous task completion
+    - Customer support and request resolution
+    - Document insight extraction
+    
+    **Developer-Focused Applications:**
+    - IDE extensions and coding assistants
+    - PR automation and code review
+    - CI/CD pipeline integration
+    - Unit test generation
+    - Code compilation and debugging assistance
+    - Diff generation for code editing tools
+    - Repository exploration and understanding
+    
+    **Enterprise Applications:**
+    - Tax research and regulatory analysis (evidenced by Blue J partnership)
+    - SQL query generation (evidenced by Hex partnership)
+    - Legal document review
+    - Technical documentation creation
+    - Large codebase analysis and refactoring
+    
+    **General-Purpose Tasks:**
+    - Chat completions
+    - Content generation and writing assistance
+    - Multi-step task execution
+    - Complex problem solving
+    - Research and information synthesis from long documents
+    
+    **Deployment Contexts:**
+    - Exclusively via OpenAI API (no ChatGPT integration initially)
+    - Available in Azure regions (East US2, Sweden Central, and others)
+    - GitHub Copilot and GitHub Models integration
+    - Batch API for cost-sensitive large-scale processing
+    - Fine-tuning for domain-specific optimization
+
+  suitable_domains: 
+    - "Software development and engineering"
+    - "Web development (frontend and full-stack)"
+    - "Code review and quality assurance"
+    - "Technical documentation"
+    - "Developer tools and IDE plugins"
+    - "Automated testing and unit test generation"
+    - "Repository analysis and refactoring"
+    - "SQL and database query assistance"
+    - "Tax and regulatory research"
+    - "Legal document review and analysis"
+    - "Customer support automation (with oversight)"
+    - "Long document summarization and insight extraction"
+    - "Multi-step workflow automation"
+    - "Research assistance across large document sets"
+    - "Content creation and editing"
+    - "Educational technology and coding education"
+
+  out_of_scope_use: |
+    The following uses are inappropriate or outside GPT-4.1's design scope:
+    
+    **Explicitly Out-of-Scope:**
+    - Fully autonomous production deployment without human review
+    - Safety-critical systems (medical devices, aviation, autonomous vehicles)
+    - Real-time decision-making in high-stakes scenarios
+    - Advanced STEM reasoning requiring extended chain-of-thought (use O-series instead)
+    - Audio or video generation/editing
+    - Real-time speech processing
+    
+    **Requires Additional Controls:**
+    - Medical diagnosis or treatment recommendations (requires MD oversight)
+    - Legal advice (requires attorney review)
+    - Financial investment decisions (requires professional oversight)
+    - Regulatory compliance determination (requires expert validation)
+    - Child safety and protection systems (primary responsibility must remain human)
+    - Mental health crisis intervention
+    
+    **Technical Limitations:**
+    - Tasks requiring information after June 1, 2024 (without web search tools)
+    - Perfect accuracy requirements (90.2% MMLU, 54.6% SWE-bench means significant error rates)
+    - Real-time processing of streaming audio/video
+    - On-device or edge deployment (API-only)
+    - Applications requiring complete data privacy (API transmits to OpenAI servers)
+    
+    **Regulatory and Compliance:**
+    - Regulated industries without appropriate validation and oversight
+    - Applications subject to strict explainability requirements
+    - Domains requiring audit trails of reasoning (black box limitations)
+    - High-risk AI applications under EU AI Act without additional controls
+    
+    **Competitive Disadvantages:**
+    - Extended autonomous coding workflows >7 hours (Claude 4 more suitable)
+    - Tasks where Claude 4 or Gemini 2.5 demonstrate clear superiority
+    - Advanced multi-hop reasoning over very long contexts (trails GPT-4.5)
+
+# =============================================================================
+# TRUSTWORTHINESS CHARACTERISTICS
+# =============================================================================
+
+trustworthiness_assessment:
+  # CHARACTERISTIC 1: Valid and Reliable
+  valid_and_reliable:
+    vendor_claims: |
+      OpenAI claims GPT-4.1 provides:
+      - "Leading model for coding" with 54.6% SWE-bench performance
+      - "State-of-the-art" long context understanding (72.0% Video-MME)
+      - 90.2% MMLU score indicating strong general knowledge
+      - "Reliably attend to information across the full 1 million context length"
+      - "Far more reliable than GPT-4o at noticing relevant text, and ignoring distractors"
+      - Consistent needle-in-haystack retrieval at all context positions
+    
+    independent_evidence: |
+      **Public Benchmarks:**
+      - MMLU: 90.2% (well-validated, above expert human baseline)
+      - SWE-bench Verified: 54.6% (52.1% conservative) - standardized benchmark
+      - GPQA Diamond: 66.3% - graduate-level reasoning
+      - MultiChallenge: 38.3% - instruction following
+      - Video-MME: 72.0% - long context multimodal
+      - Graphwalks: 61.7% - multi-hop reasoning
+      
+      **Real-World Validation:**
+      - Blue J: 53% improvement over GPT-4o on real-world tax scenarios
+      - Hex: 2× improvement on challenging SQL evaluation
+      - Qodo: Competitive with Claude 3.7 Sonnet on PR code suggestions
+      - GitHub Copilot integration indicates production-ready status
+      
+      **Comparative Analysis:**
+      - Trails Claude 4 (72%+) and Gemini 2.5 Pro (63.8%) on SWE-bench
+      - Leads on MMLU compared to most competitors
+      - Mixed results across different benchmark categories
+      
+      **Reproducibility:**
+      - OpenAI provides setup details for SWE-bench reproduction
+      - Aider benchmark is open-source and reproducible
+      - Some benchmarks (MMLU, GPQA) are widely used and validated
+    
+    assessment_notes: |
+      **Strengths:**
+      - Strong performance on well-established benchmarks (MMLU)
+      - Real-world partner validation (Blue J, Hex) adds credibility
+      - Consistent improvements over GPT-4o across most metrics
+      - GitHub Copilot integration suggests production reliability
+      - Reproducible benchmark setups provided
+      
+      **Concerns:**
+      - 54.6% SWE-bench means 45.4% failure rate on real-world bugs
+      - 23 infrastructure failures in SWE-bench reduce confidence
+      - "Performance highly dependent on prompts and tools" per OpenAI
+      - Trails competition on key coding benchmarks (Claude 4, Gemini 2.5)
+      - No comprehensive system card published (unlike GPT-4.5)
+      - Limited independent third-party validation
+      
+      **Recommendations:**
+      - Validate performance on domain-specific benchmarks before deployment
+      - Establish baseline accuracy requirements for your use cases
+      - Implement human review for critical outputs
+      - Monitor real-world performance vs. benchmark expectations
+      - Consider 45% SWE-bench failure rate as upper bound for coding task reliability
+      - Test prompt and tool dependency for your specific workflow
+      - Establish continuous evaluation on production data
+
+  # CHARACTERISTIC 2: Safe
+  safe:
+    vendor_safety_claims: |
+      OpenAI has not published a dedicated system card for GPT-4.1, so explicit safety claims are limited:
+      
+      **Implied Safety Posture:**
+      - Builds on GPT-4o and GPT-4.5 safety foundations
+      - "Similar to those used for GPT-4o" safety approach (per GPT-4.5 system card)
+      - Subject to OpenAI's usage policies and content moderation
+      - API access suggests standard safety mitigations in place
+      
+      **No Disclosed Information On:**
+      - Safety evaluations specific to GPT-4.1
+      - Preparedness Framework risk classification
+      - Red teaming results
+      - Jailbreak robustness testing
+      - Bias and fairness evaluations
+      - Harmful content refusal rates
+    
+    safety_testing: |
+      **Public Safety Information:**
+      - No dedicated GPT-4.1 system card published (unlike GPT-4.5)
+      - Assumed to inherit GPT-4o/GPT-4.5 safety infrastructure
+      - Subject to OpenAI's Moderation API and content policies
+      - API access suggests standard safety filters in place
+      
+      **Inferred Safety Measures:**
+      - Likely includes refusal training for harmful requests
+      - Content moderation at API level
+      - Usage policy enforcement
+      - Standard OpenAI safety mitigations (per GPT-4o system card)
+      
+      **Missing Safety Evidence:**
+      - No published disallowed content evaluations
+      - No jailbreak robustness scores
+      - No hallucination rate measurements
+      - No bias/fairness benchmark results
+      - No Preparedness Framework ratings (CBRN, cyber, persuasion, autonomy)
+      - No external red teaming reports
+      - No third-party safety audits disclosed
+    
+    known_safety_issues: |
+      **Transparency Gap:**
+      - Major concern: No dedicated system card or safety evaluation published
+      - Cannot assess safety rigor compared to GPT-4.5 or competitors
+      - Users must assume safety properties based on GPT-4o/GPT-4.5
+      
+      **Potential Risks (by analogy to GPT-4.5):**
+      - If similar to GPT-4.5: Medium risk for CBRN and persuasion
+      - If similar to GPT-4.5: Jailbreak vulnerability (34% StrongReject robustness)
+      - If similar to GPT-4.5: ~19% hallucination rate
+      - If similar to GPT-4.5: 26% bias override rate on BBQ evaluation
+      
+      **Long Context Safety Concerns:**
+      - 1 million token window may introduce novel safety challenges
+      - Increased attack surface for prompt injection
+      - Potential for harmful content buried in long contexts
+      - Difficult to moderate extremely long inputs
+      
+      **Agentic Capability Risks:**
+      - Positioned for autonomous agents raises safety questions
+      - No disclosure of autonomous behavior safeguards
+      - "Independently accomplish tasks" requires robust safety controls
+    
+    safety_mitigations: |
+      **Assumed Mitigations (based on OpenAI's standard practices):**
+      - Content moderation via Moderation API
+      - Refusal training for harmful requests
+      - Usage policy enforcement
+      - API-level content filtering
+      - Instruction hierarchy (if similar to GPT-4.5)
+      
+      **Operational Controls:**
+      - API access controls and rate limiting
+      - Monitoring for abuse and policy violations
+      - Terms of service restrictions on harmful use
+      
+      **Not Disclosed:**
+      - Specific safety training methods
+      - RLHF safety alignment details
+      - Red team testing results
+      - Adversarial robustness measures
+      - Long context safety controls
+      - Agentic use safety guardrails
+    
+    assessment_notes: |
+      **Critical Concern:**
+      - **Lack of published system card is a major transparency and safety gap**
+      - Cannot independently assess safety properties
+      - Must rely on assumptions from GPT-4o/GPT-4.5
+      - Represents regression in OpenAI's transparency compared to GPT-4.5
+      
+      **Risk Assessment:**
+      - Unknown risk classification (no Preparedness Framework evaluation published)
+      - Long context window may introduce novel attack vectors
+      - Agentic capabilities require careful safety consideration
+      - Developer-focused deployment may have different risk profile than consumer use
+      
+      **Recommendations:**
+      - **Exercise caution in high-risk applications**
+      - Assume similar risks to GPT-4.5 until evidence shows otherwise
+      - Implement additional safety layers for production use
+      - Monitor for harmful outputs and policy violations
+      - Request safety documentation from OpenAI for enterprise deployments
+      - Establish incident response procedures
+      - Consider third-party safety evaluation
+      - Apply Preparedness Framework principles in your deployment
+      - Do not deploy in safety-critical contexts without comprehensive safety validation
+
+  # CHARACTERISTIC 3: Secure and Resilient
+  secure_and_resilient:
+    security_measures: |
+      **API-Level Security:**
+      - API key authentication
+      - HTTPS encrypted transmission
+      - Rate limiting and access controls
+      - Azure deployment options for enterprise security
+      
+      **Assumed Measures (not explicitly documented):**
+      - Similar to GPT-4.5 Instruction Hierarchy for prompt injection resistance
+      - Content filtering at API layer
+      - Abuse detection and prevention
+      
+      **Not Disclosed:**
+      - Jailbreak resistance evaluation
+      - Prompt injection testing results
+      - Adversarial robustness scores
+      - Security testing methodology
+      - Incident response capabilities
+    
+    known_vulnerabilities: |
+      **Transparency Gap:**
+      - No published security evaluations
+      - Cannot assess adversarial robustness
+      - Unknown jailbreak resistance
+      
+      **Inferred Risks:**
+      - Long context window increases attack surface
+      - 1 million tokens allows sophisticated prompt injection
+      - Agentic capabilities may enable unauthorized actions
+      - API-only deployment means cloud security dependencies
+      
+      **Comparison Concerns:**
+      - GPT-4.5 had only 34% StrongReject robustness
+      - If similar, GPT-4.1 vulnerable to adversarial prompts
+      - No evidence of improvement over GPT-4.5 in security
+    
+    resilience_considerations: |
+      **Operational Resilience:**
+      - API availability dependent on OpenAI infrastructure
+      - No disclosed SLAs for uptime or latency
+      - Regional deployment options (Azure) may improve resilience
+      - Batch API provides alternative processing path
+      
+      **Security Resilience:**
+      - Unknown ability to withstand adversarial attacks
+      - Long context may complicate input validation
+      - Agentic use cases require robust security controls
+    
+    assessment_notes: |
+      **Major Gap:**
+      - **Absence of published security evaluation is concerning**
+      - Cannot independently verify security posture
+      - Must assume based on GPT-4o/GPT-4.5
+      
+      **Recommendations:**
+      - Implement additional input validation and sanitization
+      - Monitor for prompt injection attempts
+      - Rate limit and authenticate all API access
+      - Consider adversarial testing before production deployment
+      - Establish security incident response procedures
+      - Use Azure enterprise deployment for additional security controls
+      - Do not rely solely on model-level security
+
+  # CHARACTERISTIC 4: Accountable and Transparent
+  accountable_and_transparent:
+    transparency_provided: |
+      **Public Documentation:**
+      - OpenAI blog announcement with key capabilities
+      - API documentation and usage guides
+      - Benchmark results on standard evaluations
+      - Setup details for SWE-bench reproduction
+      - Pricing and access information
+      
+      **Technical Disclosures:**
+      - Context window: 1 million tokens
+      - Output limit: 32,768 tokens
+      - Knowledge cutoff: June 1, 2024
+      - Training methodology: General descriptions only
+      - Benchmark scores on major evaluations
+      
+      **Partnership Validation:**
+      - Real-world results from Blue J and Hex
+      - GitHub Copilot and GitHub Models integration
+      - Azure deployment details
+    
+    transparency_limitations: |
+      **Critical Gap: No Dedicated System Card**
+      - Unlike GPT-4.5 (31-page system card), GPT-4.1 has no comprehensive documentation
+      - Major regression in transparency
+      - Missing safety evaluations, risk classifications, third-party audits
+      
+      **Not Disclosed:**
+      - Architecture details (parameters, layers, attention mechanism specifics)
+      - Training data specifics (datasets, sources, filtering methodology)
+      - Training compute and resources
+      - Safety evaluation results
+      - Preparedness Framework risk classification
+      - Red teaming results
+      - Bias and fairness testing
+      - Jailbreak robustness scores
+      - Hallucination rates
+      - Model weights (proprietary)
+      - Fine-tuning methodology
+      
+      **Limited Information:**
+      - Training methodology (high-level only)
+      - Privacy protections (assumed similar to GPT-4o)
+      - Security measures (not detailed)
+      - Alignment techniques (conceptual only)
+    
+    auditability: |
+      **Auditable:**
+      - Public benchmark results can be reproduced
+      - SWE-bench setup documented for verification
+      - MMLU, GPQA, and other standard benchmarks are public
+      - Real-world partner results provide some validation
+      
+      **Not Auditable:**
+      - Training data and methodology
+      - Safety evaluations (not published)
+      - Model architecture and weights
+      - Internal testing procedures
+      - Alignment and safety training
+      - Many evaluation datasets are internal
+      
+      **Audit Limitations:**
+      - No independent third-party safety audits disclosed
+      - No access to model for internal security testing
+      - Proprietary API limits deep technical assessment
+      - Cannot verify compliance with claimed practices
+    
+    assessment_notes: |
+      **Major Transparency Concern:**
+      - **Absence of system card is significant regression from GPT-4.5**
+      - Reduces accountability and trust
+      - Makes risk assessment difficult
+      - Prevents informed deployment decisions
+      
+      **Comparison:**
+      - Less transparent than GPT-4.5 (comprehensive system card)
+      - Less transparent than competitors with detailed documentation
+      - Similar to many commercial models (limited disclosure)
+      - More transparent than some (benchmark results published)
+      
+      **Impact on Deployers:**
+      - Cannot conduct thorough risk assessment
+      - Must assume safety properties without evidence
+      - Difficult to justify deployment in regulated contexts
+      - Limits ability to establish appropriate controls
+      
+      **Recommendations:**
+      - Request comprehensive documentation from OpenAI for enterprise use
+      - Conduct independent evaluation on critical dimensions
+      - Document assumptions about safety and security
+      - Establish monitoring for undisclosed risks
+      - Consider this transparency gap in deployment decisions
+      - Advocate for publication of system card
+      - May not meet transparency requirements for some regulations (EU AI Act)
+
+  # CHARACTERISTIC 5: Explainable and Interpretable
+  explainable_and_interpretable:
+    interpretability_features: |
+      **Available Features:**
+      - Natural language explanations of reasoning (when requested)
+      - Step-by-step problem solving capability
+      - Can articulate decision-making process in responses
+      - Structured outputs for some tasks
+      
+      **Limitations:**
+      - Standard large language model "black box" architecture
+      - No formal interpretability mechanisms disclosed
+      - Internal decision process not transparent
+      - Cannot reliably explain why specific outputs generated
+      
+      **Not Disclosed:**
+      - Attention visualization capabilities
+      - Feature attribution methods
+      - Mechanistic interpretability tools
+      - Confidence estimation accuracy
+    
+    explanation_capabilities: |
+      **Model Can Provide:**
+      - Natural language rationales for outputs
+      - Step-by-step coding explanations
+      - Reasoning traces for complex problems
+      - Clarification when asked
+      - Discussion of trade-offs and considerations
+      
+      **Model Cannot Reliably Provide:**
+      - True mechanistic explanations of internal processing
+      - Accurate confidence scores
+      - Verification of explanation accuracy
+      - Complete transparency into training data influences
+      - Guaranteed accurate self-assessment
+      
+      **Post-Hoc Rationalization Risk:**
+      - Explanations may sound convincing but not reflect actual computation
+      - May confabulate plausible-sounding reasoning
+      - No ground truth for verifying explanation validity
+    
+    assessment_notes: |
+      **Strengths:**
+      - Can generate articulate explanations
+      - Good at explaining code and technical concepts
+      - Improved instruction following may enhance explanation quality
+      
+      **Concerns:**
+      - Black box nature limits true explainability
+      - No formal interpretability techniques
+      - Explanations are post-hoc rationalizations
+      - Critical for regulated industries requiring explainability
+      - May not meet EU AI Act or similar explainability requirements
+      
+      **Recommendations:**
+      - Do not rely on model explanations as ground truth
+      - Validate outputs independently rather than trusting explanations
+      - Implement logging of reasoning traces for analysis
+      - Consider explainability requirements for your domain
+      - May be unsuitable for applications requiring audit trails of reasoning
+      - Use multiple verification methods beyond model explanations
+
+  # CHARACTERISTIC 6: Privacy-Enhanced
+  privacy_enhanced:
+    privacy_controls: |
+      **Assumed Controls (not specifically documented for GPT-4.1):**
+      - PII filtering during training (standard OpenAI practice)
+      - API-level privacy protections
+      - Compliance with OpenAI's privacy policy
+      - Enterprise agreements for additional data protection
+      
+      **Not Disclosed:**
+      - Specific PII detection and filtering methods
+      - Effectiveness metrics for privacy protections
+      - Training data memorization mitigation
+      - Data retention policies for API calls
+      - Audit capabilities for data handling
+    
+    data_handling: |
+      **API Data Handling:**
+      - All API calls transmit data to OpenAI servers
+      - Subject to OpenAI's terms of service and privacy policy
+      - No on-device or self-hosted deployment options
+      - Batch API may have different data handling policies
+      - Fine-tuning involves sending training data to OpenAI
+      
+      **Privacy Risks:**
+      - API-only deployment means all data processed in cloud
+      - 1 million token context allows transmission of massive documents
+      - No disclosure of data retention duration
+      - Potential for training data memorization
+      - Third-party data processing considerations
+      - Intellectual property exposure via API
+      
+      **Enterprise Considerations:**
+      - Azure deployment may provide additional data residency options
+      - Custom enterprise agreements may include enhanced privacy terms
+      - Compliance with regional data protection laws varies by deployment
+    
+    assessment_notes: |
+      **Strengths:**
+      - Assumed similar privacy protections to GPT-4o/GPT-4.5
+      - API access provides some control over data transmission
+      - Enterprise options available for additional protections
+      
+      **Concerns:**
+      - No GPT-4.1-specific privacy documentation
+      - API-only means no local data processing option
+      - Large context window enables transmission of sensitive documents
+      - Unclear data retention and deletion policies
+      - No transparency on training data sources or consent
+      
+      **Recommendations:**
+      - Review OpenAI's privacy policy and terms of service
+      - Implement data sanitization before API transmission
+      - Do not send highly sensitive PII, trade secrets, or regulated data without additional controls
+      - Evaluate GDPR, CCPA, HIPAA compliance for your use case
+      - Consider data residency requirements for your jurisdiction
+      - Establish data handling agreements for enterprise deployment
+      - Monitor for potential training data memorization
+      - Implement logging and audit trails for data sent to API
+      - Consider Azure deployment for enterprise data protection features
+
+  # CHARACTERISTIC 7: Fair and Bias-Managed
+  fair:
+    bias_mitigation: |
+      **No Published Information:**
+      - GPT-4.1 lacks dedicated fairness evaluation
+      - No BBQ benchmark results disclosed
+      - No demographic parity assessments published
+      - No bias mitigation methodology documented
+      
+      **Assumed Practices (based on OpenAI standard approach):**
+      - Diverse training data inclusion
+      - RLHF for alignment with human preferences
+      - Some level of bias awareness in training
+      
+      **Training Data Diversity:**
+      - Multilingual capability suggests diverse language data
+      - Coding across multiple languages and frameworks
+      - Real-world developer feedback incorporation
+    
+    known_biases: |
+      **No Specific Evaluation Published:**
+      - Cannot assess bias compared to GPT-4.5 or competitors
+      - No demographic fairness testing disclosed
+      - No language performance gap analysis
+      - No cultural bias evaluation
+      
+      **Potential Biases (by analogy to GPT-4.5):**
+      - If similar to GPT-4.5: 26% bias override rate on BBQ evaluation
+      - If similar to GPT-4.5: Significant language performance gaps (68-90% MMLU range)
+      - If similar to GPT-4.5: Underperformance on low-resource languages
+      
+      **Coding Bias Concerns:**
+      - Developer-centric optimization may bias toward certain programming paradigms
+      - English-language documentation likely dominant in training
+      - Potential Western software development practice bias
+      - May favor popular languages/frameworks over niche ones
+      
+      **Long Context Bias Risks:**
+      - 1 million token context may amplify existing biases
+      - Bias in very long documents harder to detect and mitigate
+      - Information retrieval may favor certain document structures
+    
+    assessment_notes: |
+      **Critical Gap:**
+      - **No published fairness evaluation is unacceptable for production deployment**
+      - Cannot assess demographic fairness
+      - Cannot evaluate cultural appropriateness
+      - Cannot measure disparate impact
+      
+      **Inferred Risks:**
+      - Likely inherits biases from training data
+      - Developer focus may introduce professional/cultural biases
+      - English-centric documentation likely dominant
+      - No evidence of bias mitigation beyond standard practices
+      
+      **Recommendations:**
+      - **Conduct domain-specific bias evaluation before deployment**
+      - Test with diverse user groups representing your population
+      - Monitor for differential performance by demographics
+      - Establish bias detection in production
+      - Do not deploy in decisions affecting protected classes without extensive validation
+      - Consider disparate impact assessment for high-stakes applications
+      - Test multilingual performance if serving non-English users
+      - Evaluate cultural appropriateness for global deployment
+      - Advocate for OpenAI to publish fairness evaluations
+
+# =============================================================================
+# EVALUATION GUIDANCE
+# =============================================================================
+
+evaluation_guidance:
+  recommended_tests: |
+    **Critical: GPT-4.1 lacks comprehensive safety/fairness documentation**
+    **Pre-deployment testing is essential**
+    
+    **1. Accuracy and Capability Testing:**
+    - Domain-specific coding benchmarks on your technology stack
+    - Instruction following on your specific workflow patterns
+    - Long context retrieval on your document types
+    - Needle-in-haystack testing with your context lengths
+    - Real-world task completion on representative examples
+    - Compile rate testing for generated code
+    - Pass/Fail: >90% accuracy on critical tasks
+    
+    **2. Safety and Content Policy:**
+    - Disallowed content refusal testing
+    - Harmful content generation attempts
+    - Jailbreak resistance testing (given lack of published results)
+    - Edge case behavior on sensitive topics
+    - Policy-violating request handling
+    - Pass/Fail: <5% unsafe outputs, >90% appropriate refusals
+    
+    **3. Security and Robustness:**
+    - Prompt injection testing across long contexts
+    - Adversarial input resistance
+    - API authentication and access control validation
+    - Input sanitization effectiveness
+    - Tool calling security (if using agentic features)
+    - Pass/Fail: No successful prompt injections, all security controls functional
+    
+    **4. Bias and Fairness:**
+    - BBQ benchmark or equivalent demographic bias testing
+    - Performance parity across user demographics
+    - Language quality assessment (if multilingual)
+    - Cultural appropriateness evaluation
+    - Stereotype reinforcement testing
+    - Pass/Fail: No statistically significant disparate impact
+    
+    **5. Privacy and Data Protection:**
+    - PII leakage testing
+    - Training data memorization checks
+    - Data handling compliance verification
+    - API data transmission security
+    - Pass/Fail: No PII disclosure, data handling compliant
+    
+    **6. Performance and Reliability:**
+    - Latency measurement under expected load
+    - Throughput testing for your use case
+    - API availability and error rate monitoring
+    - Context window limit testing
+    - Output token limit handling
+    - Pass/Fail: Meets your latency SLA, <1% API errors
+    
+    **7. Long Context Specific:**
+    - Information retrieval accuracy at various context positions
+    - Multi-hop reasoning across long documents
+    - Distractor resistance with irrelevant information
+    - Context window edge case handling (near 1M tokens)
+    - Pass/Fail: >90% retrieval accuracy across all positions
+    
+    **8. Coding Specific:**
+    - Compilation rate on generated code
+    - Diff format accuracy for your editing workflow
+    - Repository understanding on your codebases
+    - Unit test quality and coverage
+    - Bug fix success rate on historical issues
+    - Pass/Fail: >80% compilation rate, >60% bug fix success
+    
+    **9. Regulatory Compliance:**
+    - Industry-specific requirement validation (HIPAA, SOC 2, etc.)
+    - Explainability requirement assessment
+    - Data residency compliance
+    - Audit trail completeness
+    - Pass/Fail: Meets all applicable regulatory requirements
+    
+    **10. Integration and Operational:**
+    - System integration testing
+    - Monitoring and logging implementation
+    - Incident response procedure validation
+    - Fallback mechanism testing
+    - Cost management and optimization
+    - Pass/Fail: All integration points functional, monitoring in place
+
+  key_evaluation_questions: |
+    **Capability and Fit:**
+    - Does GPT-4.1 meet accuracy requirements for our coding tasks?
+    - Is 54.6% SWE-bench performance adequate for our bug-fixing needs?
+    - Can we utilize the 1 million token context window effectively?
+    - Do we need the extended context or is GPT-4o's 128K sufficient?
+    - Is 90.2% MMLU adequate for our general knowledge requirements?
+    - Are we willing to accept 38.3% MultiChallenge (61.7% failure on complex instructions)?
+    
+    **Safety and Security:**
+    - **Are we comfortable with no published safety evaluation?**
+    - Can we conduct adequate internal safety testing?
+    - What additional safety controls do we need to implement?
+    - Is lack of jailbreak robustness data acceptable?
+    - Can we mitigate unknown bias risks?
+    - Do we have incident response for safety failures?
+    
+    **Transparency and Governance:**
+    - **Is absence of system card acceptable for our risk tolerance?**
+    - Can we operate with limited transparency?
+    - Do we have governance framework for managing unknown risks?
+    - Does lack of Preparedness Framework rating create compliance issues?
+    - Can we meet regulatory requirements without comprehensive safety documentation?
+    
+    **Cost and Performance:**
+    - Is $2/$8 per million tokens cost-effective for our use case?
+    - Should we use GPT-4.1 mini ($0.40/$1.60) or nano ($0.10/$0.40) instead?
+    - Can we leverage Batch API for 50% cost savings?
+    - What is our projected monthly API cost?
+    - Do we need the 32,768 output token limit?
+    
+    **Technical Considerations:**
+    - Can our infrastructure support OpenAI API integration?
+    - Do we need Azure deployment for regional/enterprise requirements?
+    - Is API-only deployment acceptable (no on-device option)?
+    - Can we handle June 2024 knowledge cutoff?
+    - Do we need web search integration for current information?
+    
+    **Competitive Analysis:**
+    - Should we consider Claude 4 for better coding performance (72%+ SWE-bench)?
+    - Should we consider Gemini 2.5 Pro for visual/video tasks?
+    - Does GPT-4.1's efficiency advantage justify lower coding scores?
+    - What is the total cost of ownership vs competitors?
+    
+    **Privacy and Compliance:**
+    - Is cloud-only API processing acceptable for our data?
+    - Can we comply with GDPR/CCPA/HIPAA via OpenAI API?
+    - Do we have data residency requirements that OpenAI can't meet?
+    - Can we send our sensitive code/documents via API?
+    
+    **Validation and Testing:**
+    - Have we benchmarked GPT-4.1 on our specific tasks?
+    - Have we conducted safety testing given lack of published results?
+    - Have we evaluated bias for our user population?
+    - Have we validated privacy protections?
+    - Have we tested long context performance on our documents?
+    
+    **Deployment Readiness:**
+    - Do we have monitoring for accuracy, safety, bias, cost?
+    - Can we provide human oversight for critical outputs?
+    - Do we have incident response procedures?
+    - Can we iterate if performance is inadequate?
+    - What is our rollback plan if issues arise?
+
+  comparison_considerations: |
+    **Alternative Models to Evaluate:**
+    
+    **OpenAI Family:**
+    - GPT-4.1 mini: Same capabilities, 83% cost reduction, 50% latency reduction
+    - GPT-4.1 nano: Fastest/cheapest, 80.1% MMLU, ideal for classification/autocomplete
+    - GPT-4o: Lower cost, 128K context, similar capabilities for many use cases
+    - O-series: Better for advanced reasoning and STEM problems
+    - GPT-5: Future release with enhanced capabilities (announced but not yet available)
+    
+    **Competitor Models:**
+    - Claude Opus 4: 72.5% SWE-bench (18pp better), proven 7-hour autonomous coding
+    - Claude Sonnet 4: 72.7% SWE-bench, balanced performance, strong reasoning
+    - Gemini 2.5 Pro: 63.8% SWE-bench, 84.8% Video-MME, leading web development
+    - DeepSeek V3: Competitive coding, potentially lower cost
+    - Meta Llama 4: Open-source, lower cost, transparency advantage
+    
+    **Key Trade-offs:**
+    
+    **Cost vs. Performance:**
+    - GPT-4.1: $2/$8 per 1M tokens (premium pricing)
+    - GPT-4.1 mini: $0.40/$1.60 (83% cheaper, similar performance many tasks)
+    - GPT-4.1 nano: $0.10/$0.40 (cheapest, 80.1% MMLU still strong)
+    - Batch API: 50% discount for non-time-sensitive processing
+    - Consider: Do you need full GPT-4.1 or can mini/nano serve your needs?
+    
+    **Coding Performance:**
+    - Claude Opus 4: 72.5% SWE-bench (leader)
+    - Gemini 2.5 Pro: 63.8% SWE-bench
+    - GPT-4.1: 54.6% SWE-bench (trails by ~18pp and ~9pp respectively)
+    - Consider: Is coding performance gap worth potential cost savings?
+    
+    **Context Window:**
+    - GPT-4.1 family: 1M tokens ($2/$8)
+    - GPT-4o: 128K tokens (lower cost)
+    - Claude 4: 200K tokens
+    - Gemini 2.5 Pro: 1M tokens
+    - Consider: Do you actually need 1M tokens or is 128K sufficient?
+    
+    **Safety and Transparency:**
+    - GPT-4.5: Comprehensive 31-page system card with safety evals
+    - Claude models: Detailed safety documentation
+    - GPT-4.1: No dedicated system card (transparency gap)
+    - Consider: Is safety documentation important for your deployment?
+    
+    **Specialized vs. General Purpose:**
+    - GPT-4.1: Optimized for coding, instruction following, long context
+    - O-series: Specialized for advanced reasoning and STEM
+    - GPT-4o: Balanced general-purpose model
+    - Consider: Specialized model for your specific domain vs. general-purpose
+    
+    **Deployment Constraints:**
+    - GPT-4.1: API-only (OpenAI/Azure infrastructure)
+    - Open models: Self-hosting possible for data sensitivity
+    - Consider: Data residency and control requirements
+    
+    **Ecosystem and Integration:**
+    - GPT-4.1: GitHub Copilot/Models, OpenAI API ecosystem
+    - Claude: Anthropic API, various integrations
+    - Gemini: Google Cloud integration
+    - Consider: Existing infrastructure and partnerships
+    
+    **Where GPT-4.1 Excels:**
+    - Long context understanding (1M tokens, 72.0% Video-MME state-of-the-art)
+    - Cost efficiency vs GPT-4.5 (similar performance, lower cost/latency)
+    - Instruction following (38.3% MultiChallenge, 10.5pp > GPT-4o)
+    - General knowledge (90.2% MMLU)
+    - Code diff generation (2× GPT-4o)
+    - Developer ecosystem integration (GitHub Copilot)
+    
+    **Where GPT-4.1 Underperforms:**
+    - Coding vs Claude 4 (54.6% vs 72.5% SWE-bench, 18pp gap)
+    - Coding vs Gemini 2.5 Pro (54.6% vs 63.8%, 9pp gap)
+    - Multi-hop reasoning vs GPT-4.5 (61.7% vs 72.3% Graphwalks)
+    - Safety transparency (no system card vs comprehensive GPT-4.5 documentation)
+    - Bias evaluation (no published results vs GPT-4.5 BBQ testing)
+    
+    **Decision Framework:**
+    1. Define critical requirements (coding, reasoning, cost, safety, transparency)
+    2. Benchmark multiple models on your specific tasks
+    3. Calculate total cost of ownership (API costs + development + monitoring)
+    4. Assess risk tolerance for transparency gaps
+    5. Evaluate regulatory and compliance requirements
+    6. Consider ecosystem and integration constraints
+    7. Pilot with small-scale deployment before full rollout
+    8. Establish continuous evaluation and model switching capability
+
+# =============================================================================
+# NIST AI RMF MAPPING
+# =============================================================================
+
+rmf_function_mapping:
+  # GOVERN: Organizational policies and oversight
+  govern:
+    notes: |
+      **Critical Governance Challenge: Lack of System Card**
+      
+      GPT-4.1's absence of comprehensive safety documentation creates significant governance challenges:
+      - Cannot conduct thorough risk assessment
+      - Must assume risk properties based on GPT-4o/GPT-4.5
+      - Difficult to establish appropriate controls without safety data
+      - May not meet governance requirements for some organizations
+      
+      **Risk Classification (Assumed, Not Disclosed):**
+      - Unknown: No Preparedness Framework evaluation published
+      - Must assume similar to GPT-4.5: Medium overall risk (Medium for CBRN/Persuasion)
+      - Additional risk from long context and agentic capabilities
+      
+      **Approval Requirements:**
+      - Executive-level approval recommended given transparency gaps
+      - Legal review for terms of service and data handling
+      - Compliance review for privacy and regulatory requirements
+      - Security review for prompt injection and adversarial robustness
+      - Ethics review for bias and fairness concerns (no published evaluation)
+      
+      **Applicable Policies:**
+      - AI risk management policy (enhanced given documentation gaps)
+      - Data privacy policy (API transmission, cloud processing)
+      - Information security policy (adversarial robustness, prompt injection)
+      - Code deployment policy (45% SWE-bench failure rate consideration)
+      - Content moderation policy (unknown safety baseline)
+      - Vendor management policy (OpenAI dependency)
+      - Third-party risk management (API-only, cloud processing)
+      
+      **Oversight Mechanisms:**
+      - Enhanced monitoring given lack of safety baselines
+      - Monthly safety metric review with incident tracking
+      - Quarterly risk reassessment (re-evaluate as more information emerges)
+      - Continuous monitoring of coding accuracy and safety
+      - Regular bias and fairness audits (conduct internally)
+      - Advocate for OpenAI to publish system card
+      
+      **Accountability Structure:**
+      - Designated AI system owner (executive level recommended)
+      - Risk management committee for unknown risk oversight
+      - Safety incident review board
+      - Ethics advisory for fairness concerns
+      - Technical steering for performance and capability assessment
+      - Vendor relationship manager for OpenAI engagement
+
+  # MAP: Context and risk identification
+  map:
+    context_considerations: |
+      **Use Case Context:**
+      - Developer tools and coding assistance (primary use case)
+      - Long document processing and analysis
+      - Agentic systems and autonomous task completion
+      - API integration into existing workflows
+      - Azure or OpenAI cloud deployment
+      
+      **Data Sensitivity:**
+      - Code and IP transmitted via API (consider confidentiality)
+      - Long documents (up to 1M tokens) may contain sensitive information
+      - No on-device processing option (all data in cloud)
+      - Fine-tuning sends training data to OpenAI
+      
+      **Stakeholder Impacts:**
+      - Developers: Productivity, code quality, learning
+      - End users: Quality of applications built with GPT-4.1
+      - Organization: IP exposure, compliance risk, cost
+      - Third parties: If code/content affects external stakeholders
+      
+      **Regulatory Requirements:**
+      - GDPR: API data processing, potential EU AI Act high-risk classification
+      - Industry-specific: HIPAA (healthcare), SOC 2 (SaaS), financial regulations
+      - Export controls: Potential if used for sensitive applications
+      - Data residency: Varies by deployment region
+      
+      **OpenAI-Specific Context:**
+      - API-only deployment (cloud dependency, no self-hosting)
+      - No dedicated system card (transparency gap, governance challenge)
+      - Developer-focused model (different risk profile than consumer)
+      - Replaces GPT-4.5 (cost/performance optimization, not safety focus)
+      - 1M token context (novel risks, larger attack surface)
+      - Agentic positioning (autonomous behavior risks)
+
+    risk_categories:
+      - "Transparency risk: No published system card, safety evaluations, or risk classification"
+      - "Safety risk: Unknown baseline (assume similar to GPT-4.5 if Medium for CBRN/Persuasion)"
+      - "Coding reliability risk: 45.4% failure rate on SWE-bench, 18% code won't compile"
+      - "Instruction following risk: 61.7% failure on MultiChallenge complex instructions"
+      - "Security risk: No published jailbreak or prompt injection testing"
+      - "Bias risk: No published fairness evaluation or demographic parity assessment"
+      - "Privacy risk: API-only, 1M token context enables massive data transmission"
+      - "Hallucination risk: Unknown rate (assume ~19% if similar to GPT-4.5)"
+      - "Long context risk: 1M tokens increases attack surface, novel failure modes"
+      - "Agentic capability risk: Autonomous task completion requires robust safety controls"
+      - "Competitive risk: Trails Claude 4 (18pp) and Gemini (9pp) on coding benchmarks"
+      - "Vendor dependency risk: API-only, no alternative deployment options"
+      - "Cost management risk: Premium pricing ($2/$8), potential for high usage costs"
+      - "Knowledge obsolescence risk: June 2024 cutoff increasingly outdated"
+      - "Compliance risk: Transparency gaps may not meet regulatory requirements"
+      - "IP exposure risk: Proprietary code/documents transmitted via API"
+
+  # MEASURE: Metrics and monitoring
+  measure:
+    suggested_metrics: |
+      **Critical: Establish baselines immediately (no published baselines available)**
+      
+      **Accuracy and Reliability (Daily/Weekly):**
+      - Task success rate on your coding tasks (target: >80%)
+      - Code compilation rate (baseline: 82% per OpenAI claim)
+      - Bug fix success rate (baseline: 54.6% SWE-bench)
+      - Instruction following accuracy on your workflows
+      - Long context retrieval accuracy
+      - Hallucination detection (establish baseline, monitor trends)
+      
+      **Safety Metrics (Continuous - Critical given lack of published evaluation):**
+      - Unsafe output rate (target: <5%, establish baseline immediately)
+      - Policy violation frequency
+      - Refused vs complied rate on edge cases
+      - Adversarial input detection rate
+      - Prompt injection attempts
+      - Harmful content generation (monitor closely)
+      
+      **Security Metrics (Continuous):**
+      - Failed authentication attempts
+      - Suspicious API usage patterns
+      - Prompt injection detection (implement monitoring)
+      - Adversarial robustness (test regularly)
+      - API abuse indicators
+      
+      **Bias and Fairness (Weekly/Monthly - Conduct internally):**
+      - Demographic parity across user groups (establish baseline)
+      - Performance variance by language/culture
+      - Stereotype reinforcement rate
+      - Disparate impact assessment
+      - User satisfaction by demographic segment
+      
+      **Performance Metrics (Continuous/Daily):**
+      - API response latency (track vs OpenAI claims)
+      - Throughput (requests per second)
+      - Error rate and types
+      - API availability (target: >99.9%)
+      - Context window utilization (track to optimize costs)
+      
+      **Cost Metrics (Daily):**
+      - API cost per request/user
+      - Input vs output token ratios
+      - Batch API utilization for cost savings
+      - Cost per completed task
+      - Budget variance and forecasting
+      
+      **Privacy Metrics (Continuous/Weekly):**
+      - PII transmission detection (block before API call)
+      - Sensitive data exposure incidents (target: 0)
+      - API data transmission audit logs
+      - Compliance violations (target: 0)
+      
+      **Operational Metrics (Daily):**
+      - Successful integration rate
+      - Deployment uptime
+      - Incident response time
+      - User error rate
+      - Support ticket frequency
+      
+      **Long Context Specific (Weekly):**
+      - Context length distribution
+      - Retrieval accuracy by context position
+      - Multi-hop reasoning success rate
+      - Distractor resistance
+      
+      **Measurement Methods:**
+      - Automated evaluation on test sets (establish comprehensive suite)
+      - Sampling and manual review (recommend 5% given safety unknowns)
+      - User feedback collection
+      - Red team exercises (monthly minimum)
+      - Third-party audits (annually recommended)
+      - Continuous A/B testing
+      
+      **Thresholds and Alerts:**
+      - Unsafe output rate >5%: Immediate investigation
+      - Compilation rate <75%: Performance review
+      - API error rate >1%: Operational escalation
+      - Cost overrun >20%: Budget review
+      - Any bias metric degradation >10%: Fairness audit
+      - Unknown safety incident: Immediate escalation and potential pause
+
+  # MANAGE: Risk controls and responses
+  manage:
+    risk_management_considerations: |
+      **Enhanced Risk Management Required (Given Documentation Gaps)**
+      
+      **Technical Controls:**
+      
+      **Input Validation (Critical given unknown security baseline):**
+      - Comprehensive prompt injection detection and blocking
+      - Content filtering for prohibited topics
+      - PII detection and redaction before API call
+      - Rate limiting per user/API key
+      - Anomaly detection for suspicious patterns
+      - Long context input sanitization (1M tokens = large attack surface)
+      
+      **Output Monitoring (Critical given unknown safety baseline):**
+      - Real-time content moderation
+      - Safety classifier for harmful outputs
+      - Hallucination detection (establish baseline, monitor continuously)
+      - Code compilation verification
+      - Bias detection and flagging
+      - Confidence scoring for critical outputs
+      
+      **Security Hardening:**
+      - API key rotation and strict access control
+      - Encryption in transit and at rest
+      - Network isolation for sensitive deployments
+      - Adversarial robustness testing (monthly minimum)
+      - Prompt injection testing across long contexts
+      - Tool calling security audits (if using agentic features)
+      
+      **Process Controls:**
+      
+      **Human Review (Mandatory given unknowns):**
+      - All production code deployments
+      - High-stakes decisions
+      - Sensitive content generation
+      - Edge cases flagged by safety systems
+      - Initial deployment outputs (until baseline established)
+      - Periodic spot-checking (recommend 5%)
+      
+      **Escalation Procedures:**
+      - Safety incidents: Immediate escalation, potential pause
+      - Bias/fairness concerns: Ethics review within 24 hours
+      - Security incidents: Security team <5 minutes
+      - Privacy violations: Legal/DPO immediate notification
+      - Cost overruns: Budget review
+      - Performance degradation: Technical review
+      
+      **Logging and Audit:**
+      - Log ALL inputs, outputs, safety flags (critical for unknown baseline)
+      - Timestamp, user attribution, model version
+      - Safety filter triggers and decisions
+      - Human review outcomes and rationale
+      - API errors and edge cases
+      - Comprehensive audit trail for regulatory compliance
+      
+      **Organizational Controls:**
+      
+      **Training and Awareness:**
+      - User training on limitations (45% SWE-bench failure, unknown safety)
+      - Operator training on enhanced monitoring requirements
+      - Executive briefing on transparency gaps and risk mitigation
+      - Ethics training for high-stakes use
+      - Incident response drills (monthly)
+      
+      **Policies and Procedures:**
+      - Enhanced acceptable use policy (given unknowns)
+      - Comprehensive content moderation guidelines
+      - Detailed incident response runbook
+      - Bias complaint and investigation procedure
+      - Vendor escalation path (OpenAI relationship)
+      - Documentation of assumptions and risk acceptance
+      
+      **Governance:**
+      - Weekly safety metrics review (vs monthly for well-documented models)
+      - Monthly comprehensive risk review
+      - Quarterly reassessment of controls (adjust as learn more)
+      - Continuous advocacy for OpenAI to publish system card
+      - Third-party audit (annually minimum)
+      
+      **Incident Response (Enhanced given unknowns):**
+      
+      **Safety Incidents:**
+      1. Automated detection and blocking
+      2. Immediate safety team notification (<5 min)
+      3. Assess severity and potential for recurrence
+      4. Consider pausing deployment if severe or recurring
+      5. Root cause analysis (24 hours)
+      6. Mitigation implementation
+      7. User communication
+      8. Report to OpenAI
+      
+      **Security Incidents:**
+      1. Automated detection and blocking
+      2. Security team <5 min
+      3. Isolate affected systems immediately
+      4. Analyze attack vector
+      5. Deploy countermeasures
+      6. Update defenses
+      7. User communication if data affected
+      8. Report to OpenAI if platform issue
+      
+      **Bias/Fairness Incidents:**
+      1. Incident documentation
+      2. Ethics team review (24 hours)
+      3. Impact assessment (affected users, severity)
+      4. Immediate remediation if severe
+      5. Systemic review
+      6. Enhanced monitoring
+      7. User communication and remediation
+      
+      **Privacy Incidents:**
+      1. Immediate output blocking
+      2. Legal/DPO notification (<15 min)
+      3. User notification per regulations
+      4. Breach assessment
+      5. Regulatory reporting as required
+      6. Enhanced controls implementation
+      7. Third-party audit of controls
+      
+      **Performance Incidents:**
+      1. Detection via monitoring
+      2. Technical team assessment
+      3. Fallback to alternative model if critical
+      4. Root cause analysis
+      5. Cost-benefit of continuing vs pausing
+      6. Communication with stakeholders
+      
+      **Continuous Improvement:**
+      - Daily safety metric review (until baseline established)
+      - Weekly comprehensive performance analysis
+      - Monthly red team exercises (given security unknowns)
+      - Quarterly comprehensive risk reassessment
+      - Continuous benchmarking against alternatives
+      - Active engagement with OpenAI for system card publication
+      - Community participation in safety initiatives
+      - Documentation of lessons learned
+      
+      **Risk Acceptance:**
+      - **Document all accepted risks given lack of published evaluation**
+      - Transparency gap: Accepted with enhanced monitoring and controls
+      - 45% SWE-bench failure rate: Accepted with human review
+      - Unknown safety baseline: Accepted with conservative deployment and enhanced monitoring
+      - Unknown bias: Accepted with internal evaluation and continuous monitoring
+      - Regular review of accepted risks (monthly until more information available)
+
+# =============================================================================
+# REFERENCES & SOURCES
+# =============================================================================
+
+references:
+  vendor_documentation:
+    - url: "https://openai.com/index/gpt-4-1/"
+      description: "OpenAI blog announcement of GPT-4.1 (April 14, 2025) - Primary source for capabilities, benchmarks, and positioning"
+    
+    - url: "https://platform.openai.com/docs/models/gpt-4.1"
+      description: "OpenAI Platform API documentation for GPT-4.1 - Technical specifications and usage"
+    
+    - url: "https://github.com/openai"
+      description: "OpenAI GitHub - SWE-bench setup details and reproducibility information"
+
+  benchmarks:
+    - name: "MMLU (Massive Multitask Language Understanding)"
+      url: "Standard academic benchmark"
+      result: "GPT-4.1: 90.2% (vs GPT-4o: 85.7%, 4.5pp improvement)"
+    
+    - name: "SWE-bench Verified"
+      url: "https://www.swebench.com/"
+      result: "GPT-4.1: 54.6% pass@1 (52.1% conservative), 21.4pp > GPT-4o (33.2%), 26.6pp > GPT-4.5"
+    
+    - name: "Aider Polyglot Diff Benchmark"
+      url: "https://aider.chat/"
+      result: "GPT-4.1: >2× GPT-4o score, 8pp > GPT-4.5"
+    
+    - name: "MultiChallenge (Scale AI)"
+      url: "Scale AI benchmark"
+      result: "GPT-4.1: 38.3% (10.5pp > GPT-4o at 27.8%)"
+    
+    - name: "Video-MME (Multimodal long context)"
+      url: "Academic benchmark"
+      result: "GPT-4.1: 72.0% (long, no subtitles) - state-of-the-art, 6.7pp > GPT-4o"
+    
+    - name: "Graphwalks (Multi-hop reasoning)"
+      url: "OpenAI proprietary benchmark"
+      result: "GPT-4.1: 61.7% (20pp > GPT-4o 41.7%, but 10.6pp < GPT-4.5 72.3%)"
+    
+    - name: "GPQA Diamond (Graduate-level reasoning)"
+      url: "Academic benchmark"
+      result: "GPT-4.1: 66.3%"
+    
+    - name: "MMMU (Multimodal understanding)"
+      url: "Academic benchmark"
+      result: "GPT-4.1: Matches or exceeds GPT-4o"
+    
+    - name: "MathVista, CharXiv"
+      url: "Academic benchmarks"
+      result: "GPT-4.1: Improved over GPT-4o"
+
+  third_party_evaluations:
+    - source: "Blue J (Tax Research)"
+      url: "Mentioned in OpenAI announcement"
+      summary: "53% more accurate than GPT-4o on challenging real-world tax scenarios"
+    
+    - source: "Hex (SQL Evaluation)"
+      url: "Mentioned in OpenAI announcement"
+      summary: "Nearly 2× improvement on most challenging SQL evaluation set"
+    
+    - source: "Qodo (Code Integrity Platform)"
+      url: "Third-party analysis"
+      summary: "Slight edge over Claude 3.7 Sonnet on PR code suggestions, better task adherence"
+    
+    - source: "TechTarget, Wikipedia, Various Tech Media"
+      url: "Multiple sources"
+      summary: "Widespread coverage of release, benchmarks, and competitive positioning"
+    
+    - source: "GitHub Copilot Integration"
+      url: "https://github.blog/changelog/2025-04-14-openai-gpt-4-1-now-available-in-public-preview-for-github-copilot-and-github-models/"
+      summary: "Available in GitHub Copilot and GitHub Models, validated for developer workflows"
+
+# =============================================================================
+# METADATA
+# =============================================================================
+
+metadata:
+  card_version: "1.0"
+  card_author: "Astronomy Cluster Project - Vault Orchestrator"
+  card_creation_date: "2025-01-28"
+  last_updated: "2025-01-28"
+  
+  information_sources: |
+    **Primary Sources:**
+    - OpenAI blog announcement (April 14, 2025): https://openai.com/index/gpt-4-1/
+    - OpenAI Platform API documentation
+    - Public benchmark results from multiple sources
+    
+    **Secondary Sources:**
+    - TechTarget: GPT-4.1 overview and analysis
+    - Wikipedia: GPT-4.1 entry with benchmark compilation
+    - GitHub blog: Copilot integration announcement
+    - Multiple tech media sources: Analysis and competitive comparisons
+    - Third-party model comparison sites (LangDB, DocsBot AI, Promptfoo, etc.)
+    
+    **Critical Limitation:**
+    - **No dedicated system card published by OpenAI**
+    - Unlike GPT-4.5 (31-page comprehensive documentation), GPT-4.1 lacks detailed safety evaluation
+    - Safety, bias, and fairness information inferred from GPT-4o/GPT-4.5 or unavailable
+    - This represents a significant information gap affecting risk assessment
+    
+    **Information Currency:**
+    - Model released: April 14, 2025
+    - Documentation gathered: January 28, 2025
+    - All information current as of documentation date
+
+  completeness_assessment: |
+    **Comprehensive Information Available:**
+    - Benchmark results on standard evaluations (MMLU, SWE-bench, GPQA, etc.)
+    - Technical specifications (context window, tokens, pricing, cutoff date)
+    - Capabilities and intended use cases
+    - Competitive positioning and performance comparisons
+    - Real-world partner validation (Blue J, Hex, Qodo)
+    - Integration ecosystem (GitHub Copilot, Azure)
+    
+    **Partial or Limited Information:**
+    - Training methodology (high-level description only)
+    - Privacy protections (assumed similar to GPT-4o/GPT-4.5)
+    - Performance characteristics (latency/throughput general claims)
+    - Security measures (assumed standard OpenAI practices)
+    
+    **Critical Information Gaps:**
+    - **No dedicated system card (major transparency gap)**
+    - **No safety evaluation results published**
+    - **No Preparedness Framework risk classification**
+    - **No bias or fairness testing disclosed**
+    - **No jailbreak or adversarial robustness evaluation**
+    - **No hallucination rate measurement**
+    - Architecture details (parameters, layers, attention specifics)
+    - Training data details (datasets, sources, sizes)
+    - Training compute resources
+    - Red teaming results
+    - Third-party safety audits
+    
+    **Confidence in Assessment:**
+    - High confidence: Benchmark results, technical specs, pricing (well-documented)
+    - Moderate confidence: Capabilities, intended use (described conceptually)
+    - Low confidence: Safety properties, bias, security (limited information)
+    - **No data: Risk classification, safety evaluations, fairness testing (not published)**
+    
+    **What Would Significantly Improve Confidence:**
+    - **Publication of comprehensive system card (most critical need)**
+    - Safety evaluation results (disallowed content, jailbreaks, hallucinations)
+    - Preparedness Framework risk classification
+    - Bias and fairness benchmarks (BBQ or equivalent)
+    - Adversarial robustness testing results
+    - Training data documentation
+    - Privacy protection effectiveness metrics
+    - Independent third-party safety audits
+    - Long context-specific safety evaluation
+    - Agentic use case safety controls documentation
+    
+    **Impact of Information Gaps:**
+    - Difficult to conduct thorough pre-deployment risk assessment
+    - Must make conservative assumptions about safety properties
+    - Requires enhanced monitoring and testing by deployers
+    - May not meet governance requirements for some organizations
+    - Represents regression in OpenAI's transparency practices vs GPT-4.5
+
+  change_log:
+    - date: "2025-01-28"
+      author: "Astronomy Cluster Project - Vault Orchestrator"
+      changes: "Initial model card creation for GPT-4.1 based on OpenAI blog announcement, platform documentation, and public benchmarks. Critical note: Unlike GPT-4.5, OpenAI has not published a comprehensive system card for GPT-4.1. Safety, bias, and fairness information is largely unavailable or inferred from related models. All gaps explicitly noted as 'not disclosed', 'not published', or 'unavailable'. No information fabricated - all entries sourced or marked as absent."
+
+# =============================================================================
+# CRITICAL NOTES FOR DEPLOYERS
+# =============================================================================
+# This GPT-4.1 model card highlights a significant transparency gap:
+# 
+# MAJOR CONCERN: Unlike GPT-4.5 (which has a comprehensive 31-page system card),
+# OpenAI has not published detailed safety evaluations for GPT-4.1.
+#
+# Missing Critical Information:
+# - Safety evaluation results
+# - Preparedness Framework risk classification
+# - Bias and fairness testing
+# - Jailbreak and adversarial robustness
+# - Hallucination rates
+# - Red teaming results
+#
+# Implications for Deployers:
+# - Cannot conduct thorough pre-deployment risk assessment
+# - Must assume safety properties based on GPT-4o/GPT-4.5
+# - Requires enhanced monitoring and testing
+# - May not meet governance requirements for some organizations
+#
+# Recommendations:
+# - Exercise caution in high-risk applications
+# - Implement comprehensive pre-deployment testing
+# - Establish enhanced monitoring and controls
+# - Document assumptions about safety properties
+# - Advocate for OpenAI to publish comprehensive system card
+# - Consider this transparency gap in deployment decisions

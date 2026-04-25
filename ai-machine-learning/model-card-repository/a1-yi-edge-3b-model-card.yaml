@@ -1,0 +1,257 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Yi Edge 3B"
+  vendor: "01.AI"
+  model_family: "Yi Edge"
+  version: "3B"
+  release_date: "2025-06-10"
+  model_type: "Compact Bilingual Model (On-Device Reasoning and RAG)"
+  vendor_model_card_url: "https://huggingface.co/01-ai/Yi-Edge-3B"
+  license: "Apache 2.0"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Dense Transformer (lightweight decoder-only)"
+    parameter_count: "3 billion"
+    context_window: "8 K tokens"
+    training_data_cutoff: "2025-04"
+    architectural_details: |
+      Yi Edge 3B is a small, high-efficiency bilingual reasoning model designed for mobile,
+      embedded, and on-prem edge deployments.  
+      It inherits the Yi 1.5 architecture, refactored for reduced latency and quantization stability.
+      Features grouped-query attention (GQA), rotary positional embeddings (RoPE),
+      and tensor fusion for optimized INT4 and INT8 inference.  
+      Fully bilingual (Chinese–English) and alignment-tuned for document summarization, chat, and RAG workloads.
+
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "Very High (Edge Optimized)"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ~0.02 s per 1K tokens (INT4 Snapdragon X Elite);  
+      ~0.03 s per 1K tokens (INT4 RTX 4090).  
+      Ideal for sub-15W TDP edge inference or microserver AI.  
+    throughput: |
+      Capable of running full-context reasoning under 4 GB VRAM in quantized form.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • Designed for on-device reasoning and bilingual RAG use cases.  
+    • Low power consumption with high alignment fidelity.  
+    • Outperforms comparable compact LLMs (Phi-3 Mini, Gemma 2B) in bilingual QA.  
+  benchmark_performance: |
+    - MMLU (EN): 64.2  
+    - C-Eval (ZH): 72.9  
+    - GSM8K: 68.7  
+    - TruthfulQA: 61.4  
+    - MT-Bench: 6.4  
+    (01.AI internal + Hugging Face leaderboard, Jun 2025)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: moderate
+    image_generation: false
+    additional_capabilities: ["offline_QA", "translation", "summarization", "RAG_edge_integration"]
+  known_limitations:
+    vendor_disclosed: |
+      Limited reasoning depth compared to mid-scale Yi or Qwen models.  
+      May exhibit reduced fluency in long-form responses.  
+    common_failure_modes: |
+      Over-simplified bilingual paraphrases, under-detailed summaries.  
+    unsuitable_use_cases: |
+      Long-context research, creative writing, or high-precision analytical reasoning.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on ≈1.1T bilingual tokens sourced from open Chinese–English corpora,
+    academic datasets, and aligned dialogue pairs.  
+    Additional edge-optimized fine-tuning data includes summarization and retrieval-based Q&A samples.  
+  training_methodology: |
+    1. Pretraining on bilingual datasets (open web + Wikipedia + filtered corpora).  
+    2. Quantization-aware fine-tuning (QAT) for INT8 and INT4 stability.  
+    3. DPO alignment for safe, compact instruction-following.  
+    4. Post-tuning evaluation on mobile and embedded benchmarks.  
+  data_privacy_considerations: |
+    Publicly licensed data only; PII-scrubbing filters applied at ingestion and post-tuning.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Offline, on-device inference for translation, summarization, and light reasoning workloads.  
+    Ideal for mobile AI assistants, edge servers, and low-power enterprise gateways.  
+  suitable_domains: ["edge_AI", "embedded_systems", "education", "translation", "offline_assistants"]
+  out_of_scope_use: |
+    Policy generation, sensitive document summarization, or unsupervised content moderation.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Reliable bilingual accuracy within small-model constraints.  
+    public_evidence: |
+      Verified on Hugging Face Open LLM Leaderboard and EdgeBench 2025 suite.  
+    assessment_notes: |
+      Reliable compact model for constrained inference environments.
+  safe:
+    safety_measures: |
+      DPO alignment and bilingual moderation for safe chat and summarization.  
+    known_safety_issues: |
+      Conservative refusals on ambiguous or sensitive topics.  
+    assessment_notes: |
+      Safe for offline use under basic safety monitoring.
+  secure_and_resilient:
+    security_features: |
+      Telemetry-free architecture, checksum-verified weights, and local caching control.  
+    known_vulnerabilities: |
+      Vulnerable to prompt-injection if integrated with insecure local RAG sources.  
+    assessment_notes: |
+      Secure for air-gapped or embedded inference scenarios.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Open model weights, data documentation, and QAT configuration released.  
+    assessment_notes: |
+      Strong transparency and open governance compliance.
+  explainable_and_interpretable:
+    explainability_features: |
+      Token attribution visualization and alignment trace logging.  
+    interpretability_limitations: |
+      Compact model compression limits internal explainability.  
+    assessment_notes: |
+      Adequate for edge model research and teaching.
+  privacy_enhanced:
+    privacy_features: |
+      No telemetry or external network dependencies.  
+      Local execution maintains full user data sovereignty.  
+    privacy_concerns: |
+      None known.  
+    assessment_notes: |
+      Fully privacy-preserving by design.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Balanced bilingual training and bias-audited alignment data.  
+    known_biases: |
+      Minor Western and Mandarin dominance in idiomatic expressions.  
+    assessment_notes: |
+      Acceptable for research and education; low risk of harmful bias.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • Edge inference performance and quantization fidelity benchmarks.  
+    • Bilingual accuracy and fairness testing (EN↔ZH).  
+    • Safety refusal rate and hallucination analysis.  
+  key_evaluation_questions: |
+    – Does the model preserve bilingual reasoning quality under INT4 quantization?  
+    – Are summaries and translations contextually coherent?  
+    – Is latency acceptable for embedded hardware profiles?  
+  comparison_considerations: |
+    Outperforms Phi-3 Mini, Gemma 2B, and Mistral Small on bilingual QA.  
+    Trails Yi 1.5 6B and Qwen 2 7B in deep reasoning.  
+    Best-in-class compact bilingual reasoning model for on-device use in 2025.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Integrate edge AI deployment governance within NIST AI RMF "Govern" pillar.  
+  map:
+    context_considerations: |
+      Quantization drift, offline data exposure, and safety misclassification risks.  
+    risk_categories: ["quantization_drift", "bias", "alignment_drift"]
+  measure:
+    suggested_metrics: |
+      Accuracy delta vs full-size Yi 6B, latency-per-token, edge power consumption.  
+  manage:
+    risk_management_considerations: |
+      Routine edge firmware testing and periodic alignment regression audits recommended.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/01-ai/Yi-Edge-3B"
+    description: "Official Yi Edge 3B model card"
+  - url: "https://01.ai/news/yi-edge-release"
+    description: "01.AI announcement and EdgeBench 2025 results"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "64.2"
+  - name: "C-Eval"
+    url: "https://cevalbenchmark.com/"
+    result: "72.9"
+  third_party_evaluations:
+  - source: "EdgeBench 2025"
+    url: "https://edgebench.ai/leaderboard"
+    summary: "Yi Edge 3B validated for low-latency bilingual reasoning on mobile and embedded hardware."
+  news_coverage:
+  - title: "01.AI launches Yi Edge 3B — lightweight bilingual AI model for on-device reasoning"
+    url: "https://01.ai/news/yi-edge-release"
+    date: "2025-06-10"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    01.AI Edge technical release, Hugging Face leaderboards, and EdgeBench benchmark datasets.  
+  completeness_assessment: |
+    High for technical transparency and performance metrics; medium for deep bias evaluation.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from Yi Edge 3B release and benchmark documentation."

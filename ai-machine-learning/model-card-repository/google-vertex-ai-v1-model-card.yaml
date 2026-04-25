@@ -1,0 +1,263 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Veo 2 Preview"
+  vendor: "Google Cloud (Vertex AI)"
+  model_family: "Veo 2"
+  version: "2.0-generate-preview"
+  release_date: "2025-10-17"  # last updated date listed on docs :contentReference[oaicite:3]{index=3}
+  model_type: "Video Generation Model (text/image → video)"
+
+  vendor_model_card_url: "https://cloud.google.com/vertex-ai/generative-ai/docs/models/veo/2-0-generate-preview"
+
+  license: "CC BY 4.0 (documentation); underlying model proprietary"
+  deprecation_status: "Preview – not recommended for production"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Proprietary Google video-generation diffusion/transformer pipeline"  # not publicly detailed
+    parameter_count: "Not publicly disclosed"
+    context_window: "Not publicly disclosed"
+
+    training_data_cutoff: "Not publicly disclosed"
+
+    architectural_details: |
+      Veo 2 supports text-to-video, image-to-video, video extension, object insertion/removal in video streams. # :contentReference[oaicite:4]{index=4}
+
+  modalities:
+    supported_inputs: ["text", "image", "video"]
+    supported_outputs: ["video"]
+
+  performance_characteristics:
+    speed_tier: "Preview – enterprise/creative use"
+    cost_tier: "Premium (via Vertex AI)"
+    latency: "Not publicly disclosed"
+    throughput: "Not publicly disclosed"
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    - Supported modes: text→video, image→video (via reference image), extend first & last frames of video. # :contentReference[oaicite:5]{index=5}
+    - Supports 16:9 and 9:16 aspect ratios. # :contentReference[oaicite:6]{index=6}
+    - Supports 720p resolution at 24 fps in this version. # :contentReference[oaicite:7]{index=7}
+    - API limits: max 20 requests/min per project, max 4 videos per request. Video length 5-8 seconds. # :contentReference[oaicite:8]{index=8}
+
+  benchmark_performance: |
+    Public benchmarks (e.g., visual fidelity, realism, safety) are not disclosed in the documentation.
+
+  special_capabilities:
+    tools_support: false
+    vision_support: true
+    reasoning_support: false
+    image_generation: false
+    additional_capabilities: ["video editing/insertion/removal", "first-frame/last-frame video extension"]
+
+  known_limitations:
+    vendor_disclosed: |
+      - Preview model: not recommended for production.
+      - Resolution limited to 720p for this version. # :contentReference[oaicite:9]{index=9}
+      - Only English prompt language supported. # :contentReference[oaicite:10]{index=10}
+
+    common_failure_modes: |
+      - Highly complex scenes may degrade in realism given current resolution limits.
+      - Use in uncontrolled/high-stakes contexts unverified due to preview status.
+    unsuitable_use_cases: |
+      - High-stakes decision-making systems.
+      - Production workflows requiring GA support or full enterprise indemnity.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Not publicly disclosed — Google describes the "previous stable line" and preview status but does not specify dataset details. # :contentReference[oaicite:11]{index=11}
+
+  training_methodology: |
+    Proprietary internal Google video-generation pipeline; no public fine-tuning or dataset breakdown provided.
+
+  data_privacy_considerations: |
+    Documentation does not list specific data privacy safeguards or dataset sourcing transparency in this preview release.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Creative video generation for prototyping, short-form media workflows (5-8 second videos) in English prompts; editing existing video by extending or inserting/removing objects. # :contentReference[oaicite:12]{index=12}
+
+  suitable_domains: ["creative_generation", "marketing_demos", "short_form_video_content"]
+  out_of_scope_use: |
+    Use in regulated environments or where high-fidelity >720p is required; non-English prompts; mainstream production without GA model; high-stakes or safety-critical applications.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Documentation presents supported formats, limits and preview status. # :contentReference[oaicite:13]{index=13}
+    public_evidence: |
+      No publicly disclosed independent benchmarking or parameter transparency.
+    assessment_notes: |
+      As a preview model, reliability is limited for production-level performance evaluation.
+
+  safe:
+    safety_measures: |
+      Google provides usage limits and preview status; but no detailed safety classifier performance publicly documented in this specific doc page.
+    known_safety_issues: |
+      Risks typical to generative video: deepfakes, likeness misuse, misinformation.
+    assessment_notes: |
+      Users should layer additional moderation and provenance controls; else risk remains.
+
+  secure_and_resilient:
+    security_features: |
+      Standard Vertex AI platform protections apply; preview model means potential changes.
+    known_vulnerabilities: |
+      Preview code path may change; no published large-scale stress testing.
+    assessment_notes: |
+      Suitable for early-stage exploration, not hardened enterprise deployment.
+
+  accountable_and_transparent:
+    transparency_level: "Low-Medium"
+    auditability: |
+      Model documentation available; but no weight release, no dataset breakdown, limited evaluation data.
+    assessment_notes: |
+      Requires vendor-governance or deployer oversight for trust-worthiness.
+
+  explainable_and_interpretable:
+    explainability_features: |
+      Input/output descriptions (text, image → video) and parameter limits given.
+    interpretability_limitations: |
+      Internal architecture, data, and training processes not disclosed.
+    assessment_notes: |
+      Operational usage clarity is moderate; internal reasoning not exposed.
+
+  privacy_enhanced:
+    privacy_features: |
+      Not explicitly documented.
+    privacy_concerns: |
+      Potential personal data in training corpus unknown.
+    assessment_notes: |
+      Deployers should assess ingestion policies and compliance with internal rules before sensitive use.
+
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Not documented in the preview page.
+    known_biases: |
+      None publicly enumerated.
+    assessment_notes: |
+      As a preview offering, further bias/harm evaluation needed by users.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Generate a representative set of videos from your prompts and evaluate for visual fidelity, realism and creative alignment.
+    - Assess moderation/control pipeline for content generated via text/image→video (including deepfake, likeness, misinformation).
+    - Test video editing operations (object insertion/removal, frame extension) for alignment and artifacts.
+    - Monitor API usage limits (requests/min, videos/request), and performance at scale for your project.
+    - Evaluate resolution/quality threshold (720p) suitability for your target domain.
+
+  key_evaluation_questions: |
+    - Does the preview-model performance meet your visual quality and fidelity requirements?
+    - Are the editing/insertion/removal features stable and artifact-free for your media pipeline?
+    - Can you integrate your moderation, watermark/provenance and review workflows into this model’s output?
+    - Are you prepared for transition when the GA model version becomes available (Veo 3 or later)?
+
+  comparison_considerations: |
+    - Compare with other video generation models (e.g., Veo 3 previews, competing vendor models) in terms of resolution, controls, editing features.
+    - Check enterprise readiness, resolution support (>720p), and model stability when selecting for production use.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Establish human-in-loop review for generated videos; manage distribution channels and provenance; monitor model version transition as preview → GA.
+
+  map:
+    context_considerations: |
+      Consider video use case (short-form, creative vs high-stakes), audience age/region, platform sharing policies, watermark/provenance requirements.
+    risk_categories: ["deepfake_likeness_misuse", "misinformation_video", "creative_media_policy_violation"]
+
+  measure:
+    suggested_metrics: |
+      - Rate of generated outputs flagged by moderation.
+      - Artifact rate (e.g., visual glitches, frame dropout) in editing operations.
+      - Usage rate vs. API limits (20 requests/min).
+      - Quality score compared to target resolution and fidelity.
+
+  manage:
+    risk_management_considerations: |
+      Use layered controls: video-specific moderation, watermark/provenance (SynthID or equivalent), monitor for misuse of realistic motion or likeness, plan migration to GA model.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://cloud.google.com/vertex-ai/generative-ai/docs/models/veo/2-0-generate-preview"
+    description: "Google Cloud Veo 2 Preview model doc (last updated 2025-10-17)."   # :contentReference[oaicite:14]{index=14}
+  benchmarks:
+  - name: "Veo 2 API limits and capabilities"
+    url: "https://cloud.google.com/vertex-ai/generative-ai/docs/models/veo/2-0-generate-preview"
+    result: "Text→video, image→video, etc; 720p; 16:9 and 9:16; 20 requests/min, 4 videos per request, length 5-8s."   # :contentReference[oaicite:15]{index=15}
+  third_party_evaluations:
+  - source: ""
+    url: ""
+    summary: ""
+  news_coverage:
+  - title: "Google rolls out its AI video generator to Gemini Advanced subscribers"
+    url: "https://www.theverge.com/news/648816/google-veo-2-ai-video-generation-gemini-advanced"
+    date: "2025-04-15"   # :contentReference[oaicite:16]{index=16}
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "Don Fountain"
+  card_creation_date: "2025-10-24"
+  last_updated: "2025-10-24"
+  information_sources: |
+    Documentation page for Veo 2 Preview, release notes, feature announcements. # :contentReference[oaicite:17]{index=17}
+  completeness_assessment: |
+    Moderate: API/usage details provided; architecture, training/data, safety/bias details largely not disclosed.
+  change_log:
+  - date: "2025-10-24"
+    author: "Don Fountain"
+    changes: "Initial model card for Veo 2 Preview."
+

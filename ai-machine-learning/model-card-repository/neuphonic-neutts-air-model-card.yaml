@@ -1,0 +1,227 @@
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# =============================================================================
+# MODEL IDENTITY
+# =============================================================================
+model_identity:
+  name: "NeuTTS Air"
+  vendor: "Neuphonic"
+  model_family: "NeuTTS"
+  version: "Air"
+  release_date: "2025-10-02"  # approximate release announcement date ([marktechpost.com](https://www.marktechpost.com/2025/10/02/neuphonic-open-sources-neutts-air-a-748m-parameter-on-device-speech-language-model-with-instant-voice-cloning/))
+  model_type: "Text-to-Speech & Voice-Cloning Foundation Model (≈0.5-0.75B param)"
+
+  vendor_model_card_url: "https://huggingface.co/neuphonic/neutts-air"
+
+  license: "Apache 2.0" :contentReference[oaicite:2]{index=2}
+  deprecation_status: "Active"
+
+# =============================================================================
+# MODEL ARCHITECTURE & TECHNICAL SPECIFICATIONS
+# =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Hybrid – 0.5B-param language model backbone (Qwen 0.5B) + NeuCodec neural audio codec" :contentReference[oaicite:3]{index=3}
+    parameter_count: "≈ 0.7 B (748M reported) for available variant" :contentReference[oaicite:4]{index=4}
+    context_window: "Not applicable in standard sense (text-to-speech)"
+    training_data_cutoff: "Not publicly disclosed"
+
+    architectural_details: |
+      The model uses a lightweight LM backbone for text understanding/generation, combined with the NeuCodec audio codec for efficient high-quality audio output. Reference -audio based voice-cloning capability is supported (≈3-15 s of audio) to mimic speaker style. :contentReference[oaicite:5]{index=5}
+
+  modalities:
+    supported_inputs: ["text","reference_audio"]
+    supported_outputs: ["audio (waveform)"]
+
+  performance_characteristics:
+    speed_tier: "Optimised for on-device, real-time CPU inference"
+    cost_tier: "Low-to-moderate (devices rather than large cloud infrastructure)"
+    latency: "Real-time generation claimed on mid-range hardware" :contentReference[oaicite:6]{index=6}
+    throughput: "Not explicitly published"
+
+# =============================================================================
+# CAPABILITIES & LIMITATIONS
+# =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    - On-device text-to-speech and voice cloning (create a voice from ~3 s of reference audio) :contentReference[oaicite:7]{index=7}
+    - Highly realistic voice generation for its size, suitable for mobile/embedded/edge devices (phones, laptops, Raspberry Pi) :contentReference[oaicite:8]{index=8}
+    - Privacy-preserving offline operation (no cloud dependency) :contentReference[oaicite:9]{index=9}
+  benchmark_performance: |
+    No major independent benchmark tables public; some vendor/press claim “best-in-class realism for its size”. :contentReference[oaicite:10]{index=10}
+  special_capabilities:
+    tools_support: false
+    vision_support: false
+    reasoning_support: false
+    image_generation: false
+    additional_capabilities: ["instant voice cloning","GGUF quantised versions for on-device inference"] :contentReference[oaicite:11]{index=11}
+  known_limitations:
+    vendor_disclosed: |
+      Model currently emphasizes English; multilingual support still evolving. :contentReference[oaicite:12]{index=12}
+    common_failure_modes: |
+      - Quality may degrade with low-quality reference audio or noisy background. :contentReference[oaicite:13]{index=13}
+      - Unsupported languages or dialects may have weaker fidelity. :contentReference[oaicite:14]{index=14}
+    unsuitable_use_cases: |
+      - High-stakes decision-making systems reliant solely on TTS (not the model’s intended domain)
+      - Scenarios requiring full training-data transparency or very large multilingual voice-banks without validation.
+
+# =============================================================================
+# TRAINING & DATA
+# =============================================================================
+training_information:
+  training_data_description: |
+    Not fully disclosed. Model announcement references LM backbone and audio codec training, but detailed dataset sizes, sources and filtering not publicly reported. :contentReference[oaicite:15]{index=15}
+  training_methodology: |
+    Hybrid LM + neural audio codec; voice-cloning by encoding reference audio and synthesising new audio in that voice style. :contentReference[oaicite:16]{index=16}
+  data_privacy_considerations: |
+    The model emphasises on-device inference and privacy, but explicit PII/ethics filtering details are not disclosed.
+
+# =============================================================================
+# INTENDED USE & SCOPE
+# =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Deployments of text-to-speech and voice cloning where latency, privacy and device-local inference matter (embedded voice agents, mobile assistants, interactive devices) :contentReference[oaicite:17]{index=17}
+  suitable_domains: ["voice_assistant_offline","embedded_agent_voice","custom_voice_cloning","edge_device_TTS"]
+  out_of_scope_use: |
+    Use as a general-language-model for broad text-generation tasks; dependent decision-making systems without human oversight; untested languages/dialects without validation.
+
+# =============================================================================
+# TRUSTWORTHINESS CHARACTERISTICS
+# =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Claims well-publicised: on-device realtime voice cloning etc.
+    public_evidence: |
+      Multiple press and user-community posts confirm core functionality. :contentReference[oaicite:18]{index=18}
+    assessment_notes: |
+      Promising for TTS/voice-cloning; still requires deployment-specific testing, especially for multilingual and low-resource language use.
+
+  safe:
+    safety_measures: |
+      Generated audio includes watermarking (“Perth (Perceptual Threshold) Watermarker”) for traceability. :contentReference[oaicite:19]{index=19}
+    known_safety_issues: |
+      Risks of voice-cloning misuse, privacy/consent issues, deep-fake style audio generation.
+    assessment_notes: |
+      Deployers should implement consent, speaker-verification and usage logging.
+
+  secure_and_resilient:
+    security_features: |
+      On-device inference reduces cloud-exfiltration risk; open-license enables local audit.
+    known_vulnerabilities: |
+      Possibility of voice cloning for impersonation; embedded inference still requires runtime security.
+    assessment_notes: |
+      Safeguards needed for credential/voice-security contexts.
+
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Model and code released under Apache 2.0; architecture summary public; but training data and bias/fairness audits limited.
+    assessment_notes: |
+      Good baseline for many uses; for highly regulated domains additional audit may be required.
+
+  explainable_and_interpretable:
+    explainability_features: |
+      Voice-generation outputs are human-audible and traceable; architecture described at a high level.
+    interpretability_limitations: |
+      Internal model weights, dataset provenance, codec internals are not fully disclosed.
+    assessment_notes: |
+      Suitable for TTS workloads with traceability; not for deep interpretability needs.
+
+  privacy_enhanced:
+    privacy_features: |
+      Device-local inference, no cloud-upload required; less risk of external data exposure.
+    privacy_concerns: |
+      Unknown training data sources/data-sharing; voice cloning may raise biometric privacy risks.
+    assessment_notes: |
+      For sensitive user data (e.g., healthcare or identity) run additional privacy review.
+
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      No detailed public bias/fairness audit; multi-language coverage still evolving.
+    known_biases: |
+      Under-represented languages/dialects may have lower fidelity; voice-cloning misuse potential. :contentReference[oaicite:20]{index=20}
+    assessment_notes: |
+      Organisations should perform their own fairness/harm audits especially for diverse speaker populations.
+
+# =============================================================================
+# EVALUATION GUIDANCE
+# =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Test voice-cloning quality: reference audio (3-15 s) → generated audio; evaluate speaker similarity, intelligibility, prosody.
+    - Latency and resource usage: benchmark on target device (CPU, laptop, embedded board) for realtime generation.
+    - Multilingual/ dialect test: if target domain uses non-English voices, test fidelity and naturalness.
+    - Safety & misuse test: verify speaker-consent scenario, check watermark presence, test impersonation risk.
+    - Throughput/endurance: if used continuously (e.g., embedded agent), measure power/thermal behaviour.
+    - Usability test: integration with toolchain, reference samples, robustness to noisy/short audio.
+  key_evaluation_questions: |
+    - Does the TTS output meet your intelligibility and speaker-fidelity metrics for your domain?
+    - Is your target hardware capable of realtime inference as claimed?
+    - Are you ensuring voice-consent, watermarking traceability and misuse controls?
+    - Are you comfortable with the licensing (Apache 2.0) and any constraints (voice cloning consent, watermarking obligations)?
+  comparison_considerations: |
+    - Compare with other local/offline TTS models (e.g., Coqui TTS, Larynx, TTS2Go) in terms of footprint, quality, latency, license.
+    - Evaluate trade-off of ~0.7B parameter size vs larger/heavier models for your use-case.
+    - Check compute/hardware budget for embedded device deployment and latency budget for real-time voice interaction.
+
+# =============================================================================
+# NIST AI RMF MAPPING
+# =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      In voice-agent deployments, human-in-the-loop must review cloned voices for consent; versioning and output logging required.
+  map:
+    context_considerations: |
+      Voice-cloning, on-device voice agent, privacy/consent risk, impersonation risk.
+    risk_categories: ["voice_deepfake","biometric_privacy_leakage","misinformation_via_audio","model_misuse"]
+  measure:
+    suggested_metrics: |
+      - Rate of cloned-voice errors / hallucination per 1k audio samples.
+      - Latency/throughput on target device (ms per 10s audio).
+      - Consent verification failures per 1k uses.
+      - Bias/harm incident rate across speaker demographics per 1k uses.
+  manage:
+    risk_management_considerations: |
+      Require voice-consent workflows, watermarking of generated audio, logging of use cases, periodic audit of speaker-similarity drift, fallbacks for high-risk voice interactions.
+
+# =============================================================================
+# REFERENCES & SOURCES
+# =============================================================================
+references:
+  vendor_documentation:
+    - url: "https://huggingface.co/neuphonic/neutts-air"
+      description: "Hugging Face model page for NeuTTS Air" :contentReference[oaicite:21]{index=21}
+    - url: "https://github.com/neuphonic/neutts-air"
+      description: "GitHub repository for NeuTTS Air" :contentReference[oaicite:22]{index=22}
+    - url: "https://neuphonic.com/"
+      description: "Neuphonic company site (on-device voice AI) " :contentReference[oaicite:23]{index=23}
+  benchmarks:
+    - name: "MarkTechPost announcement: NeuTTS Air open-source release"
+      url: "https://www.marktechpost.com/2025/10/02/neuphonic-open-sources-neutts-air-a-748m-parameter-on-device-speech-language-model-with-instant-voice-cloning/"
+      result: "748M parameters, real-time on device, voice cloning" :contentReference[oaicite:24]{index=24}
+  third_party_evaluations:
+    - source: "reddit discussion for multilingual and fine-tuning queries"
+      url: "https://www.reddit.com/r/unsloth/comments/1o67tgu/neutts-air_multilanguage_fine-tuning_scripts/?utm_source=chatgpt.com"
+      summary: > “Portuguese voices are not on par with English ones … Brazilian Portuguese support on the road-map.” :contentReference[oaicite:25]{index=25}
+
+# =============================================================================
+# METADATA
+# =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "Don Fountain"
+  card_creation_date: "2025-10-24"
+  last_updated: "2025-10-24"
+  information_sources: |
+    Hugging Face model page, GitHub repository, vendor website, press coverage, community discussion.
+  completeness_assessment: |
+    Good for architecture, use-case and on-device deployment context; moderate for training data transparency, benchmark tables; limited for detailed latency/throughput across diverse devices and multilingual voice-cloning metrics.
+  change_log:
+    - date: "2025-10-24"
+      author: "Don Fountain"
+      changes: "Initial synthesis of NeuTTS Air model card."
+

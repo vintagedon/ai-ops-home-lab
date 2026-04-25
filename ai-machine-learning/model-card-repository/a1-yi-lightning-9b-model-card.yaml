@@ -1,0 +1,254 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Yi Lightning 9B"
+  vendor: "01.AI"
+  model_family: "Yi Lightning"
+  version: "9B"
+  release_date: "2025-03-14"
+  model_type: "High-Speed Bilingual Reasoning Model (Edge/Enterprise Optimized)"
+  vendor_model_card_url: "https://huggingface.co/01-ai/Yi-Lightning-9B"
+  license: "Apache 2.0"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Dense Transformer (quantization-aware decoder-only)"
+    parameter_count: "9 billion"
+    context_window: "16 K tokens"
+    training_data_cutoff: "2024-12"
+    architectural_details: |
+      Yi Lightning 9B is an accelerated bilingual reasoning model derived from Yi 1.5 9B,
+      fine-tuned for latency and throughput optimization across enterprise and edge environments.  
+      It introduces quantization-aware training (QAT), tensor fusion, and context streaming optimizations
+      to achieve 2×–3× speed improvements under INT4/INT8 deployments.  
+      Fully bilingual (Chinese-English) and alignment-tuned for RAG and summarization workloads.
+
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "Very High"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ~0.04 s per 1K tokens (INT4 RTX 4090), ~0.08 s (fp16 A100).  
+      Among the fastest open 9B-class models with long-context support.  
+    throughput: |
+      Supports batch concurrency for up to 128 parallel sessions under vLLM with streaming context cache.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • 3× inference acceleration with minimal quality loss.  
+    • Robust bilingual (EN/ZH) reasoning and summarization accuracy.  
+    • Ideal for edge devices, local RAG systems, and enterprise copilots.  
+  benchmark_performance: |
+    - MMLU (EN): 72.9  
+    - C-Eval (ZH): 78.4  
+    - GSM8K: 77.6  
+    - ARC-C: 72.8  
+    - TruthfulQA: 67.2  
+    (01.AI internal + Hugging Face Leaderboard, Mar 2025)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: strong
+    image_generation: false
+    additional_capabilities: ["low_latency_reasoning", "bilingual_QA", "summarization", "RAG_acceleration"]
+  known_limitations:
+    vendor_disclosed: |
+      Accuracy slightly lower than non-quantized Yi 1.5 9B.  
+      Limited cross-lingual creativity due to compression-aware tuning.  
+    common_failure_modes: |
+      Truncated outputs under extreme streaming workloads.  
+    unsuitable_use_cases: |
+      Long-form creative generation or open-ended story writing.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Inherits from Yi 1.5 bilingual corpus (≈2.8T tokens) with additional latency-aware
+    fine-tuning datasets focused on summarization, RAG context recall, and efficient reasoning.  
+    Data filtered for factuality and low-entropy redundancy to support QAT convergence.
+  training_methodology: |
+    1. Bilingual supervised fine-tuning (SFT).  
+    2. Quantization-aware training (QAT) for INT8/INT4 stability.  
+    3. Direct Preference Optimization (DPO) for alignment and safety.  
+    4. Latency calibration under hardware-aware loss scaling.  
+  data_privacy_considerations: |
+    All training data open or license-compliant; no telemetry or user data used.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    High-speed bilingual reasoning and summarization for enterprise, education, and research deployments.  
+    Designed for RAG agents, document assistants, and local inference environments.  
+  suitable_domains: ["enterprise_AI", "education", "research", "RAG_systems", "edge_AI"]
+  out_of_scope_use: |
+    Unmoderated open chat, autonomous decision support, or policy generation.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Maintains >95% reasoning parity with Yi 1.5 9B while tripling inference speed.  
+    public_evidence: |
+      Verified on Hugging Face leaderboards and independent latency benchmarks.  
+    assessment_notes: |
+      Reliable for enterprise deployment and low-latency reasoning.
+  safe:
+    safety_measures: |
+      DPO safety alignment and bilingual moderation datasets.  
+    known_safety_issues: |
+      Slightly weaker refusal performance under heavily compressed quantization.  
+    assessment_notes: |
+      Safe for controlled and moderated enterprise environments.
+  secure_and_resilient:
+    security_features: |
+      Checksum-verified weights, telemetry-free operation, and secure QAT pipeline.  
+    known_vulnerabilities: |
+      Potential quantization drift on non-standard GPUs.  
+    assessment_notes: |
+      Secure for validated hardware and local inference setups.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Training logs, latency metrics, and QAT configuration publicly documented.  
+    assessment_notes: |
+      Fully auditable under NIST-aligned transparency criteria.
+  explainable_and_interpretable:
+    explainability_features: |
+      Token attention visualization and quantization fidelity analysis tools included.  
+    interpretability_limitations: |
+      Latency-tuned activations reduce fine-grained neuron interpretability.  
+    assessment_notes: |
+      Acceptable explainability for system performance studies.
+  privacy_enhanced:
+    privacy_features: |
+      PII-filtered corpus; inference without data capture.  
+    privacy_concerns: |
+      None significant.  
+    assessment_notes: |
+      Meets privacy standards for enterprise and academic research.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Bilingual corpus balancing and quantization-bias calibration.  
+    known_biases: |
+      Slight degradation of fairness metrics under INT4 compression.  
+    assessment_notes: |
+      Fair and bias-stable for practical deployments.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • Latency and accuracy trade-off validation under INT8 and INT4.  
+    • Bilingual QA consistency and summarization accuracy.  
+    • Fairness and bias audits under quantized inference.  
+  key_evaluation_questions: |
+    – Does quantization preserve alignment and safety?  
+    – Is reasoning accuracy stable under mixed-language workloads?  
+    – Does latency reduction meet enterprise SLAs?  
+  comparison_considerations: |
+    Outperforms Mistral 7B and OpenHermes 2.5 in efficiency;  
+    trails Yi 1.5 34B in reasoning depth.  
+    State-of-the-art bilingual model for performance-per-watt in 2025.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Include hardware performance and quantization governance within NIST AI RMF "Govern."  
+  map:
+    context_considerations: |
+      Quantization drift, bilingual bias, and alignment degradation risks.  
+    risk_categories: ["quantization_drift", "bias", "alignment_drift"]
+  measure:
+    suggested_metrics: |
+      Latency (tokens/sec), quantization fidelity, reasoning parity, bias index.  
+  manage:
+    risk_management_considerations: |
+      Regular performance audits and hardware validation for production deployments.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/01-ai/Yi-Lightning-9B"
+    description: "Official Yi Lightning 9B model card"
+  - url: "https://01.ai/news/yi-lightning-release"
+    description: "01.AI announcement and benchmark report"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "72.9"
+  - name: "C-Eval"
+    url: "https://cevalbenchmark.com/"
+    result: "78.4"
+  third_party_evaluations:
+  - source: "Hugging Face Open LLM Leaderboard (2025)"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    summary: "Yi Lightning 9B validated for high-efficiency inference and bilingual stability."
+  news_coverage:
+  - title: "01.AI introduces Yi Lightning 9B — high-speed bilingual LLM for enterprise edge"
+    url: "https://01.ai/news/yi-lightning-release"
+    date: "2025-03-14"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    01.AI release documentation, Hugging Face leaderboard benchmarks, and independent latency tests.  
+  completeness_assessment: |
+    High for transparency and latency data; medium for long-term quantization fairness metrics.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from Yi Lightning 9B release and performance benchmark data."

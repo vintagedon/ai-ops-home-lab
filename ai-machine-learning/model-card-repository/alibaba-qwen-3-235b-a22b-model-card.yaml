@@ -1,0 +1,87 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Qwen3 (Technical Report)"
+  vendor: "Qwen Team / Alibaba Group"
+  model_family: "Qwen3"
+  version: "arXiv:2505.09388 v1"
+  release_date: "2025-05-14"
+  model_type: "Large Language Model family (dense + MoE)"
+
+  vendor_model_card_url: "https://arxiv.org/abs/2505.09388"
+
+  license: "Apache-2.0 (open weights, per paper)"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer (dense and Mixture-of-Experts variants)"
+    parameter_count: |
+      Family spans 0.6B–235B total parameters; flagship MoE Qwen3-235B-A22B has 235B total with 22B activated per token. # :contentReference[oaicite:0]{index=0}
+    context_window: |
+      Dense models up to 128K; MoE models up to 128K (tables show per-model specs; e.g., 32B: 128K; MoE 30B/235B: 128K). # :contentReference[oaicite:1]{index=1}
+
+    training_data_cutoff: "Not explicitly stated; pretraining described (36T tokens)."
+
+    architectural_details: |
+      Qwen3 integrates "thinking" and "non-thinking" modes in one model and introduces a configurable "thinking budget" at inference. Dense models use GQA, SwiGLU, RoPE with RMSNorm and QK-Norm; MoE uses 128 experts with 8 active per token and global-batch load-balancing, with no shared experts. # :contentReference[oaicite:2]{index=2}
+
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "Not publicly benchmarked for latency in paper"
+    cost_tier: "N/A (varies by deployment)"
+
+    latency: |
+      Not disclosed in the technical report.
+
+    throughput: |
+      Not disclosed in the technical report.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    Unified support for non-thinking (fast) and thinking (multi-step reasoning) modes with adjustable "thinking budget"; strong performance in coding, mathematics, agent tasks; multilingual expansion from 29 to 119 languages/dialects. # :contentReference[oaicite:3]{index=3}
+
+  benchmark_performance: |
+    Reported highlights for the flagship Qwen3-235B-A22B:
+    - AIME’24: 85.7
+    - AIME’25: 81.5
+    - LiveCodeBench v5: 70.7
+    - Codeforces: 2,056
+    - BFCL v3: 70.8
+    (As listed in the technical report.) # :contentReference[oaicite:4]{index=4}
+
+  special_capabilities:
+    tools_support: false
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["thinking/non-thinking unified modes", "adjustable reasoning budget"]
+
+  known_limitations:
+    vendor_disclosed: |
+      The report focuses on training, architecture, and benchmark results; deployment-time safety/latency, detailed robustness testing, and production guidance are not covered in depth. 

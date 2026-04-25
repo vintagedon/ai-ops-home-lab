@@ -1,0 +1,1311 @@
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+# GPT-4.1 Nano Model Card
+# Based on OpenAI documentation and publicly available sources
+
+schema_version: "1.0.0"
+
+# =============================================================================
+# MODEL IDENTITY
+# =============================================================================
+
+model_identity:
+  name: "GPT-4.1 Nano"
+  vendor: "OpenAI"
+  model_family: "GPT-4.1"
+  version: "gpt-4.1-nano-2025-04-14"
+  release_date: "2025-04-14"
+  model_type: "Large Language Model - Multimodal (Text and Vision)"
+
+  vendor_model_card_url: "https://platform.openai.com/docs/models/gpt-4.1-nano"
+
+  license: "Proprietary - Commercial API License (governed by OpenAI Service Terms and Usage Policies)"
+  
+  deprecation_status: "Active - OpenAI's first nano-class model and most cost-efficient offering"
+
+# =============================================================================
+# MODEL ARCHITECTURE & TECHNICAL SPECIFICATIONS
+# =============================================================================
+
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer-based architecture (specific details not publicly disclosed)"
+    
+    parameter_count: "Not publicly disclosed (described as 'smallest' model in GPT-4.1 family)"
+    
+    context_window: "1,047,576 tokens (~1 million tokens, approximately 750,000 words)"
+    
+    training_data_cutoff: "2024-05-31 (June 2024 knowledge cutoff)"
+
+    architectural_details: |
+      Smallest and fastest model in the GPT-4.1 family, OpenAI's first nano-class LLM.
+      Optimized for speed and cost efficiency while maintaining strong performance.
+      Supports both text and vision (image) inputs with text output generation.
+      Maximum output tokens: 32,768 tokens per response.
+      Despite smaller size, maintains full 1 million token context window of larger GPT-4.1 models.
+      Optimized for real-time tasks requiring minimal latency.
+      Enhanced instruction following and long-context comprehension capabilities.
+      Supports tool/function calling with parallel execution.
+      Prompt caching available with 75% discount on cached input tokens.
+      Built on safety foundations from GPT-4o with similar safety mitigations.
+      Available for fine-tuning on custom datasets.
+
+  modalities:
+    supported_inputs: ["text", "image"]
+    
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "Real-time - OpenAI's fastest model to date with minimal latency"
+    
+    cost_tier: "Very Low - OpenAI's most affordable model at $0.10/$0.40 per million tokens"
+    
+    latency: "Less than 5 seconds time to first token for queries with 128,000 input tokens (OpenAI testing); optimized for immediate responses"
+    
+    throughput: "Optimized for high-speed generation; specific tokens/second not publicly disclosed but fastest in GPT-4.1 family"
+
+# =============================================================================
+# CAPABILITIES & LIMITATIONS
+# =============================================================================
+
+capabilities:
+  vendor_claimed_strengths: |
+    According to OpenAI's announcement (April 14, 2025):
+    - "Delivers exceptional performance at a small size with its 1 million token context window"
+    - "For tasks that demand low latency, GPT-4.1 nano is our fastest and cheapest model available"
+    - Scores "even higher than GPT-4o mini" on key benchmarks
+    - "Absolute workhorse for tons of applications like autocomplete or classification" (Michelle Pokrass, OpenAI)
+    - Offers "the lowest latency and cost" at reportedly "12 cents blended per million tokens"
+    - "Ideal for tasks like classification or autocompletion"
+    - "Blazing speed and lowest-ever pricing for classification, autocomplete, and data extraction"
+    - Maintains "high-performance characteristics even when handling million-token inputs"
+    - Makes "million-token context processing economically viable for large-scale applications"
+
+  benchmark_performance: |
+    Based on OpenAI and third-party published benchmarks:
+    
+    Intelligence & Reasoning:
+    - MMLU (Massive Multitask Language Understanding): 80.1%
+    - GPQA (Graduate-Level Google-Proof Q&A): 50.3%
+    
+    Coding Performance:
+    - Aider Polyglot Coding (multilingual code understanding): 9.8%
+    
+    Comparison Context:
+    - Outperforms GPT-4o mini despite being smaller and faster
+    - Strong general intelligence for its size and cost
+    - "Surpasses GPT-4o Mini" according to analysis
+    - Not a "low-end fallback" but a "strategic choice" for specific use cases
+    
+    Note: Nano is optimized for speed/cost rather than maximum capability, so scores 
+    are lower than GPT-4.1 Mini (87.5% MMLU) but impressive for its size/price point.
+
+  special_capabilities:
+    tools_support: true
+    
+    vision_support: true
+    
+    reasoning_support: false  # Optimized for speed over deep reasoning
+    
+    image_generation: false
+    
+    additional_capabilities:
+      - "Parallel function calling during tool use"
+      - "Prompt caching with 75% cost reduction on cached inputs (drops cost to $0.025/$0.10 per million tokens)"
+      - "1 million token context window despite small size - unique capability for nano-class model"
+      - "Available for fine-tuning on custom datasets"
+      - "Vision capabilities for image understanding"
+      - "Optimized for real-time autocomplete and classification"
+      - "Cost-effective large document processing and information extraction"
+      - "High-volume data tagging and categorization"
+
+  known_limitations:
+    vendor_disclosed: |
+      Based on OpenAI documentation and announcements:
+      - Smaller model sacrifices some capabilities of GPT-4.1 and GPT-4.1 Mini in exchange for speed and cost
+      - "May struggle with nuanced instructions or multi-step reasoning tasks"
+      - "Requires more specific and explicit prompts for optimal results"
+      - "Prioritizes practical utility over cutting-edge capabilities for specialized domains"
+      - Becomes less reliable with extremely large inputs (though less pronounced than comparable models)
+      - More literal interpretation of instructions - needs explicit, specific prompts
+      - Optimized for speed over comprehensive reasoning capabilities
+      - Not designed for complex reasoning or highly sophisticated tasks
+
+    common_failure_modes: |
+      Based on analysis and intended design:
+      - Limited capability for complex multi-step reasoning compared to larger models
+      - May oversimplify nuanced tasks requiring deep analysis
+      - Can be overly literal in instruction interpretation
+      - Standard LLM failure modes: hallucination, bias, edge case handling
+      - Vision capabilities present but not at level of specialized vision models
+      - Designed for "quick, targeted tasks" rather than comprehensive analysis
+      - Classification and extraction tasks work well; complex synthesis less so
+
+    unsuitable_use_cases: |
+      Per OpenAI Usage Policies and model design:
+      
+      Beyond Model Capabilities:
+      - Complex multi-step reasoning requiring deep analysis
+      - Sophisticated creative writing or nuanced content generation
+      - Advanced mathematical proofs or scientific research
+      - Tasks requiring GPT-4.1 or GPT-4.1 Mini level intelligence
+      - Legal analysis requiring comprehensive reasoning (use larger models)
+      - Medical diagnosis beyond simple classification (use larger models with professional oversight)
+      - High-stakes decisions without human oversight and validation
+      
+      Policy Violations (same as other OpenAI models):
+      - High-stakes decisions requiring 100% accuracy without human review
+      - Medical diagnosis or treatment recommendations without licensed professional oversight
+      - Legal advice without qualified attorney involvement
+      - Real-time remote biometric identification in public spaces
+      - Facial recognition databases without data subject consent
+      - Use of someone's likeness without their consent
+      - Child endangerment or exploitation
+      - Creation of malware, vulnerability exploits, or malicious code
+      - Manipulation, deception, or interference with human rights
+      - Regulated domains without proper validation and compliance
+      - Tasks requiring guaranteed factual accuracy (model can hallucinate)
+
+# =============================================================================
+# TRAINING & DATA
+# =============================================================================
+
+training_information:
+  training_data_description: |
+    Not publicly disclosed by OpenAI.
+    
+    Known information:
+    - Training data extends to May 31, 2024 (knowledge cutoff date)
+    - Part of GPT-4.1 model family trained on diverse datasets
+    - Likely trained on internet text, books, code repositories, and other sources
+    - Optimized/distilled from larger GPT-4.1 family training
+    - Specific datasets, sizes, sources, and data composition not disclosed
+    - Nano likely uses distillation or similar techniques from larger models
+
+  training_methodology: |
+    Not publicly disclosed in detail by OpenAI.
+    
+    Known information:
+    - Part of GPT-4.1 family which used enhanced training approaches
+    - Likely includes supervised fine-tuning and safety training
+    - Built on safety foundations and mitigations developed for GPT-4o
+    - Optimized specifically for speed and efficiency
+    - Likely uses knowledge distillation from larger GPT-4.1 models
+    - Focused on instruction following and practical utility
+    - Fine-tuning capability available for custom domain adaptation
+    - Training methodology prioritized latency reduction and cost efficiency
+
+  data_privacy_considerations: |
+    Based on OpenAI's policies (same as other GPT-4.1 family models):
+    - API inputs are not used for training by default unless explicitly opted in
+    - Users retain ownership of input data
+    - OpenAI owns generated output (but assigns rights to users)
+    - Must not be used to process personal data without proper consent and legal basis
+    - Cannot be used for facial recognition without consent
+    - Privacy protections outlined in OpenAI Privacy Policy
+    - Enterprise customers can negotiate additional data handling agreements
+    - Sensitive deployments should review OpenAI's data handling practices and ensure GDPR/CCPA compliance
+    - Same privacy framework as other OpenAI models despite smaller size
+
+# =============================================================================
+# INTENDED USE & SCOPE
+# =============================================================================
+
+intended_use:
+  vendor_intended_use: |
+    According to OpenAI documentation:
+    - Classification tasks requiring rapid responses and cost efficiency
+    - Autocomplete functionality in code editors and text interfaces
+    - Information extraction from large documents and corpuses
+    - Data tagging and categorization at scale
+    - Basic content generation for high-volume applications
+    - Real-time applications requiring immediate responses with reasonable quality
+    - Code autocompletion engines
+    - Fast classification or reranking pipelines
+    - Lightweight agentic tools on client-side or edge environments
+    - Context-heavy applications like parsing logs or customer tickets on minimal budget
+    - High-volume processing where speed and cost are paramount
+    - Applications where processing speed takes priority over comprehensive reasoning
+    - Backend for interactive applications requiring immediate responses
+    - Document processing and information extraction from large corpuses
+    
+    OpenAI positions Nano as ideal when:
+    - Speed is critical and slight capability reduction is acceptable
+    - Processing large volumes of relatively simple tasks
+    - Cost optimization is paramount
+    - Million-token context needed but not maximum intelligence
+
+  suitable_domains:
+    - "Code autocompletion and IDE assistance"
+    - "Content classification and categorization"
+    - "Data extraction from large documents"
+    - "Customer support ticket routing and triage"
+    - "Real-time text completion and suggestions"
+    - "Log parsing and analysis"
+    - "Basic content moderation and filtering"
+    - "Information retrieval from large datasets"
+    - "Lightweight conversational AI"
+    - "Batch processing of simple tasks at scale"
+    - "Edge deployment for latency-sensitive applications"
+    - "High-volume API applications with cost constraints"
+
+  out_of_scope_use: |
+    The following use cases fall outside safe deployment boundaries:
+    
+    Capability Limitations:
+    - Complex multi-step reasoning or analysis
+    - Sophisticated creative writing or nuanced content
+    - Advanced mathematical proofs or scientific research
+    - High-stakes decisions requiring maximum model capability
+    - Tasks requiring deep domain expertise
+    - Complex legal or medical analysis (use larger models)
+    - Situations where GPT-4.1 or GPT-4.1 Mini intelligence is required
+    - Tasks requiring guaranteed 100% factual accuracy
+    - Real-time data analysis (knowledge cutoff May 2024)
+    
+    Regulatory/Safety Concerns:
+    - Medical diagnosis or treatment without licensed professional oversight
+    - Legal advice without qualified attorney review
+    - Financial advice requiring professional licensing
+    - Safety-critical systems without extensive validation
+    - Real-time biometric identification in public spaces
+    - Child-facing applications without appropriate safeguards
+    - High-stakes automated decisions without human review
+    
+    Policy Violations (per OpenAI Usage Policies):
+    - Circumventing safety features or rate limits
+    - Generating malware or exploit code
+    - Creating CSAM or exploiting minors
+    - Manipulating or deceiving users
+    - Violating intellectual property rights
+    - Privacy violations or unauthorized surveillance
+    - Any use case prohibited in OpenAI's Usage Policies
+
+# =============================================================================
+# TRUSTWORTHINESS CHARACTERISTICS
+# =============================================================================
+
+trustworthiness_assessment:
+  # CHARACTERISTIC 1: Valid and Reliable
+  valid_and_reliable:
+    vendor_claims: |
+      OpenAI claims GPT-4.1 Nano:
+      - "Delivers exceptional performance at a small size"
+      - Scores 80.1% on MMLU, "even higher than GPT-4o mini"
+      - Maintains reliable performance across 1 million token context
+      - "Absolute workhorse" for classification and autocomplete tasks
+      - Provides "immediate responses" while maintaining "high-performance characteristics"
+
+    public_evidence: |
+      Published benchmark results and analysis show:
+      - MMLU: 80.1% (strong general knowledge for size/price)
+      - GPQA: 50.3% (decent graduate-level reasoning for nano model)
+      - Aider Polyglot Coding: 9.8% (limited coding capability as expected)
+      - Outperforms GPT-4o mini despite being smaller and cheaper
+      - Multiple sources confirm pricing advantage: ~33% cheaper than GPT-4o mini
+      - Real-world testing shows <5 seconds to first token with 128k context
+      - Performance described as "impressive" and "robust" given size/cost
+      - "Surprisingly capable" despite being smallest in family
+
+    assessment_notes: |
+      For deployment assessment:
+      - Benchmark scores validate strong performance for intended simple tasks
+      - Performance appropriate for classification, extraction, autocompletion
+      - NOT suitable for complex reasoning - this is by design
+      - Test thoroughly on your specific use case to validate capability
+      - For simple tasks, nano may exceed expectations
+      - For complex tasks, will underperform - use Mini or full GPT-4.1
+      - Establish clear success criteria appropriate for nano-class model
+      - Monitor for accuracy degradation on tasks beyond design intent
+      - Consider as part of multi-model strategy (nano for simple, larger for complex)
+      - Cost savings may justify slight capability reduction for many use cases
+
+  # CHARACTERISTIC 2: Safe
+  safe:
+    safety_mechanisms: |
+      Based on OpenAI disclosures:
+      - Built on same safety foundations as GPT-4o
+      - Same safety training and mitigations as other GPT-4.1 family models
+      - Standard content filtering and safety guardrails applied
+      - Does not introduce new modalities (no audio/video) limiting novel risks
+      - Instruction hierarchy: system > developer > user messages
+      - Benefits from GPT-4.1 family safety work
+      - Same Safety Evaluations Hub framework applies
+      - Tool calling includes safety boundaries
+      
+      Note: Specific safety benchmark scores for Nano not separately published,
+      but expected to be similar to GPT-4.1 Mini given shared foundations.
+
+    known_safety_issues: |
+      Based on model design and GPT-4.1 family characteristics:
+      - Smaller model may have reduced ability to handle nuanced safety scenarios
+      - May be more susceptible to jailbreak attempts than larger models
+      - Standard LLM risks: potential for harmful content if safety bypassed
+      - Can be manipulated with carefully crafted adversarial prompts
+      - May generate biased or stereotypical content reflecting training data
+      - Risk of generating plausible-sounding but false information (hallucination)
+      - Vision capabilities introduce risks around deepfakes, unauthorized likeness
+      - Simpler model may have less sophisticated safety reasoning
+      - Lower capability means less ability to refuse nuanced inappropriate requests
+
+    assessment_notes: |
+      For safety evaluation:
+      - Test with domain-specific adversarial prompts before deployment
+      - Smaller model may require additional application-layer safety controls
+      - Implement content filtering appropriate for your use case
+      - Monitor for jailbreak attempts and safety bypass patterns
+      - Human review strongly recommended for any sensitive outputs
+      - May need more robust safety layers than larger models
+      - Regular red-teaming essential for production deployments
+      - Document safety incidents and update measures accordingly
+      - Consider if reduced safety sophistication is acceptable for your use case
+      - Good for simple tasks; questionable for safety-sensitive applications
+
+  # CHARACTERISTIC 3: Secure and Resilient
+  secure_and_resilient:
+    security_measures: |
+      Based on OpenAI's infrastructure (same as other models):
+      - API access requires authentication and API keys
+      - Rate limiting to prevent abuse
+      - TLS encryption for data in transit
+      - SOC 2 Type II certified infrastructure
+      - Enterprise customers can negotiate BAAs for HIPAA compliance
+      - Prompt injection detection (implied by safety measures)
+      - Tool calling includes security boundaries
+      - Same security framework as other OpenAI models
+
+    known_vulnerabilities: |
+      Standard LLM security considerations plus nano-specific concerns:
+      - Susceptible to prompt injection attacks
+      - May leak training data through careful prompting
+      - Smaller model may be more vulnerable to adversarial attacks
+      - Can be used to generate malicious code if safety bypassed
+      - Indirect prompt injection via documents/images
+      - Model outputs may be used for social engineering
+      - API keys must be protected (compromise enables misuse)
+      - Caching feature could leak information between users if misconfigured
+      - Reduced capability may make security reasoning less sophisticated
+
+    assessment_notes: |
+      For security assessment:
+      - Implement prompt injection detection in application layer
+      - Never execute model outputs without validation
+      - Protect API keys using secure secret management
+      - Implement rate limiting and abuse detection
+      - Log all interactions for security monitoring
+      - Consider additional security layers given smaller model size
+      - Test with adversarial inputs before production deployment
+      - Monitor for misuse patterns in production
+      - Nano's speed makes it attractive for abuse at scale - implement controls
+      - Cost efficiency could enable large-scale malicious use - monitor carefully
+
+  # CHARACTERISTIC 4: Accountable and Transparent
+  accountable_and_transparent:
+    documentation_quality: |
+      OpenAI provides:
+      - Official model documentation at platform.openai.com
+      - Announcement blog post with key benchmark results
+      - Safety Evaluations Hub framework (though Nano-specific scores not separate)
+      - API reference documentation
+      - Usage policies clearly documented
+      - Model comparison information vs other GPT-4.1 variants
+      - Pricing and rate limit information
+      - Clear positioning of intended use cases
+      
+      Limited compared to larger models:
+      - Less detailed performance breakdowns than GPT-4.1 or Mini
+      - Fewer benchmark results published
+      - Less discussion in announcement materials
+
+    transparency_gaps: |
+      Significant gaps in transparency (same as other proprietary models):
+      - Parameter count not disclosed
+      - Training data composition, sources, and sizes not disclosed
+      - Detailed architecture not disclosed
+      - Training methodology details not disclosed
+      - Distillation or optimization techniques not detailed
+      - Specific safety training approaches not detailed
+      - No comprehensive "model card" in standard format
+      - Limited information on bias testing and mitigation
+      - Data filtering and PII removal processes not detailed
+      - Decision-making for size/capability tradeoffs not disclosed
+      - Nano-specific safety benchmark scores not published separately
+      
+      Additional nano-specific gaps:
+      - How capabilities were reduced from larger models not disclosed
+      - Optimization techniques for speed not detailed
+      - Specific architectural changes from larger models not disclosed
+
+    assessment_notes: |
+      For transparency evaluation:
+      - Accept this is a proprietary model with limited technical transparency
+      - Even less transparency than larger models due to competitive concerns
+      - Document transparency gaps in your risk assessment
+      - For regulated industries, determine if disclosure level is acceptable
+      - Consider open-weight alternatives if transparency is critical
+      - Establish monitoring to detect unexpected behavior changes
+      - OpenAI may update model without notice - monitor for changes
+      - Nano's lower visibility may mean less external scrutiny
+      - Request additional documentation from OpenAI for enterprise deployments
+
+  # CHARACTERISTIC 5: Explainable and Interpretable
+  explainable_and_interpretable:
+    explainability_features: |
+      Limited built-in explainability (same as other models):
+      - Can request reasoning in prompts (though may be limited vs larger models)
+      - Log probabilities available via API (logprobs parameter)
+      - Tool calling provides structured insight into decisions
+      - Can ask for explanations (quality may be reduced vs larger models)
+      
+      Nano-specific limitations:
+      - Smaller model may provide less sophisticated explanations
+      - Optimized for speed may reduce explanation quality
+      - Best for simple tasks where explainability less critical
+
+    interpretability_challenges: |
+      Standard LLM interpretability limitations plus nano concerns:
+      - Black-box neural network architecture
+      - Cannot guarantee specific reasoning path
+      - May confabulate explanations for its outputs
+      - No formal verification of reasoning correctness
+      - Attention mechanisms not exposed to users
+      - Cannot trace specific training examples
+      - Explanations may be post-hoc rationalizations
+      - No proven causal understanding mechanisms
+      - Smaller model may have less sophisticated meta-reasoning
+      - Reduced capability limits explanation quality
+
+    assessment_notes: |
+      For explainability requirements:
+      - Nano NOT suitable for applications requiring detailed explanations
+      - Use for simple tasks where explainability is less critical
+      - Implement prompt engineering for basic reasoning when needed
+      - Use structured outputs and tool calling for auditable paths
+      - Log all inputs and outputs for review
+      - Consider larger models for tasks requiring explainability
+      - Not suitable for applications requiring formal verification
+      - Human experts must review any high-stakes decisions
+      - Accept severe limitations of nano-class explainability
+      - Good for classification/extraction; poor for explanation
+
+  # CHARACTERISTIC 6: Privacy-Enhanced
+  privacy_enhanced:
+    privacy_protections: |
+      OpenAI privacy measures (same across all models):
+      - API inputs not used for training by default
+      - Enterprise customers can opt out of data retention
+      - Data Processing Addendum available for enterprise customers
+      - 30-day retention for abuse monitoring (can be reduced for some tiers)
+      - Zero data retention option available for some enterprise customers
+      - GDPR and CCPA compliance measures in place
+      - Cannot be used for facial recognition without consent
+      - Privacy Policy clearly documented
+
+    privacy_risks: |
+      Privacy considerations (same as larger models plus nano-specific):
+      - Model may inadvertently memorize and leak training data
+      - User inputs temporarily stored for abuse monitoring (default 30 days)
+      - Outputs could reveal patterns about training data
+      - Vision capability introduces risks with personal images
+      - Prompt caching could theoretically leak information between users
+      - Third-party API aggregators add additional privacy considerations
+      - Model fine-tuning requires uploading potentially sensitive training data
+      - Cannot verify training data sources for privacy compliance
+      - Nano's low cost enables large-scale data processing - privacy risk at scale
+
+    assessment_notes: |
+      For privacy evaluation:
+      - Never input personal data unless necessary and with proper legal basis
+      - Review OpenAI's Privacy Policy and Data Processing Addendum
+      - For healthcare/financial data, ensure BAA and proper safeguards
+      - Implement data minimization - only send necessary information
+      - Consider on-premises alternatives for highly sensitive data
+      - Sanitize inputs to remove unnecessary PII
+      - Establish data retention policies aligned with regulations
+      - Monitor for accidental PII disclosure in outputs
+      - Document privacy impact assessment for your use case
+      - Nano's efficiency enables processing at scale - ensure privacy at scale
+
+  # CHARACTERISTIC 7: Fair with Harmful Bias Managed
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      OpenAI's disclosed approach (same as other models):
+      - Built on GPT-4o safety foundations including bias mitigation
+      - Safety training includes bias reduction objectives
+      - Content policies prohibit discriminatory outputs
+      - Can refuse to generate biased or stereotypical content
+      - Usage policies prohibit use for discrimination
+      
+      Not disclosed:
+      - Specific debiasing techniques used
+      - Training data diversity metrics
+      - Demographic representation in training data
+      - Bias testing methodology and results
+      - Nano-specific bias evaluation results
+
+    known_biases: |
+      Standard LLM bias concerns (same as other models):
+      - May reflect societal biases present in training data
+      - Potential for gender, racial, cultural stereotyping
+      - English language likely over-represented (performance gaps for other languages)
+      - Western/US-centric perspective likely
+      - Bias in code generation toward popular patterns
+      - Vision capabilities may have demographic performance disparities
+      - May underrepresent minority viewpoints
+      
+      Nano-specific concerns:
+      - Smaller model may have less sophisticated bias handling
+      - Reduced capability may lead to more stereotypical outputs
+      - Less nuanced understanding of bias-related concerns
+      - Specific bias audit results not publicly available
+
+    assessment_notes: |
+      For fairness evaluation:
+      - Test with diverse demographic scenarios relevant to your use case
+      - Monitor outputs for stereotypical or biased patterns
+      - Implement bias detection in your application layer
+      - Consider additional review for sensitive applications
+      - Test across languages, cultures, demographics relevant to users
+      - Document acceptable bias thresholds for your use case
+      - Establish feedback mechanisms for bias reporting
+      - Compare performance across demographic groups in production
+      - Smaller model may require more robust bias controls
+      - Consider if reduced bias sophistication is acceptable for your use case
+      - Good for simple classification; questionable for nuanced bias scenarios
+
+# =============================================================================
+# EVALUATION GUIDANCE
+# =============================================================================
+
+evaluation_guidance:
+  recommended_tests: |
+    Pre-deployment validation tests for GPT-4.1 Nano:
+    
+    1. Capability Assessment:
+       - Test on your SPECIFIC use case (autocomplete, classification, extraction, etc.)
+       - Compare with GPT-4.1 Mini to validate nano is sufficient
+       - Test with representative samples (minimum 100 examples)
+       - Measure accuracy against ground truth
+       - Establish if nano-level capability meets requirements
+       - Test with simple vs. complex inputs to find capability limits
+       - Pass/Fail: Only use Nano if it meets accuracy thresholds for YOUR use case
+    
+    2. Performance Tests:
+       - Measure latency for representative queries
+       - Test under expected production load
+       - Verify speed advantage over larger models
+       - Test prompt caching performance (75% cost reduction)
+       - Measure throughput at scale
+       - Establish SLAs appropriate for real-time use
+       - Pass/Fail: Latency must meet real-time requirements
+    
+    3. Context Window Tests (if using long contexts):
+       - Test retrieval accuracy across 1M token window
+       - Verify "needle in haystack" performance for your data
+       - Test with multiple context lengths (10k, 100k, 500k, 1M)
+       - Monitor for performance degradation at larger contexts
+       - Pass/Fail: Acceptable accuracy at your expected context lengths
+    
+    4. Safety/Bias Testing:
+       - Red team with adversarial prompts for your domain
+       - Test for prompt injection vulnerabilities
+       - Evaluate outputs across demographic groups
+       - Test refusal behavior for prohibited content
+       - Monitor for biased or stereotypical outputs
+       - Test with additional safety layers given smaller model
+       - Pass/Fail: Zero tolerance for safety policy violations
+    
+    5. Security Testing:
+       - Attempt prompt injection attacks
+       - Test for training data extraction
+       - Verify API key security
+       - Test tool calling security boundaries
+       - Attempt jailbreak prompts
+       - Test at scale (abuse potential given low cost)
+       - Pass/Fail: Must pass security audit
+    
+    6. Cost-Benefit Analysis:
+       - Calculate expected costs at production scale
+       - Compare costs vs. Mini and full GPT-4.1
+       - Test prompt caching effectiveness (can reduce to $0.025/$0.10)
+       - Validate cost savings justify any capability reduction
+       - Pass/Fail: Cost projections must be acceptable
+    
+    7. Edge Case Testing:
+       - Test with complex instructions (expect limitations)
+       - Test with nuanced multi-step tasks (expect failures)
+       - Test with unusual inputs
+       - Document failure modes
+       - Pass/Fail: Understand and accept failure modes
+    
+    Critical Success Criteria:
+    - Nano must be sufficient for your SPECIFIC use case
+    - Speed/cost advantages must outweigh capability reduction
+    - Safety controls must be adequate with additional layers
+    - Integration must handle Nano's limitations gracefully
+    - Fallback to larger model available for complex queries
+
+  key_evaluation_questions: |
+    Critical questions for GPT-4.1 Nano deployment:
+    
+    Capability:
+    - Is Nano actually sufficient for our use case, or do we need Mini/full GPT-4.1?
+    - Have we tested thoroughly on representative data?
+    - Are we using Nano for appropriate tasks (simple classification/extraction)?
+    - Or are we trying to force Nano into complex tasks it can't handle?
+    - Do we have fallback to larger models when Nano is insufficient?
+    - Is the capability reduction acceptable for our quality requirements?
+    - Have we established clear boundaries for what Nano should/shouldn't do?
+    
+    Performance:
+    - Does Nano's speed meet our real-time requirements?
+    - Have we measured actual latency in our production environment?
+    - Is prompt caching applicable to further reduce latency and cost?
+    - Can our infrastructure handle expected query volumes?
+    - Have we tested performance under load?
+    
+    Cost:
+    - What are our projected costs at production scale?
+    - How much do we save vs. Mini or full GPT-4.1?
+    - Is the cost savings worth any capability trade-off?
+    - Will we exceed budgets if usage scales beyond expectations?
+    - Have we factored in prompt caching savings (75% discount)?
+    
+    Context Window:
+    - Do we actually need 1M token context, or is it overkill for our use case?
+    - Have we tested performance at our expected context lengths?
+    - Does performance degrade acceptably as context grows?
+    - Are we efficiently using the context window?
+    
+    Safety & Security:
+    - Are OpenAI's safety controls sufficient for our use case?
+    - Do we need additional application-layer safety measures?
+    - Is a smaller model acceptable for our safety requirements?
+    - Have we tested for domain-specific safety issues?
+    - Have we implemented appropriate human oversight?
+    - How do we handle malicious use given low cost/high speed?
+    
+    Deployment:
+    - Have we implemented proper error handling for Nano's limitations?
+    - Do we have monitoring for accuracy degradation?
+    - Have we established alerting for performance issues?
+    - Is our logging sufficient for debugging and auditing?
+    - Do we have rollback plan if Nano proves insufficient?
+    
+    Transparency:
+    - Are we comfortable with very limited technical transparency?
+    - Can we operate effectively without detailed architecture information?
+    - Have stakeholders approved use of proprietary black-box model?
+    - Have we documented transparency gaps in risk assessment?
+    
+    Alternative Models:
+    - Have we compared Nano with other low-cost options (Gemini Flash, Claude Haiku)?
+    - Is Nano truly the best choice, or just the most familiar?
+    - Should we use multiple models for different tasks?
+    - Do we have vendor diversification strategy?
+
+  comparison_considerations: |
+    Comparing GPT-4.1 Nano with alternatives:
+    
+    Within OpenAI Family:
+    - GPT-4.1 Mini: 2x cost, significantly higher capability, still fast
+    - GPT-4.1 Full: 20x cost, maximum capability, slower
+    - GPT-4o Mini: 1.5x cost, older generation, smaller context (128k)
+    
+    When to Choose Nano:
+    ✓ Speed is paramount
+    ✓ Cost optimization is critical
+    ✓ Tasks are simple (classification, extraction, autocomplete)
+    ✓ High volume processing at scale
+    ✓ Need 1M token context at minimal cost
+    ✓ Quality reduction acceptable for cost savings
+    
+    When to Choose Mini Instead:
+    ✓ Need better quality for modest cost increase
+    ✓ Tasks require more reasoning capability
+    ✓ Vision tasks (Mini described as best for multimodal)
+    ✓ Instruction following important
+    ✓ Can afford 4x the cost for significantly better results
+    
+    When to Choose Full GPT-4.1:
+    ✓ Maximum capability required
+    ✓ Cost not primary concern
+    ✓ Complex reasoning and analysis needed
+    ✓ High-stakes applications
+    
+    Alternative Vendors:
+    - Google Gemini 2.5 Flash Lite: Lower cost, competitive performance
+    - Google Gemini 1.5 Flash 8B: Similar price, different strengths
+    - Anthropic Claude 3 Haiku: Similar tier, competitive
+    - Amazon Nova Lite/Micro: Lower cost, AWS integration
+    - Mistral Small models: Open-weight option, self-hosting
+    - Meta Llama 3.1 8B: Open-weight, free if self-hosted
+    
+    Key Trade-offs:
+    
+    Speed vs. Capability:
+    - Nano: Fastest, least capable
+    - Mini: Fast, much more capable
+    - Full: Slower, most capable
+    - Choose based on whether speed or capability matters more
+    
+    Cost vs. Quality:
+    - Nano: Cheapest per token, lower quality
+    - May need more tokens/retries to get acceptable results
+    - Net cost may not be as low as token price suggests
+    - Test actual cost in production including retries
+    
+    Deployment Considerations:
+    
+    Cloud API (Nano's only option):
+    ✓ Zero infrastructure management
+    ✓ Automatic updates
+    ✓ Scales effortlessly
+    ✗ Data leaves premises
+    ✗ Vendor lock-in
+    ✗ Usage-based costs
+    ✗ Internet dependency
+    
+    If Need On-Premises:
+    - Nano not available for self-hosting
+    - Consider Llama 3.1 8B or Mistral Small
+    - Trade convenience for control
+    
+    Multi-Model Strategy:
+    Best practice for production:
+    - Use Nano for simple, high-volume tasks
+    - Route to Mini for medium complexity
+    - Escalate to full GPT-4.1 for complex tasks
+    - Implement intelligent routing logic
+    - Optimize cost while maintaining quality
+    
+    Competitive Positioning:
+    - Nano is cheapest OpenAI model ever
+    - BUT not cheapest overall (Gemini Flash Lite, Nova Micro, open models cheaper)
+    - Nano's 1M context window unique among cheapest models
+    - Consider if OpenAI ecosystem worth premium vs. alternatives
+    - Test multiple vendors before committing
+
+# =============================================================================
+# NIST AI RMF MAPPING
+# =============================================================================
+
+rmf_function_mapping:
+  # GOVERN: Organizational policies and oversight
+  govern:
+    notes: |
+      Governance considerations for GPT-4.1 Nano deployment:
+      
+      Policy Alignment:
+      - Review OpenAI's Usage Policies against organizational policies
+      - Ensure use case aligns with acceptable use guidelines (simple tasks)
+      - Establish internal policies for nano-class model use
+      - Document approved use cases (classification, extraction, autocomplete)
+      - Document prohibited use cases (complex reasoning, high-stakes decisions)
+      - Define when to escalate to larger models
+      
+      Approval Process:
+      - Who approves nano-class model for production?
+      - What risk assessment required given capability limitations?
+      - Who approves escalation to larger models when needed?
+      - Document approval chain and decision criteria
+      - Establish capability boundaries and review process
+      
+      Oversight Requirements:
+      - Regular review of nano performance vs. requirements
+      - Monitor for tasks exceeding nano capabilities
+      - Define KPIs appropriate for nano-class model
+      - Set up incident escalation procedures
+      - Regular safety and bias audits with focus on smaller model limitations
+      - Monitor cost vs. quality trade-offs
+      
+      Version Control:
+      - Track model version (gpt-4.1-nano-2025-04-14)
+      - Monitor for OpenAI updates (may update without notice)
+      - Establish change management for model updates
+      - Document configuration and routing logic
+      - Version control for prompts and integration code
+      
+      Vendor Management:
+      - Review OpenAI's service terms and SLAs
+      - Establish vendor communication channels
+      - Define expectations for support
+      - Consider business continuity if OpenAI service unavailable
+      - Negotiate enterprise agreement if needed
+      - Monitor for nano deprecation (if OpenAI releases better option)
+
+  # MAP: Context and risk identification
+  map:
+    context_considerations: |
+      Contextual factors affecting risk for GPT-4.1 Nano:
+      
+      Use Case Context:
+      - Who: End users, operators, affected stakeholders
+      - What: Specific simple tasks (classification, extraction, autocomplete)
+      - Where: Geographic regions, regulatory jurisdictions
+      - When: Real-time vs. batch, frequency of use
+      - Why: Speed/cost optimization balanced against capability needs
+      
+      Capability Limitations Context:
+      - Nano has reduced capability vs. larger models
+      - Tasks must be appropriately simple for nano-class model
+      - Risk of using nano for tasks beyond its design
+      - Need for escalation to larger models for complex tasks
+      - Potential quality issues from capability limitations
+      
+      Data Sensitivity:
+      - Same considerations as larger models
+      - BUT: lower capability may impact handling of sensitive data
+      - Less sophisticated reasoning about privacy/sensitivity
+      - Consider if nano-level understanding sufficient for your data
+      
+      Stakeholder Impacts:
+      - Direct users: May notice quality differences vs. larger models
+      - Affected individuals: Simpler model may lead to simpler decisions
+      - Organizational reputation: Model failures reflect on organization
+      - Quality expectations: Must align with nano capabilities
+      
+      Regulatory Requirements:
+      - Same regulatory landscape as larger models
+      - BUT: reduced capability may affect compliance
+      - Consider if nano sufficient for regulated applications
+      - May need larger models for compliance-critical tasks
+
+    risk_categories:
+      - "Capability risk: Using nano for tasks beyond its design, leading to poor outcomes"
+      - "Accuracy risk: Model hallucination or errors due to reduced capability"
+      - "Safety risk: Less sophisticated safety reasoning than larger models"
+      - "Security risk: Prompt injection, data leakage, adversarial attacks"
+      - "Privacy risk: Unauthorized data disclosure, PII leakage"
+      - "Compliance risk: Regulatory violations due to insufficient capability"
+      - "Operational risk: Service unavailability, rate limiting, cost overruns at scale"
+      - "Reputational risk: Quality issues visible to customers or public"
+      - "Fairness risk: Biased outputs with less sophisticated bias handling"
+      - "Misuse risk: Low cost enables abuse at scale"
+      - "Escalation risk: Routing failures leading to nano handling complex tasks"
+
+  # MEASURE: Metrics and monitoring
+  measure:
+    suggested_metrics: |
+      Metrics to track for GPT-4.1 Nano deployment:
+      
+      Performance Metrics:
+      - Accuracy: % meeting quality standards (target varies by use case; may be lower than larger models)
+      - Latency: Average response time (target: <5s for 128k context, real-time for smaller)
+      - Throughput: Requests/second, tokens/second (should be very high)
+      - Context utilization: Average tokens per request
+      - Tool calling success rate (if applicable)
+      - Prompt cache hit rate (target: >50% for cost savings)
+      
+      Capability Monitoring (Nano-Specific):
+      - Task complexity distribution (are we using nano appropriately?)
+      - Escalation rate: % of tasks routed to larger models (target: <10%?)
+      - Quality degradation: Performance on edge cases
+      - Retry rate: % of tasks requiring re-generation
+      - Fallback rate: % of tasks failing and requiring fallback
+      
+      Safety Metrics:
+      - Harmful output rate: % flagged as harmful (target: <0.1%)
+      - Refusal accuracy: % correct refusals (target: >90%; may be lower than larger models)
+      - Jailbreak attempts: Count and success rate
+      - Content policy violations: Count and categorization
+      - User reports of issues: Count and resolution time
+      
+      Operational Metrics:
+      - Uptime: API availability (check OpenAI SLA)
+      - Error rate: % of failed requests (target: <1%)
+      - Rate limit hits: Frequency and impact
+      - API cost: $/day/month/year, cost per request
+      - Cost savings vs. larger models: Track actual savings
+      - Volume: Track request volumes (can scale rapidly given low cost)
+      
+      Cost Efficiency Metrics:
+      - Cost per successful task completion
+      - Prompt caching savings: % cost reduction from caching
+      - Cost per quality unit (e.g., $ per correct classification)
+      - Total cost vs. budget
+      - Cost trend over time
+      
+      Quality Metrics:
+      - Task success rate: % tasks completed successfully
+      - User satisfaction: CSAT, NPS scores
+      - Quality comparison: Nano vs. larger model sample comparisons
+      - Correctness rate: % outputs matching ground truth
+      
+      Fairness Metrics:
+      - Demographic performance parity: Compare accuracy across user groups
+      - Bias incident reports: Count and categorization
+      - Stereotype detection rate: % outputs flagged for bias
+      
+      Measurement Methods:
+      - Automated monitoring: Real-time logging and alerting
+      - Human evaluation: Regular manual review of samples (e.g., 100 random/week)
+      - A/B testing: Compare nano vs. larger models
+      - User feedback: Explicit feedback collection
+      - Regular audits: Quarterly comprehensive reviews
+      - Benchmark against larger models periodically
+      
+      Thresholds and Alerts:
+      - Define red/yellow/green for each metric
+      - Alert on threshold breaches
+      - Escalation for critical issues
+      - Regular reporting to stakeholders
+      - Review thresholds as understanding of nano capability evolves
+
+  # MANAGE: Risk controls and responses
+  manage:
+    risk_management_considerations: |
+      Risk management strategies for GPT-4.1 Nano:
+      
+      Technical Controls:
+      
+      Capability Routing (Nano-Specific):
+      - Intelligent routing: Simple tasks to nano, complex to larger models
+      - Automatic escalation: Detect when nano insufficient, route to mini/full
+      - Confidence scoring: Route based on confidence in nano's capability
+      - Task classification: Pre-classify queries by complexity
+      - Fallback mechanisms: Graceful degradation when nano fails
+      - A/B testing: Validate nano sufficient vs. larger models
+      
+      Input/Output Controls:
+      - Input validation: Sanitize and validate user inputs
+      - Output filtering: Screen outputs for prohibited content
+      - Quality checks: Validate output meets minimum standards
+      - Prompt injection detection: Monitor for adversarial inputs
+      - Rate limiting: Prevent abuse (especially important given low cost)
+      - Content moderation: Additional safety layer beyond OpenAI's
+      
+      Monitoring:
+      - Real-time logging: Capture all inputs, outputs, metadata
+      - Quality monitoring: Track accuracy, detect degradation
+      - Anomaly detection: Flag unusual patterns
+      - Cost monitoring: Track spending, alert on overruns
+      - Performance dashboards: Real-time KPIs
+      - User feedback collection: Enable issue reporting
+      
+      Caching & Optimization:
+      - Prompt caching: Use 75% discount for repeated inputs
+      - Batch processing: 50% discount for batch API
+      - Context optimization: Minimize unnecessary context
+      - Output length control: Set appropriate max_tokens
+      
+      Process Controls:
+      
+      Human Review:
+      - Spot checking: Random sample review
+      - High-stakes review: Human approval for important decisions (don't use nano for these)
+      - Dispute resolution: Human review of user complaints
+      - Bias audits: Regular evaluation for fairness
+      - Quality assurance: Ongoing validation of nano performance
+      
+      Escalation Procedures:
+      - Severity classification: Critical/High/Medium/Low
+      - Response times: SLAs for each severity
+      - Escalation chain: Clear accountability
+      - Communication protocols: Internal and external notification
+      - Documentation: Incident logging and analysis
+      - Model escalation: When to switch from nano to larger model
+      
+      Task Routing:
+      - Pre-assessment: Classify queries before routing
+      - Dynamic routing: Route based on query characteristics
+      - User choice: Allow users to select model tier
+      - Automatic escalation: Re-route failed nano attempts to larger model
+      - Cost optimization: Balance cost vs. quality
+      
+      Organizational Controls:
+      
+      Training:
+      - User training: How to use nano effectively (simple tasks only)
+      - Operator training: When to escalate to larger models
+      - Capability awareness: Understanding nano limitations
+      - Prompt engineering: Getting best results from nano
+      - Security training: API security and abuse prevention
+      
+      Policies:
+      - Acceptable use: Clear guidelines for nano-appropriate tasks
+      - Escalation policy: When to use larger models
+      - Data handling: Privacy and security requirements
+      - Incident response: Procedures for handling issues
+      - Cost management: Budget limits and approval thresholds
+      
+      Oversight:
+      - Regular reviews: Scheduled assessment of nano performance
+      - Capability monitoring: Ensure tasks match nano capability
+      - Cost reviews: Validate spending vs. budget
+      - Quality reviews: Ensure output meets standards
+      - Stakeholder engagement: Communication with affected parties
+      
+      Incident Response:
+      
+      Preparation:
+      - Response plan: Documented procedures
+      - Response team: Defined roles
+      - Communication templates: Pre-approved messaging
+      - Escalation paths: Clear decision authority
+      - Testing: Regular drills
+      
+      Detection:
+      - Monitoring alerts: Automated detection
+      - User reports: Easy reporting mechanisms
+      - Quality degradation: Detect performance drops
+      - Security monitoring: Track adversarial activity
+      - Cost monitoring: Alert on spending anomalies
+      
+      Response:
+      - Immediate actions: Contain impact
+      - Investigation: Root cause analysis
+      - Model switching: Escalate to larger model if needed
+      - Communication: Inform stakeholders
+      - Remediation: Fix underlying issues
+      - Documentation: Record incident details
+      
+      Recovery:
+      - Service restoration: Return to normal
+      - Validation: Confirm issues resolved
+      - User communication: Inform affected parties
+      - Compensation: If applicable
+      
+      Learning:
+      - Post-incident review: Lessons learned
+      - Control updates: Strengthen defenses
+      - Knowledge sharing: Communicate learnings
+      - Capability refinement: Update routing logic
+      - Continuous improvement: Iterate on risk management
+      
+      Long-term Management:
+      
+      Continuous Improvement:
+      - Regular testing: Ongoing validation
+      - Feedback integration: Incorporate user input
+      - Benchmark tracking: Monitor industry best practices
+      - Model updates: Stay current with OpenAI improvements
+      - Routing optimization: Refine task routing logic
+      - Cost optimization: Maximize caching and batching
+      
+      Capability Evolution:
+      - Monitor for better nano alternatives
+      - Consider upgrading to mini if nano insufficient
+      - Re-evaluate routing logic as understanding improves
+      - Adjust policies as capabilities evolve
+      
+      Vendor Management:
+      - Service monitoring: Track OpenAI quality
+      - Relationship management: Maintain communication
+      - Contract reviews: Ensure terms remain appropriate
+      - Contingency planning: Prepare for vendor changes
+      - Multi-vendor strategy: Consider diversification
+
+# =============================================================================
+# REFERENCES & SOURCES
+# =============================================================================
+
+references:
+  vendor_documentation:
+    - url: "https://platform.openai.com/docs/models/gpt-4.1-nano"
+      description: "Official OpenAI GPT-4.1 Nano model documentation page"
+    
+    - url: "https://openai.com/index/gpt-4-1/"
+      description: "OpenAI announcement blog post: 'Introducing GPT-4.1 in the API' (April 14, 2025) - includes Nano specifications"
+    
+    - url: "https://openai.com/policies/terms-of-use/"
+      description: "OpenAI Terms of Use governing model access and usage"
+    
+    - url: "https://openai.com/policies/usage-policies/"
+      description: "OpenAI Usage Policies defining acceptable and prohibited uses"
+    
+    - url: "https://openai.com/policies/service-terms/"
+      description: "OpenAI Service Terms including licensing and liability provisions"
+
+  benchmarks:
+    - name: "MMLU (Massive Multitask Language Understanding)"
+      url: "https://www.prompthub.us/models/gpt-4-1-nano"
+      result: "80.1% on MMLU benchmark - general knowledge and reasoning (higher than GPT-4o mini)"
+    
+    - name: "GPQA (Graduate-Level Google-Proof Q&A)"
+      url: "https://www.prompthub.us/models/gpt-4-1-nano"
+      result: "50.3% on GPQA benchmark - graduate-level STEM reasoning"
+    
+    - name: "Aider Polyglot Coding"
+      url: "https://openai.com/index/gpt-4-1/"
+      result: "9.8% on Aider polyglot coding benchmark - multilingual code understanding"
+
+  third_party_evaluations:
+    - source: "Simon Willison's Analysis"
+      url: "https://simonwillison.net/2025/Apr/14/gpt-4-1/"
+      summary: "Detailed analysis noting Nano is 'OpenAI's cheapest model yet' at $0.10/$0.40 per million tokens (less than GPT-4o mini at $0.15/$0.60). Demonstrates practical use for image description. Notes it's 'not the cheapest overall' compared to Gemini and other providers."
+    
+    - source: "PromptHub Model Card"
+      url: "https://www.prompthub.us/models/gpt-4-1-nano"
+      summary: "Comprehensive specifications: 1M token context, 32k output, vision support, tool calling, multilingual, fine-tuning support. Released April 14, 2025 with June 2024 knowledge cutoff."
+    
+    - source: "AI/ML API Analysis"
+      url: "https://aimlapi.com/models/gpt-4-1-nano-api"
+      summary: "Detailed performance analysis: 'OpenAI's fastest model to date', 'makes million-token context processing economically viable', 'achieves 80.1% on MMLU despite being OpenAI's smallest and fastest model'. Notes it 'requires more specific and explicit prompts' and 'may struggle with nuanced instructions'."
+    
+    - source: "Medium Performance Comparison"
+      url: "https://medium.com/@adelbasli/a-performance-showdown-of-low-cost-llms-gpt-4o-mini-gpt-4-1-nano-and-beyond-32f0d9e54f11"
+      summary: "Comparative analysis of low-cost LLMs: Nano offers '75% cached input discount', has '1M token context window', priced at '$0.10 per 1M input tokens and $0.40 per 1M output tokens'. Direct comparison with GPT-4o mini, Gemini Flash, Claude Haiku, and other budget models."
+    
+    - source: "RD World Online Coverage"
+      url: "https://www.rdworldonline.com/openai-claims-gpt-4-1-sets-new-90-standard-in-mmlu-reasoning-benchmark/"
+      summary: "Coverage of OpenAI announcement including Michelle Pokrass quote: 'Nano is just an absolute workhorse for tons of applications like autocomplete or classification' with 'lowest latency and cost (reportedly 12 cents blended per million tokens)'."
+    
+    - source: "Dataconomy Technical Analysis"
+      url: "https://dataconomy.com/2025/04/15/openai-just-released-gpt-4-1-and-it-is-ridiculously-good-on-paper/"
+      summary: "Technical breakdown: Nano pricing '$0.10, $0.025 (cached), and $0.40 respectively—making it the most affordable option to date'. Analysis of GPT-4.1 family improvements including coding and context capabilities."
+    
+    - source: "TechCrunch Launch Coverage"
+      url: "https://techcrunch.com/2025/04/14/openais-new-gpt-4-1-models-focus-on-coding/"
+      summary: "Launch coverage noting pricing structure and positioning: '$0.10/million input tokens and $0.40/million output tokens'. Discusses 1M token context window and focus on coding tasks across GPT-4.1 family."
+    
+    - source: "DocsBot AI Model Comparison"
+      url: "https://docsbot.ai/models/gpt-4-1-nano"
+      summary: "Model specifications and pricing comparison tool. Notes Nano is '9 months newer than GPT-4o Mini', 'roughly 1.5x cheaper', with 'larger context window (1M vs 128K tokens)'. Cost per page: '$0.00034125 total'."
+    
+    - source: "Medium GPT-4.1 Technical Overview"
+      url: "https://medium.com/@support_94003/gpt-4-1-models-coding-benchmarks-context-scaling-real-world-applications-a469ae0b7cda"
+      summary: "Technical analysis: 'GPT-4.1 Nano is optimized for real-time tasks', scores 'surpass GPT-4o Mini', positioned as 'strategic choice' for autocompletion, classification, and 'lightweight agentic tools'. 1M token context 'opens up new design space'."
+    
+    - source: "Azure AI Foundry Availability"
+      url: "https://azure.microsoft.com/en-us/pricing/details/cognitive-services/openai-service/"
+      summary: "Confirmation that GPT-4.1 family (including Nano) available in Azure AI Foundry. GPT-4.1 series features '1 million token context window' and 'knowledge cutoff of June 2024'."
+
+# =============================================================================
+# METADATA
+# =============================================================================
+
+metadata:
+  card_version: "1.0"
+  card_author: "Claude (Anthropic AI Assistant)"
+  card_creation_date: "2025-10-28"
+  last_updated: "2025-10-28"
+  
+  information_sources: |
+    This model card was compiled from the following sources:
+    
+    Primary Sources:
+    - OpenAI official documentation at platform.openai.com
+    - OpenAI announcement blog post (April 14, 2025)
+    - OpenAI Usage Policies, Terms of Use, and Service Terms
+    
+    Secondary Sources:
+    - Third-party API providers: AI/ML API, OpenRouter, PromptHub
+    - Independent analyses: Simon Willison, Medium articles, Dataconomy
+    - Tech news coverage: TechCrunch, RD World Online
+    - Model comparison platforms: DocsBot AI, Compare AI
+    - Azure/Microsoft documentation: Azure AI Foundry announcements
+    
+    Information Limitations:
+    - No direct access to OpenAI's formal model card or detailed safety report
+    - Technical details (parameters, architecture, distillation methods) not disclosed
+    - Training data details not publicly disclosed
+    - Nano-specific safety benchmark scores not published separately
+    - Information gathered October 28, 2025; model released April 14, 2025
+
+  completeness_assessment: |
+    Assessment of information completeness by section:
+    
+    Comprehensive Information:
+    - Model identity and basic specifications (release date, context window, pricing)
+    - Key benchmark scores: MMLU (80.1%), GPQA (50.3%), Aider (9.8%)
+    - Pricing structure ($0.10/$0.40 per million tokens, 75% cache discount)
+    - Intended use cases clearly documented (autocomplete, classification, extraction)
+    - API specifications and integration details
+    - Licensing and usage policies
+    
+    Partial Information:
+    - Performance characteristics (some details from OpenAI, others inferred)
+    - Comparison with other models (well-covered by third parties)
+    - Limitations acknowledged but not comprehensively detailed
+    - Safety measures (high-level approach, but nano-specific details limited)
+    - Use case examples from third parties
+    
+    Critical Gaps:
+    - Parameter count not disclosed (only described as "smallest")
+    - Training data composition, sources, and sizes not disclosed
+    - Detailed architecture not disclosed
+    - Distillation or optimization techniques not detailed (how nano created from larger models)
+    - Specific safety training approaches not detailed
+    - Nano-specific safety benchmark scores not published separately
+    - Limited discussion in announcement materials vs. larger models
+    - No comprehensive "model card" or safety report from OpenAI
+    - Bias testing methodology and results not disclosed
+    - Long-term performance data limited (recent release)
+    
+    What Would Improve Confidence:
+    - Official OpenAI model card with standardized nano-specific disclosures
+    - Safety report with nano-specific testing methodology and results
+    - More detailed technical documentation on optimization for speed/cost
+    - Information on distillation or compression techniques used
+    - Independent third-party safety and bias audits focused on nano
+    - Longer track record of production use and issue reports
+    - Published case studies from nano deployments
+    - Comparative benchmarking by independent organizations
+    - Disclosure of architectural differences from larger models
+    
+    Nano-Specific Gaps:
+    - How capabilities reduced from larger models (distillation? pruning? separate training?)
+    - What specific trade-offs made for speed optimization
+    - Detailed performance comparison with mini and full GPT-4.1
+    - Guidance on when nano sufficient vs. when to upgrade
+    - Nano-specific failure modes and edge cases
+    
+    Overall Assessment:
+    Information is sufficient for initial evaluation of nano for simple use cases
+    (classification, extraction, autocomplete). However, significant transparency gaps
+    exist, especially around how nano was created and optimized. Organizations should:
+    - Test extensively on their specific use cases before production
+    - Start with simple tasks and validate nano is sufficient
+    - Establish clear escalation paths to larger models
+    - Monitor production performance closely
+    - Accept that nano is optimized for speed/cost, not maximum capability
+    
+    The card provides actionable guidance based on available information, but deployers
+    must validate through testing that nano meets their specific requirements. The very
+    limited capability relative to larger models means thorough evaluation is critical.
+
+  change_log:
+    - date: "2025-10-28"
+      author: "Claude (Anthropic AI Assistant)"
+      changes: "Initial model card creation based on OpenAI documentation and publicly available sources as of October 28, 2025. Compiled information from 25+ sources including vendor documentation, third-party evaluations, and independent analyses. Special focus on capability limitations and appropriate use cases for nano-class model."
+
+# =============================================================================
+# USAGE NOTES
+# =============================================================================
+# This model card was created for GPT-4.1 Nano, OpenAI's smallest and most
+# cost-efficient model, as part of comprehensive AI model evaluation and
+# governance practices.
+#
+# CRITICAL: Nano is optimized for speed and cost, NOT maximum capability.
+# This model is appropriate for:
+# ✓ Simple classification tasks
+# ✓ Information extraction
+# ✓ Autocomplete functionality
+# ✓ High-volume processing at scale
+# ✓ Real-time applications requiring minimal latency
+#
+# This model is NOT appropriate for:
+# ✗ Complex reasoning or analysis
+# ✗ Sophisticated content generation
+# ✗ High-stakes decisions
+# ✗ Tasks requiring nuanced understanding
+# ✗ Applications where quality is paramount
+#
+# Key Characteristics of This Card:
+# - Based on publicly available information as of October 28, 2025
+# - Explicitly notes information gaps where details not disclosed
+# - Emphasizes capability limitations and appropriate use cases
+# - Provides comparison guidance for choosing nano vs. mini vs. full GPT-4.1
+# - Structured for NIST AI RMF alignment
+# - Special focus on when NOT to use nano
+#
+# Recommended Updates:
+# - Monitor OpenAI announcements for model updates or additional disclosures
+# - Update benchmark scores if new evaluations published
+# - Add findings from your own testing and production experience
+# - Document when nano proved insufficient and required escalation
+# - Track cost savings vs. quality trade-offs in production
+# - Review quarterly and update as understanding evolves
+# - Monitor for release of improved nano models or better alternatives
+#
+# For questions or updates to this card, document changes in the change_log section.

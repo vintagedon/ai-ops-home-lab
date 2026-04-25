@@ -1,0 +1,244 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Mistral 7B v0.3"
+  vendor: "Mistral AI"
+  model_family: "Mistral"
+  version: "0.3"
+  release_date: "2025-05-29"
+  model_type: "Open-weight Large Language Model"
+  vendor_model_card_url: "https://mistral.ai/news/mistral-7b-v0.3/"
+  license: "Apache 2.0"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer (Decoder-only, GQA)"
+    parameter_count: "7 B parameters"
+    context_window: "32 K tokens"
+    training_data_cutoff: "2024-12"
+    architectural_details: |
+      Mistral 7B v0.3 is a refined version of the base Mistral architecture using Grouped Query Attention (GQA)
+      and sliding-window attention optimizations. It maintains compact inference cost while improving reasoning,
+      multilingual coverage, and factuality. Released alongside Mixtral 8x22B and open instruct variants.
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "Fast"
+    cost_tier: "Lowest Cost"
+    latency: |
+      Typically 10–20 ms/token on A100; highly optimized for local and edge inference.
+    throughput: |
+      Achieves ~80–100 tokens/s per GPU stream with 4-bit quantization using vLLM or Ollama runtimes.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    Compact model with strong general reasoning, instruction following, and multilingual comprehension.
+    Mistral 7B v0.3 improves factual accuracy, math reasoning, and code generation compared to v0.2.
+  benchmark_performance: |
+    - MMLU: 74.8
+    - GSM8K: 78.5
+    - HumanEval: 63.0
+    (Vendor + community benchmarks)
+  special_capabilities:
+    tools_support: false
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["quantization_friendly", "edge_inference", "multilingual_support"]
+  known_limitations:
+    vendor_disclosed: |
+      Limited reasoning depth and factual recall relative to large (>30B) models; lacks built-in safety filters;
+      not aligned for RLHF beyond base instruct tuning.
+    common_failure_modes: |
+      Occasional hallucinations, inconsistent long-context coherence, and unstable multi-step math reasoning.
+    unsuitable_use_cases: |
+      Safety-critical, regulated, or dual-use domains; deployments without external moderation.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on a mixture of filtered web, code, and multilingual text corpora (≈2T tokens). 
+    Details on exact dataset composition not published.
+  training_methodology: |
+    Supervised instruction fine-tuning plus DPO-style preference optimization;
+    base pretraining on public and licensed corpora.
+  data_privacy_considerations: |
+    Dataset filtered for toxicity and personal information. As open weights are released,
+    downstream fine-tuning must manage privacy and copyright risk independently.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Research, prototyping, RAG pipelines, and on-premise assistants where transparency and low cost are desired.
+  suitable_domains: ["research", "education", "RAG_pipelines", "local_assistants", "code_generation"]
+  out_of_scope_use: |
+    Sensitive or regulated domains without external safety systems; automated decision systems with material human impact.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Stable accuracy and strong performance for a 7B parameter class.
+    public_evidence: |
+      Confirmed by Hugging Face Open LLM Leaderboard evaluations.
+    assessment_notes: |
+      Reliable within normal LLM variability; still subject to standard hallucination patterns.
+  safe:
+    safety_measures: |
+      Content filtering during pretraining; responsible-use guidelines.
+    known_safety_issues: |
+      No runtime moderation; open-weight misuse possible.
+    assessment_notes: |
+      Safety depends on integrator safeguards.
+  secure_and_resilient:
+    security_features: |
+      None intrinsic; model can be sandboxed for offline inference.
+    known_vulnerabilities: |
+      Prompt injection and unfiltered output risks.
+    assessment_notes: |
+      Secure when deployed locally with network isolation and output moderation.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Full weights, tokenizer, and evaluation results public.
+    assessment_notes: |
+      Strong transparency for research; lacks detailed data disclosure.
+  explainable_and_interpretable:
+    explainability_features: |
+      Open architecture supports full interpretability studies.
+    interpretability_limitations: |
+      No dedicated interpretability tools built-in.
+    assessment_notes: |
+      Excellent base for mechanistic interpretability research.
+  privacy_enhanced:
+    privacy_features: |
+      Filtered pretraining data; offline inference reduces data exposure.
+    privacy_concerns: |
+      Unclear dataset provenance; potential inclusion of public PII from web sources.
+    assessment_notes: |
+      Acceptable for research use with awareness of provenance gaps.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Filtering for toxicity and demographic balance.
+    known_biases: |
+      Standard demographic and cultural biases persist; some community reports of gender/locale skew.
+    assessment_notes: |
+      Independent bias audits recommended for applied use.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Domain-specific RAG accuracy and hallucination tests
+    - Instruction-following and bias evaluation
+    - Cost/latency profiling on local hardware
+    - Red-team prompts for safety robustness
+  key_evaluation_questions: |
+    - Is 7B capacity adequate for required reasoning depth?
+    - Does it meet latency and cost requirements?
+    - What moderation or filtering will be layered above it?
+  comparison_considerations: |
+    - Faster than Llama 3.1 8B; lower reasoning ceiling but greater inference efficiency;
+      often paired with RAG for factual grounding.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Document use policies for open-weight models; apply data-handling safeguards for fine-tuned derivatives.
+  map:
+    context_considerations: |
+      Assess data sensitivity and intended downstream deployment environment.
+    risk_categories: ["hallucination", "bias", "privacy_leakage", "prompt_injection"]
+  measure:
+    suggested_metrics: |
+      Factuality rate, toxicity rate, latency, throughput, energy cost.
+  manage:
+    risk_management_considerations: |
+      Include external safety layer (moderation or retrieval grounding);
+      audit derivative fine-tunes for compliance with Apache 2.0 license.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://mistral.ai/news/mistral-7b-v0.3/"
+    description: "Official release announcement and model card"
+  - url: "https://huggingface.co/mistralai/Mistral-7B-v0.3"
+    description: "Model repository and evaluation data"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "74.8"
+  - name: "GSM8K"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "78.5"
+  third_party_evaluations:
+  - source: "Hugging Face Open LLM Leaderboard"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    summary: "Community benchmark confirming strong 7B-class performance."
+  news_coverage:
+  - title: "Mistral 7B v0.3 Released"
+    url: "https://mistral.ai/news/mistral-7b-v0.3/"
+    date: "2025-05-29"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Mistral AI announcement, Hugging Face leaderboard, community evaluations.
+  completeness_assessment: |
+    High for performance and architecture; limited for detailed data and RLHF disclosure.
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card based on Mistral AI and community sources."

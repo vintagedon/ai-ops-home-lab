@@ -1,0 +1,251 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Nous-Hermes 2 Mixtral 8×7B"
+  vendor: "Nous Research"
+  model_family: "Nous-Hermes"
+  version: "2 (Mixtral 8×7B)"
+  release_date: "2024-03-05"
+  model_type: "Open-Weight Mixture-of-Experts Instruction-Tuned Model"
+  vendor_model_card_url: "https://huggingface.co/NousResearch/Nous-Hermes-2-Mixtral-8x7B"
+  license: "Apache 2.0"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Mixture-of-Experts Transformer (Mistral 8×7B)"
+    parameter_count: "47 billion active / 56 billion total"
+    context_window: "32 K tokens"
+    training_data_cutoff: "2024-01"
+    architectural_details: |
+      Nous-Hermes 2 Mixtral 8×7B is an instruction-tuned version of Mistral’s Mixture-of-Experts model.
+      It routes tokens dynamically across 8 expert subnetworks (7B each, 2 active per token), 
+      combining compute efficiency with large-model reasoning performance.  
+      Trained on curated conversational, reasoning, and academic datasets using high-quality alignment and bias reduction pipelines.
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "High"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ~0.18 s per 1 K tokens (fp16 A100); ~0.07 s quantized (INT4 RTX 4090).  
+      Performs near GPT-3.5-level reasoning at a fraction of compute cost.
+    throughput: |
+      Efficient multi-expert routing enables fast inference and high batch parallelism.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • Mixture-of-Experts (MoE) efficiency with large-model accuracy.  
+    • High conversational coherence and instruction following.  
+    • Outperforms Hermes 2 13B and most 30B dense models in reasoning.  
+  benchmark_performance: |
+    - MT-Bench: 7.8  
+    - MMLU: 78.9  
+    - GSM8K: 83.6  
+    - ARC-C: 78.2  
+    - TruthfulQA: 63.4  
+    - HellaSwag: 81.1  
+    (Nous Research + Hugging Face Leaderboard, Apr 2024)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["instruction_following", "long_context_reasoning", "chatbot", "summarization"]
+  known_limitations:
+    vendor_disclosed: |
+      English-centric model; lacks multilingual training.  
+      MoE inference requires specialized runtime (vLLM or TensorRT-LLM).  
+    common_failure_modes: |
+      Occasional verbosity or repetition under extended dialogues.  
+    unsuitable_use_cases: |
+      High-sensitivity legal, healthcare, or compliance automation.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on approximately 600 billion tokens of curated instruction datasets:
+    OpenOrca, ShareGPT, Alpaca+, Flan v2, and Nous Research’s private academic dialogue corpus.  
+  training_methodology: |
+    Supervised fine-tuning on high-quality multi-turn data, followed by SafeRL alignment 
+    for coherence, reasoning, and harmlessness.  
+    Fine-tuning optimized for stability across MoE routing topologies.  
+  data_privacy_considerations: |
+    All datasets public or permissively licensed; no private or user data retained.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Open research, education, chatbots, and enterprise reasoning systems.  
+    Designed for efficient deployment on single high-end GPUs or multi-GPU MoE servers.  
+  suitable_domains: ["education", "research", "enterprise_AI", "chatbots", "open_assistants"]
+  out_of_scope_use: |
+    Regulated or safety-critical automation without human oversight.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Stable reasoning and high factual accuracy relative to compute budget.  
+    public_evidence: |
+      Independent leaderboard and benchmark replication confirm consistent performance.  
+    assessment_notes: |
+      Reliable open MoE instruct model for reasoning and dialogue.
+  safe:
+    safety_measures: |
+      Safety alignment via SafeRL, toxicity filtering, and refusal tuning.  
+    known_safety_issues: |
+      Limited moderation for edge cases and creative writing prompts.  
+    assessment_notes: |
+      Safe for research with minimal external moderation.
+  secure_and_resilient:
+    security_features: |
+      Open weights with SHA256 hash validation; no telemetry.  
+    known_vulnerabilities: |
+      Standard prompt-injection and malicious fine-tune risks.  
+    assessment_notes: |
+      Secure for controlled open-source environments.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Weights, fine-tuning configuration, and evaluation scripts public on Hugging Face.  
+    assessment_notes: |
+      Fully transparent open MoE model.
+  explainable_and_interpretable:
+    explainability_features: |
+      Supports attention visualization and expert routing trace.  
+    interpretability_limitations: |
+      Routing decisions not human-readable in full; stochastic path selection.  
+    assessment_notes: |
+      Reasonably interpretable for MoE analysis.
+  privacy_enhanced:
+    privacy_features: |
+      Dataset filtered for PII; inference has no logging or user tracking.  
+    privacy_concerns: |
+      Minimal; adheres to standard open-source LLM privacy norms.  
+    assessment_notes: |
+      Meets open privacy and reproducibility requirements.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Safety and fairness adjustments during SafeRL; diverse source data.  
+    known_biases: |
+      Western-English phrasing bias; lacks multicultural dataset representation.  
+    assessment_notes: |
+      Acceptable bias mitigation for general use.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • Instruction-following and multi-turn reasoning evaluation (MT-Bench).  
+    • Hallucination and factual consistency checks.  
+    • MoE routing efficiency and expert activation profiling.  
+    • Quantization and performance benchmarking (vLLM).  
+  key_evaluation_questions: |
+    – Does MoE routing meet latency goals?  
+    – Is factual accuracy sufficient for use context?  
+    – Are moderation and bias filters applied?  
+  comparison_considerations: |
+    Outperforms dense 13B–30B models like Yi-1.5 and OpenHermes 2.5;  
+    trails Qwen 2 72B and GPT-4o in reasoning and long-context stability.  
+    Leading open Mixture-of-Experts instruct model of 2024.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Ensure governance for derivative fine-tunes and model attribution.  
+  map:
+    context_considerations: |
+      Identify hallucination, bias, and routing instability risks in MoE deployments.  
+    risk_categories: ["hallucination", "bias", "routing_variance", "prompt_injection"]
+  measure:
+    suggested_metrics: |
+      Accuracy, MT-Bench, hallucination rate, latency, expert utilization efficiency.  
+  manage:
+    risk_management_considerations: |
+      Apply moderation, MoE stability audits, and fairness evaluation before deployment.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/NousResearch/Nous-Hermes-2-Mixtral-8x7B"
+    description: "Official model card and evaluation data"
+  - url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    description: "Benchmark source"
+  benchmarks:
+  - name: "MT-Bench"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "7.8"
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "78.9"
+  third_party_evaluations:
+  - source: "Open LLM Leaderboard (2024)"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    summary: "Nous-Hermes 2 Mixtral 8×7B confirmed top MoE instruct-tuned model."
+  news_coverage:
+  - title: "Nous Research releases Nous-Hermes 2 Mixtral 8×7B — top open MoE instruct model"
+    url: "https://huggingface.co/blog/nous-hermes2-mixtral"
+    date: "2024-03-05"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Nous Research release notes, Hugging Face leaderboard, Open LLM community validation.  
+  completeness_assessment: |
+    High for transparency, performance data, and interpretability; medium for safety dataset documentation.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from Nous-Hermes 2 Mixtral 8×7B release and evaluation data."

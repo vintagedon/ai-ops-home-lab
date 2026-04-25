@@ -1,0 +1,181 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Gemini 2.0 Flash-Lite"
+  vendor: "Google"
+  model_family: "Gemini 2.0"
+  version: "2.0 Flash-Lite (Feb 2025)"
+  release_date: "2025-02-25"
+  model_type: "Large Multimodal Model (Cost/Latency-Optimized)"
+  vendor_model_card_url: "https://modelcards.withgoogle.com/assets/documents/gemini-2-flash-lite.pdf"
+  license: "Commercial API (Proprietary)"
+  deprecation_status: "Active (Discontinuation: 2026-02-25)"
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Sparse Mixture-of-Experts (MoE) Transformer"
+    parameter_count: "Not publicly disclosed"
+    context_window: "1,048,576 tokens (input)"
+    training_data_cutoff: "2024-06"
+    architectural_details: |
+      A member of the Gemini 2.0 series, built on a sparse MoE Transformer architecture. It is Google's most cost-efficient model, striking a balance between efficiency and quality for low-cost workflows. [21]
+  modalities:
+    supported_inputs:
+    - "text"
+    - "code"
+    - "image"
+    - "audio"
+    - "video"
+    supported_outputs:
+    - "text"
+  performance_characteristics:
+    speed_tier: "Highest"
+    cost_tier: "Lowest"
+    latency: "Optimized for low latency."
+    throughput: "Optimized for high-volume, cost-sensitive workflows."
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    The fastest and most cost-efficient Gemini Flash model. Performs better than Gemini 1.5 Flash on the majority of benchmarks at the same speed and cost. [21]
+  benchmark_performance: |
+    Detailed benchmark results are available in the official model card, showing performance comparable to or better than Gemini 1.5 Flash. [21]
+  special_capabilities:
+    tools_support: true
+    vision_support: true
+    reasoning_support: false
+    image_generation: false
+    additional_capabilities:
+    - "tuning"
+    - "system_instructions"
+    - "structured_output"
+    - "chat_completions"
+  known_limitations:
+    vendor_disclosed: |
+      Does not include all the same features as Gemini 2.0 Flash, including Grounding with Google Search, Code Execution, and Thinking capabilities. [13, 21] May exhibit general limitations like hallucinations.
+    common_failure_modes: |
+      Over-refusals and tone. The model will sometimes refuse to answer on prompts where an answer would not violate policies. [21]
+    unsuitable_use_cases: |
+      Applications requiring advanced reasoning, code execution, or real-time web grounding, as these features are not supported.
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Pre-trained on a large-scale, diverse multimodal corpus. Post-trained on vetted instruction tuning data and human preference data. [21]
+  training_methodology: |
+    Leverages Trillium, the sixth-generation of Google's TPUs, for both training and inference. [21]
+  data_privacy_considerations: |
+    Adheres to Google Cloud's data privacy policies.
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Applications that require operational efficiency on devices with limited computational power, or for low-cost workflows such as text generation, summarization, translation, and question answering. [21]
+  suitable_domains:
+  - "high_volume_text_processing"
+  - "cost_sensitive_applications"
+  - "on_device_ai_prototyping"
+  - "basic_chatbots"
+  out_of_scope_use: |
+    Complex agentic workflows that rely on code execution or grounding.
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Strikes a balance between efficiency and quality, performing better than Gemini 1.5 Flash. [21]
+    public_evidence: |
+      Performance benchmarks are published in the model card. [21]
+    assessment_notes: |
+      A reliable choice for high-volume, low-complexity tasks where cost is the primary driver.
+  safe:
+    safety_measures: |
+      Safety and responsibility were built in throughout the training and deployment lifecycle. [21]
+    known_safety_issues: |
+      Main safety limitations are over-refusals and a "preachy" tone. [21]
+    assessment_notes: |
+      Standard safety profile for a base-level model.
+  secure_and_resilient:
+    security_features: |
+      Supports enterprise security controls like CMEK and VPC Service Controls for online prediction, but not for tuning. [13]
+    known_vulnerabilities: |
+      Standard LLM vulnerabilities.
+    assessment_notes: |
+      Security is robust for prediction workloads.
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Public model card available.
+    assessment_notes: |
+      Transparency is on par with other models in the Gemini 2.0 family.
+  explainable_and_interpretable:
+    explainability_features: |
+      None specified. Does not support the "Thinking" feature. [13]
+    interpretability_limitations: |
+      Internal workings are opaque.
+    assessment_notes: |
+      Limited explainability.
+  privacy_enhanced:
+    privacy_features: |
+      Leverages Google Cloud privacy features.
+    privacy_concerns: |
+      Training data sources not fully itemized.
+    assessment_notes: |
+      Meets enterprise privacy standards.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Subject to Google's internal bias mitigation processes.
+    known_biases: |
+      May reflect societal biases.
+    assessment_notes: |
+      Requires use-case-specific testing.
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Throughput testing (requests per minute) to validate performance for high-volume scenarios.
+    - Cost analysis at scale to confirm TCO benefits over Gemini 2.0 Flash.
+    - Quality spot-checks to ensure outputs are sufficient for the intended low-cost workflows.
+  key_evaluation_questions: |
+    - What is the precise cost-per-million-tokens saving compared to the standard Flash model for our workload?
+    - Is the absence of features like Code Execution and Grounding a blocker for our intended applications?
+  comparison_considerations: |
+    Directly compare against Gemini 2.0 Flash to quantify the trade-offs between cost, speed, and features.
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://modelcards.withgoogle.com/assets/documents/gemini-2-flash-lite.pdf"
+    description: "Official Gemini 2.0 Flash-Lite Model Card"
+  - url: "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/models/gemini/2-0-flash-lite"
+    description: "Vertex AI Documentation for Gemini 2.0 Flash-Lite"

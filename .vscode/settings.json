@@ -35,7 +35,7 @@
   },
 
   // (nice to have for your venv)
-  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+  "python.defaultInterpreterPath": "D:\\development-environments\\ml-compat-3.12\\Scripts\\python.exe",
   "python.analysis.typeCheckingMode": "basic",
   "python.terminal.activateEnvironment": true
 }

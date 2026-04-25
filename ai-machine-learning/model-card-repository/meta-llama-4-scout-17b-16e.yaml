@@ -1,0 +1,318 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Llama 4 Scout 17B-16E"
+  vendor: "Meta"
+  model_family: "Llama 4 Scout"
+  version: "17B-16E"
+  release_date: "2025-04-05"
+  model_type: "Large Language Model (multimodal text+image understanding)"
+
+  vendor_model_card_url: "https://huggingface.co/meta-llama/Llama-4-Scout-17B-16E"
+
+  license: "Llama 4 Community License (commercial, custom)"
+
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer, Mixture of Experts"
+    parameter_count: "17B activated (~109B total), 16 experts"
+    context_window: "Not publicly disclosed"
+
+    training_data_cutoff: "2024-08"
+
+    architectural_details: |
+      MoE configuration with 16 experts; page lists 17B activated parameters and
+      ~109B total. Detailed layer/attention specs are not disclosed publicly.
+
+  modalities:
+    supported_inputs: ["text", "image"]
+    supported_outputs: ["text"]
+
+  performance_characteristics:
+    speed_tier: "Not publicly disclosed"
+    cost_tier: "Not publicly disclosed"
+
+    latency: |
+      Not publicly disclosed.
+
+    throughput: |
+      Not publicly disclosed.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    Multilingual text and image understanding; instruction-tuned chat and visual
+    reasoning; code generation support noted in outputs. Image understanding has
+    been tested up to 5 input images.
+
+  benchmark_performance: |
+    Selected pretrain checkpoints (bf16) reported:
+    - MMLU (5-shot): 79.6
+    - MMLU-Pro (5-shot, EM): 58.2
+    - MATH (4-shot, EM): 50.3
+    - MBPP (3-shot, pass@1): 67.8
+    - TyDiQA (1-shot, F1): 31.5
+    - ChartQA (0-shot, relaxed acc): 83.4
+
+  special_capabilities:
+    tools_support: false
+    vision_support: true
+    reasoning_support: false
+    image_generation: false
+
+    additional_capabilities: ["multilingual", "code_generation"]
+
+  known_limitations:
+    vendor_disclosed: |
+      Model card notes preview/static status and standard LLM caveats (potential
+      inaccuracies/objectionable outputs); developers are responsible for safety
+      testing and tuning for their applications.
+
+    common_failure_modes: |
+      Typical LLM issues: hallucinations, biased or unsafe outputs in edge cases,
+      and sensitivity to prompt phrasing—especially for visual reasoning outside
+      tested bounds (>5 images).
+
+    unsuitable_use_cases: |
+      Any use violating the Llama 4 Community License or Acceptable Use Policy;
+      high-stakes automated decision-making without layered mitigations and human
+      oversight.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Pretrained on ~40T tokens of multimodal data from a mix of publicly available,
+    licensed sources, and information from Meta’s products and services (including
+    publicly shared posts on Instagram and Facebook and people’s interactions with
+    Meta AI).
+
+  training_methodology: |
+    Custom training libraries and production infrastructure on H100-80GB GPUs;
+    bf16 checkpoints used for reported evals; further fine-tuning/quantization done
+    on production infra. Detailed optimization methods not disclosed.
+
+  data_privacy_considerations: |
+    The page references use of data from Meta’s products and services and links to
+    Meta Privacy Policy; developers must ensure compliant use under the license
+    and AUP.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Commercial and research use across multiple languages; assistant-like chat and
+    visual reasoning for instruction-tuned models; pretrained models for general
+    language generation; image recognition/captioning/QA for image inputs.
+
+  suitable_domains: ["general_purpose", "multilingual_assistant", "code_generation", "image_understanding", "analysis"]
+
+  out_of_scope_use: |
+    Any use prohibited by Llama 4 Community License / AUP or outside explicitly
+    supported capabilities/languages without additional testing and safeguards.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Provides benchmark table versus prior Llama models; notes static model status.
+
+    public_evidence: |
+      Benchmark numbers and dataset description are provided in the HF card.
+
+    assessment_notes: |
+      Solid self-reported eval coverage; no independent third-party evals are cited
+      on the page.
+
+  safe:
+    safety_measures: |
+      License and AUP constraints; developer responsibility for domain-specific
+      safety testing and mitigations emphasized.
+
+    known_safety_issues: |
+      Standard LLM risks (misinformation, bias, harmful content) and vision-task
+      edge cases beyond tested settings.
+
+    assessment_notes: |
+      Deployers should apply layered moderation, logging, and human review.
+
+  secure_and_resilient:
+    security_features: |
+      Not detailed; follow platform-level controls and application-side hardening.
+
+    known_vulnerabilities: |
+      Prompt injection and jailbreak attempts typical of LLMs.
+
+    assessment_notes: |
+      Treat as foundation model; add app-layer validation and guardrails.
+
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Public model card with training scale, tokens, cutoff, and emissions; weights
+      downloadable under license; limited architectural specifics.
+
+    assessment_notes: |
+      Good operational transparency; limited internals disclosed.
+
+  explainable_and_interpretable:
+    explainability_features: |
+      None beyond standard LLM interpretability; prompts/evals documented.
+
+    interpretability_limitations: |
+      No mechanistic interpretability artifacts released.
+
+    assessment_notes: |
+      Treat as black-box with documented behavior and benchmarks.
+
+  privacy_enhanced:
+    privacy_features: |
+      Not specified beyond Meta privacy policy references.
+
+    privacy_concerns: |
+      Inclusion of data from Meta’s products/services warrants careful compliance
+      review for downstream deployments.
+
+    assessment_notes: |
+      Ensure contractual and regulatory review for sensitive use cases.
+
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Not explicitly detailed; developer guidance stresses testing/tuning.
+
+    known_biases: |
+      None enumerated beyond general LLM risks; multilingual coverage may vary.
+
+    assessment_notes: |
+      Run bias evaluations for target audiences and languages.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Reproduce vendor benchmarks on your infra; compare to baseline models.
+    - Multilingual and vision-input tests reflecting your languages and images.
+    - Safety red-teaming (toxicity, bias, disallowed content).
+    - Code tasks if applicable (HumanEval/MBPP-style).
+    - Latency/throughput under expected loads.
+
+  key_evaluation_questions: |
+    - Do reported scores translate to your domain prompts and datasets?
+    - Are image-understanding tasks within tested limits (≤5 images)?
+    - Do license/AUP terms align with your distribution and branding?
+    - Are privacy requirements satisfied given data provenance?
+
+  comparison_considerations: |
+    - Activated vs total parameters (MoE efficiency) vs competitors.
+    - Multilingual/vision capability breadth vs your needs.
+    - License obligations (e.g., attribution "Built with Llama").
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Enforce license/AUP terms; establish human-in-the-loop review; document
+      attribution obligations ("Built with Llama") when redistributing.
+
+  map:
+    context_considerations: |
+      Map languages, image-input usage, and domain risks (misinfo/bias/privacy).
+
+    risk_categories: ["hallucination", "bias", "privacy_leakage", "prompt_injection", "misuse_of_image_understanding"]
+
+  measure:
+    suggested_metrics: |
+      - Factual accuracy on domain corpora.
+      - Safety incident rate per 1k interactions.
+      - Latency/throughput on your stack.
+      - Vision-task accuracy vs ground truth.
+
+  manage:
+    risk_management_considerations: |
+      Add moderation, rate-limiting, provenance, logging; monitor for jailbreaks;
+      maintain rollback and incident response procedures.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/meta-llama/Llama-4-Scout-17B-16E"
+    description: "Official Hugging Face model card for Llama 4 Scout 17B-16E"
+
+  benchmarks:
+  - name: "Pretrained benchmark table (MMLU/MMLU-Pro/MATH/MBPP/TyDiQA/ChartQA)"
+    url: "https://huggingface.co/meta-llama/Llama-4-Scout-17B-16E"
+    result: "As listed in model page table"
+
+  third_party_evaluations:
+  - source: ""
+    url: ""
+    summary: ""
+
+  news_coverage:
+  - title: ""
+    url: ""
+    date: ""
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "Don Fountain"
+  card_creation_date: "2025-10-24"
+  last_updated: "2025-10-24"
+
+  information_sources: |
+    Model card on Hugging Face including license text, training scale and energy/
+    emissions table, dataset overview, cutoff date, benchmarks, and usage notes.
+
+  completeness_assessment: |
+    High for training/data scale, license, and benchmarks; medium for architecture
+    specifics; low for latency/throughput details.
+
+  change_log:
+  - date: "2025-10-24"
+    author: "Don Fountain"
+    changes: "Initial synthesis from Hugging Face model card."

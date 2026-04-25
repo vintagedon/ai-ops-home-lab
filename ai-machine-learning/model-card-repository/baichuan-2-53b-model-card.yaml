@@ -1,0 +1,262 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Baichuan 2 53B"
+  vendor: "Baichuan Intelligent Technology (China)"
+  model_family: "Baichuan"
+  version: "2 (53B)"
+  release_date: "2024-03-18"
+  model_type: "Open-Weight Multilingual Reasoning and Instruction Model"
+  vendor_model_card_url: "https://huggingface.co/baichuan-inc/Baichuan2-53B"
+  license: "Apache 2.0"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Dense Transformer (decoder-only)"
+    parameter_count: "53 billion"
+    context_window: "32 K tokens"
+    training_data_cutoff: "2024-01"
+    architectural_details: |
+      Baichuan 2 53B builds upon the Baichuan 1 and 2 series with expanded token context and cross-lingual 
+      reasoning optimizations.  
+      It employs rotary positional embeddings (RoPE), grouped-query attention (GQA), fused attention kernels, 
+      and gradient checkpointing for memory efficiency.  
+      The model was trained on diverse multilingual and domain-specialized datasets including Chinese, English, 
+      and high-resource Asian and European languages.
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "Medium"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ~0.9 s per 1 K tokens on 8 × A100 (fp16);  
+      0.4 s quantized on H800 or RTX 4090 GPUs.
+    throughput: |
+      Optimized for batch reasoning, document summarization, and long-context QA; 
+      supports vLLM, Triton, and TensorRT-LLM inference.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • Advanced reasoning and instruction-following for Chinese and English.  
+    • High performance in math, law, and education domains.  
+    • Efficient scaling for enterprise fine-tuning.  
+    • Fine-tuned safety alignment and multilingual bias calibration.
+  benchmark_performance: |
+    - MMLU: 84.9  
+    - GSM8K: 87.1  
+    - C-Eval: 91.8  
+    - CMMLU: 93.5  
+    - ARC-C: 83.9  
+    (Baichuan Inc. internal and OpenCompass community results, Apr 2024)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["bilingual_reasoning", "math_QA", "domain_instruct_tuning", "long_context_QA"]
+  known_limitations:
+    vendor_disclosed: |
+      Primary optimization for Chinese and English; weaker performance in low-resource languages.  
+      No multimodal support.  
+      Slight verbosity in reasoning explanations.
+    common_failure_modes: |
+      Overconfidence in uncertain answers; mild hallucination in creative generation tasks.  
+    unsuitable_use_cases: |
+      Legal or medical decisions requiring verified citations.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on approximately 10 trillion tokens from multilingual and domain-specific datasets, 
+    including academic literature, books, Wikipedia, code, and Chinese-language news corpora.  
+    Data filtered for duplication, quality, and safety compliance.
+  training_methodology: |
+    Autoregressive pretraining followed by instruction fine-tuning with supervised datasets and 
+    reinforcement learning with AI feedback (RLAIF).  
+    Alignment tuning includes "Safety-RL" for toxicity and factuality control.
+  data_privacy_considerations: |
+    Public and licensed data only; no private or user-sourced content.  
+    Model includes no telemetry or external logging.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Multilingual research, enterprise reasoning, and educational applications.  
+    Designed for text generation, summarization, and code or math reasoning tasks.  
+    Also used as a base for Baichuan 3 proprietary models.
+  suitable_domains: ["education", "research", "enterprise_AI", "multilingual_QA", "software_engineering"]
+  out_of_scope_use: |
+    Safety-critical environments or regulated data handling.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Balanced reasoning across Chinese and English; top-tier performance among open bilingual models.  
+    public_evidence: |
+      Verified through OpenCompass and Hugging Face Leaderboard evaluations.  
+    assessment_notes: |
+      Reliable for multilingual reasoning and educational domains.
+  safe:
+    safety_measures: |
+      Safety alignment via SafeRL and toxic content filtering.  
+      Refusal mechanisms tuned for high-risk categories.  
+    known_safety_issues: |
+      Conservative refusals may impact creative writing; minor residual bias in political topics.  
+    assessment_notes: |
+      Safe under moderated deployment.
+  secure_and_resilient:
+    security_features: |
+      Signed checkpoints, reproducible builds, no telemetry or data retention.  
+    known_vulnerabilities: |
+      Standard open LLM risks (prompt injection, data contamination).  
+    assessment_notes: |
+      Secure and verifiable for research and enterprise.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Model weights, tokenizer, and training methodology fully published.  
+      Evaluation and red-teaming results partially available via OpenCompass.  
+    assessment_notes: |
+      Excellent transparency and documentation quality.
+  explainable_and_interpretable:
+    explainability_features: |
+      Compatible with attention and saliency visualization tools.  
+      Supports activation probing for interpretability studies.  
+    interpretability_limitations: |
+      No chain-of-thought exposure in public checkpoint.  
+    assessment_notes: |
+      High interpretability for research use.
+  privacy_enhanced:
+    privacy_features: |
+      Trained on non-personal data only; deployment without telemetry supported.  
+    privacy_concerns: |
+      None identified beyond open web data provenance.  
+    assessment_notes: |
+      Meets open-science privacy baselines.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Multilingual balancing and SafeRL fairness calibration.  
+    known_biases: |
+      Slight bias toward formal Mandarin phrasing and English academic style.  
+    assessment_notes: |
+      Fair for bilingual deployments with standard moderation.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • Multilingual reasoning QA (C-Eval, MMLU).  
+    • Math and logic (GSM8K, MATH).  
+    • Bias and safety evaluation on bilingual datasets.  
+    • Latency and quantization tests for deployment.
+  key_evaluation_questions: |
+    – Does model meet fairness and safety goals in your region?  
+    – Is deployment infrastructure adequate for 53B scale inference?  
+    – Are alignment filters properly configured for target use cases?
+  comparison_considerations: |
+    Outperforms Yi-Large and LLaMA 3 8B in bilingual QA;  
+    trails GPT-4 Turbo and DeepSeek V2.5 in reasoning.  
+    Best-performing bilingual open dense model in early 2024.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Define multilingual governance requirements and data provenance audits.  
+      Document model selection rationale under AI use policy.
+  map:
+    context_considerations: |
+      Identify hallucination, bias, and prompt injection risks for bilingual contexts.  
+    risk_categories: ["hallucination", "bias", "prompt_injection", "safety_alignment"]
+  measure:
+    suggested_metrics: |
+      Factual accuracy, fairness index, toxicity rate, and latency.  
+  manage:
+    risk_management_considerations: |
+      Use external moderation, deterministic seed control, and safety layer audits.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/baichuan-inc/Baichuan2-53B"
+    description: "Official Baichuan 2 53B release and technical card"
+  - url: "https://github.com/baichuan-inc/Baichuan2"
+    description: "Training and evaluation repository"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "84.9"
+  - name: "C-Eval"
+    url: "https://arxiv.org/abs/2305.08322"
+    result: "91.8"
+  third_party_evaluations:
+  - source: "OpenCompass (2024)"
+    url: "https://opencompass.org.cn/"
+    summary: "Baichuan 2 53B benchmarked for high bilingual reasoning accuracy and safety alignment."
+  news_coverage:
+  - title: "Baichuan 2 53B released — bilingual model advancing open Chinese AI research"
+    url: "https://www.baichuan-ai.com/news/baichuan2"
+    date: "2024-03-18"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Baichuan Inc. documentation, OpenCompass benchmarks, Hugging Face leaderboards, and replication studies.  
+  completeness_assessment: |
+    High for transparency and multilingual benchmarks; medium for red-team methodology disclosure.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from Baichuan 2 53B release and benchmark data."

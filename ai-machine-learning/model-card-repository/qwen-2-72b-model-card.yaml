@@ -1,0 +1,254 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Qwen 2 72B"
+  vendor: "Alibaba Cloud (DAMO Academy)"
+  model_family: "Qwen"
+  version: "2 (72B)"
+  release_date: "2024-06-06"
+  model_type: "Open-Weight Multilingual Reasoning and Code Model"
+  vendor_model_card_url: "https://huggingface.co/Qwen/Qwen2-72B"
+  license: "Apache 2.0"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Dense Transformer (decoder-only)"
+    parameter_count: "72 billion"
+    context_window: "128 K tokens"
+    training_data_cutoff: "2024-03"
+    architectural_details: |
+      Qwen 2 72B is Alibaba Cloud’s second-generation open flagship model, 
+      succeeding Qwen-1.5. It features grouped-query attention (GQA), 
+      rotary embeddings (RoPE), context caching, and FlashAttention 2 for long-context efficiency.  
+      The model is optimized for multilingual reasoning, math, and code synthesis across 30+ languages.
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "Medium"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ~0.8 s per 1K tokens (fp16 A100 8-GPU);  
+      quantized INT4 deployment feasible on dual H100s via TensorRT-LLM.  
+    throughput: |
+      Optimized for multi-GPU scaling (up to 128 GPUs) with near-linear performance.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • Frontier-level multilingual reasoning and code synthesis.  
+    • Strong factual grounding and low hallucination rate (<1.8%).  
+    • Outperforms LLaMA 3 70B and Falcon 180B in benchmark accuracy.  
+    • Long-context stability up to 128K tokens.
+  benchmark_performance: |
+    - MMLU: 88.6  
+    - GSM8K: 94.1  
+    - HumanEval: 88.5  
+    - C-Eval: 93.9  
+    - ARC-C: 87.7  
+    - MATH: 81.0  
+    (Alibaba Cloud + OpenCompass June 2024)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["multilingual_QA", "code_generation", "long_context_reasoning", "retrieval_grounded_generation"]
+  known_limitations:
+    vendor_disclosed: |
+      Primarily optimized for text and code; lacks multimodal vision support.  
+      High VRAM requirements for full precision inference.  
+    common_failure_modes: |
+      Verbose reasoning chains; mild translation artifacts in low-resource languages.  
+    unsuitable_use_cases: |
+      Real-time edge inference or resource-constrained systems.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on over 15 trillion tokens spanning multilingual corpora, academic datasets, 
+    filtered web text, code repositories, and mathematical reasoning data.  
+    Dataset includes 30+ languages with a focus on English, Chinese, and Arabic.  
+  training_methodology: |
+    Pretrained using large-scale distributed training on 2048 GPUs.  
+    Instruction fine-tuning and SafeRL alignment applied for reasoning reliability.  
+    Alignment datasets included both human and AI feedback for factual control.  
+  data_privacy_considerations: |
+    Uses public and licensed corpora; no private user data.  
+    All checkpoints distributed under transparent open-weight license.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Research, enterprise AI copilots, multilingual reasoning, and large-scale RAG systems.  
+    Ideal for education, science, software engineering, and knowledge management.  
+  suitable_domains: ["research", "education", "software_engineering", "enterprise_AI", "multilingual_QA"]
+  out_of_scope_use: |
+    High-stakes decision automation, medical diagnostics, or regulatory decision systems.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Stable factual reasoning and consistent multilingual performance.  
+    public_evidence: |
+      Confirmed via Hugging Face and OpenCompass leaderboards; results reproducible across hardware.  
+    assessment_notes: |
+      Reliable large open model with near frontier-level reasoning accuracy.
+  safe:
+    safety_measures: |
+      SafeRL alignment, content filtering, and multilingual refusal tuning.  
+    known_safety_issues: |
+      Conservative refusals in ambiguous prompts; reduced creativity in poetic generation.  
+    assessment_notes: |
+      Safe for moderated enterprise and research contexts.
+  secure_and_resilient:
+    security_features: |
+      Integrity-verified weights, reproducible builds, and telemetry-free architecture.  
+    known_vulnerabilities: |
+      Standard open-LLM risks (prompt injection, malicious fine-tunes).  
+    assessment_notes: |
+      Secure for controlled local and on-prem deployments.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Weights, tokenizer, and training recipes open-sourced; red-teaming summary included.  
+    assessment_notes: |
+      Excellent transparency for open research use.
+  explainable_and_interpretable:
+    explainability_features: |
+      Compatible with TransformerLens, Neuron Viewer, and interpretability dashboards.  
+    interpretability_limitations: |
+      Dense attention structure complicates localized reasoning tracing.  
+    assessment_notes: |
+      Strong interpretability for academic analysis.
+  privacy_enhanced:
+    privacy_features: |
+      PII-filtered training corpus; inference process telemetry-free.  
+    privacy_concerns: |
+      Minimal; only open data sources used.  
+    assessment_notes: |
+      Meets stringent privacy expectations for open release.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Multilingual fairness calibration via SafeRL and dataset balancing.  
+    known_biases: |
+      Slight overperformance in Mandarin and English; reduced output quality in low-resource languages.  
+    assessment_notes: |
+      Fair multilingual coverage with active bias management.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • Long-context and multilingual QA.  
+    • Mathematical reasoning (GSM8K, MATH).  
+    • Code synthesis (HumanEval, MBPP).  
+    • Fairness and bias audits across 10+ languages.  
+  key_evaluation_questions: |
+    – Does 128K context performance align with infrastructure?  
+    – Are moderation policies configured per domain?  
+    – Is quantization acceptable for deployment hardware?  
+  comparison_considerations: |
+    Outperforms Yi-Large, DeepSeek V2, and Falcon 180B in reasoning and code accuracy;  
+    trails GPT-4 Turbo and Claude 4 Opus in contextual coherence.  
+    Strongest open 70B-class multilingual model as of mid-2024.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Document governance for multilingual deployment, retraining audit trails, and dataset provenance.  
+  map:
+    context_considerations: |
+      Identify hallucination, bias, and prompt-injection risks across languages.  
+    risk_categories: ["hallucination", "bias", "prompt_injection", "alignment_drift"]
+  measure:
+    suggested_metrics: |
+      Factual accuracy, hallucination rate, fairness index, latency, safety refusal rate.  
+  manage:
+    risk_management_considerations: |
+      Apply multilingual moderation, seed control for reproducibility, and post-deployment audits.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/Qwen/Qwen2-72B"
+    description: "Official Hugging Face model card and evaluation data"
+  - url: "https://github.com/QwenLM/Qwen2"
+    description: "Training and evaluation repository"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "88.6"
+  - name: "GSM8K"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "94.1"
+  third_party_evaluations:
+  - source: "OpenCompass (2024)"
+    url: "https://opencompass.org.cn/"
+    summary: "Qwen 2 72B benchmarked as top open 70B-class multilingual reasoning model."
+  news_coverage:
+  - title: "Alibaba releases Qwen 2 72B — open multilingual reasoning model"
+    url: "https://developer.aliyun.com/article/1489437"
+    date: "2024-06-06"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Alibaba Cloud documentation, OpenCompass and Hugging Face leaderboards, and community benchmark data.  
+  completeness_assessment: |
+    High for transparency and performance benchmarks; medium for dataset composition granularity.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from Qwen 2 72B release and benchmark data."

@@ -1,0 +1,249 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Yi 1.5 6B"
+  vendor: "01.AI"
+  model_family: "Yi"
+  version: "1.5 (6B)"
+  release_date: "2024-05-08"
+  model_type: "Compact Bilingual Instruction-Tuned Model (Chinese-English)"
+  vendor_model_card_url: "https://huggingface.co/01-ai/Yi-1.5-6B"
+  license: "Apache 2.0"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Dense Transformer (decoder-only)"
+    parameter_count: "6 billion"
+    context_window: "8 K tokens"
+    training_data_cutoff: "2024-03"
+    architectural_details: |
+      Yi 1.5 6B is a compact bilingual (Chinese-English) reasoning model built by 01.AI as part of the Yi 1.5 series.
+      It uses a streamlined transformer architecture with rotary embeddings (RoPE) and grouped-query attention (GQA),
+      optimized for low-latency reasoning and translation tasks on consumer hardware.
+      Focused on performance-per-watt efficiency while maintaining bilingual accuracy and safety alignment.
+  modalities:
+    supported_inputs: ["text"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "Very High"
+    cost_tier: "Free / Open-weight"
+    latency: |
+      ~0.07 s per 1K tokens (fp16 A100); ~0.03 s quantized (RTX 4090).  
+      Highly efficient for personal and enterprise deployments.  
+    throughput: |
+      Excellent concurrency and quantization support; ideal for edge or on-prem RAG systems.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    • Balanced bilingual reasoning in a 6B parameter footprint.  
+    • Tuned for translation, summarization, and safe conversation.  
+    • Open weights allow low-cost deployment and domain fine-tuning.  
+  benchmark_performance: |
+    - MMLU (EN): 69.8  
+    - C-Eval (ZH): 76.2  
+    - GSM8K: 72.5  
+    - ARC-C: 69.3  
+    - TruthfulQA: 65.1  
+    (01.AI internal + Hugging Face Leaderboard, May 2024)
+  special_capabilities:
+    tools_support: true
+    vision_support: false
+    reasoning_support: strong
+    image_generation: false
+    additional_capabilities: ["translation", "summarization", "QA", "bilingual_chat", "RAG_integration"]
+  known_limitations:
+    vendor_disclosed: |
+      Reduced reasoning accuracy compared to Yi 34B or Qwen 2 72B.  
+      English factual QA slightly weaker than Chinese benchmarks.  
+    common_failure_modes: |
+      Over-simplification in cross-lingual reasoning; verbosity under safety filters.  
+    unsuitable_use_cases: |
+      Long-context legal, policy, or autonomous reasoning tasks.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Trained on 2.1T bilingual tokens combining Chinese and English open-domain data,
+    filtered through 01.AI’s data governance pipeline for factuality and bias.  
+    Includes Wikipedia, academic, and code-mixed conversational text.
+  training_methodology: |
+    Pretrained from scratch, then instruction-tuned using bilingual task datasets
+    and aligned via Direct Preference Optimization (DPO) for safety and helpfulness.  
+  data_privacy_considerations: |
+    PII-filtered and license-verified dataset; no private or proprietary data included.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    General-purpose bilingual assistant for education, translation, and RAG systems.  
+    Optimized for local deployments where efficiency and transparency are priorities.  
+  suitable_domains: ["education", "translation", "research", "embedded_AI"]
+  out_of_scope_use: |
+    Autonomous decision-making, financial analysis, or regulated content moderation.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Reliable bilingual reasoning and factual QA for model size.  
+    public_evidence: |
+      Consistent leaderboard performance and user replication.  
+    assessment_notes: |
+      Reliable, compact open bilingual model for general research and education.
+  safe:
+    safety_measures: |
+      Safety alignment via DPO with refusal and politeness tuning.  
+    known_safety_issues: |
+      May over-refuse or hedge factual questions under safety mode.  
+    assessment_notes: |
+      Safe under standard supervised usage.
+  secure_and_resilient:
+    security_features: |
+      Telemetry-free, checksum-verified weights, and open audit trail.  
+    known_vulnerabilities: |
+      Susceptible to generic prompt-injection and translation misuse.  
+    assessment_notes: |
+      Secure for local or enterprise deployment.
+  accountable_and_transparent:
+    transparency_level: "High"
+    auditability: |
+      Open weights, evaluation results, and alignment logs published on Hugging Face.  
+    assessment_notes: |
+      Excellent transparency for a small bilingual model.
+  explainable_and_interpretable:
+    explainability_features: |
+      Compatible with token-level attention visualization and bilingual embedding probes.  
+    interpretability_limitations: |
+      No native chain-of-thought exposure.  
+    assessment_notes: |
+      Interpretable within standard LLM tooling.
+  privacy_enhanced:
+    privacy_features: |
+      Dataset filtered for PII; no inference telemetry.  
+    privacy_concerns: |
+      None identified.  
+    assessment_notes: |
+      Meets privacy standards for open bilingual models.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Balanced bilingual corpus; fairness calibration on gender, tone, and cultural phrasing.  
+    known_biases: |
+      Western and Mandarin content dominance; minor cultural phrasing asymmetry.  
+    assessment_notes: |
+      Acceptable for non-critical research and education contexts.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    • Cross-lingual translation accuracy and bias analysis.  
+    • Reasoning and factual QA validation (EN & ZH).  
+    • Latency and quantization benchmarking on consumer GPUs.  
+  key_evaluation_questions: |
+    – Does bilingual reasoning maintain parity across languages?  
+    – Are alignment and refusal behaviors culturally consistent?  
+    – Does performance scale appropriately under quantization?  
+  comparison_considerations: |
+    Outperforms Yi 1.5 3B and Zephyr 7B in bilingual reasoning;  
+    trails Yi 34B and Qwen 2 72B in overall factual QA.  
+    Leading efficient bilingual reasoning model for 2024.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Document bilingual fairness evaluation and reproducibility per NIST AI RMF "Govern."  
+  map:
+    context_considerations: |
+      Map bilingual bias and factuality risks; track alignment drift.  
+    risk_categories: ["bias", "hallucination", "alignment_drift"]
+  measure:
+    suggested_metrics: |
+      Translation fidelity, factual QA accuracy, refusal precision.  
+  manage:
+    risk_management_considerations: |
+      Periodic multilingual fairness and transparency audits recommended.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://huggingface.co/01-ai/Yi-1.5-6B"
+    description: "Official Yi 1.5 6B model card"
+  - url: "https://01.ai/news/yi1.5-release"
+    description: "01.AI release announcement and benchmarks"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    result: "69.8"
+  - name: "C-Eval"
+    url: "https://cevalbenchmark.com/"
+    result: "76.2"
+  third_party_evaluations:
+  - source: "Hugging Face Open LLM Leaderboard (2024)"
+    url: "https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard"
+    summary: "Yi 1.5 6B validated as efficient bilingual reasoning model."
+  news_coverage:
+  - title: "01.AI expands Yi family with Yi 1.5 6B — compact bilingual open model"
+    url: "https://01.ai/news/yi1.5-release"
+    date: "2024-05-08"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    01.AI release documentation, Hugging Face benchmarks, and bilingual evaluation results.  
+  completeness_assessment: |
+    High for transparency and performance data; medium for multilingual fairness metrics.  
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card created from Yi 1.5 6B release and benchmark data."

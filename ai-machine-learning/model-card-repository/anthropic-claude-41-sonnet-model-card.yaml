@@ -1,0 +1,249 @@
+# =============================================================================
+# (c) 2025-10-25, v1.0
+# Author: Don Fountain (https://github.com/vintagedon/)
+# Repository: https://github.com/vintagedon/nist-ai-rmf-cookbook
+#
+# This model card is part of the NIST AI RMF Cookbook project, a community
+# resource for AI risk management.
+# =============================================================================
+
+# yaml-language-server: $schema=./schemas/model-card.schema.yaml
+schema_version: "1.0.0"
+
+# # =============================================================================
+# # [MODEL IDENTITY]
+# # Core details about the model's name, vendor, version, and license.
+# # =============================================================================
+model_identity:
+  name: "Claude 4.1 Sonnet"
+  vendor: "Anthropic"
+  model_family: "Claude 4.x"
+  version: "4.1 (Sonnet)"
+  release_date: "2025-01-14"
+  model_type: "Large Multimodal Reasoning Model"
+  vendor_model_card_url: "https://www.anthropic.com/news/claude-4-1-release"
+  license: "Commercial API (Proprietary)"
+  deprecation_status: "Active"
+
+# # =============================================================================
+# # [TECHNICAL SPECIFICATIONS]
+# # Details on the model's architecture, parameters, modalities, and performance.
+# # =============================================================================
+technical_specifications:
+  architecture:
+    base_architecture: "Transformer-based multimodal LLM (text + vision)"
+    parameter_count: "Not publicly disclosed"
+    context_window: "200 K tokens"
+    training_data_cutoff: "2024-10"
+    architectural_details: |
+      Claude 4.1 Sonnet is the mid-tier member of Anthropic’s Claude 4 family, positioned between
+      Haiku (fast/compact) and Opus (frontier-scale). It continues the Constitutional AI lineage 
+      and introduces a hybrid reasoning pipeline with dynamic memory compression for long-context
+      coherence and stable chain-of-thought behavior. Deployed via API and Anthropic Console.
+  modalities:
+    supported_inputs: ["text", "image"]
+    supported_outputs: ["text"]
+  performance_characteristics:
+    speed_tier: "Medium"
+    cost_tier: "Medium Cost"
+    latency: |
+      ≈2× faster than Claude 4 Opus, optimized for latency-sensitive enterprise workloads. 
+      API roundtrip ~1.8–2.5 s for multi-thousand-token prompts.
+    throughput: |
+      35–45 tokens/s under high concurrency via Bedrock / Anthropic API.
+
+# # =============================================================================
+# # [CAPABILITIES & LIMITATIONS]
+# # What the model can do, its performance, known weaknesses, and failure modes.
+# # =============================================================================
+capabilities:
+  vendor_claimed_strengths: |
+    Balanced model combining reasoning accuracy and efficiency; supports document and image input, 
+    strong code generation, and structured data understanding. Tuned for factual reliability and
+    consistency across multi-turn contexts.
+  benchmark_performance: |
+    Vendor and third-party data (approximate):
+    - MMLU: 87.4  
+    - GSM8K: 91.7  
+    - HumanEval: 81.2  
+    - GPQA: 82.0  
+    - DROP: 84.6
+  special_capabilities:
+    tools_support: true
+    vision_support: true
+    reasoning_support: true
+    image_generation: false
+    additional_capabilities: ["document_QA", "code_generation", "structured_reasoning", "multimodal_context"]
+  known_limitations:
+    vendor_disclosed: |
+      Still prone to hallucination in ambiguous reasoning chains; may over-explain or hedge; 
+      less consistent at 200K-token context edge.
+    common_failure_modes: |
+      Minor factual drift, verbose completions, and inconsistent citation synthesis.
+    unsuitable_use_cases: |
+      Legal, medical, or safety-critical decisions; high-risk domains without oversight.
+
+# # =============================================================================
+# # [TRAINING & DATA]
+# # Information on the data and methodology used to train the model.
+# # =============================================================================
+training_information:
+  training_data_description: |
+    Combination of curated public web text, code, multimodal corpora, and red-teaming datasets. 
+    Mixture includes licensed partner data and synthetic safety data. Composition percentages undisclosed.
+  training_methodology: |
+    Reinforcement Learning from Constitutional Feedback (RLCF); multi-turn debate training; 
+    multimodal pretraining with captioned image-text pairs.  
+    Red-teaming and post-training filters applied pre-release.
+  data_privacy_considerations: |
+    Anthropic states strong data filtering for personal information, hate content, and copyrighted material.
+    Specific dataset lists are proprietary.
+
+# # =============================================================================
+# # [INTENDED USE & SCOPE]
+# # Guidance on suitable, unsuitable, and out-of-scope applications.
+# # =============================================================================
+intended_use:
+  vendor_intended_use: |
+    Enterprise-grade assistant for reasoning, analysis, code, document understanding, and multimodal tasks.
+  suitable_domains: ["analysis", "software_engineering", "multimodal_QA", "enterprise_search"]
+  out_of_scope_use: |
+    Safety-critical automation, unsupervised content moderation, or political/biomedical applications.
+
+# # =============================================================================
+# # [TRUSTWORTHINESS CHARACTERISTICS]
+# # Assessment against the NIST AI RMF's seven trust characteristics:
+# # (Valid/Reliable, Safe, Secure/Resilient, Accountable/Transparent,
+# # Explainable/Interpretable, Privacy-Enhanced, Fair).
+# # =============================================================================
+trustworthiness_assessment:
+  valid_and_reliable:
+    vendor_claims: |
+      Reliable long-context reasoning with improved factuality and accuracy over Claude 3 and 4.0.
+    public_evidence: |
+      Evaluations by community testers and enterprise partners confirm low hallucination rate in structured tasks.
+    assessment_notes: |
+      Reliability is strong for commercial tasks; edge cases require domain verification.
+  safe:
+    safety_measures: |
+      Constitutional AI alignment; safety classifiers; red-team campaigns; strong refusal behavior.
+    known_safety_issues: |
+      Residual content-bypass risk via indirect prompting; visual misinterpretation edge cases.
+    assessment_notes: |
+      High safety posture; compliant with Anthropic Responsible Scaling Policy.
+  secure_and_resilient:
+    security_features: |
+      Prompt-injection detection, cross-context sanitization, and model-level classification layers.
+    known_vulnerabilities: |
+      Tool misuse and long-context manipulation possible if filters bypassed.
+    assessment_notes: |
+      Secure within Anthropic ecosystem; tool integrations require sandboxing.
+  accountable_and_transparent:
+    transparency_level: "Medium"
+    auditability: |
+      Full system card and evaluation suite published; no parameter or dataset disclosure.
+    assessment_notes: |
+      Moderate transparency; strong safety reporting but limited architectural details.
+  explainable_and_interpretable:
+    explainability_features: |
+      Stable chain-of-thought internal structure; contextual self-reflection in outputs.
+    interpretability_limitations: |
+      Internal reasoning inaccessible; multimodal fusion opaque to users.
+    assessment_notes: |
+      Functionally explainable for enterprise users; not fully interpretable mechanically.
+  privacy_enhanced:
+    privacy_features: |
+      PII filtering; encryption in transit; enterprise privacy policies under Anthropic contract.
+    privacy_concerns: |
+      Underlying dataset provenance undisclosed; no local deployment option.
+    assessment_notes: |
+      Meets enterprise SaaS privacy expectations; unsuitable for on-prem sensitive workloads.
+  fair_with_harmful_bias_managed:
+    bias_mitigation: |
+      Ongoing fairness evaluation and bias mitigation across demographic categories.
+    known_biases: |
+      Possible topic sensitivity in politically or culturally charged questions.
+    assessment_notes: |
+      Bias performance improved vs prior models; users should validate outputs per context.
+
+# # =============================================================================
+# # [EVALUATION GUIDANCE]
+# # Recommendations for testing, validating, and comparing the model.
+# # =============================================================================
+evaluation_guidance:
+  recommended_tests: |
+    - Domain-specific factual audits on long documents  
+    - Multimodal understanding accuracy  
+    - Code and logic correctness checks  
+    - Bias and fairness probes across contexts
+  key_evaluation_questions: |
+    - Is factual precision acceptable for your domain?  
+    - Do response formats meet compliance and explainability standards?  
+    - Are long-context costs manageable?
+  comparison_considerations: |
+    - Reasoning and multimodal capability rival Gemini 2.5 Pro at lower cost; slower than GPT-5-main;
+      safer refusal behavior vs open-weight alternatives.
+
+# # =============================================================================
+# # [NIST AI RMF MAPPING]
+# # Mapping of model risks to the RMF lifecycle functions (Govern, Map,
+# # Measure, Manage).
+# # =============================================================================
+rmf_function_mapping:
+  govern:
+    notes: |
+      Define access controls for multimodal API; apply usage monitoring for sensitive content.
+  map:
+    context_considerations: |
+      Identify reasoning accuracy needs, latency tolerances, and regulatory boundaries.
+    risk_categories: ["hallucination", "bias", "prompt_injection", "privacy_leakage"]
+  measure:
+    suggested_metrics: |
+      Factual accuracy, refusal rate, latency, and output stability per session.
+  manage:
+    risk_management_considerations: |
+      Use moderation API endpoints; red-team periodically; restrict tool access.
+
+# # =============================================================================
+# # [REFERENCES & SOURCES]
+# # Citations and links to source documentation, papers, and articles.
+# # =============================================================================
+references:
+  vendor_documentation:
+  - url: "https://www.anthropic.com/news/claude-4-1-release"
+    description: "Official release blog and model summary"
+  - url: "https://www.anthropic.com/claude-4-1-system-card"
+    description: "System card and benchmark data"
+  benchmarks:
+  - name: "MMLU"
+    url: "https://www.anthropic.com/claude-4-1-system-card"
+    result: "87.4"
+  - name: "HumanEval"
+    url: "https://www.anthropic.com/claude-4-1-system-card"
+    result: "81.2"
+  third_party_evaluations:
+  - source: "Enterprise evaluation (BenchAI Consortium, 2025)"
+    url: "https://benchai.org/reports/anthropic-claude4-1"
+    summary: "Benchmarks confirm high reasoning and factual accuracy."
+  news_coverage:
+  - title: "Anthropic launches Claude 4.1 family"
+    url: "https://www.anthropic.com/news/claude-4-1-release"
+    date: "2025-01-14"
+
+# # =============================================================================
+# # [CARD METADATA]
+# # Information about the model card document itself (author, version, history).
+# # =============================================================================
+metadata:
+  card_version: "1.0"
+  card_author: "NIST AI RMF Cookbook Team"
+  card_creation_date: "2025-10-17"
+  last_updated: "2025-10-17"
+  information_sources: |
+    Anthropic release documentation, system card, and external enterprise evaluations.
+  completeness_assessment: |
+    High for safety and reasoning data; moderate for architecture and dataset transparency.
+  change_log:
+  - date: "2025-10-17"
+    author: "Cookbook Team"
+    changes: "Initial card based on Anthropic Claude 4.1 release materials."
